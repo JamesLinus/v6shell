@@ -1571,8 +1571,7 @@ execute1(struct tnode *t)
 					break;
 				}
 			if (!aok || *t->nav[1] == EOS ||
-			    EQUAL(t->nav[1], "alias") ||
-			    EQUAL(t->nav[1], "unalias")) {
+			    cmd_lookup(t->nav[1]) != SBI_UNKNOWN) {
 				err(-1, FMT4S, getmyname(),
 				    t->nav[0], t->nav[1], ERR_BADNAME);
 				return;
@@ -1751,8 +1750,7 @@ execute1(struct tnode *t)
 					break;
 				}
 			if (!aok || *t->nav[1] == EOS ||
-			    EQUAL(t->nav[1], "alias") ||
-			    EQUAL(t->nav[1], "unalias")) {
+			    cmd_lookup(t->nav[1]) != SBI_UNKNOWN) {
 				err(-1, FMT4S, getmyname(),
 				    t->nav[0], t->nav[1], ERR_BADNAME);
 				return;
