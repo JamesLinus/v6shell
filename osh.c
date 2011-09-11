@@ -1281,22 +1281,19 @@ syn3(char **p1, char **p2)
 			goto synerr;
 		if ((as = asget(pv[0])) != NULL && asp == NULL) {
 			/*
-			 * Substitute alias string pointed to by as
-			 * for alias name pointed to by pv[0].
+			 * Substitute alias string pointed to by as for
+			 * alias name pointed to by pv[0].  Read, parse,
+			 * allocate, and copy it into tav.  Execute as
+			 * TSUBSHELL w/o ( ) .
 			 */
-
-			/* Check for errors. */
 			if (error)
 				goto synerr;
 			if (alcnt > 2) {
 				error_message = ERR_ALIASLOOP;
 				goto synerr;
 			}
-			/* Read and parse as into av. */
 			if ((av = rp_alias(as)) == NULL)
 				goto synerr;
-
-			/* Create alias vector. */
 			ac   = vacount(av);
 			tav  = xmalloc((ac + n + 1) * sizeof(char *));
 			tavp = tav;
@@ -1306,8 +1303,6 @@ syn3(char **p1, char **p2)
 				*tavp++ = xstrdup(pv[ac1]);
 			*tavp++ = xstrdup("\n");
 			*tavp   = NULL;
-
-			/* Execute as TSUBSHELL w/o ( ) . */
 			alcnt++;
 			t = talloc();
 			t->ntype = TSUBSHELL;
