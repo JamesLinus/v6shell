@@ -1295,7 +1295,7 @@ syn3(char **p1, char **p2)
 			if ((av = rp_alias(as)) == NULL)
 				goto synerr;
 			ac   = vacount(av);
-			tav  = xmalloc((ac + n + 1) * sizeof(char *));
+			tav  = xmalloc((ac + n) * sizeof(char *));
 			tavp = tav;
 			for (ac = 0; *av[ac] != EOL; ac++)
 				*tavp++ = xstrdup(av[ac]);
