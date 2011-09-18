@@ -2885,6 +2885,7 @@ xstrdup(const char *src)
 
 static	const char	**gavp;	/* points to current gav position     */
 static	const char	**gave;	/* points to current gav end          */
+static	unsigned	gavmult;/* GAVNEW reallocation multiplier     */
 static	size_t		gavtot;	/* total bytes used for all arguments */
 
 static	const char	**gnew(/*@only@*/ const char **);
@@ -2912,15 +2913,18 @@ glob(enum sbikey key, char **av)
 	int pmc = 0;		/* pattern-match count                 */
 	bool gerr = false;	/* glob error flag                     */
 
-	gavtot = 0;
+	gavmult = 1;
+	gavtot  = 0;
 
 	sav  = av;
 	gav  = xmalloc(GAVNEW * sizeof(char *));
-	*gav = NULL, gavp = gav;
+	*gav = NULL;
+	gavp = gav;
 	gave = &gav[GAVNEW - 1];
 	while (*av != NULL) {
 		if ((gp = gtrim(UCPTR(*av))) == NULL) {
-			gerr = true;
+			*gavp = NULL;
+			gerr  = true;
 			break;
 		}
 		gav = glob1(key, gav, gp, &pmc, &gerr);
@@ -2946,15 +2950,14 @@ gnew(const char **gav)
 {
 	size_t siz;
 	ptrdiff_t gidx;
-	static unsigned mult = 1;
 
 	if (gavp == gave) {
-		mult *= GAVMULT;
-		gidx  = (ptrdiff_t)(gavp - gav);
-		siz   = (size_t)((gidx + (GAVNEW * mult)) * sizeof(char *));
-		gav   = xrealloc(gav, siz);
-		gavp  = gav + gidx;
-		gave  = &gav[gidx + (GAVNEW * mult) - 1];
+		gavmult *= GAVMULT;
+		gidx = (ptrdiff_t)(gavp - gav);
+		siz  = (size_t)((gidx + (GAVNEW * gavmult)) * sizeof(char *));
+		gav  = xrealloc(gav, siz);
+		gavp = gav + gidx;
+		gave = &gav[gidx + (GAVNEW * gavmult) - 1];
 	}
 	return gav;
 }
@@ -2972,7 +2975,9 @@ gcat(const char *src1, const char *src2, bool slash)
 		return NULL;
 	}
 
-	*buf = EOS, b = buf, s = src1;
+	*buf = EOS;
+	b = buf;
+	s = src1;
 	while ((c = *s++) != EOS) {
 		if (b >= &buf[PATHMAX - 1]) {
 			err(-2, FMT2S, getmyname(), strerror(ENAMETOOLONG));
@@ -2990,8 +2995,9 @@ gcat(const char *src1, const char *src2, bool slash)
 		}
 		*b++ = c = *s++;
 	} while (c != EOS);
+	b--;
 
-	siz = b - buf;
+	siz = (b - buf) + 1;
 	gavtot += siz;
 	if (gavtot > GAVMAX) {
 		err(-2, FMT2S, getmyname(), ERR_E2BIG);
@@ -3020,6 +3026,7 @@ glob1(enum sbikey key, const char **gav, char *as, int *pmc, bool *gerr)
 		if (DO_TRIM(key))
 			(void)atrim(UCPTR(as));
 		if ((p = gcat(as, "", slash)) == NULL) {
+			*gavp = NULL;
 			*gerr = true;
 			return gav;
 		}
@@ -3044,6 +3051,7 @@ glob1(enum sbikey key, const char **gav, char *as, int *pmc, bool *gerr)
 	}
 	if ((dirp = gopendir(dirbuf, *ds != EOS ? ds : ".")) == NULL) {
 		err(-2, FMT2S, getmyname(), ERR_NODIR);
+		*gavp = NULL;
 		*gerr = true;
 		return gav;
 	}
@@ -3057,6 +3065,7 @@ glob1(enum sbikey key, const char **gav, char *as, int *pmc, bool *gerr)
 			gav = gnew(gav);
 			if ((p = gcat(ds, entry->d_name, slash)) == NULL) {
 				(void)closedir(dirp);
+				*gavp = NULL;
 				*gerr = true;
 				return gav;
 			}
