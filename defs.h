@@ -37,6 +37,7 @@
  */
 #include "config.h"
 
+#ifndef	S_SPLINT_S
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/uio.h>
@@ -53,6 +54,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#endif
 
 #ifdef	PATH_MAX
 #define	PATHMAX		PATH_MAX
