@@ -112,7 +112,8 @@ main(int argc, char **argv)
 	if ((gav = malloc(GAVNEW * sizeof(char *))) == NULL)
 		err(SH_ERR, FMT1S, ERR_NOMEM);
 
-	*gav = NULL, gavp = gav;
+	*gav = NULL;
+	gavp = gav;
 	gave = &gav[GAVNEW - 1];
 	while (*++argv != NULL)
 		gav = glob1(gav, *argv, &pmc);
@@ -154,7 +155,9 @@ gcat(const char *src1, const char *src2)
 	char *b, buf[PATHMAX], c, *dst;
 	const char *s;
 
-	*buf = EOS, b = buf, s = src1;
+	*buf = EOS;
+	b = buf;
+	s = src1;
 	while ((c = *s++) != EOS) {
 		if (b >= &buf[PATHMAX - 1])
 			err(SH_ERR, FMT1S, strerror(ENAMETOOLONG));
@@ -171,8 +174,9 @@ gcat(const char *src1, const char *src2)
 			err(SH_ERR, FMT1S, strerror(ENAMETOOLONG));
 		*b++ = c = *s++;
 	} while (c != EOS);
+	b--;
 
-	siz = b - buf;
+	siz = (b - buf) + 1;
 	gavtot += siz;
 	if (gavtot > GAVMAX)
 		err(SH_ERR, FMT1S, ERR_E2BIG);
