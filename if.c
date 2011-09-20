@@ -235,9 +235,10 @@ e3(void)
 		return ifstat1(nxtarg(!RETERR), F_GZ);
 	if (equal(a, "-t")) {
 		/* Does the descriptor refer to a terminal device? */
-		b = nxtarg(RETERR);
-		if (b == NULL || *b == EOS)
+		if ((b = nxtarg(RETERR)) == NULL || *b == EOS) {
 			err(FC_ERR, FMT3S, getmyname(), a, ERR_DIGIT);
+			/*NOTREACHED*/
+		}
 		if (*b >= '0' && *b <= '9' && *(b + 1) == EOS) {
 			d = *b - '0';
 			if (IS_DIGIT(d, *b))
