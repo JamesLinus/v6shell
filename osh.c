@@ -252,16 +252,18 @@ static	bool		verbose_flag;	/* verbose flag for `-v' option     */
 static	void		cmd_loop(bool);
 static	void		cmd_verbose(void);
 static	int		rpx_line(void);
+/*@null@*/
 static	const char	**rp_alias(const char *);
 static	int		get_word(void);
 static	int		xgetc(bool);
 static	int		readc(void);
 /*@null@*/ /*@only@*/
 static	const char	*get_dolp(int);
-static	void		aalloc(const char *, const char *);
+static	void		aalloc(/*@null@*/ const char *, /*@null@*/ const char *);
 static	struct anode	*aalloc1(const char *, const char *);
 static	void		afree(/*@null@*/ const char *);
-static	const char	*asget(const char *);
+/*@null@*/
+static	const char	*asget(/*@null@*/ const char *);
 static	struct tnode	*talloc(void);
 static	void		tfree(/*@null@*/ /*@only@*/ struct tnode *);
 /*@null@*/
@@ -1026,6 +1028,9 @@ asget(const char *name)
 	struct anode *a;
 	const char *as;
 
+	if (name == NULL)
+		return NULL;
+
 	as = NULL;
 	a  = anp;
 	while (a != NULL) {
@@ -1715,7 +1720,7 @@ execute1(struct tnode *t)
 			break;
 		}
 		if (t->nav[1] == NULL) {
-			(void)umask(m = umask(0));
+			(void)umask(m = (mode_t)umask(0));
 			fd_print(FD1, "%04o\n", (unsigned)m);
 		} else {
 			m = 0;

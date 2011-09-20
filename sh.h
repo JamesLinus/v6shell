@@ -58,8 +58,8 @@ enum sbikey {
  */
 struct anode {
 /*@null@*/struct anode	 *next;
-/*@null@*/char		 *name;
-/*@null@*/char		 *string;
+	  char		 *name;
+	  char		 *string;
 };
 #endif
 
