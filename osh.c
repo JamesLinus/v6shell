@@ -212,8 +212,7 @@ static	int		dolc;		/* $N dollar-argument count         */
 static	const char	*dolp;		/* $ dollar-value pointer           */
 static	char	*const	*dolv;		/* $N dollar-argument value array   */
 static	int		dupfd0;		/* duplicate of the standard input  */
-static	bool		error;		/* error flag for read/parse errors */
-/*@observer@*/
+/*@null@*/ /*@observer@*/
 static	const char	*error_message;	/* error msg for read/parse errors  */
 static	bool		error_source;	/* error flag for `source' command  */
 static	int		hwfd = -1;	/* history write file descriptor    */
@@ -235,6 +234,7 @@ static	char		*word[WORDMAX];	/* arg/word pointer array           */
 static	char		*aword[WORDMAX];/* alias arg/word pointer array     */
 static	char		**wordp;
 static	char		**ewordp;
+/*@null@*/ /*@only@*/
 static	struct anode	*anp;		/* shell alias node pointer         */
 /*@null@*/
 static	const char	*asp;		/* shell alias string pointer       */
@@ -259,7 +259,7 @@ static	int		xgetc(bool);
 static	int		readc(void);
 /*@null@*/ /*@only@*/
 static	const char	*get_dolp(int);
-static	void		aalloc(/*@null@*/ const char *, /*@null@*/ const char *);
+static	void		aalloc(/*@null@*/const char *, /*@null@*/const char *);
 static	struct anode	*aalloc1(const char *, const char *);
 static	void		afree(/*@null@*/ const char *);
 /*@null@*/
@@ -291,7 +291,8 @@ static	void		pwait(pid_t);
 static	int		prsig(int, pid_t, pid_t);
 /*@maynotreturn@*/
 static	void		sh_errexit(int);
-static	void		sh_init(/*@null@*/ const char *);
+static	void		sh_init(/*@dependent@*/ /*@null@*/ /*@temp@*/
+				const char *);
 static	void		sh_magic(void);
 static	bool		sh_on_tty(void);
 static	void		sighup(/*@unused@*/ int IS_UNUSED);
@@ -317,8 +318,8 @@ static	void		xfree(/*@null@*/ /*@only@*/ void *);
 static	void		*xmalloc(size_t);
 static	void		*xrealloc(/*@only@*/ void *, size_t);
 static	char		*xstrdup(const char *);
-/*@maynotreturn@*/ /*@null@*/
-static	const char	**glob(enum sbikey, char **);
+/*@maynotreturn@*/ /*@null@*/ /*@only@*/
+static	const char	**glob(enum sbikey, /*@only@*/ char **);
 
 /*
  * NAME
@@ -533,7 +534,6 @@ rpx_line(void)
 	elinep = &line[LINEMAX - 5];
 	wordp  = word;
 	ewordp = &word[WORDMAX - 5];
-	error  = false;
 	error_message = NULL;
 	nul_count = 0;
 	do {
@@ -546,7 +546,7 @@ rpx_line(void)
 	cmd_verbose();
 	hist_write(PROMPT && wordp - word > 1);
 
-	if (error) {
+	if (error_message != NULL) {
 		err(-1, FMT2S, getmyname(), error_message);
 		return 1;
 	}
@@ -558,7 +558,7 @@ rpx_line(void)
 		tnp = NULL;
 		tnp = syntax(word, wordp);
 		(void)sigprocmask(SIG_SETMASK, &omask, NULL);
-		if (error)
+		if (error_message != NULL)
 			err(-1, FMT2S, getmyname(), error_message);
 		else
 			execute(tnp, NULL, NULL);
@@ -586,7 +586,6 @@ rp_alias(const char *string)
 	elinep = &aline[LINEMAX - 5];
 	wordp  = aword;
 	ewordp = &aword[WORDMAX - 5];
-	error  = false;
 	error_message = NULL;
 	nul_count = 0;
 	do {
@@ -599,7 +598,7 @@ rp_alias(const char *string)
 	} while (*wp != EOL);
 	*wordp = NULL;
 
-	if (error) {
+	if (error_message != NULL) {
 		asp = NULL;
 		return NULL;
 	}
@@ -615,7 +614,7 @@ rp_alias(const char *string)
 		t = NULL;
 		t = syntax(aword, wordp);
 		(void)sigprocmask(SIG_SETMASK, &omask, NULL);
-		if (error) {
+		if (error_message != NULL) {
 			tfree(t);
 			t = NULL;
 			asp = NULL;
@@ -660,11 +659,10 @@ get_word(void)
 				if (c == EOF)
 					return EOF;
 				if (c == EOL) {
-					if (!error)
+					if (error_message == NULL)
 						error_message = ERR_SYNTAX;
 					peekc = c;
 					*linep++ = EOS;
-					error = true;
 					return 1;
 				}
 				if (c == BQUOT) {
@@ -801,7 +799,6 @@ getd:
 	return c;
 
 geterr:
-	error = true;
 	return EOL;
 }
 
@@ -1159,7 +1156,6 @@ syn1(char **p1, char **p2)
 		return syn2(p1, p2);
 
 synerr:
-	error = true;
 	error_message = ERR_SYNTAX;
 	return NULL;
 }
@@ -1215,7 +1211,7 @@ syn3(char **p1, char **p2)
 	struct tnode *t;
 	enum tnflags flags;
 	static int alcnt;
-	int ac, ac1, c, n, subcnt;
+	int ac, c, n, subcnt;
 	char **p, **pv, **lp, **rp;
 	char **tav, **tavp;
 	const char **av;
@@ -1291,7 +1287,7 @@ syn3(char **p1, char **p2)
 			 * allocate, and copy it into tav.  Execute as
 			 * TSUBSHELL w/o ( ) .
 			 */
-			if (error)
+			if (error_message != NULL)
 				goto synerr;
 			if (alcnt > 2) {
 				error_message = ERR_ALIASLOOP;
@@ -1304,8 +1300,8 @@ syn3(char **p1, char **p2)
 			tavp = tav;
 			for (ac = 0; *av[ac] != EOL; ac++)
 				*tavp++ = xstrdup(av[ac]);
-			for (ac1 = 1; ac1 < n; ac1++)
-				*tavp++ = xstrdup(pv[ac1]);
+			for (ac = 1; ac < n; ac++)
+				*tavp++ = xstrdup(pv[ac]);
 			*tavp++ = xstrdup("\n");
 			*tavp   = NULL;
 			alcnt++;
@@ -1348,7 +1344,6 @@ synerr:
 	xfree(fout);
 	pv[n] = NULL;
 	vfree(pv);
-	error = true;
 	if (error_message == NULL)
 		error_message = ERR_SYNTAX;
 	return NULL;
@@ -2897,7 +2892,6 @@ static	const char	**gnew(/*@only@*/ const char **);
 /*@null@*/
 static	char		*gcat(/*@null@*/ const char *,
 			      /*@null@*/ const char *, bool);
-/*@null@*/
 static	const char	**glob1(enum sbikey, /*@only@*/ const char **,
 				char *, int *, bool *);
 static	bool		glob2(const UChar *, const UChar *);
@@ -2913,8 +2907,9 @@ static	DIR		*gopendir(/*@out@*/ char *, const char *);
 static const char **
 glob(enum sbikey key, char **av)
 {
-	char *gp, **sav;
+	char **sav;
 	const char **gav;	/* points to generated argument vector */
+	char *gp;
 	int pmc = 0;		/* pattern-match count                 */
 	bool gerr = false;	/* glob error flag                     */
 

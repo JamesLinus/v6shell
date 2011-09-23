@@ -103,9 +103,8 @@ static	int		dolc;		/* $N dollar-argument count         */
 /*@null@*/
 static	const char	*dolp;		/* $N and $$ dollar-value pointer   */
 static	char	*const	*dolv;		/* $N dollar-argument value array   */
-static	bool		error;		/* error flag for read/parse errors */
-/*@observer@*/
-static	const char	*error_message;	/* error message for read errors    */
+/*@null@*/ /*@observer@*/
+static	const char	*error_message;	/* error msg for read/parse errors  */
 static	bool		glob_flag;	/* glob flag for `*', `?', `['      */
 static	char		line[LINEMAX];	/* command-line buffer              */
 static	char		*linep;
@@ -148,7 +147,8 @@ static	void		pwait(pid_t);
 static	int		prsig(int, pid_t, pid_t);
 /*@maynotreturn@*/
 static	void		sh_errexit(int);
-static	void		sh_init(/*@null@*/ const char *);
+static	void		sh_init(/*@dependent@*/ /*@null@*/ /*@temp@*/
+				const char *);
 static	void		sh_magic(void);
 static	void		fd_free(void);
 static	bool		fd_isdir(int);
@@ -234,14 +234,15 @@ rpx_line(void)
 
 	linep = line;
 	wordp = word;
-	error = false;
+	error_message = NULL;
 	nul_count = 0;
 	do {
 		wp = linep;
 		get_word();
 	} while (*wp != EOL);
+	*wordp = NULL;
 
-	if (error) {
+	if (error_message != NULL) {
 		err(SH_ERR, FMT1S, error_message);
 		return;
 	}
@@ -252,8 +253,8 @@ rpx_line(void)
 		t = NULL;
 		t = syntax(word, wordp);
 		(void)sigprocmask(SIG_SETMASK, &omask, NULL);
-		if (error)
-			err(SH_ERR, FMT1S, ERR_SYNTAX);
+		if (error_message != NULL)
+			err(SH_ERR, FMT1S, error_message);
 		else
 			execute(t, NULL, NULL);
 		tfree(t);
@@ -284,11 +285,10 @@ loop:
 		c1 = c;
 		while ((c = xgetc(!DOLSUB)) != c1) {
 			if (c == EOL) {
-				if (!error)
+				if (error_message == NULL)
 					error_message = ERR_SYNTAX;
 				peekc = c;
 				*linep++ = EOS;
-				error = true;
 				return;
 			}
 			if (c == BQUOT) {
@@ -409,7 +409,6 @@ getd:
 	return c;
 
 geterr:
-	error = true;
 	return EOL;
 }
 
@@ -555,7 +554,7 @@ syn1(char **p1, char **p2)
 		return syn2(p1, p2);
 
 synerr:
-	error = true;
+	error_message = ERR_SYNTAX;
 	return NULL;
 }
 
@@ -692,7 +691,7 @@ syn3(char **p1, char **p2)
 	return t;
 
 synerr:
-	error = true;
+	error_message = ERR_SYNTAX;
 	return NULL;
 }
 

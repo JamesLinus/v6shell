@@ -57,9 +57,10 @@ enum sbikey {
  * shell alias node structure
  */
 struct anode {
-/*@null@*/struct anode	 *next;
-	  char		 *name;
-	  char		 *string;
+	/*@null@*/ /*@only@*/
+	struct anode	*next;	/* Pointer to next alias node.   */
+	char		*name;	/* Pointer to this alias name.   */
+	char		*string;/* Pointer to this alias string. */
 };
 #endif
 
@@ -81,22 +82,28 @@ enum tnflags {
  * shell command tree node structure
  */
 struct tnode {
-/*@null@*/struct tnode	 *nleft;	/* Pointer to left node.            */
-/*@null@*/struct tnode	 *nright;	/* Pointer to right node.           */
-/*@null@*/struct tnode	 *nsub;		/* Pointer to TSUBSHELL node.       */
-/*@null@*/char		 *nfin;		/* Pointer to input file (<).       */
-/*@null@*/char		 *nfout;	/* Pointer to output file (>, >>).  */
-/*@null@*/char		**nav;		/* Argument vector for TCOMMAND.    */
+	/*@null@*/ /*@only@*/
+	struct tnode	 *nleft;	/* Pointer to left node.            */
+	/*@null@*/ /*@only@*/
+	struct tnode	 *nright;	/* Pointer to right node.           */
+	/*@null@*/ /*@only@*/
+	struct tnode	 *nsub;		/* Pointer to TSUBSHELL node.       */
+	/*@null@*/ /*@only@*/
+	char		 *nfin;		/* Pointer to input file (<).       */
+	/*@null@*/ /*@only@*/
+	char		 *nfout;	/* Pointer to output file (>, >>).  */
+	/*@null@*/ /*@only@*/
+	char		**nav;		/* Argument vector for TCOMMAND.    */
 #ifdef	OSH_SHELL
-	  enum	 sbikey	  nkey;		/* Shell sbi command key.           */
+	enum sbikey	  nkey;		/* Shell sbi command key.           */
 #endif
-	  enum	 tnflags  nflags;	/* Shell command tree node flags.   */
-	  enum {			/* Shell command tree node type.    */
+	enum tnflags	  nflags;	/* Shell command tree node flags.   */
+	enum {				/* Shell command tree node type.    */
 		TLIST     = 1,	/* pipelines separated by `;', `&', or `\n' */
 		TPIPE     = 2,	/* commands separated by `|' or `^'         */
 		TCOMMAND  = 3,	/* command  [arg ...]  [< in]  [> [>] out]  */
 		TSUBSHELL = 4	/* ( list )            [< in]  [> [>] out]  */
-	  } ntype;
+	} ntype;
 };
 
 #ifdef	OSH_SHELL

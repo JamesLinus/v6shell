@@ -72,8 +72,11 @@ static	const char	**gavp;	/* points to current gav position     */
 static	const char	**gave;	/* points to current gav end          */
 static	size_t		gavtot;	/* total bytes used for all arguments */
 
+/*@maynotreturn@*/
 static	const char	**gnew(/*@only@*/ const char **);
+/*@maynotreturn@*/
 static	char		*gcat(const char *, const char *);
+/*@maynotreturn@*/
 static	const char	**glob1(/*@only@*/ const char **, char *, int *);
 static	bool		glob2(const UChar *, const UChar *);
 static	void		gsort(const char **);
@@ -109,8 +112,10 @@ main(int argc, char **argv)
 	if (argc < 2)
 		err(SH_ERR, FMT1S, ERR_GARGCOUNT);
 
-	if ((gav = malloc(GAVNEW * sizeof(char *))) == NULL)
+	if ((gav = malloc(GAVNEW * sizeof(char *))) == NULL) {
 		err(SH_ERR, FMT1S, ERR_NOMEM);
+		/*NOTREACHED*/
+	}
 
 	*gav = NULL;
 	gavp = gav;
@@ -119,8 +124,10 @@ main(int argc, char **argv)
 		gav = glob1(gav, *argv, &pmc);
 	gavp = NULL;
 
-	if (pmc == 0)
+	if (pmc == 0) {
 		err(SH_ERR, FMT1S, ERR_NOMATCH);
+		/*NOTREACHED*/
+	}
 
 	(void)err_pexec(gav[0], (char *const *)gav);
 	/*NOTREACHED*/
@@ -139,8 +146,10 @@ gnew(const char **gav)
 		mult *= GAVMULT;
 		gidx  = (ptrdiff_t)(gavp - gav);
 		siz   = (size_t)((gidx + (GAVNEW * mult)) * sizeof(char *));
-		if ((nav = realloc(gav, siz)) == NULL)
+		if ((nav = realloc(gav, siz)) == NULL) {
 			err(SH_ERR, FMT1S, ERR_NOMEM);
+			/*NOTREACHED*/
+		}
 		gav   = nav;
 		gavp  = gav + gidx;
 		gave  = &gav[gidx + (GAVNEW * mult) - 1];
@@ -206,8 +215,10 @@ glob1(const char **gav, char *as, int *pmc)
 			*gavp = NULL;
 			return gav;
 		}
-	if (strlen(as) >= PATHMAX)
+	if (strlen(as) >= PATHMAX) {
 		err(SH_ERR, FMT1S, ERR_PATTOOLONG);
+		/*NOTREACHED*/
+	}
 	for (;;) {
 		if (ps == ds) {
 			ds = "";
