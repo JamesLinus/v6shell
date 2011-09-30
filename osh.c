@@ -1561,7 +1561,7 @@ execute1(struct tnode *t)
 		if (t->nav[1] != NULL) {
 			aok = true;
 			for (p = t->nav[1]; *p != EOS; p++)
-				if (any(*p, WORDPACK) || any(*p, GLOBCHARS)) {
+				if (any(*p, BANCHARS)) {
 					aok = false;
 					break;
 				}
@@ -1740,7 +1740,7 @@ execute1(struct tnode *t)
 		if (t->nav[1] != NULL && t->nav[2] == NULL) {
 			aok = true;
 			for (p = t->nav[1]; *p != EOS; p++)
-				if (any(*p, WORDPACK) || any(*p, GLOBCHARS)) {
+				if (any(*p, BANCHARS)) {
 					aok = false;
 					break;
 				}

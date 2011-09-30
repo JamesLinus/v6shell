@@ -144,6 +144,7 @@
 /*
  * special string literals
  */
+#define	BANCHARS	" \t$\"'\\();&|^<>*?[\n"
 #define	EOC		";&\n"
 #define	GLOBCHARS	"*?["
 #define	QUOTPACK	"\"'"
