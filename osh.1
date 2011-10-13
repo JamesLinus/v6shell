@@ -58,6 +58,44 @@
 .\" IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .\" POSSIBILITY OF SUCH DAMAGE.
 .\"
+.\" .SS Aliases (+) derived from:
+.\"		- /usr/src/bin/csh/csh.1 (.Ss Alias substitution):
+.\"			$OpenBSD: csh.1,v 1.66 2011/09/03 22:59:08 jmc Exp $
+.\"			$NetBSD: csh.1,v 1.10 1995/03/21 09:02:35 cgd Exp $
+.\"
+.\" Copyright (c) 1980, 1990, 1993
+.\"	The Regents of the University of California.  All rights reserved.
+.\"
+.\" Redistribution and use in source and binary forms, with or without
+.\" modification, are permitted provided that the following conditions
+.\" are met:
+.\" 1. Redistributions of source code must retain the above copyright
+.\"    notice, this list of conditions and the following disclaimer.
+.\" 2. Redistributions in binary form must reproduce the above copyright
+.\"    notice, this list of conditions and the following disclaimer in the
+.\"    documentation and/or other materials provided with the distribution.
+.\" 3. Neither the name of the University nor the names of its contributors
+.\"    may be used to endorse or promote products derived from this software
+.\"    without specific prior written permission.
+.\"
+.\" THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+.\" ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+.\" IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+.\" ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+.\" FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+.\" DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+.\" OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+.\" HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+.\" LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+.\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+.\" SUCH DAMAGE.
+.\"
+.\"	@(#)csh.1	8.2 (Berkeley) 1/21/94
+.\"
+.\" Includes public domain content derived from:
+.\"		- /usr/src/bin/ksh/sh.1
+.\"			$OpenBSD: sh.1,v 1.91 2011/09/03 22:59:08 jmc Exp $
+.\"
 .TH OSH 1 "@OSH_DATE@" "@OSH_VERSION@" "General Commands"
 .SH NAME
 osh \- old shell (command interpreter)
@@ -71,7 +109,7 @@ osh \- old shell (command interpreter)
 \fB\-t\fR |
 \fIfile\fR [\fIarg1 ...\fR]]
 .SH DESCRIPTION
-.I Osh
+.B Osh
 is an enhanced,
 backward-compatible port of the
 standard command interpreter from Sixth Edition UNIX.
@@ -79,7 +117,7 @@ It may be used either as an interactive shell
 or as a non-interactive shell.
 Throughout this manual,
 `(+)' indicates those cases where
-.I osh
+.B osh
 is known to differ from the original
 .IR sh (1),
 as it appeared in Sixth Edition UNIX.
@@ -173,20 +211,88 @@ from the appropriate rc files if possible
 below)
 before reading and executing command lines
 from the terminal.
+.SS Metacharacters
+A
+.I "syntactic metacharacter"
+is any one of the following:
+.PP
+.RS 6
+\fB|\fR
+\fB^\fR
+\fB;\fR
+\fB&\fR
+\fB(\fR
+\fB)\fR
+\fB<\fR
+\fB>\fR
+\fBspace\fR
+\fBtab\fR
+.RE
+.PP
+When such a character is unquoted,
+it has special meaning to the shell.
+The shell uses it to separate words
+(see
+.I Commands
+and
+.I "Command\ lines"
+below).
+A
+.I "quoting metacharacter"
+is any one of the following:
+.PP
+.RS 6
+\fB\\\fR
+\fB"\fR
+\fB'\fR
+.RE
+.PP
+See
+.I "Quoting"
+below.
+The
+.I "substitution metacharacter"
+is a:
+.PP
+.RS 6
+\fB$\fR
+.RE
+.PP
+See
+.I "Parameter substitution"
+below.
+A
+.I "pattern metacharacter"
+is any one of the following:
+.PP
+.RS 6
+\fB*\fR
+\fB?\fR
+\fB[\fR
+.RE
+.PP
+See
+.I "File name generation"
+below.
 .SS Commands
-Each command is a sequence of non-blank command arguments
-separated by blanks (spaces or tabs).
+Each command is a sequence of non-blank command arguments,
+or words,
+separated by one or more blanks (\fBspaces\fR or \fBtabs\fR).
 The first argument specifies the name of a command to be executed.
-Except for certain types of special arguments described below,
+Except for certain special arguments described below,
 the arguments other than the command name are passed
 without interpretation to the invoked command.
 .PP
 If the first argument names a special command,
 the shell executes it (see
-.I "Special commands"
+.I "Special\ commands"
 below).
-Otherwise,
-the shell treats it as an external command,
+(+) Otherwise,
+the shell treats it either as an alias
+(see
+.I "Aliases"
+below)
+or as an external command,
 which is located as follows.
 .PP
 (+) If the command name contains no `/' characters,
@@ -210,7 +316,7 @@ to execute such a file.
 If a command cannot be found or executed,
 a diagnostic is printed.
 .SS Command lines
-Commands separated by `|' or `^' constitute a chain of
+Commands separated by \fB|\fR or \fB^\fR constitute a chain of
 .IR filters ,
 or a
 .IR pipeline .
@@ -222,11 +328,11 @@ by pipes (see
 to its neighbors.
 .PP
 A
-.IR "command line" ,
+.IR "command\ line" ,
 or
 .IR list ,
 consists of one or more pipelines separated,
-and perhaps terminated by `;' or `&'.
+and perhaps terminated by \fB;\fR or \fB&\fR.
 The semicolon designates sequential execution.
 The ampersand designates asynchronous execution,
 which causes the preceding pipeline to be executed
@@ -235,12 +341,61 @@ The process ID of each command in such a pipeline is reported,
 so that it may be used if necessary for a subsequent
 .IR kill (1).
 .PP
-A list contained within parentheses such as `(\ list\ )'
+A list contained within parentheses such as
+.BI ( \ list \ )
 is executed in a subshell and may appear
 in place of a simple command as a filter.
 .PP
 If a command line is syntactically incorrect,
 a diagnostic is printed.
+.SS Aliases (+)
+The shell can interpret command aliases set by the user.
+A user may cause the shell to set, print, and unset
+command aliases by using the
+.B alias
+and
+.B unalias
+special commands.
+.PP
+A command alias is a string that substitutes
+for a given command alias name set by the user.
+Command aliases provide a simple way to represent
+complex, long, or often-used commands
+as simple command names.
+Thus,
+if the first argument names an existing command alias,
+its alias string substitutes for the command alias name.
+Any remaining arguments are appended to the argument list.
+.PP
+The shell parses each alias in a command line
+into a list of words from left to right,
+wraps it as a
+\fB(\fR\ \fIlist\fR\ \fB)\fR,
+and executes it in a subshell.
+Two examples of alias usage follow:
+.PP
+.nf
+	% alias s 'echo $s' ; alias status 's'
+	% alias s ; alias status
+	(echo $s)
+	(s)
+	% false
+	% status
+	1
+
+	% alias ll 'ls \-AlF'
+	% alias ll
+	(ls \-AlF)
+	% ll \-d [A\-Z]* | wc \-l | tr \-d ' \\t'
+	9
+.fi
+.PP
+If an alias,
+or its parsed result in a command line,
+is syntactically incorrect,
+a diagnostic is printed.
+If an alias loop occurs,
+an `Alias\ loop\ error' diagnostic is printed.
 .SS Termination reporting
 All terminations other than exit and interrupt
 are considered to be abnormal.
@@ -285,18 +440,18 @@ the arguments of a simple command,
 or before or after a parenthesized command list,
 and is associated with that command or command list.
 .PP
-A redirection of the form `<arg' causes the file `arg'
+A redirection of the form \fB<\fR\fIarg\fR causes the file \fIarg\fR
 to be used as the standard input (file descriptor 0)
 for the associated command.
 .PP
-A redirection of the form `>arg' causes the file `arg'
+A redirection of the form \fB>\fR\fIarg\fR causes the file \fIarg\fR
 to be used as the standard output (file descriptor 1)
 for the associated command.
-If `arg' does not already exist, it is created;
+If \fIarg\fR does not already exist, it is created;
 otherwise, it is truncated at the outset.
 .PP
-A redirection of the form `>>arg' is the same as `>arg',
-except if `arg' already exists the command output is
+A redirection of the form \fB>>\fR\fIarg\fR is the same as \fB>\fR\fIarg\fR,
+except if \fIarg\fR already exists the command output is
 always appended to the end of the file.
 .PP
 For example, either of the following command lines:
@@ -311,15 +466,15 @@ the current date and time,
 followed by the name and a long listing
 of the current working directory.
 .PP
-(+) A `<\-' redirection causes input
+(+) A \fB<\-\fR redirection causes input
 for the associated command to be redirected
 from the standard input which existed when
 the shell was invoked.
 This allows a command file to be used as a filter.
 .PP
-A `>arg' or `>>arg' redirection associated with any
+A \fB>\fR\fIarg\fR or \fB>>\fR\fIarg\fR redirection associated with any
 but the last command of a pipeline is ineffectual,
-as is a `<arg' redirection with any but the first.
+as is a \fB<\fR\fIarg\fR redirection with any but the first.
 .PP
 The standard error (file descriptor 2)
 is never subject to redirection by the shell itself.
@@ -336,18 +491,19 @@ a diagnostic is printed.
 .SS Quoting
 The shell treats all
 .I quoted
-characters literally.
-This includes characters which may have
-special meaning to the shell such as
-`|', `^', `;', `&', `<', `>', and others
-described in this manual.
+characters literally,
+including characters which have
+special meaning to the shell
+(see
+.I Metacharacters
+above).
 If such characters are quoted,
 they represent themselves and may be passed
 as part of arguments.
 .PP
 An individual
 .I backslash
-(\\) quotes,
+(\fB\\\fR) quotes,
 or
 .IR escapes ,
 the next individual character.
@@ -360,9 +516,9 @@ is translated into a blank.
 Individual characters, and sequences of characters,
 are also quoted when enclosed by a matched pair of
 .I double
-(") or
+(\fB"\fR) or
 .I single
-(') quotes.
+(\fB'\fR) quotes.
 For example:
 .PP
 .nf
@@ -396,7 +552,8 @@ Such a shell may be invoked as follows:
 .PP
 If the first character of
 .I name
-is not `\-',
+is not
+.BR \- ,
 it is taken as the name of a
 .IR "command file" ,
 or
@@ -426,7 +583,7 @@ the string itself is taken as a command line
 and executed.
 .PP
 In each command line,
-an unquoted character sequence of the form `$N',
+an unquoted character sequence of the form \fB$\fR\fIN\fR,
 where
 .I N
 is a digit,
@@ -437,11 +594,11 @@ Each occurrence of a positional parameter in the
 command line is substituted with the value of the
 \fIN\fRth argument to the invocation of the shell
 (\fIargN\fR).
-`$0' is substituted with
+\fB$\fR\fI0\fR is substituted with
 .IR name .
 .PP
 In all shell instances,
-`$$' is substituted with the process ID of
+\fB$$\fR is substituted with the process ID of
 the current shell.
 The value is represented as a 5-digit ASCII string,
 padded on the left with zeros when the process ID
@@ -454,38 +611,38 @@ Otherwise,
 the parameter is unset when the shell
 cannot determine its value.
 .TP 10
-$# (*)
+\fB$\fR\fI#\fR (*)
 The number of positional parameters currently available
 to the shell.
 .TP
-$*
+\fB$\fR\fI*\fR
 The values of the positional parameters currently available
-to the shell, from `$1' through the end of its argument list.
+to the shell, from \fB$\fR\fI1\fR through the end of its argument list.
 .TP
-$d
+\fB$\fR\fId\fR
 The value of the environment variable OSHDIR.
 .TP
-$e
+\fB$\fR\fIe\fR
 The value of the environment variable EXECSHELL.
 .TP
-$h
+\fB$\fR\fIh\fR
 The value of the environment variable HOME.
 .TP
-$m
+\fB$\fR\fIm\fR
 The value of the environment variable MANPATH.
 .TP
-$n (*)
-A synonym for the `$#' parameter.
+\fB$\fR\fIn\fR (*)
+A synonym for the \fB$\fR\fI#\fR parameter.
 .TP
-$p
+\fB$\fR\fIp\fR
 The value of the environment variable PATH.
 .TP
-$s (*)
+\fB$\fR\fIs\fR (*)
 The exit status of the last sequential command from the
 .I previous
 command line.
 .TP
-$t
+\fB$\fR\fIt\fR
 The terminal name with which the standard input
 was associated when the shell was invoked,
 as determined by
@@ -493,14 +650,14 @@ as determined by
 The value (if any) is equivalent to that
 given by `tty\ <\-'.
 .TP
-$u
+\fB$\fR\fIu\fR
 The effective user name of the current user,
 as determined by
 .IR getpwuid (3).
 The value (if any) is equivalent to that
 given by `id\ -un'.
 .TP
-$v (*)
+\fB$\fR\fIv\fR (*)
 The version of the current shell represented
 as a one-word, read-only string.
 .PP
@@ -515,8 +672,7 @@ occurring on the
 line.
 .PP
 A positional-parameter value may contain
-any number of characters with special meaning
-to the shell.
+any number of metacharacters.
 Each one which is
 .IR unquoted ,
 or
@@ -534,22 +690,26 @@ Take the following two shell invocations for example:
 .fi
 .PP
 In the first invocation,
-the `>' in the value substituted by `$1'
+the \fB>\fR in the value substituted by \fB$\fR\fI1\fR
 retains its special meaning.
 This causes all output from
 .B echo
-to be redirected to `/dev/null'.
+to be redirected to \fI/dev/null\fR.
 However,
 in the second invocation,
-the meaning of `>' is escaped by `\\'
-in the value substituted by `$1'.
+the meaning of \fB>\fR is
+.I escaped
+by \fB\\\fR
+in the value substituted by \fB$\fR\fI1\fR.
 This causes the shell to pass `>/dev/null'
-as an argument to echo instead of interpreting
+as a single argument to
+.B echo
+instead of interpreting
 it as a redirection.
 .SS File name generation
 Prior to executing a command,
 the shell scans each argument for
-unquoted `*', `?', or `[' characters.
+unquoted \fB*\fR, \fB?\fR, or \fB[\fR characters.
 If one or more of these characters appears,
 the argument is treated as a
 .I pattern
@@ -561,20 +721,20 @@ the argument is used as is.
 .PP
 The meaning of each pattern character is as follows:
 .IP o 4
-The `*' character in a pattern matches any string of
+The \fB*\fR character in a pattern matches any string of
 characters in a file name (including the null string).
 .IP o
-The `?' character in a pattern matches any single character
+The \fB?\fR character in a pattern matches any single character
 in a file name.
 .IP o
-The `[...]' brackets in a pattern specifies a class of characters
+The \fB[...]\fR brackets in a pattern specifies a class of characters
 which matches any single file-name character in the class.
 Within the brackets,
 each character is taken to be a member of the class.
-A pair of characters separated by an unquoted `\-' specifies
+A pair of characters separated by an unquoted \fB\-\fR specifies
 the class as a range which matches each character lexically
 between the first and second member of the pair, inclusive.
-A `\-' matches itself when quoted or when first or last
+A \fB\-\fR matches itself when quoted or when first or last
 in the class.
 .PP
 Any other character in a pattern matches itself in a file name.
@@ -588,7 +748,7 @@ If the pattern contains no `/' characters,
 the current directory is always used.
 Otherwise,
 the specified directory is the one obtained by taking the pattern
-up to the last `/' before the first unquoted `*', `?', or `['.
+up to the last `/' before the first unquoted \fB*\fR, \fB?\fR, or \fB[\fR.
 The matching process matches the remainder of the pattern
 after this `/' against the files in the specified directory.
 .PP
@@ -624,9 +784,9 @@ a diagnostic is printed only when they
 fail to match any files.
 Otherwise,
 each pattern argument failing to match
-any files is simply removed from the argument list.
+any files is removed from the argument list.
 .SS Startup and shutdown (+)
-If the first character of the file name used to
+If the first character of the argv[0] used to
 invoke an interactive shell is `\-' (e.g.,\ \-osh),
 it is a login shell and tries to read and execute commands
 from the following four rc init files in sequence:
@@ -638,10 +798,10 @@ and
 The same is true when the shell is invoked with the
 .B \-l
 option,
-regardless of the shell's file name.
+regardless of the value of argv[0].
 .PP
 In the case where an interactive shell is not
-a login shell according to its file name,
+a login shell according to its argv[0],
 it tries to read and execute commands
 from the following two rc init files in sequence:
 .I @SYSCONFDIR@/osh.oshrc
@@ -650,7 +810,7 @@ and
 The same is true when the shell is invoked with the
 .B \-i
 option,
-regardless of the shell's file name.
+regardless of the value of argv[0].
 .PP
 In any case,
 after the shell finishes its startup actions,
@@ -804,9 +964,9 @@ Does nothing and sets the exit status to zero.
 Sets the alias \fIname\fR to \fIstring\fR in the current shell
 if both \fIname\fR and \fIstring\fR are specified.
 Prints the current value of the alias \fIname\fR's string
-if \fIname\fR is specified.
-Prints the name and string of each alias (if any)
-set in the current shell if no arguments are specified.
+if \fIname\fR is specified and set in the current shell.
+Prints the name and string of each alias set in
+the current shell if no arguments are specified.
 .TP
 \fBcd\fR [\fIdir ...\fR] (+)
 Is a synonym for the
@@ -818,7 +978,7 @@ Changes the shell's current working directory to
 .IR dir .
 (+) If
 .I dir
-is an unquoted `-',
+is an unquoted \fB-\fR,
 the shell's previous working directory is used instead.
 Otherwise,
 if
@@ -829,7 +989,7 @@ the user's home directory is used by default.
 \fBecho\fR [\fB\-n\fR] [\fIstring ...\fR] (+)
 Writes its string arguments (if any) separated by blanks
 and terminated by a newline to the standard output.
-If `\-n' is specified, the terminating newline is not written.
+If \fB\-n\fR is specified, the terminating newline is not written.
 .TP
 \fBexec\fR \fIcommand\fR [\fIarg ...\fR] (+)
 Replaces the current shell with an instance of
@@ -884,9 +1044,9 @@ is set to the empty string.
 .B shift
 Shifts all positional-parameter values to the
 left by 1,
-so that the old value of `$2' becomes the new
-value of `$1' and so forth.
-The value of `$0' does not shift.
+so that the old value of \fB$\fR\fI2\fR becomes the new
+value of \fB$\fR\fI1\fR and so forth.
+The value of \fB$\fR\fI0\fR does not shift.
 .TP
 \fBsigign\fR [\fB+\fR | \fB\-\fR \fIsignal_number ...\fR] (+)
 \fB+\fR causes the specified signals
@@ -969,7 +1129,7 @@ Asynchronous child processes always ignore
 both SIGINT and SIGQUIT.
 Also,
 if such a process has not redirected its
-input with a `<', `|', or `^',
+input with a \fB<\fR, \fB|\fR, or \fB^\fR,
 the shell automatically redirects it to come from
 .IR /dev/null .
 .SH "EXIT STATUS (+)"
@@ -1030,14 +1190,14 @@ execute an external command when it does not
 begin with the proper magic number
 or a `#!shell' sequence.
 Its value is available to the shell via
-the `$e' special parameter.
+the \fB$\fR\fIe\fR special parameter.
 .TP
 .B HOME
 If set to a non-empty string,
 the value of this variable is taken as the
 user's home directory.
 Its value is available to the shell via
-the `$h' special parameter and is
+the \fB$\fR\fIh\fR special parameter and is
 the default directory for the
 .B chdir
 special command.
@@ -1049,7 +1209,7 @@ sequence of directories used by
 .IR man (1)
 to search for manual page files.
 Its value is available to the shell via
-the `$m' special parameter.
+the \fB$\fR\fIm\fR special parameter.
 .TP
 .B OSHDIR
 If set to a non-empty string,
@@ -1057,7 +1217,7 @@ the value of this variable is taken as the
 path name of a directory which may be used
 for temporary files.
 Its value is available to the shell via
-the `$d' special parameter.
+the \fB$\fR\fId\fR special parameter.
 .TP
 .B PATH
 If set to a non-empty string,
@@ -1065,7 +1225,7 @@ the value of this variable is taken as the
 sequence of directories used
 by the shell to search for external commands.
 Its value is available to the shell via
-the `$p' special parameter.
+the \fB$\fR\fIp\fR special parameter.
 Notice that the Sixth Edition UNIX
 shell always used the equivalent of `.:/bin:/usr/bin',
 not PATH.
@@ -1126,7 +1286,7 @@ which is hereby made available as
 .IR osh (1).
 .SH HISTORY
 A
-.I sh
+.B sh
 command
 appeared as
 .I /bin/sh
@@ -1141,13 +1301,13 @@ it was replaced by the Bourne shell.
 However,
 the Thompson shell
 was still distributed with the system as
-.I osh
+.B osh
 because of known portability problems
 with the Bourne shell's memory management
 in Seventh Edition UNIX.
 .SH LICENSE
 See either the LICENSE file which is distributed with
-.I osh
+.B osh
 or
 http://v6shell.org/license/
 for full details.
