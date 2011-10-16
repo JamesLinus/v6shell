@@ -107,7 +107,8 @@ the OpenBSD project.  The original license follows:
 ============================================================
 Additionally, fd2.1, glob6.1, if.1, osh.1, and sh6.1 include
 public domain content derived from /usr/src/bin/ksh/sh.1 of
-the OpenBSD project.  The original license follows:
+the OpenBSD project that describes the environment variable
+EXECSHELL.  The original license follows:
 
 .\"	$OpenBSD: sh.1,v 1.91 2011/09/03 22:59:08 jmc Exp $
 .\"
