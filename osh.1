@@ -348,54 +348,6 @@ in place of a simple command as a filter.
 .PP
 If a command line is syntactically incorrect,
 a diagnostic is printed.
-.SS Aliases (+)
-The shell can interpret command aliases set by the user.
-A user may cause the shell to set, print, and unset
-command aliases by using the
-.B alias
-and
-.B unalias
-special commands.
-.PP
-A command alias is a string that substitutes
-for a given command alias name set by the user.
-Command aliases provide a simple way to represent
-complex, long, or often-used commands
-as simple command names.
-Thus,
-if the first argument names an existing command alias,
-its alias string substitutes for the command alias name.
-Any remaining arguments are appended to the argument list.
-.PP
-The shell parses each alias in a command line
-into a list of words from left to right,
-wraps it as a
-\fB(\fR\ \fIlist\fR\ \fB)\fR,
-and executes it in a subshell.
-Two examples of alias usage follow:
-.PP
-.nf
-	% alias s 'echo $s' ; alias status 's'
-	% alias s ; alias status
-	(echo $s)
-	(s)
-	% false
-	% status
-	1
-
-	% alias ll 'ls \-AlF'
-	% alias ll
-	(ls \-AlF)
-	% ll \-d [A\-Z]* | wc \-l | tr \-d ' \\t'
-	9
-.fi
-.PP
-If an alias,
-or its parsed result in a command line,
-is syntactically incorrect,
-a diagnostic is printed.
-If an alias loop occurs,
-an `Alias\ loop\ error' diagnostic is printed.
 .SS Termination reporting
 All terminations other than exit and interrupt
 are considered to be abnormal.
@@ -944,6 +896,85 @@ and then doing a:
 causes sed to output the 44th command line from
 the history file via pipe for repetition as a
 command substitution by osh.
+.SS Aliases (+)
+The shell can interpret command aliases set by the user.
+A user may cause the shell to set, print, and unset
+command aliases by using the
+.B alias
+and
+.B unalias
+special commands.
+.PP
+A command alias is a string that substitutes
+for a given command alias name set by the user.
+Command aliases provide a simple way to represent
+complex, long, or often-used commands
+as simple command names.
+Thus,
+if the first argument names an existing command alias,
+its alias string substitutes for the command alias name.
+Any remaining arguments are appended to the argument list.
+.PP
+Aliases may be used both in interactive shells
+and in non-interactive shells.
+However,
+notice that aliases are not functional
+when a non-interactive shell is invoked
+either with the
+.B \-c
+option followed by a
+.I string
+or with the
+.B \-t
+option.
+Such a shell only executes one command line,
+but setting and using an alias requires
+executing two command lines,
+one for setting and one for executing.
+.PP
+The shell parses each alias in a command line
+into a list of words from left to right,
+wraps it as a
+\fB(\fR\ \fIlist\fR\ \fB)\fR,
+re-parses it while parsing any nested aliases
+(up to three deep),
+and executes the resulting alias in a subshell
+on success.
+Three simple examples of alias usage follow:
+.PP
+.nf
+	% : Example One
+	% alias s 'echo $s' ; alias status 's'
+	% alias s ; alias status
+	(echo $s)
+	(s)
+	% false
+	% status
+	1
+
+	% : Example Two
+	% alias ll 'ls \-AlF'
+	% alias ll
+	(ls \-AlF)
+	% ll \-d [A\-Z]* | wc \-l | tr \-d ' \\t'
+	9
+
+	% : Example Three
+	% alias loadavg "uname \-n|sed 's/\\([^.]*\\).*/\\1/'|tr -d \\\\n;\\
+	  echo \-n ': ';uptime|sed 's/^.*user[s,][ ,] *//'"
+	% alias loadavg
+	(uname \-n|sed 's/\\([^.]*\\).*/\\1/'|tr -d \\\\n;\\
+	 echo \-n ': ';uptime|sed 's/^.*user[s,][ ,] *//')
+	% loadavg | awk '{ print NR "\\t" $0 }'
+	1       haven: load averages: 0.49 0.39 0.29
+.fi
+.PP
+If an alias,
+or its parsed result in a command line,
+is syntactically incorrect,
+a diagnostic is printed.
+If an alias loop occurs,
+an `Alias\ loop\ error' diagnostic is printed.
 .SS End of file
 An end-of-file in the shell's input
 causes it to exit.
