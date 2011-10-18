@@ -940,7 +940,7 @@ re-parses it while parsing any nested aliases
 (up to three deep),
 and executes the resulting alias in a subshell
 on success.
-Three simple examples of alias usage follow:
+Three examples of alias usage follow:
 .PP
 .nf
 	% : Example One
@@ -957,7 +957,7 @@ Three simple examples of alias usage follow:
 	% alias ll
 	(ls \-AlF)
 	% ll \-d [A\-Z]* | wc \-l | tr \-d ' \\t'
-	9
+	10
 
 	% : Example Three
 	% alias loadavg "uname \-n|sed 's/\\([^.]*\\).*/\\1/'|tr -d \\\\n;\\
