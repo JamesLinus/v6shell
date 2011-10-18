@@ -199,7 +199,7 @@ install-dest:
 
 install-doc:
 	test -d $(DESTDOCDIR) || { umask 0022 && mkdir -p $(DESTDOCDIR) ; }
-	$(INSTALL) -c    $(MANGRP) $(MANMODE) [ACILNPR]*  $(DESTDOCDIR)
+	$(INSTALL) -c    $(MANGRP) $(MANMODE) [ACDILNPR]* $(DESTDOCDIR)
 
 install-exp:
 	test -d $(DESTEXPDIR) || { umask 0022 && mkdir -p $(DESTEXPDIR) ; }
