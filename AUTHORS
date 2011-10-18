@@ -1,6 +1,6 @@
 The original Thompson shell was principally written by Ken Thompson
 of Bell Labs.  However, it should be noted that other individuals
-at Bell Labs also had a role in its development: Dennis Ritchie,
+at Bell Labs also had a role in its development: Dennis M. Ritchie,
 M. D. McIlroy, J. F. Ossanna, and quite likely others as well.
 
 Jeffrey Allen Neitzel is the principal developer and maintainer of
@@ -54,6 +54,8 @@ I wish to thank the original authors very much for their efforts.
 Without their previous work, none of this software or documentation
 would exist today.
 
-Jeffrey Allen Neitzel						2010/04/30
+See the DEDICATIONS file for further info.
+
+Jeffrey Allen Neitzel						2011/10/18
 
 @(#)$Id$
