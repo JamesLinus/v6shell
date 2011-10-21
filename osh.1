@@ -654,9 +654,7 @@ the meaning of \fB>\fR is
 by \fB\\\fR
 in the value substituted by \fB$\fR\fI1\fR.
 This causes the shell to pass `>/dev/null'
-as a single argument to
-.B echo
-instead of interpreting
+as a single argument to echo instead of interpreting
 it as a redirection.
 .SS File name generation
 Prior to executing a command,
@@ -873,15 +871,15 @@ the user can use the history file to repeat
 any command line as a command substitution with
 .IR sed (1)
 and
-.IR osh .
+.BR osh .
 Taking the following command line
 and history entry for example:
 .PP
 .nf
-	% history -n 44
+	% history -n 3126
 	Number	Command Line
 	------	------------
-	44		uname -s | \\
+	3126		uname -s | \\
 			if { fd2 -ef/dev/null egrep '(Darwin|Linux|NetBSD)' } \\
 			echo 'Running on GNU/Linux, Mac OS X, or NetBSD.'
 .fi
@@ -889,11 +887,11 @@ and history entry for example:
 and then doing a:
 .PP
 .nf
-	% sed -n 44p <$h/.osh.history | osh
+	% sed -n 3126p <$h/.osh.history | osh
 	Running on GNU/Linux, Mac OS X, or NetBSD.
 .fi
 .PP
-causes sed to output the 44th command line from
+causes sed to output the 3126th command line from
 the history file via pipe for repetition as a
 command substitution by osh.
 .SS Aliases (+)
@@ -929,8 +927,8 @@ or with the
 option.
 Such a shell only executes one command line,
 but setting and using an alias requires
-executing two command lines,
-one for setting and one for executing.
+executing two command lines in the same shell,
+one to set it and one to execute it.
 .PP
 The shell parses each alias in a command line
 into a list of words from left to right,
@@ -1303,6 +1301,14 @@ stty(1)
 .PP
 Osh home page:
 http://v6shell.org/
+.PP
+`The UNIX Time-Sharing System' (CACM, July, 1974):
+.PP
+.nf
+	http://v6shell.org/history/unix/
+.fi
+.PP
+gives the theory of operation of both the system and the shell.
 .SH AUTHORS
 This enhanced port of the Thompson shell is derived from
 Sixth Edition UNIX /usr/source/s2/sh.c,
