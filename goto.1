@@ -62,11 +62,10 @@
 .SH NAME
 goto \- transfer command
 .SH SYNOPSIS
-.BI
 .B goto
 \fIlabel\fR [\fI...\fR]
 .SH DESCRIPTION
-.I Goto
+.B Goto
 is allowed only when the shell is taking
 commands from a seekable command file (see
 .IR lseek (2)).
@@ -77,17 +76,17 @@ followed by one or more blanks,
 and then the
 .IR label .
 If such a line is found,
-.I goto
+.B goto
 repositions the command-file offset to
 the line after the label and exits.
-This effectively causes the shell to transfer
+This causes the shell to transfer
 to the labelled line.
 .PP
 \fB:\fR is a special command which causes
 the shell to do nothing.
 .SH "EXIT STATUS"
 The
-.I goto
+.B goto
 command exits with one of the following values:
 .TP
 0
@@ -107,7 +106,7 @@ Osh home page:
 http://v6shell.org/
 .SH COMPATIBILITY
 The
-.I goto
+.B goto
 command from Sixth Edition UNIX
 requires \fB:\fR to be the first character
 on the labelled line.
@@ -119,14 +118,14 @@ This allows labelled lines to be indented so that complex
 command files might be easier to read and understand.
 .SH HISTORY
 A
-.I goto
+.B goto
 command
 appeared as
 .I /bin/goto
 in Third Edition UNIX.
 .SH LICENSE
 See either the LICENSE file which is distributed with
-.I osh
+.B osh
 or
 http://v6shell.org/license/
 for full details.

@@ -58,6 +58,10 @@
 .\" IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .\" POSSIBILITY OF SUCH DAMAGE.
 .\"
+.\" Includes public domain content derived from:
+.\"		- /usr/src/bin/ksh/sh.1
+.\"			$OpenBSD: sh.1,v 1.91 2011/09/03 22:59:08 jmc Exp $
+.\"
 .TH IF 1 "@OSH_DATE@" "@OSH_VERSION@" "General Commands"
 .SH NAME
 if \- conditional command
@@ -65,7 +69,7 @@ if \- conditional command
 .B if
 [\fIexpression\fR [\fIcommand\fR [\fIarg ...\fR]]]
 .SH DESCRIPTION
-.I If
+.B If
 evaluates the specified
 .IR expression ,
 and if its value is true,
@@ -78,7 +82,7 @@ it returns a non-zero exit status.
 When
 .I expression
 is not specified,
-.I if
+.B if
 also returns a non-zero exit status.
 .PP
 The following primaries are used to construct
@@ -176,21 +180,16 @@ has higher precedence than
 .BR \-o .
 Notice that all of the operators and flags
 are separate arguments to
-.IR if .
+.BR if .
 Notice also that parentheses are meaningful
 to the shell and must be escaped.
 .PP
-In addition,
-except for the
-.B \-h
-primary,
-symbolic links are followed for all
-other \fIfile\fR-related primaries.
-.\" primaries that refer to filesystem objects.
-.\" primaries that refer to files.
+Symbolic links are followed for all
+\fIfile\fR-related primaries except
+.BR \-h .
 .SH "EXIT STATUS"
 The
-.I if
+.B if
 command exits with one of the following values:
 .TP
 0
@@ -256,7 +255,7 @@ Osh home page:
 http://v6shell.org/
 .SH COMPATIBILITY
 The
-.I if
+.B if
 command from Sixth Edition UNIX
 does not support the
 .BR \-d ,
@@ -280,14 +279,14 @@ as is the case with
 .IR test (1).
 .SH HISTORY
 An
-.I if
+.B if
 command
 appeared as
 .I /bin/if
 in Third Edition UNIX.
 .SH LICENSE
 See either the LICENSE file which is distributed with
-.I osh
+.B osh
 or
 http://v6shell.org/license/
 for full details.
