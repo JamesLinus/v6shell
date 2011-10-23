@@ -11,20 +11,14 @@
 : fd2 -e echo "debug: Executing `"$h/.oshrc"' now..."
 
 printenv TERM >/dev/null
-if $s = 0 goto TERM_OK
+if $s = 0 goto TermIsSet
 
 	setenv	TERM	vt100
 	: fallthrough
 
-: TERM_OK
-if ! \( $n = 1 -a X$1 = Xsh6 \) goto TTY_CHECK
-
-	unsetenv TTY
-	: fallthrough
-
-: TTY_CHECK
+: TermIsSet
 printenv TTY | grep \^$t\$ >/dev/null
-if $s = 0 goto continue
+if $s = 0 goto Continue
 
 	setenv	TTY	$t
 
@@ -39,36 +33,56 @@ if $s = 0 goto continue
 		setenv	LC_ALL		en_US.UTF-8
 		setenv	LESSCHARSET	utf-8
 		printf	"%b"		'\033]701;en_US.UTF-8\007' >/dev/tty
-		goto Next
+		goto Continue
 
 	: C - " Default to the C locale for rxvt. "
 
 		setenv	LC_ALL	C
 		: fallthrough
 
-	: Next - " Set the window title for terminal emulators under X. "
-
-	if $n = 1 -a X$1 = Xsh6 goto sh6
-		xtitle ; goto stty
-	: sh6
-		sh6 -c xtitle
-		: fallthrough
-
-	: stty - " Set terminal options. "
-	stty altwerase imaxbel -oxtabs <-
-	stty status '^T' <-
-	: fallthrough
-
-: continue - " Okay, continue as normal. "
+: Continue - " Continue as normal. "
 
 	:
-	: " Other initialization routines that the user wishes to execute "
-	: " for each interactive shell can be placed here.                "
+	: " Set terminal options. "
 	:
+	( stty altwerase imaxbel -oxtabs ; stty status '^T' ) <-
 
 	if ! \( $n = 1 -a X$1 = Xsh6 \) goto osh
+
+		:
+		: " Replace osh w/ sh6 when user does `osh [-i | -l] sh6'. "
+		:
 		if ! { which sh6 >/dev/null } goto shift
-			: " Replace osh w/ sh6 . " ; exec sh6 <-
+			sh6 -c xtitle
+			exec sh6 <-
 		: shift
 			shift
-	: osh
+			: " Fallthrough if sh6 is not found. "
+
+	: osh - " Finish osh init. "
+
+		xtitle
+
+		:
+		: " Set some useful aliases. "
+		:
+		alias	hcount	"setenv LC_ALL C;awk '{print $1;}'<$h/.osh.history|sort|uniq -c|sort -k1 -rn|head -25;:"
+		alias	l	'leaks $$;:'
+		alias	lf	'ls -F'
+		alias	li	'ls -i'
+		alias	ll	'ls -AlF'
+		alias	loadavg	"uname -n|sed 's/\([^.]*\).*/\1/'|tr -d \\n;echo -n ': ';uptime|sed 's/^.*user[s,][ ,] *//';:"
+		alias	manpath	'echo $m;:'
+		alias	n	'echo "日本語 Nihongo";:'
+		alias	path	'echo $p;:'
+		alias	pparm	'echo $0: $#: $*;:'
+		alias	pspg	'ps -Oppid,pgid;:'
+		alias	sh6i	'osh -i sh6;xtitle;:'
+		alias	sh6l	'osh -l sh6;xtitle;:'
+		alias	s	'echo $s;:'
+		alias	status	's'
+		( alias logout ) | wc -c | tr -d ' \t' | grep '^0$' >/dev/null
+		if $s != 0 goto Jump
+			alias	logout	'fd2 -e echo "Not an osh login shell - Type an EOT (^D) instead";false'
+		: Jump
+			: nothing

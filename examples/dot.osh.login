@@ -39,8 +39,29 @@ if X$u != Xroot goto continue
 	setenv	POSIXLY_CORRECT
 
 	if $n = 1 -a X$1 = Xsh6 goto sh6
+		alias	logout	'(sigign)|if { grep "^sigign +  1$">/dev/null } fd2 -e echo "SIGHUP ignored - Type an EOT (^D) instead";sigign + 1;(sigign)|if ! { grep "^sigign +  1$">/dev/null } fd2 -e echo "SIGHUP ignored - Type an EOT (^D) instead";kill -HUP $$;false'
 		@SOURCE_OSHDIR@
+		: fallthrough
 	: sh6
+
+	:
+	: " Start ssh-agent & ssh-add key(s) if possible.        "
+	: " Change `$h/.ssh/SshKeyFile' to private ssh key file. "
+	:
+	which ssh-agent ssh-add >/dev/null
+	if ! \( $s = 0 -a -e $h/.ssh/SshKeyFile \) goto NoSshAgentOrKey
+	if { printenv SSH_AUTH_SOCK } -o { printenv SSH_AGENT_PID } \
+		goto Jump >/dev/null
+		if ! { mkdir $h/.osh.setenv.$$ } goto Jump
+			ssh-agent -c >$h/.osh.setenv.$$/SSH_AGENT
+			source $h/.osh.setenv.$$/SSH_AGENT >/dev/null
+			rm -r $h/.osh.setenv.$$
+		: fallthrough
+	: Jump
+		ssh-add -l | grep $h/.ssh/SshKeyFile                 >/dev/null
+		</dev/null if $s != 0 fd2 ssh-add $h/.ssh/SshKeyFile >/dev/null
+		: " Copy previous 2 lines for additional ssh keys if desired. "
+	: NoSshAgentOrKey
 
 	: " Print a message or two at login time. "
 	echo ; date '+%A, %Y-%m-%d, %T %Z' ; echo
