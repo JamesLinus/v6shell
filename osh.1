@@ -942,9 +942,9 @@ Three examples of alias usage follow:
 .PP
 .nf
 	% : Example One
-	% alias s 'echo $s' ; alias status 's'
+	% alias s 'echo $s;:' ; alias status 's'
 	% alias s ; alias status
-	(echo $s)
+	(echo $s;:)
 	(s)
 	% false
 	% status
@@ -959,10 +959,10 @@ Three examples of alias usage follow:
 
 	% : Example Three
 	% alias loadavg "uname \-n|sed 's/\\([^.]*\\).*/\\1/'|tr -d \\\\n;\\
-	  echo \-n ': ';uptime|sed 's/^.*user[s,][ ,] *//'"
+	  echo \-n ': ';uptime|sed 's/^.*user[s,][ ,] *//';:"
 	% alias loadavg
 	(uname \-n|sed 's/\\([^.]*\\).*/\\1/'|tr -d \\\\n;\\
-	 echo \-n ': ';uptime|sed 's/^.*user[s,][ ,] *//')
+	 echo \-n ': ';uptime|sed 's/^.*user[s,][ ,] *//';:)
 	% loadavg | awk '{ print NR "\\t" $0 }'
 	1       haven: load averages: 0.49 0.39 0.29
 .fi
