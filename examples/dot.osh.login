@@ -46,21 +46,26 @@ if X$u != Xroot goto continue
 
 	:
 	: " Start ssh-agent & ssh-add key(s) if possible.        "
+	: " Allow ssh key use across multiple login sessions.    "
 	: " Change `$h/.ssh/SshKeyFile' to private ssh key file. "
 	:
-	which ssh-agent ssh-add >/dev/null
+	which ssh ssh-agent ssh-add >/dev/null
 	if ! \( $s = 0 -a -e $h/.ssh/SshKeyFile \) goto NoSshAgentOrKey
-	if { printenv SSH_AUTH_SOCK } -o { printenv SSH_AGENT_PID } \
-		goto Jump >/dev/null
-		if ! { mkdir $h/.osh.setenv.$$ } goto Jump
-			ssh-agent -c >$h/.osh.setenv.$$/SSH_AGENT
-			source $h/.osh.setenv.$$/SSH_AGENT >/dev/null
-			rm -r $h/.osh.setenv.$$
-		: fallthrough
-	: Jump
+	if { printenv SSH_AUTH_SOCK } -a ! { printenv IS_OSH_SSH_AGENT } goto AddOrReAddKey >/dev/null
+		if -e $h/.osh-ssh-agent goto SourceSshAgent
+			( : ) >$h/.osh-ssh-agent ; chmod 0600 $h/.osh-ssh-agent
+			echo ': Agent started by osh pid '$$ >$h/.osh-ssh-agent
+			echo 'setenv IS_OSH_SSH_AGENT true;'>>$h/.osh-ssh-agent
+			ssh-agent -c | head -2 >>$h/.osh-ssh-agent
+			: fallthrough
+		: SourceSshAgent
+			source $h/.osh-ssh-agent
+			: fallthrough
+	: AddOrReAddKey
 		ssh-add -l | grep $h/.ssh/SshKeyFile                 >/dev/null
 		</dev/null if $s != 0 fd2 ssh-add $h/.ssh/SshKeyFile >/dev/null
-		: " Copy previous 2 lines for additional ssh keys if desired. "
+		: " Copy & adjust previous 2 lines for additional ssh keys... "
+		: fallthrough
 	: NoSshAgentOrKey
 
 	: " Print a message or two at login time. "

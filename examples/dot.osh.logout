@@ -13,8 +13,20 @@ sigign + 2 3
 : fd2 -e echo "debug: Executing `"$h/.osh.logout"' now..."
 
 :
+: " Check for ssh-agent started by $$, and kill it before logout. "
+:
+if ! -e $h/.osh-ssh-agent -o ! { printenv IS_OSH_SSH_AGENT } goto OshDir >/dev/null
+
+	sed -n 1p <$h/.osh-ssh-agent | grep $$ >/dev/null
+	if $s != 0 goto OshDir
+		printenv SSH_AGENT_PID | sed 's,.*,kill &,' | fd2 osh >/dev/null
+		unsetenv SSH_AGENT_PID ; rm -f $h/.osh-ssh-agent
+	: fallthrough
+
+:
 : " Check for OSHDIR ($d), and remove it before logout. "
 :
+: OshDir
 if X$d = X -o ! -d $d'' goto Logout
 
 	chdir ; rm -r $d ; chdir -
