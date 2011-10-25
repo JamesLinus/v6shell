@@ -3,8 +3,12 @@ code for the Sixth Edition (V6) UNIX Thompson shell and global
 command in porting them to run on modern UNIX systems.
 
 -------------------------------------------------------------------------------
-[osh-current]: Friday, 2010-05-14:
-	* No changes.
+[osh-current]:
+sh6.c, glob6.c:
+	* Updated to better align w/ osh code w/o changing visible behavior.
+
+*6.1:
+	* Updated to match style changes in other manual pages.
 
 -------------------------------------------------------------------------------
 [osh-20100430]:
@@ -403,6 +407,6 @@ glob.c:
     Date: May 14, 1975
     From: Sixth Edition UNIX /usr/source/s1/glob.c
 
-Jeffrey Allen Neitzel						2010/05/14
+Jeffrey Allen Neitzel						2011/10/25
 
 @(#)$Id$
