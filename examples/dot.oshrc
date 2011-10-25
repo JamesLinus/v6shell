@@ -64,7 +64,19 @@ if $s = 0 goto Continue
 		xtitle
 
 		:
-		: " Set some useful aliases. "
+		: " Set some useful aliases.                           "
+		: " If you want an alias to ignore arguments, doing a: "
+		:
+		:	alias foo ' echo foo bar baz ; : '
+		:
+		: " or "
+		:
+		:	alias foo 'echo foo bar baz;:'
+		:
+		: " ... "
+		: " or similar (for example) is a simple way to do so. "
+		: " The terminating ` ; : ' or `;:' (in effect) turns  "
+		: " alias arguments into a no-op.                      "
 		:
 		alias	hcount	"setenv LC_ALL C;awk '{print $1;}'<$h/.osh.history|sort|uniq -c|sort -k1 -rn|head -25;:"
 		alias	l	'leaks $$;:'
