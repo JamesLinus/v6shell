@@ -2,6 +2,9 @@ Changes that improve compatibility w/ the Sixth Edition (V6) UNIX
 Thompson shell are marked w/ a `C:' in the details below.
 
 -------------------------------------------------------------------------------
+[osh-current]:
+
+-------------------------------------------------------------------------------
 [osh-20111027]:
 	* New file: DEDICATIONS (in memory of Dennis M. Ritchie (dmr))
 

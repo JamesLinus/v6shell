@@ -3,6 +3,9 @@ code for the Sixth Edition (V6) UNIX Thompson shell and global
 command in porting them to run on modern UNIX systems.
 
 -------------------------------------------------------------------------------
+[osh-current]:
+
+-------------------------------------------------------------------------------
 [osh-20111027]:
 sh6.c, glob6.c:
 	* Updated to better align w/ osh code w/o changing visible behavior.
