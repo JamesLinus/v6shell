@@ -2,11 +2,51 @@ Changes that improve compatibility w/ the Sixth Edition (V6) UNIX
 Thompson shell are marked w/ a `C:' in the details below.
 
 -------------------------------------------------------------------------------
-[osh-current]: Friday, 2010-05-14:
-osh.1:
-	* Added [--] to fd2 usage synopsis in "Special commands" subsection.
+[osh-current]:
+	* New file: DEDICATIONS (in memory of Dennis M. Ritchie (dmr))
 
-	* s/Mac/Mac OS X/
+AUTHORS:
+	* Added reference to DEDICATIONS file.
+
+LICENSE:
+	* Added two more OpenBSD license references.
+
+mkconfig:
+	* Fixed a problem w/ the mkconfig script on OpenBSD, where which(1)
+	  used to send a "newgrp: Command not found." diagnostic to standard
+	  output, not standard error. It looks like the noted OpenBSD which(1)
+	  problem has since been fixed though.
+
+osh:
+	* Fixed a globbing problem caused by an unsigned-integer overflow.
+
+	* Added $# (as a synonym for $n) and $* parameters.
+
+	* Added a new, command-aliasing feature.
+
+osh.1:
+	* Added `alias' and `unalias' documentation to the
+	  "Special commands" subsection.
+
+	* Added a new "Aliases (+)" subsection.
+
+	* Added a new "Metacharacters" subsection.
+
+*.1:
+	* Changed the visual style of the manual pages, regarding bold, italic,
+	  and `literal' text.  The intent was to make for easier reading.
+
+if:
+	* Added `:' as if(1) special command. It is useful when debugging
+	  scripts and helps when documenting them.
+
+examples/dot.*:
+	* Documented by example how to turn alias arguments into a no-op.
+
+	* Added ssh-agent support.  This allows the same ssh-agent process
+	  to be used for shared ssh key(s) across multiple concurrent
+	  login sessions. It also kills the ssh-agent process on
+	  logout when appropriate.
 
 -------------------------------------------------------------------------------
 [osh-20100430]:
@@ -1596,6 +1636,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2010/05/14
+Jeffrey Allen Neitzel						2011/10/26
 
 @(#)$Id$
