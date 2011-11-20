@@ -53,7 +53,7 @@ if X$u != Xroot goto continue
 			( : ) >$h/.osh-ssh-agent ; chmod 0600 $h/.osh-ssh-agent
 			echo ': Agent started by osh pid '$$ >$h/.osh-ssh-agent
 			echo 'setenv IS_OSH_SSH_AGENT true;'>>$h/.osh-ssh-agent
-			ssh-agent -c | head -2 >>$h/.osh-ssh-agent
+			ssh-agent -c | head -2              >>$h/.osh-ssh-agent
 			: fallthrough
 		: SourceSshAgent
 			source $h/.osh-ssh-agent

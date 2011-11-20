@@ -19,8 +19,10 @@ if ! -e $h/.osh-ssh-agent -o ! { printenv IS_OSH_SSH_AGENT } goto OshDir >/dev/n
 
 	sed -n 1p <$h/.osh-ssh-agent | grep $$ >/dev/null
 	if $s != 0 goto OshDir
-		printenv SSH_AGENT_PID | sed 's,.*,kill &,' | fd2 osh >/dev/null
-		unsetenv SSH_AGENT_PID ; rm -f $h/.osh-ssh-agent
+		echo 'unsetenv IS_OSH_SSH_AGENT;' >$h/.osh-ssh-agent
+		ssh-agent -c -k | head -2        >>$h/.osh-ssh-agent
+		source $h/.osh-ssh-agent ; rm -f $h/.osh-ssh-agent
+
 	: fallthrough
 
 :
