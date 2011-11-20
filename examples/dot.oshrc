@@ -22,6 +22,8 @@ if $s = 0 goto Continue
 
 	setenv	TTY	$t
 
+	printenv TERM | grep '^vt100$' >/dev/null
+	if $s = 0 goto Continue
 	printenv TERM | grep '^rxvt$' >/dev/null
 	if $s = 0 goto C
 
