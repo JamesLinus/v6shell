@@ -38,11 +38,8 @@ if X$u != Xroot goto continue
 	:
 	setenv	POSIXLY_CORRECT
 
-	if $n = 1 -a X$1 = Xsh6 goto sh6
-		alias	logout	'(sigign)|if { grep "^sigign +  1$">/dev/null } fd2 -e echo "SIGHUP ignored - Type an EOT (^D) instead";sigign + 1;(sigign)|if ! { grep "^sigign +  1$">/dev/null } fd2 -e echo "SIGHUP ignored - Type an EOT (^D) instead";kill -HUP $$;false'
-		@SOURCE_OSHDIR@
-		: fallthrough
-	: sh6
+	alias	logout	'(sigign)|if { grep "^sigign +  1$">/dev/null } fd2 -e echo "SIGHUP ignored - Type an EOT (^D) instead";sigign + 1;(sigign)|if ! { grep "^sigign +  1$">/dev/null } fd2 -e echo "SIGHUP ignored - Type an EOT (^D) instead";kill -HUP $$;false'
+	@SOURCE_OSHDIR@
 
 	:
 	: " Start ssh-agent & ssh-add key(s) if possible.        "
