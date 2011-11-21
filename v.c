@@ -29,6 +29,8 @@
  *	@(#)$Id$
  */
 
+#include "config.h"
+
 #ifndef	lint
 #ifndef	OSH_ATTR
 # if __GNUC__ > 3 || __GNUC__ == 3 && __GNUC_MINOR__ >= 4
@@ -46,5 +48,5 @@ static const char cid1[] OSH_ATTR = "\100(#)\044Id: Copyright (c) 2001-2002 Cald
 /*@unused@*/
 static const char cid2[] OSH_ATTR = "\100(#)\044Id: Copyright (c) 2003-2011 Jeffrey Allen Neitzel. \044";
 /*@unused@*/
-static const char vid[]  OSH_ATTR = "\100(#)\044Id: " OSH_VERSION " \044";
+static const char vid[]  OSH_ATTR = "\100(#)\044Id: " OSH_VERSION " (" OSH_UNAME_SRM ") \044";
 #endif	/* !lint */

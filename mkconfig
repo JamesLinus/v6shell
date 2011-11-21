@@ -86,6 +86,7 @@ cat <<EOI >$CONFIG_H
 
 `definePathnameConstant PATH_LOGIN  login`
 `definePathnameConstant PATH_NEWGRP newgrp`
+#define	OSH_UNAME_SRM	"$UNAME_SRM"
 
 EOI
 
