@@ -79,8 +79,17 @@ if $s = 0 goto Continue
 	alias	sh6i	'sh6 -c xtitle;sh6;xtitle;:'
 	alias	s	'echo $s;:'
 	alias	status	's'
+	alias	v	'echo $v;:'
+	: Version1
+	if ! { fd2 which what >/dev/null } goto Version2
+		alias	version	"which osh|sed 's/.*/what &/'|osh|head -2|tail -1|sed 's/[ 	]*\$Id$//';:"
+		goto NoVersion
+	: Version2
+	if ! { fd2 which ident >/dev/null } goto NoVersion
+		alias	version	"which osh|sed 's/.*/ident &/'|osh|head -2|tail -1|sed 's/[ 	]*\$Id$//';:"
+		: fallthrough
+	: NoVersion
 	( alias logout ) | wc -c | tr -d ' \t' | grep '^0$' >/dev/null
 	if $s != 0 goto Jump
 		alias	logout	'fd2 -e echo "Not an osh login shell - Type an EOT (^D) instead";false'
 	: Jump
-		: nothing

@@ -1,4 +1,4 @@
-Welcome to osh rc files!
+Welcome to Osh (V6Shell) RC Files!
 
 The Sixth Edition Thompson shell did not read/execute rc (init and
 logout) files.  The fact that osh does so is simply one of its
@@ -43,6 +43,6 @@ you to contact me via email.  Thanks & Enjoy!
 
 Jeffrey Allen Neitzel
 <jan (at) v6shell (dot) org>
-http://v6shell.org/rc_files					2010/02/28
+http://v6shell.org/rc_files					2011/11/22
 
 @(#)$Id$
