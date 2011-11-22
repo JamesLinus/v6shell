@@ -32,10 +32,10 @@ following systems:
 	System		Releases / Distributions / Additional Info
 	----------------------------------------------------------
 	DragonFly BSD	2.0.1
-	FreeBSD		6.1, 7.0
+	FreeBSD		6.1, 7.0, 8.2
 	Mac OS X	10.4, 10.5, 10.6, 10.7
-	NetBSD		2.1, 3.1.1, 4.0, 4.0.1, 5.0, 5.0.2, 5.1
-	OpenBSD		4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7
+	NetBSD		2.1, 3.1.1, 4.0, 4.0.1, 5.0, 5.1
+	OpenBSD		4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, ?5.0?
 	OpenSolaris	2008.05, 2008.11, 2009.06 (See last example
 			in EXAMPLES section of INSTALL file.)
 	GNU/Linux	CentOS 5.2, Debian 5.0.3 (lenny), Linpus,
@@ -57,6 +57,6 @@ you to contact me via email.  Thanks & Enjoy!
 
 Jeffrey Allen Neitzel
 <jan (at) v6shell (dot) org>
-http://v6shell.org/						2011/10/25
+http://v6shell.org/						2011/11/22
 
 @(#)$Id$
