@@ -2,7 +2,28 @@ Changes that improve compatibility w/ the Sixth Edition (V6) UNIX
 Thompson shell are marked w/ a `C:' in the details below.
 
 -------------------------------------------------------------------------------
-[osh-current]:
+[osh-20111129]:
+mkconfig, v.c:
+	* Added useful build system info from `uname -srm'.
+
+examples/dot.*:
+	* Removed code to replace osh w/ sh6 when invoked as
+	  `osh [-i | -l] sh6'.  Use sh6i alias instead.
+
+	* Changed sh6i alias for sake of simplicity.
+
+	* Removed sh6l alias.
+
+	* Changed from using kill(1) to kill current ssh-agent process
+	  to using ssh-agent(1) and its `-k' flag instead.
+
+	* Added handy new v and version aliases.  For example:
+
+		% v ; : Same as doing % echo $v
+		osh-20111129
+
+		% version
+		osh-20111129 (NetBSD 5.1 amd64)
 
 -------------------------------------------------------------------------------
 [osh-20111027]:
@@ -1639,6 +1660,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2011/10/26
+Jeffrey Allen Neitzel						2011/11/22
 
 @(#)$Id$
