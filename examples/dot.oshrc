@@ -1,7 +1,5 @@
 : $h/.oshrc - " Modify to taste. "
 :
-: "  @(#)$Id$  "
-:
 : "  The author of this file, J.A. Neitzel <jan (at) v6shell (dot) org>,  "
 : "  hereby grants it to the public domain.                               "
 :
@@ -82,11 +80,11 @@ if $s = 0 goto Continue
 	alias	v	'echo $v;:'
 	: Version1
 	if ! { fd2 which what >/dev/null } goto Version2
-		alias	version	"which osh|sed 's/.*/what &/'|osh|head -2|tail -1|sed 's/[ 	]*\$Id$//';:"
+		alias	version	"which osh|sed 's/.*/what &/'|osh|head -2|tail -1|sed 's/[ 	]*\$Id: //';:"
 		goto NoVersion
 	: Version2
 	if ! { fd2 which ident >/dev/null } goto NoVersion
-		alias	version	"which osh|sed 's/.*/ident &/'|osh|head -2|tail -1|sed 's/[ 	]*\$Id$//';:"
+		alias	version	"which osh|sed 's/.*/ident &/'|osh|head -2|tail -1|sed 's/[ 	]*\$Id: //';:"
 		: fallthrough
 	: NoVersion
 	( alias logout ) | wc -c | tr -d ' \t' | grep '^0$' >/dev/null

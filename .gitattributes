@@ -1,1 +1,3 @@
-* ident
+[A-Z]* ident
+mkconfig ident
+*.[1ch] ident

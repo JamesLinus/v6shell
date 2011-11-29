@@ -1,7 +1,5 @@
 : $h/.osh.login - " Modify to taste. "
 :
-: "  @(#)$Id$  "
-:
 : "  The author of this file, J.A. Neitzel <jan (at) v6shell (dot) org>,  "
 : "  hereby grants it to the public domain.                               "
 :
