@@ -2,6 +2,18 @@ Changes that improve compatibility w/ the Sixth Edition (V6) UNIX
 Thompson shell are marked w/ a `C:' in the details below.
 
 -------------------------------------------------------------------------------
+[osh-20111129-p1]:
+examples/dot.oshrc:
+	* Re-added missing ';s/ \$//' that git ident removed from version alias.
+	  This removes trailing ' $' as shown in example 1 and 2 below:
+
+		% : example 1 ; version
+		osh-20111129 (NetBSD 5.1 amd64) $
+
+		% : example 2 ; version
+		osh-20111129-p1 (NetBSD 5.1 amd64)
+
+-------------------------------------------------------------------------------
 [osh-20111129]:
 mkconfig, v.c:
 	* Added useful build system info from `uname -srm'.
@@ -1660,6 +1672,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2011/11/22
+Jeffrey Allen Neitzel						2011/12/08
 
 @(#)$Id$

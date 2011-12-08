@@ -68,8 +68,8 @@ LDFLAGS+=	$(MOXARCH)
 #	osh-YYYYMMDD           == official release
 #	osh-YYYYMMDD-p[1-9]    == patched  release
 #
-OSH_DATE=	November 22, 2011
-OSH_VERSION=	osh-20111129
+OSH_DATE=	December 8, 2011
+OSH_VERSION=	osh-20111129-p1
 
 OSH=	osh
 SH6=	sh6 glob6
