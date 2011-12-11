@@ -8,7 +8,7 @@
 
 : fd2 -e echo "debug: Executing `"$h/.osh.login"' now..."
 
-if X$u != Xroot goto continue
+if X$u != Xroot goto Continue
 
 	:
 	: " Give the superuser a different default PATH. "
@@ -17,7 +17,7 @@ if X$u != Xroot goto continue
 	setenv	PATH	$p:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11/bin
 	: fallthrough
 
-: continue - " Okay, continue as normal. "
+: Continue - " Continue as normal. "
 
 	setenv	MANPATH	\
 		/opt/local/share/man:/usr/local/man:/usr/share/man:/usr/X11/share/man
