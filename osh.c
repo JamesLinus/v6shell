@@ -178,6 +178,7 @@ static	const struct sbicmd {
 	{ "umask",	SBI_UMASK    },
 	{ "unalias",	SBI_UNALIAS  },
 	{ "unsetenv",	SBI_UNSETENV },
+	{ "version",	SBI_VERSION  },
 	{ "wait",	SBI_WAIT     }
 };
 #define	NSBICMD		((int)(sizeof(sbi) / sizeof(sbi[0])))
@@ -1780,6 +1781,14 @@ execute1(struct tnode *t)
 		}
 		emsg = ERR_ARGCOUNT;
 		break;
+
+	case SBI_VERSION:
+		/*
+		 * Print version and build system of current shell.
+		 */
+		fd_print(FD1, "%s (%s)\n", OSH_VERSION, OSH_UNAME_SRM);
+		status = SH_TRUE;
+		return;
 
 	case SBI_WAIT:
 		/*
