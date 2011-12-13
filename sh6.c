@@ -107,7 +107,7 @@ static	char	*const	*dolv;		/* $N dollar-argument value array   */
 static	const char	*error_message;	/* error msg for read/parse errors  */
 static	bool		glob_flag;	/* glob flag for `*', `?', `['      */
 static	char		line[LINEMAX];	/* command-line buffer              */
-static	char		*linep;
+static	char		*linep;		/* line pointer                     */
 static	const char	*name;		/* $0 - shell command name          */
 static	int		nul_count;	/* `\0'-character count (per line)  */
 static	int		one_line_flag;	/* one-line flag for `-t' option    */
@@ -117,7 +117,7 @@ static	const char	*prompt;	/* interactive-shell prompt pointer */
 static	enum sigflags	sig_child;	/* SIG(INT|QUIT|TERM) child flags   */
 static	int		status;		/* shell exit status                */
 static	char		*word[WORDMAX];	/* argument/word pointer array      */
-static	char		**wordp;
+static	char		**wordp;	/* word pointer                     */
 
 /*
  * **** Function Prototypes ****

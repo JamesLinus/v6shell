@@ -220,8 +220,8 @@ static	int		hwfd = -1;	/* history write file descriptor    */
 static	bool		is_login;	/* login shell flag (true if login) */
 static	char		line[LINEMAX];	/* command-line buffer              */
 static	char		aline[LINEMAX];	/* alias-line buffer                */
-static	char		*linep;
-static	char		*elinep;
+static	char		*linep;		/* [a]line pointer                  */
+static	char		*elinep;	/* end of [a]line pointer           */
 static	volatile sig_atomic_t
 			logout_now;	/* SIGHUP caught flag (1 if caught) */
 static	const char	*name;		/* $0 - shell command name          */
@@ -233,8 +233,8 @@ static	enum sigflags	sig_state;	/* SIG(INT|QUIT|TERM) state flags   */
 static	int		status;		/* shell exit status                */
 static	char		*word[WORDMAX];	/* arg/word pointer array           */
 static	char		*aword[WORDMAX];/* alias arg/word pointer array     */
-static	char		**wordp;
-static	char		**ewordp;
+static	char		**wordp;	/* [a]word pointer                  */
+static	char		**ewordp;	/* end of [a]word pointer           */
 /*@null@*/ /*@only@*/
 static	struct anode	*anp;		/* shell alias node pointer         */
 /*@null@*/
