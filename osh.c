@@ -262,7 +262,7 @@ static	int		readc(void);
 static	const char	*get_dolp(int);
 static	void		aalloc(/*@null@*/const char *, /*@null@*/const char *);
 static	struct anode	*aalloc1(const char *, const char *);
-static	void		afree(/*@null@*/ const char *);
+static	bool		afree(/*@null@*/ const char *);
 /*@null@*/
 static	const char	*asget(/*@null@*/ const char *);
 static	struct tnode	*talloc(void);
@@ -449,7 +449,7 @@ logout:
 done:
 	xfree(tty);
 	xfree(user);
-	afree(NULL);
+	(void)afree(NULL);
 	return status;
 }
 
@@ -980,15 +980,18 @@ aalloc1(const char *name, const char *string)
 /*
  * If name is specified (is not NULL), free its alias.
  * If name is not specified (is NULL), free all aliases.
+ * Return true (1) or false (0) as needed.
  */
-static void
+static bool
 afree(const char *name)
 {
 	struct anode *a, *p;
+	bool r;
 
 	if (name != NULL) {
 		a = anp;
 		p = a;
+		r = false;
 		while (a != NULL) {
 			if (EQUAL(name, a->name)) {
 				if (a == anp)
@@ -998,6 +1001,7 @@ afree(const char *name)
 				xfree(a->name);
 				xfree(a->string);
 				xfree(a);
+				r = true;
 				break;
 			}
 			p = a;
@@ -1012,7 +1016,9 @@ afree(const char *name)
 			a = a->next;
 			xfree(p);
 		}
+		r = (anp != NULL) ? true : false;
 	}
+	return r;
 }
 
 /*
@@ -1582,17 +1588,20 @@ execute1(struct tnode *t)
 					break;
 				}
 				aalloc(t->nav[1], t->nav[2]);
-			} else
+				status = SH_TRUE;
+			} else {
 				if ((p = asget(t->nav[1])) != NULL)
 					fd_print(FD1, "(%s)\n", p);
+				status = (p != NULL) ? SH_TRUE : SH_FALSE;
+			}
 		} else {
 			a = anp;
 			while (a != NULL) {
 				fd_print(FD1, "%s\t(%s)\n", a->name, a->string);
 				a = a->next;
 			}
+			status = (anp != NULL) ? SH_TRUE : SH_FALSE;
 		}
-		status = SH_TRUE;
 		return;
 
 	case SBI_CD:
@@ -1751,8 +1760,7 @@ execute1(struct tnode *t)
 				    t->nav[0], t->nav[1], ERR_BADNAME);
 				return;
 			}
-			afree(t->nav[1]);
-			status = SH_TRUE;
+			status = (afree(t->nav[1])) ? SH_TRUE : SH_FALSE;
 			return;
 		}
 		emsg = ERR_ARGCOUNT;
