@@ -1008,6 +1008,7 @@ afree(const char *name)
 			a = a->next;
 		}
 	} else {
+		r = (anp != NULL) ? true : false;
 		a = anp;
 		while (a != NULL) {
 			p = a;
@@ -1016,7 +1017,6 @@ afree(const char *name)
 			a = a->next;
 			xfree(p);
 		}
-		r = (anp != NULL) ? true : false;
 	}
 	return r;
 }
