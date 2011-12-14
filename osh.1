@@ -607,11 +607,16 @@ The effective user name of the current user,
 as determined by
 .IR getpwuid (3).
 The value (if any) is equivalent to that
-given by `id\ -un'.
+given by `id\ \-un'.
 .TP
 \fB$\fR\fIv\fR (*)
-The version of the current shell represented
+The version of the current shell
 as a one-word, read-only string.
+The
+.B version
+special command prints the version,
+and build system given by `uname\ \-srm',
+of the current shell.
 .PP
 All substitution on a command line is performed
 .I before
