@@ -1793,6 +1793,9 @@ execute1(struct tnode *t)
 	case SBI_VERSION:
 		/*
 		 * Print version and build system of current shell.
+		 * This information comes from $v (OSH_VERSION) and
+		 * from build-time output of `uname -srm' (see uname(1)
+		 * and OSH_UNAME_SRM in "config.h").
 		 */
 		fd_print(FD1, "%s (%s)\n", OSH_VERSION, OSH_UNAME_SRM);
 		status = SH_TRUE;
