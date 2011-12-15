@@ -610,13 +610,15 @@ The value (if any) is equivalent to that
 given by `id\ \-un'.
 .TP
 \fB$\fR\fIv\fR (*)
-The version of the current shell
+The version of the current shell represented
 as a one-word, read-only string.
 The
 .B version
-special command prints the version,
-and build system given by `uname\ \-srm',
-of the current shell.
+special command is another option (see
+.B version
+in
+.I "Special\ commands"
+below).
 .PP
 All substitution on a command line is performed
 .I before
@@ -1126,7 +1128,12 @@ Removes the alias \fIname\fR and its string from the current shell.
 Removes the variable \fIname\fR from the environment.
 .TP
 .B version
-Prints the version and build system of the current shell.
+Prints the version and the build system
+of the current shell.
+This information comes from \fB$\fR\fIv\fR
+and from the build-time output
+of `uname\ \-srm' (see
+.IR uname (1)).
 .TP
 .B wait
 Waits for all asynchronous processes to terminate,
@@ -1305,7 +1312,8 @@ man(1),
 newgrp(1),
 sed(1),
 sh6(1),
-stty(1)
+stty(1),
+uname(1)
 .PP
 Osh home page:
 http://v6shell.org/
