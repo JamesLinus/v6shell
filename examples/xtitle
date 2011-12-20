@@ -1,0 +1,40 @@
+#!/usr/bin/env osh
+:
+: "  xtitle.osh: 2005/09/28  "
+:
+: "  The author of this file, J.A. Neitzel <jneitzel (at) sdf1 (dot) org>,  "
+: "  hereby grants it to the public domain.                                 "
+:
+
+:
+: "  Set the window title for terminal emulators under X.  "
+:
+: "  usage: xtitle [string]  "
+:
+
+: " Check for correct usage. "
+: >>$1'' <''
+if $n != 0 -a $n != 1 if { exit } pusage $0 '"[string]"'
+
+( : " Fail if this process does not have a controlling terminal. " ) >/dev/tty
+
+:
+: " Exit quietly w/ a non-zero status if the value of TERM does not match "
+: " the following pattern.  Change the pattern according to your needs.   "
+:
+printenv TERM | egrep '^(rxvt|xterm|xterm-color|xterm-xfree86)$' >/dev/null
+if $s != 0 if { exit } false
+
+:
+: " If $1 is specified, set the window title to the specified value. "
+:
+if $n = 1 if { exit } printf "%b" '\033]0;'$1'\007' >/dev/tty
+
+:
+: " Otherwise, set it to a nice default value... "
+:
+(	printf "%b" '\033]0;osh: '$u@	; \
+	printenv HOST			; \
+	printf "%b" ' ('		; \
+	printenv TTY | cut -d/ -f3	; \
+	printf "%b" ')\007'		) | tr -d '\n' >/dev/tty

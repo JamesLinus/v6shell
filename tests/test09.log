@@ -1,0 +1,29 @@
+Backslashes: \ (1) - \\\\\\\\\ (9)
+
+The effect of `\' when using the shell w/ `-c string' ...
+Continuation of command lines is not supported.
+2) XYZ\
+4) XYZ\\
+6) XYZ\\\
+8) XYZ\\\\
+
+The effect of `\' when using the shell w/ the `-t' option ...
+Continuation of command lines is not supported.
+2) XYZ\
+4) XYZ\\
+6) XYZ\\\
+8) XYZ\\\\
+
+The effect of `\' in command files and interactive shells ...
+Continuation of command lines is always supported.
+1) XYZ
+2) XYZ\
+3) XYZ\
+4) XYZ\\
+5) XYZ\\
+6) XYZ\\\
+7) XYZ\\\
+8) XYZ\\\\
+9) XYZ\\\\
+
+" Hello to you! "

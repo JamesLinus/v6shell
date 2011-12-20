@@ -1,0 +1,32 @@
+--------
+Historical notes:
+
+The Thompson shell, by Ken Thompson of Bell Labs, was used as the
+standard command interpreter through Sixth Edition Unix.  In the
+Seventh Edition, it was replaced by the Bourne shell and then made
+available as osh.
+
+The Thompson shell from Sixth Edition Unix used the following
+external utilities:
+
+	1) /bin/exit was used to terminate command files.
+
+	2) /bin/goto was used to transfer the shell's control
+	   from one point to another within a command file.
+
+	3) /bin/if was used to evaluate conditional expressions.
+	   This is the predecessor of test(1), which was first
+	   released in Seventh Edition Unix.
+
+	4) /etc/glob was used to expand `*', `?', and `[...]'
+	   in command arguments.
+
+The functionality of each of the above-mentioned utilities is
+provided here.  However, the `exit' utility is implemented as a
+special built-in command, and `glob' is built into the shell by
+using glob(3) from the C library.
+
+Refer to the manual pages for if(1) and goto(1) for further details
+on those utilities.
+
+Jeffrey Allen Neitzel						2005/05/20

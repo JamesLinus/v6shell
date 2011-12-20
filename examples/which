@@ -1,0 +1,60 @@
+#!/usr/bin/env sh6
+:
+: "  which.sh6: 2005/10/23  "
+:
+: "  The author of this file, J.A. Neitzel <jneitzel (at) sdf1 (dot) org>,  "
+: "  hereby grants it to the public domain.                                 "
+:
+
+:
+: "  Given a name, or list of names, locate the program file(s) in the  "
+: "  user's command search PATH which would be executed if the name(s)  "
+: "  were given to the shell as command(s) in a command line.           "
+:
+: "  If any given name is not found, or is not executable by the user,  "
+: "  exit with a non-zero status.  Otherwise, exit with a zero status.  "
+:
+: "  usage: which name1 [... [name9]]  "
+:
+
+: " Try to exit w/ error if any argument is bad. "
+: >>$1'' <'' ; : >>$2'' <'' ; : >>$3'' <''
+: >>$4'' <'' ; : >>$5'' <'' ; : >>$6'' <''
+: >>$7'' <'' ; : >>$8'' <'' ; : >>$9'' <''
+
+:
+: " Check for correct usage, and create temporary directory. "
+:
+if X$1 = X if { exit } pusage $0 '"name1 [... [name9]]"'
+if ! { mkdir /tmp/which-$$ } if { exit } false
+
+( \
+  echo 'sh6 - \'; \
+  printenv PATH | sed '/^[ 	]*$/q; s![ 	][ 	]*!!g; \
+		       s!:! !g; s!  ! . !g; s!^ !. !; s! $! .!; \
+		       s! !/$1 !g; s!$!/$1!; s!//*!/!g' \
+) >/tmp/which-$$/search
+
+head -4 >>/tmp/which-$$/search; goto Ready
+	: Next
+		if X$1 = X if { exit } false
+		if -f $1 -a -x $1 if { exit } echo $1
+		shift; goto Next
+
+: Ready
+sh6 -$$ $1 $2 $3 $4 $5 $6 $7 $8 $9 >/tmp/which-$$/output; \
+cat </tmp/which-$$/output; \
+</tmp/which-$$/output \
+	( rm -r /tmp/which-$$; if ! { grep ': not found' } ) \
+		>/dev/null; exit
+
+	: Search
+		if X$1 = X exit
+		echo $1 | grep / >/tmp/which$0/gotslash
+		if -s /tmp/which$0/gotslash goto GotSlash
+			if ! { sh6 /tmp/which$0/search $1 } echo $1: not found
+			shift; goto Search
+
+		: GotSlash
+			if ! { if -f $1 -a -x $1 echo $1 } echo $1: not found
+			shift; goto Search
