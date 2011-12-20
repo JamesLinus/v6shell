@@ -1,0 +1,12 @@
+goto: error
+goto: cannot seek
+goto: FOO...........................................................64: label too long
+
+goto: FOO..........................................................63: label found
+goto: FOO: label found
+goto: BAR: label found
+goto: BAZ: label found
+goto: foo: label not found
+goto: bar: label not found
+goto: baz: label not found
+goto: Not_a_label_in_test01.osh...: label not found

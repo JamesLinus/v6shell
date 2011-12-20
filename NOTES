@@ -1,0 +1,81 @@
+--------
+Historical notes:
+
+The Thompson shell, by Ken Thompson of Bell Labs, was used as the
+standard command interpreter through Sixth Edition Unix.  In the
+Seventh Edition, it was replaced by the Bourne shell and then made
+available as osh.
+
+The Thompson shell from Sixth Edition Unix used the following
+external utilities:
+
+	1) /bin/exit was used to terminate command files.
+
+	2) /bin/goto was used to transfer the shell's control
+	   from one point to another within a command file.
+
+	3) /bin/if was used to evaluate conditional expressions.
+	   This is the predecessor of test(1), which was first
+	   released in Seventh Edition Unix.
+
+	4) /etc/glob was used to expand `*', `?', and `[...]'
+	   in command arguments.
+
+The functionality of each of the above-mentioned utilities is
+provided here.  However, the `exit' utility is implemented as a
+special built-in command, and `glob' is built into the shell by
+using glob(3) from the C library.
+
+Refer to the manual pages for if(1) and goto(1) for further details
+on those utilities.
+
+--------
+Compatibility notes:
+
+This implementation of the shell is backward compatible with the
+Thompson shell from Sixth Edition Unix.  However, when it is known
+to differ in some way from the original, this fact is indicated in
+the appropriate manual page, osh(1) or sh6(1).
+
+Aside from those differences which are detailed either in the manual
+pages or below, the only other substantial difference is that this
+implementation of the shell can handle 8-bit character sets.  However,
+the original can only handle 7-bit ASCII.
+
+Further details on some of the known differences:
+
+1) This implementation of the shell uses PATH to search for external
+   commands; the original always uses the equivalent of `.:/bin:/usr/bin'.
+   The sh(1) manual page from Sixth Edition Unix says:
+
+       If  the  first argument is the name of an executable file,
+       it is invoked; otherwise the string `/bin/'  is  prepended
+       to  the  argument.   (In  this way most standard commands,
+       which reside in `/bin', are found.)  If no such command is
+       found,  the  string  `/usr'  is further prepended (to give
+       `/usr/bin/command') and another attempt is made to execute
+       the resulting file.  (Certain lesser-used commands live in
+       `/usr/bin'.)
+
+...
+
+   The primary reason this implementation of the shell uses PATH
+   instead of a procedure like that described above is for both
+   user convenience and security.  The behaviour described above
+   can conceivably be quite dangerous as an unchangeable default.
+
+   Using PATH allows the user to choose the search behaviour.
+   If search behaviour like that of the original is desired, the
+   user can set PATH to a value of `.:/bin:/usr/bin' in order to
+   accomplish this.
+
+2) This implementation of the shell ignores the first line of a
+   command file if it begins with `#!' in order to play nicely with
+   the kernel's `#!' mechanism.  For example, the first line might
+   be `#!/usr/local/bin/osh' or `#!/usr/bin/env osh'.  This is just
+   for user convenience.
+
+3) The original implementation of the shell does shell accounting
+   in order to record command execution data; this one does not.
+
+Jeffrey Allen Neitzel						2005/11/18

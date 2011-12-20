@@ -1,0 +1,58 @@
+" "" "foo "foo" # $ % & ' '' 'foo 'foo' ( ) * - 0 1 2 7 8 9 ; < > >> ? A B C FOO [ \ \\ \foo \foo\ ] ^ foo" foo' foo\ x y z |
+" "" "foo "foo" # $ % & ' '' 'foo 'foo' ( ) * - 0 1 2 7 8 9 ; < > >> ? A B C FOO [ \ \\ \foo \foo\ ] ^ foo" foo' foo\ x y z |
+" "" "foo "foo" # $ % & ' '' 'foo 'foo' ( ) * - 0 1 2 7 8 9 ; < > >> ? A B C FOO [ \ \\ \foo \foo\ ] ^ foo" foo' foo\ x y z |
+
+" # $ % & ' ( ) * - 0 1 2 7 8 9 ; < > ? A B C [ \ ] ^ x y z |
+" # $ % & ' ( ) * - 0 1 2 7 8 9 ; < > ? A B C [ \ ] ^ x y z |
+" # $ % & ' ( ) * - 0 1 2 7 8 9 ; < > ? A B C [ \ ] ^ x y z |
+
+0 1 2 7 8 9 A B C x y z
+- 0 9 A z - 0 9 A z - 0 9 A z
+
+# $ % # $ % # $ %
+
+^ | ^ | ^ |
+
+( ) ( ) ( )
+
+& ; & ; & ;
+
+< > >> < > >> < > >>
+
+" ' \ " ' \
+" "" "foo "foo" ' '' 'foo 'foo' \ \\ \foo \foo\ foo" foo' foo\
+" "" "foo "foo" ' '' 'foo 'foo' \ \\ \foo \foo\ foo" foo' foo\
+"" "foo" '' 'foo' \\ \foo\
+"" "foo" '' 'foo' \\ \foo\
+
+[ ] [ ] [ ] [ ]
+[ ] [ ] [ ] [ ]
+* ? [ * ? [ * ? [ * ? [
+
+" # $ % & ' ( ) * - 0 1 2 7 8 9 ; < > ? A B C [ \ ] ^ x y z | FOO
+" # $ % & ' ( ) * - ; < > ? [ \ ] ^ | FOO
+" & ' ( ) * - ; < > ? [ \ ] ^ | FOO
+" & ' ( ) * - ; < > ? [ \ ] FOO
+" & ' * - ; < > ? [ \ ] FOO
+" ' * - < > ? [ \ ] FOO
+" ' * - ? [ \ ] FOO
+* - ? [ ] FOO
+- [ ] FOO
+- FOO
+FOO
+No match
+No match
+No match
+No match
+No match
+No match
+No match
+No match
+No match
+No match
+No match
+No match
+
+Too many args
+Too many args
+Too many args

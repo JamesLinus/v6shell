@@ -1,0 +1,16 @@
+:
+: " Test for correct detection of syntax errors.            "
+: "	* All of these tests should produce a syntax error. "
+: -- 
+: Jeffrey Allen Neitzel
+:
+
+$2'' X$1 = X -o X$3 = X -o X$4 = X exit; false
+$2 X$0 != Xtest04.osh -a X$0 != X./test04.osh \
+	$2 { exit } echo $0': Wrong directory or test name'; false
+
+sed 's,@SH_TO_TEST@,'$1',g ; \
+     s,@IF_UTIL@,'$2',g ; \
+     s,@GOTO_UTIL@,'$3',g'  <syntax_error.osh.in  >$4/syntax_error.osh
+
+$1 $4/syntax_error.osh

@@ -1,0 +1,41 @@
+if: !: argument expected
+if: (: argument expected
+if: foo: operator expected
+if: =: argument expected
+if: (: ) expected
+if ! ( foo = bar ) is true.
+
+$5 = "FOO" (set to a non-empty string)
+$9 = "" (unset or empty string)
+
+if X! = X! is true.
+if X-a = X-a is true.
+if X-o = X-o is true.
+if X-d = X-d is true.
+if X-e = X-e is true.
+if X-f = X-f is true.
+if X-r = X-r is true.
+if X-s = X-s is true.
+if X-w = X-w is true.
+if X-x = X-x is true.
+if xyz = xyz is true.
+if xyz != zyx is true.
+if ! xyz = zyx is true.
+if ! xyz != xyz is true.
+if { true } is true.
+if ! { false } is true.
+if -e test_dir -a -e test_dir/file is true.
+if ! -f test_dir is true.
+if -d test_dir is true.
+if ! -d test_dir/file is true.
+if -f test_dir/file is true.
+if -r test_dir/file is true.
+if -w test_dir/file is true.
+if -x test_dir/file is true.
+if -s test_dir/file is true.
+if ! -s test_dir/file is true.
+if ! -r test_dir/file is true.
+if ! -w test_dir/file is true.
+if ! -x test_dir/file is true.
+if -e test_dir/file is true.
+if ! -e test_dir/file is true.

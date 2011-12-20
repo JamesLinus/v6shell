@@ -1,0 +1,26 @@
+#!/usr/bin/env osh
+:
+: "  strlen.osh: 2005/10/07  "
+:
+: "  The author of this file, J.A. Neitzel <jneitzel (at) sdf1 (dot) org>,  "
+: "  hereby grants it to the public domain.                                 "
+:
+
+:
+: "  Use expr(1) to print the length of the specified string.  "
+:
+: "  usage: strlen string  "
+:
+
+: " Try to exit w/ error if $1 is bad. "
+: >>$1'' <''
+
+if $n = 1 goto OK
+
+	pusage $0 string; exit
+
+: OK
+	if X$1 = X if { exit } echo 'String "'$1'" is the empty string.'
+	echo -n 'String "'$1'" is '
+	expr //$1 : '//.*' - 2 | tr -d '\n'
+	echo ' character(s) in length.'

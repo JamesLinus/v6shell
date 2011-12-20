@@ -1,0 +1,68 @@
+Welcome to release 051120 of osh!
+
+Osh(1) is an enhanced, backward-compatible reimplementation of the
+Thompson shell from Sixth Edition Unix (circa 1975).  It is derived
+from osh-020214/osh.c, which was written by Gunnar Ritter.  However,
+it should be noted that the original implementation of the Thompson
+shell was written by Ken Thompson of Bell Labs.
+
+In addition to the shell, which is built as osh by default, this
+package also includes:
+
+	sh6(1) - a version of the shell w/o enhancements
+
+	if(1) - conditional command (ported from Sixth Edition Unix)
+
+	goto(1) - transfer command (ported from Sixth Edition Unix)
+
+	fd2(1) - redirect file descriptor 2
+
+The NOTES file gives additional information about this software,
+including some historical and compatibility notes.  However, see
+the manual pages for full details.
+
+--------
+INSTALL:
+The following steps should suffice to build/install osh and its
+supporting utilities, if, goto, and fd2:
+
+	1) Adjust the CONFIGURATION section in the Makefile to match
+	   your desires and/or the requirements of your system.
+
+	2) Type `make' to compile osh, if, goto, and fd2.
+
+	3) Optionally, type `make check' to run a minimal test suite.
+	   *) This should be done as a regular user, not the superuser.
+
+	4) Type `make install' to install the binaries and manual pages.
+
+If you also wish to build/install sh6:
+
+	5) Type `make sh6' to compile it.
+
+	6) Type `make check-sh6' as a regular user to optionally
+	   run the tests against the sh6 binary.
+
+	7) Type `make install-sh6' to install it and its manual page.
+
+--------
+This software should build and work correctly on any POSIX-compliant
+Unix system.  In particular, it is currently developed, maintained,
+and tested by the developer on NetBSD, OpenBSD, and Mac OS X.  In
+the past, it has also been successfully tested on FreeBSD and on
+various distributions of GNU/Linux.
+
+If you think you may have found a bug, before reporting it, please
+try to reproduce it with the latest version of the code.  With bug
+reports, please try to ensure that enough information to reproduce
+the problem is enclosed.  Also, if a known fix for it exists then
+please include that as well.  All bug reports should be sent to the
+following email address:
+	jneitzel (at) sdf1 (dot) org
+
+If you have any questions about this software, I encourage you to
+contact me via email.  Enjoy!
+
+Jeffrey Allen Neitzel
+jneitzel (at) sdf1 (dot) org
+http://jneitzel.sdf1.org/osh/
