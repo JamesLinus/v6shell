@@ -1,0 +1,72 @@
+:
+: " Test the if(1) utility for correct behaviour. "
+: -- 
+: Jeffrey Allen Neitzel
+:
+
+$2'' X$1 = X -o X$3 = X -o X$4 = X exit; false
+$2 X$5 = X -o X$9 != X exit; false
+
+$2 !; $2 ! \(; $2 ! \( foo; $2 ! \( foo =; $2 ! \( foo = bar; \
+$2 ! \( foo = bar \) echo 'if ! ( foo = bar ) is true.'; $3 1
+echo NOTREACHED
+
+: 1
+echo
+$2 X$5 != X $2 ! { echo '$5 = "'$5'" (set to a non-empty string)' } exit; false
+$2 X$9  = X $2 ! { echo '$9 = "'$9'" (unset or empty string)' } exit; false
+echo
+
+$1 - $2 'X! = X!' $3 \
+     $2 'X-a = X-a' $3 \
+     $2 'X-o = X-o' $3 \
+     $2 'X-d = X-d' $3 \
+     $2 'X-e = X-e' $3 \
+     $2 'X-f = X-f' $3 \
+     $2 'X-r = X-r' $3 \
+     $2 'X-s = X-s' $3 \
+     $2 'X-w = X-w' $3 \
+     $2 'X-x = X-x' $3 \
+     $2 'xyz = xyz' $3 \
+     $2 'xyz != zyx' $3 \
+     $2 '! xyz = zyx' $3 \
+     $2 '! xyz != xyz' $3 \
+     $2 '{ true }' $3 \
+     $2 '! { false }' $3; $3 2
+	: Next
+		$1 $2 $1 ! { echo 'if '$2' is true.' } $1 { exit } false
+		$1 X$4 = X exit
+		shift; shift; shift
+		$3 Next
+
+: 2
+$2 ! { rm -f $4/file } exit; false
+$2 ! { echo >$4/file } exit; false
+$2 ! { chmod 0700 $4/file } exit; false
+
+$2 -e $4 -a -e $4/file \
+	$2 ! { echo "if -e "$4" -a -e "$4"/file is true." } exit; false
+
+$2 ! -f $4 $2 ! { echo "if ! -f "$4" is true." } exit; false
+$2 -d $4 $2 ! { echo "if -d "$4" is true." } exit; false
+
+$2 ! -d $4/file $2 ! { echo "if ! -d "$4"/file is true." } exit; false
+$2 -f $4/file $2 ! { echo "if -f "$4"/file is true." } exit; false
+
+$2 -r $4/file $2 ! { echo "if -r "$4"/file is true." } exit; false
+$2 -w $4/file $2 ! { echo "if -w "$4"/file is true." } exit; false
+$2 -x $4/file $2 ! { echo "if -x "$4"/file is true." } exit; false
+
+$2 -s $4/file $2 ! { echo "if -s "$4"/file is true." } exit; false
+( : ) >$4/file
+$2 ! -s $4/file $2 ! { echo "if ! -s "$4"/file is true." } exit; false
+
+$2 ! { chmod 0000 $4/file } exit; false
+
+$2 ! -r $4/file $2 ! { echo "if ! -r "$4"/file is true." } exit; false
+$2 ! -w $4/file $2 ! { echo "if ! -w "$4"/file is true." } exit; false
+$2 ! -x $4/file $2 ! { echo "if ! -x "$4"/file is true." } exit; false
+
+$2 -e $4/file $2 ! { echo "if -e "$4"/file is true." } exit; false
+$2 ! { rm -f $4/file } exit; false
+$2 ! -e $4/file $2 ! { echo "if ! -e "$4"/file is true." } exit; false

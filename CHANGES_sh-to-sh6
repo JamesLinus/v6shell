@@ -1,0 +1,144 @@
+The following list describes the changes which were made to the
+original source code for the Sixth Edition (V6) Unix Thompson shell
+and global command in porting them to run on modern Unix systems.
+
+-------------------------------------------------------------------------------
+sh6.c	1.2 (jneitzel) 2006/01/09:
+	* Deny set-ID execution.  If the effective user (group) ID of the sh6
+	  process is not equal to its real user (group) ID, it shall now print
+	  a diagnostic and exit with a non-zero status.
+
+	* Use geteuid(2) instead of getuid(2) to determine whether to print
+	  the `% ' prompt for a regular user or the `# ' prompt for the
+	  superuser.
+
+	* Cause the shell to ignore SIGINT, SIGQUIT, and SIGTERM when invoked
+	  as an interactive shell.  The original Thompson shell did not do
+	  this.  In Sixth Edition Unix, the login(1) utility invoked the shell
+	  in the following way:
+
+		execl("/bin/sh", "-", (char *)0);
+
+	  ...
+	  This caused the invoked login shell to ignore SIGINT and SIGQUIT.
+	  However, this was not the case for a non-login interactive shell
+	  invoked by a user.
+
+	* When invoked as `cat <runcom | sh6' or `sh6 <runcom', cause the
+	  shell to not print prompts to file descriptor 2.
+
+	* Fixed a file descriptor leak in the creation of pipelines where any
+	  of the commands is a shell special command.  A pipeline such as
+	  `echo hello | : | grep h' is one way to demonstrate this leak in
+	  an unfixed copy of the shell.
+
+	* Added explicit error detection in those cases where the original
+	  Thompson shell did not do so.  For example, the original Thompson
+	  shell did not check the value returned by dup(2) or pipe(2).
+
+	* Changed all of the close(2)/dup(2) sequences for file descriptors
+	  0 and 1 to simply call dup2(2) instead.
+
+	* Changed all of the calls to exit(3) which happen in the child process
+	  after a successful call to fork(2) to _exit(2) instead.
+
+	* Added `exit' as special command which is built into the shell.  Its
+	  usage is the same as that of the external `exit' utility found in
+	  Sixth Edition Unix.
+
+	* Define explicit exit status for special commands, external commands,
+	  and shell errors.
+
+	* Removed the `: too large' diagnostic, and added a `: cannot execute'
+	  diagnostic for external-command execution errors.  The `No shell!'
+	  and `: not found' diagnostics, however, are unchanged.
+
+	* Use pexec() (see pexec.h) for external command execution to
+	  give more flexible and predictable command search behavior.
+
+glob6.c	1.2 (jneitzel) 2006/01/09:
+	* Deny set-ID execution.  If the effective user (group) ID of the
+	  glob6 process is not equal to its real user (group) ID, it shall
+	  now print a diagnostic and exit with a non-zero status.
+
+	* Increased the size of the argument-list buffers to allow generation
+	  of longer argument lists.
+
+	* Added a `Pattern too long' diagnostic for those cases where the
+	  total length of a pattern argument is >= PATH_MAX (or 1024).  If
+	  such an error is encountered, glob6 exits with a non-zero status.
+
+	* Handle quoted arguments specially so that path names containing
+	  blanks can be successfully globbed.
+
+	* Use pexec() (see pexec.h) for command execution to give
+	  more flexible and predictable command search behavior.
+
+-------------------------------------------------------------------------------
+The following ports of the original source code were never released
+to the public.
+
+sh6.c	1.1 (jneitzel) 2004/01/26:
+	* Changed the source file name from `sh.c' to `sh6.c' and the
+	  resulting binary name from `sh' to `sh6' to avoid name conflict
+	  and confusion with the system shell, sh(1), on modern Unix systems.
+
+	* Transformed the source code from K&R C into ANSI C.
+
+	* This nothing more than a simple port to modern Unix systems.
+	  It is now 64-bit clean.  At least, this is true for the 64-bit
+	  systems to which the porter has access.
+
+	* Removed support for the shell's accounting of process times (see
+	  times(3)) which allowed the shell to record command execution data
+	  in a log file.
+
+	* Fixed a buffer overflow in the word() function.
+
+glob6.c	1.1 (jneitzel) 2004/01/26:
+	* Changed the source file name from `glob.c' to `glob6.c' and
+	  the resulting binary name from `glob' to `glob6', matching
+	  the similar change to the name of the shell (see above).
+
+	* Transformed the source code from K&R C into ANSI C.
+
+	* This nothing more than a simple port to modern Unix systems.
+
+	* Fixed possible overflow of the argument-list buffers
+	  in the cat() function.
+
+-------------------------------------------------------------------------------
+Pertinent information about the original files:
+
+The following description refers to Sixth Edition (V6) Unix obtained from:
+
+	http://www.tuhs.org/Archive/PDP-11/Distributions/research/Dennis_v6/
+
+...
+A portion of the `http://www.tuhs.org/Archive/PDP-11/Distributions/DETAILS'
+file reads as follows:
+
+Dennis_v6
+---------
+
+v6root.gz, v6src.gz and v6doc.gz are a set of three RK05 images of Sixth
+Edition with root, /usr and documentation, from Dennis Ritchie. The tape
+bootstraps are not included. The most recent timestamp on any file is
+July 19th 1975.
+
+v6root.tar.gz, v6src.tar.gz and v6doc.tar.gz are tar archives of the
+three RK05 images.
+
+...
+The following files and the corresponding manual pages were all
+obtained from the tar archives described above:
+
+sh.c:
+    What: Original source code for the Sixth Edition (V6) Unix Thompson shell
+    Date: July 17, 1975
+    From: Sixth Edition Unix /usr/source/s2/sh.c
+
+glob.c:
+    What: Original source code for the Sixth Edition (V6) Unix global command
+    Date: May 14, 1975
+    From: Sixth Edition Unix /usr/source/s1/glob.c

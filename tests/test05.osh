@@ -1,0 +1,157 @@
+:
+: " Test for correct redirection behaviour ... "
+: -- 
+: Jeffrey Allen Neitzel
+:
+
+$2'' X$1 = X -o X$3 = X -o X$4 = X exit; false
+$2 X$0 != Xtest05.osh -a X$0 != X./test05.osh \
+	$2 { exit } echo $0': Wrong directory or test name'; false
+
+:
+: " ... when redirection arguments are used w/ built-in commands. "
+: " No error messages should be printed as the shell should not   "
+: " try to open or create files for any of the following tests.   "
+:
+: nothing <$4/Cannot_open >$4/Cannot_create
+<$4/Cannot_open : nothing >$4/Cannot_create
+<$4/Cannot_open >$4/Cannot_create : nothing
+
+: nothing >$4/Cannot_create <$4/Cannot_open
+>$4/Cannot_create : nothing <$4/Cannot_open
+>$4/Cannot_create <$4/Cannot_open : nothing
+
+:
+: " ... when redirection arguments are used w/ external commands. "
+: " Each of the following tests should print a `cannot open' or a "
+: " `cannot create' error message.                                "
+:
+: 1
+$2 { $1 -t $4 } echo "1: Failure, not detected as an error."
+cat <$1/Cannot_open >$1/Cannot_create
+
+: 2
+$2 { $1 -t $4 } echo "2: Failure, not detected as an error."
+<$1/Cannot_open cat >$1/Cannot_create
+
+: 3
+$2 { $1 -t $4 } echo "3: Failure, not detected as an error."
+<$1/Cannot_open >$1/Cannot_create cat
+
+: 4
+$2 { $1 -t $4 } echo "4: Failure, not detected as an error."
+cat >$1/Cannot_create <$1/Cannot_open
+
+: 5
+$2 { $1 -t $4 } echo "5: Failure, not detected as an error."
+>$1/Cannot_create cat <$1/Cannot_open
+
+: 6
+$2 { $1 -t $4 } echo "6: Failure, not detected as an error."
+>$1/Cannot_create <$1/Cannot_open cat
+
+:
+: " ... in the case of the following generic tests. "
+: " The resulting outputs should be correct.        "
+:
+( : ) >$4/Output
+echo 'Output contains '|tr -d '\n';wc -l <$4/Output|tr -d ' \t\n';echo ' lines.'
+
+cat <Input >$4/Output
+<Input cat >$4/Output
+<Input >$4/Output cat
+cat < Input > $4/Output
+< Input cat > $4/Output
+< Input > $4/Output cat
+echo 'Output contains '|tr -d '\n';wc -l <$4/Output|tr -d ' \t\n';echo ' lines.'
+
+cat <Input >>$4/Output
+<Input cat >>$4/Output
+<Input >>$4/Output cat
+cat < Input >> $4/Output
+< Input cat >> $4/Output
+< Input >> $4/Output cat
+echo 'Output contains '|tr -d '\n';wc -l <$4/Output|tr -d ' \t\n';echo ' lines.'
+
+cat >$4/Output <Input
+>$4/Output cat <Input
+>$4/Output <Input cat
+cat > $4/Output < Input
+> $4/Output cat < Input
+> $4/Output < Input cat
+echo 'Output contains '|tr -d '\n';wc -l <$4/Output|tr -d ' \t\n';echo ' lines.'
+
+cat >>$4/Output <Input
+>>$4/Output cat <Input
+>>$4/Output <Input cat
+cat >> $4/Output < Input
+>> $4/Output cat < Input
+>> $4/Output < Input cat
+echo 'Output contains '|tr -d '\n';wc -l <$4/Output|tr -d ' \t\n';echo ' lines.'
+
+( cat ) <Input >$4/Output
+<Input ( cat ) >$4/Output
+<Input >$4/Output ( cat )
+( cat ) < Input > $4/Output
+< Input ( cat ) > $4/Output
+< Input > $4/Output ( cat )
+echo 'Output contains '|tr -d '\n';wc -l <$4/Output|tr -d ' \t\n';echo ' lines.'
+
+( cat ) <Input >>$4/Output
+<Input ( cat ) >>$4/Output
+<Input >>$4/Output ( cat )
+( cat ) < Input >> $4/Output
+< Input ( cat ) >> $4/Output
+< Input >> $4/Output ( cat )
+echo 'Output contains '|tr -d '\n';wc -l <$4/Output|tr -d ' \t\n';echo ' lines.'
+
+(cat) <Input >$4/Output
+<Input (cat) >$4/Output
+<Input >$4/Output (cat)
+(cat) < Input > $4/Output
+< Input (cat) > $4/Output
+< Input > $4/Output (cat)
+echo 'Output contains '|tr -d '\n';wc -l <$4/Output|tr -d ' \t\n';echo ' lines.'
+
+(cat) <Input >>$4/Output
+<Input (cat) >>$4/Output
+<Input >>$4/Output (cat)
+(cat) < Input >> $4/Output
+< Input (cat) >> $4/Output
+< Input >> $4/Output (cat)
+echo 'Output contains '|tr -d '\n';wc -l <$4/Output|tr -d ' \t\n';echo ' lines.'
+
+( cat ) >$4/Output <Input
+>$4/Output ( cat ) <Input
+>$4/Output <Input ( cat )
+( cat ) > $4/Output < Input
+> $4/Output ( cat ) < Input
+> $4/Output < Input ( cat )
+echo 'Output contains '|tr -d '\n';wc -l <$4/Output|tr -d ' \t\n';echo ' lines.'
+
+( cat ) >>$4/Output <Input
+>>$4/Output ( cat ) <Input
+>>$4/Output <Input ( cat )
+( cat ) >> $4/Output < Input
+>> $4/Output ( cat ) < Input
+>> $4/Output < Input ( cat )
+echo 'Output contains '|tr -d '\n';wc -l <$4/Output|tr -d ' \t\n';echo ' lines.'
+
+(cat) >$4/Output <Input
+>$4/Output (cat) <Input
+>$4/Output <Input (cat)
+(cat) > $4/Output < Input
+> $4/Output (cat) < Input
+> $4/Output < Input (cat)
+echo 'Output contains '|tr -d '\n';wc -l <$4/Output|tr -d ' \t\n';echo ' lines.'
+
+(cat) >>$4/Output <Input
+>>$4/Output (cat) <Input
+>>$4/Output <Input (cat)
+(cat) >> $4/Output < Input
+>> $4/Output (cat) < Input
+>> $4/Output < Input (cat)
+echo 'Output contains '|tr -d '\n';wc -l <$4/Output|tr -d ' \t\n';echo ' lines.'
+
+echo '----'; cat <$4/Output; echo '----'
+rm -f $4/Output
