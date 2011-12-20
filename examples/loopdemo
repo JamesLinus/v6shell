@@ -1,0 +1,48 @@
+#!/usr/local/bin/sh6
+:
+: "  loopdemo.sh6: 2005/02/12  "
+:
+: "  The author of this file, J.A. Neitzel <jneitzel (at) sdf1 (dot) org>,  "
+: "  hereby grants it to the public domain.                                 "
+:
+
+:
+: "  This command file demonstrates loop control using `shift'.  "
+:
+
+echo 'The argument list used for each of the following'
+echo 'shell loops contains the numbers 1 through 10.'
+echo
+
+: 1
+sh6 - 1 2 3 4 5 6 7 8 9 10; echo; echo; goto 2
+
+	echo -n '	Count from 1 to 10:  '
+	: Next
+		echo -n $1' '
+		shift
+		if $1'' = '' exit
+		goto Next
+
+: 2
+sh6 - 1 2 3 4 5 6 7 8 9 10; echo; echo; goto 3
+
+	echo -n '	Evens from 1 to 10:  '
+	shift
+	: Evens
+		echo -n $1' '
+		if $3'' = '' exit
+		: " Shift twice, skipping the next odd number. "
+		shift; shift
+		goto Evens
+
+: 3
+sh6 - 1 2 3 4 5 6 7 8 9 10; echo
+
+	echo -n '	 Odds from 1 to 10:  '
+	: Odds
+		echo -n $1' '
+		if $3'' = '' exit
+		: " Shift twice, skipping the next even number. "
+		shift; shift
+		goto Odds

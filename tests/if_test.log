@@ -1,0 +1,6 @@
+if xyz = xyz is true.
+if xyz != zyx is true.
+if ! xyz != xyz is true.
+if ! xyz = zyx is true.
+if { true } is true.
+if ! { false } is true.

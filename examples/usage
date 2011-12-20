@@ -1,0 +1,35 @@
+#!/usr/local/bin/sh6
+:
+: "  usage.sh6: 2005/02/16  "
+:
+: "  The author of this file, J.A. Neitzel <jneitzel (at) sdf1 (dot) org>,  "
+: "  hereby grants it to the public domain.                                 "
+:
+
+:
+: "  Print usage message for command and exit w/ a non-zero status.  "
+:
+: "  usage: usage command [message]  "
+:
+
+: " Try to exit w/ error if $1 or $2 is bad. "
+: >>$1'' <'' ; : >>$2'' <''
+
+if $1'' != '' goto OK
+
+	usage $0 '"command [message]"';exit
+
+: OK
+if -w /dev/stderr goto STDERR
+if -w /dev/fd/2   goto FD2
+
+	: " The following assumes this process has a controlling terminal. "
+	(echo -n "usage: ";basename $1|tr -d '\n';echo \ $2) >/dev/tty;false
+	exit
+
+: STDERR
+	(echo -n "usage: ";basename $1|tr -d '\n';echo \ $2) >/dev/stderr;false
+	exit
+
+: FD2
+	(echo -n "usage: ";basename $1|tr -d '\n';echo \ $2) >/dev/fd/2;false

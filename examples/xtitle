@@ -1,0 +1,34 @@
+#!/usr/local/bin/osh
+:
+: "  xtitle.osh: 2005/02/15  "
+:
+: "  The author of this file, J.A. Neitzel <jneitzel (at) sdf1 (dot) org>,  "
+: "  hereby grants it to the public domain.                                 "
+:
+
+:
+: "  Set the window title for terminal emulators under X.  "
+:
+
+: " Fail if this process does not have a controlling terminal. "
+</dev/null osh -c '( : ) >/dev/tty'
+if $s = 0 goto CTTY
+
+	(basename $0|tr -d '\n';echo : No controlling terminal) \
+		>/dev/stderr; false; exit
+
+: CTTY
+	printenv TERM | egrep '^(xterm|rxvt)' >/dev/null
+	if $s = 0 goto TERMOK
+		: " ... or die quietly. "; false; exit
+
+: TERMOK
+	( \
+		printf "%b" '\033]0;osh: '		;\
+		printenv LOGNAME | tr -d '\n'		;\
+		printf "%s" '@'				;\
+		printenv HOST | tr -d '\n'		;\
+		printf "%s" ' ('			;\
+		printenv TTY | cut -d/ -f3 | tr -d '\n'	;\
+		printf "%b" ')\007'			;\
+	) >/dev/tty

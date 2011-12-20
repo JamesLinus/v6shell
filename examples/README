@@ -1,0 +1,42 @@
+--------
+Initialization files:
+
+	1) etc.osh.login
+		This is a system-wide initialization file for login shells.
+		It can be installed as `/etc/osh.login' after modification.
+
+	2) dot.osh.login
+		This is a user initialization file for login shells.
+		It can be installed as `$h/.osh.login' after modification.
+
+	3) dot.oshrc
+		This is a user initialization file for interactive shells.
+		It can be installed as `$h/.oshrc' after modification.
+
+These three example initialization files have been written to work
+together.  For further info, see the osh(1) manual page.
+
+--------
+Command files:
+
+	1) loopdemo
+		This sh6 command file demonstrates loop control
+		using `shift'.
+
+	2) strlen
+		This osh command file prints the length of a
+		specified string.
+
+	3) usage
+		This sh6 command file prints a usage message for a
+		command file and exits w/ a non-zero status.
+
+	4) xtitle
+		This osh command file sets the window title for
+		terminal emulators under X.
+
+A variety of command files are also available at the following URL:
+
+	http://jneitzel.sdf1.org/osh/command_files/
+
+Jeffrey Allen Neitzel						2005/02/17
