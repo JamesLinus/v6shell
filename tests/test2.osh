@@ -1,0 +1,14 @@
+:
+: " Test for correct detection of syntax errors.            "
+: "	* All of these tests should produce a syntax error. "
+: -- 
+: Jeffrey Allen Neitzel
+:
+
+$2'' $1'' = '' -o $3'' = '' -o $4'' = '' exit; false
+
+sed 's,@SH_TO_BE_TESTED@,'$1',g ; \
+     s,@IF_UTIL@,'$2',g ; \
+     s,@GOTO_UTIL@,'$3',g'  <syntax_error.osh.in  >$4/syntax_error.osh
+
+$1 $4/syntax_error.osh

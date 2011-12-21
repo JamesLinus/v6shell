@@ -1,0 +1,72 @@
+Welcome to release 041231 of osh!
+
+Osh(1) is an enhanced, backward-compatible reimplementation of the
+Thompson shell from Sixth Edition Unix (circa 1975).  It is derived
+from osh-020214/osh.c, which was written by Gunnar Ritter.  However,
+it should be noted that the original implementation of the Thompson
+shell was written by Ken Thompson of Bell Labs.
+
+In addition to the shell, which is built as osh by default, this
+package also includes:
+
+	sh6(1) - a version of the shell w/o enhancements
+
+	if(1) - conditional command (ported from Sixth Edition Unix)
+
+	goto(1) - transfer command (ported from Sixth Edition Unix)
+
+The NOTES file gives additional information about this software,
+including some historical and compatibility notes.  See the manual
+pages for additional details.
+
+--------
+INSTALL:
+The following steps will normally suffice to build/install osh and
+its supporting utilities, if and goto:
+
+1) Adjust the CONFIGURATION section in the Makefile to match
+   your desires and/or the requirements of your system.
+
+2) Type `make' to compile osh, if, and goto.
+
+3) Optionally, type `make check' to run a minimal test suite.
+   *) This should be done as a regular user, not the superuser.
+
+4) Type `make install' to install the binaries and manual pages.
+
+If you also wish to build/install sh6:
+
+5) Type `make sh6' to compile it.
+
+6) Typing `make check-sh6' as a regular user optionally
+   runs the tests against the sh6 binary.
+
+7) Type `make install-sh6' to install it and its manual page.
+
+--------
+Osh is currently developed and maintained on NetBSD and OpenBSD.
+The latest release is always tested and known to work correctly on
+these systems and also on FreeBSD.  I have received reports that
+previous releases build and work correctly on various distributions
+of GNU/Linux as well.
+
+To the best of my knowledge this software should build on most any
+POSIX-compliant Unix system, but I have not verified this as I do
+not necessarily have access to other operating systems.  However,
+I certainly do welcome reports of success or failure to build it
+on other systems.
+
+If you think you may have found a bug, before reporting it, please
+try to reproduce it with the latest version of the code.  With bug
+reports, please try to ensure that enough information to reproduce
+the problem is enclosed.  Also, if a known fix for it exists then
+please include that as well.  All bug reports should be sent to the
+following email address:
+	jneitzel@sdf.lonestar.org
+
+If you have any questions about this software, I encourage you to
+contact me via email.  Enjoy!
+
+Jeffrey Allen Neitzel
+jneitzel@sdf.lonestar.org
+http://jneitzel.sdf1.org/osh/

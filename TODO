@@ -1,0 +1,30 @@
+Firstly, I do not intend to add any other enhancements to osh(1).
+It has enough features and is perfectly usable as is.
+
+The incorrect behaviour described below was fixed in osh-041231.
+As such, it is no longer on the TODO list but is left here as a
+point of reference.
+
+---- 1 ----
+The one remaining thing that still needs to be done to the shell
+(both osh and sh6) is to better deal with quoting as it relates to
+globbing.  This should not be difficult to fix, but it simply takes
+time that I do not presently have.  It is also not a critical problem
+which interferes with effectively using the shell on a daily basis.
+
+Here is an example of the incorrect behaviour of osh(1) vs. the
+correct behaviour of csh(1) and sh(1).
+
+% osh -c "echo R???M?; echo R'???'M?"
+README
+README
+
+% csh -c "set nonomatch; echo R???M?; echo R'???'M?"
+README
+R???M?
+
+% sh -c "echo R???M?; echo R'???'M?"
+README
+R???M?
+
+Jeffrey Allen Neitzel						2004/12/28

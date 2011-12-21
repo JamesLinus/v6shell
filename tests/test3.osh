@@ -1,0 +1,34 @@
+:
+: " Test for correct behaviour when redirection arguments refer to files "
+: " that cannot be opened or created.                                    "
+: "	* All of these tests should print a `file: cannot open'          "
+: "	  or `file: cannot create' error message.                        "
+: -- 
+: Jeffrey Allen Neitzel
+:
+
+$2'' $1'' = '' -o $3'' = '' -o $4'' = '' exit; false
+
+: 1
+$2 { $1 -t $4 } echo "1: Failure, not detected as an error." ; $3 2
+cat <$1/Cannot_open >$1/Cannot_create
+
+: 2
+$2 { $1 -t $4 } echo "2: Failure, not detected as an error." ; $3 3
+<$1/Cannot_open cat >$1/Cannot_create
+
+: 3
+$2 { $1 -t $4 } echo "3: Failure, not detected as an error." ; $3 4
+<$1/Cannot_open >$1/Cannot_create cat
+
+: 4
+$2 { $1 -t $4 } echo "4: Failure, not detected as an error." ; $3 5
+cat >$1/Cannot_create <$1/Cannot_open
+
+: 5
+$2 { $1 -t $4 } echo "5: Failure, not detected as an error." ; $3 6
+>$1/Cannot_create cat <$1/Cannot_open
+
+: 6
+$2 { $1 -t $4 } echo "6: Failure, not detected as an error."
+>$1/Cannot_create <$1/Cannot_open cat

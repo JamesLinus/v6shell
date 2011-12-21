@@ -1,0 +1,20 @@
+Contents of this directory:
+
+	1) etc.osh.login
+		This is an example of a system-wide initialization file
+		for login shells.
+
+	2) dot.osh.login
+		This is an example of a user initialization file
+		for login shells.
+
+	3) dot.oshrc
+		This is an example of a user initialization file
+		for interactive shells.
+
+	These three files have been written to work together.  The
+	developer uses them as a baseline for his own initialization
+	files.  Thus, they contain the developer's preferences.
+	Modify to taste as they are just examples.
+
+	See osh(1) for full details of shell initialization.

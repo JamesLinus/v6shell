@@ -1,0 +1,653 @@
+.\"
+.\" Copyright (c) 2003, 2004
+.\"	Jeffrey Allen Neitzel <jneitzel@sdf.lonestar.org>.
+.\"	All rights reserved.
+.\"
+.\" Redistribution and use in source and binary forms, with or without
+.\" modification, are permitted provided that the following conditions
+.\" are met:
+.\" 1. Redistributions of source code must retain the above copyright
+.\"    notice, this list of conditions and the following disclaimer.
+.\" 2. Redistributions in binary form must reproduce the above copyright
+.\"    notice, this list of conditions and the following disclaimer in the
+.\"    documentation and/or other materials provided with the distribution.
+.\"
+.\" THIS SOFTWARE IS PROVIDED BY JEFFREY ALLEN NEITZEL ``AS IS'', AND ANY
+.\" EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+.\" WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+.\" DISCLAIMED.  IN NO EVENT SHALL JEFFREY ALLEN NEITZEL BE LIABLE FOR ANY
+.\" DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+.\" (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+.\" LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
+.\" AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+.\" OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+.\" USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+.\"
+.\"	Derived from: Sixth Edition (V6) Unix /usr/man/man1/sh.1
+.\"
+.\" Copyright (C) Caldera International Inc.  2001-2002.  All rights reserved.
+.\"
+.\" Redistribution and use in source and binary forms, with or without
+.\" modification, are permitted provided that the following conditions
+.\" are met:
+.\" 1. Redistributions of source code and documentation must retain the above
+.\"    copyright notice, this list of conditions and the following disclaimer.
+.\" 2. Redistributions in binary form must reproduce the above copyright
+.\"    notice, this list of conditions and the following disclaimer in the
+.\"    documentation and/or other materials provided with the distribution.
+.\" 3. All advertising materials mentioning features or use of this software
+.\"    must display the following acknowledgement:
+.\"      This product includes software developed or owned by Caldera
+.\"      International, Inc.
+.\" 4. Neither the name of Caldera International, Inc. nor the names of other
+.\"    contributors may be used to endorse or promote products derived from
+.\"    this software without specific prior written permission.
+.\"
+.\" USE OF THE SOFTWARE PROVIDED FOR UNDER THIS LICENSE BY CALDERA
+.\" INTERNATIONAL, INC. AND CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR
+.\" IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+.\" OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+.\" IN NO EVENT SHALL CALDERA INTERNATIONAL, INC. BE LIABLE FOR ANY DIRECT,
+.\" INDIRECT INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+.\" (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+.\" SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+.\" HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+.\" STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+.\" IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+.\" POSSIBILITY OF SUCH DAMAGE.
+.\"
+.TH SH6 1 "December 28, 2004" "osh-041231" "General Commands"
+.SH NAME
+sh6 \- shell (command interpreter)
+.SH SYNOPSIS
+.B sh6
+[[\fB\-\fR | \fB\-c\fR [\fIstring\fR] | \fB\-t\fR | \fIfile\fR]
+[\fIarg1 ...\fR]]
+.SH DESCRIPTION
+.I Sh6
+is a backward-compatible reimplementation of the
+standard command interpreter from Sixth Edition
+.SM UNIX.
+It is usable both as an interactive and non-interactive shell.
+Throughout this manual, `(+)' marks where
+.I sh6
+is known to differ from the Sixth Edition
+.SM UNIX
+shell.
+.PP
+The options are as follows:
+.TP
+.B \-
+Suppress prompting;
+the shell reads and executes command lines from its standard input
+until terminated by end-of-file (or possibly by
+.BR exit ).
+.TP
+\fB\-c\fR [\fIstring\fR]
+The shell executes
+.I string
+as a command line and exits.
+If no string is specified,
+the shell behaves in the same way as for the \fB\-\fR option.
+.TP
+.B \-t
+The shell reads a single line from the standard input,
+executes it as a command line,
+and then exits.
+.PP
+If no arguments are specified and if both the standard input
+and standard error are connected to a terminal,
+the shell is interactive.
+An interactive shell prompts the user
+with a `%\ ' (or `#\ ' for the superuser)
+before reading each command line from the terminal.
+.PP
+The shell can also be invoked as a non-interactive command
+to interpret command files (shell scripts).
+.SS Commands
+Each command is a sequence of non-blank command arguments
+separated by blanks (spaces or tabs).
+The first argument specifies the name of a command to be executed.
+Except for certain types of special arguments described below,
+the arguments other than the command name are passed
+without interpretation to the invoked command.
+.PP
+If the first argument names a special command,
+it is executed (see
+.I "Special commands"
+below).
+Otherwise, the shell treats it as an external command which is
+located as follows.
+If the command name contains a `/' character,
+it is executed without performing any searches.
+(+) Otherwise,
+the sequence of directories in the environment variable
+.SM PATH
+is searched for the first occurrence
+of an executable file by the same name
+which the shell attempts to execute.
+.PP
+If the command cannot be found,
+or cannot be executed,
+a diagnostic is printed.
+.SS Command lines
+Commands separated by `|' or `^' constitute a chain of
+.IR filters ,
+or a
+.IR pipeline .
+The standard output of each command but the last
+is taken as the standard input of the next command.
+Each command is run as a separate process, connected
+by pipes (see
+.IR pipe (2))
+to its neighbors.
+A command line contained in parentheses `(\ )' is executed in a
+subshell and may appear in place of a simple command as a filter.
+.PP
+A
+.I "command line"
+consists of one or more pipelines separated,
+and perhaps terminated by `;' or `&'.
+The semicolon designates sequential execution.
+The ampersand designates asynchronous execution which causes
+the preceding pipeline to be executed without waiting for it
+to finish.
+The process ID of such a pipeline is reported,
+so that it may be used if necessary for a subsequent
+.IR kill .
+.PP
+If a command line is syntactically incorrect,
+a diagnostic is printed.
+.SS Termination reporting
+All terminations other than exit and interrupt
+are considered to be abnormal.
+If a sequential command terminates abnormally,
+a message is printed.
+The termination report for an asynchronous command
+is given upon receipt of the first
+syntactically-correct command line
+subsequent to its termination,
+or when the
+.B wait
+special command is executed.
+The following is a list of the termination messages:
+.PP
+.RS 6n
+Hangup
+.br
+Quit
+.br
+Illegal instruction
+.br
+Trace/BPT trap
+.br
+IOT trap
+.br
+EMT trap
+.br
+Floating exception
+.br
+Killed
+.br
+Bus error
+.br
+Memory fault
+.br
+Bad system call
+.RE
+.PP
+For an asynchronous command, its process ID is prepended to
+the appropriate message.
+If a core image is produced,
+`\ \-\-\ Core\ dumped' is appended
+to the appropriate message.
+.SS I/O redirection
+There are three character sequences which cause the immediately
+following string to be interpreted as a special argument to the
+shell itself.
+Such a redirection may appear anywhere among the
+arguments of a simple command,
+or before or after a parenthesized command list,
+and is associated with that command or command list.
+.PP
+A redirection of the form `<arg' causes the file `arg'
+to be used as the standard input (file descriptor 0)
+for the associated command.
+.PP
+A redirection of the form `>arg' causes the file `arg'
+to be used as the standard output (file descriptor 1)
+for the associated command.
+If `arg' does not exist, it is created;
+otherwise, it is truncated at the outset.
+.PP
+A redirection of the form `>>arg' is the same as `>arg',
+except if `arg' exists the command output is
+appended to the end of the file.
+.PP
+For example, either of the following command lines:
+.PP
+.RS 6n
+date >/tmp/list; ls \-l >>/tmp/list
+.br
+( date; ls \-l ) >/tmp/list
+.RE
+.PP
+creates, on file `/tmp/list', the current date and time,
+followed by a long listing of the current directory.
+.PP
+A `>' or `>>' redirection
+associated with any but the last command of a pipeline
+is ineffectual, as is a `<' with any but the first.
+.PP
+The standard error (file descriptor 2)
+is not subject to redirection by the shell.
+Thus, commands may write diagnostics
+to a location where they have a
+chance to be seen.
+.SS Quoting
+The character `\\' causes the immediately following character
+to lose any special meaning it may have to the shell; in this
+way `<', `>', and other characters meaningful to the
+shell may be passed as part of arguments.
+A special case of this feature allows the continuation of commands
+onto more than one line:  a newline preceded by `\\' is translated
+into a blank.
+.PP
+Sequences of characters enclosed in double (") or single (')
+quotes are also taken literally.
+For example:
+.PP
+.RS 6n
+awk '{print NR "\\t" $0}' My_File ^ more
+.RE
+.PP
+causes
+.I awk
+to write `My_File',
+preceding each line with its line number and a tab,
+to the standard output which is piped to
+.I more
+for viewing.
+The quotes prevent the shell from trying to interpret any part
+of the string, which is then given as a single argument to awk.
+.SS Parameter substitution
+When the shell is invoked as a non-interactive command,
+it has additional string processing capabilities not available
+when interactive.
+If the shell is invoked in the following form:
+.PP
+.RS 6n
+sh6 name [arg1 ...]
+.RE
+.PP
+.I name
+is either taken as one of the shell options,
+or as the name of a
+.I "command file"
+which is opened as the standard input of the shell.
+.PP
+In both cases,
+the shell reads and interprets
+command lines from its standard input.
+In each command line,
+an unquoted character sequence of the form `$N',
+where
+.I N
+is a digit,
+is treated as a
+.I "positional parameter"
+by the shell.
+.PP
+Each occurrence of a positional parameter in the command line
+is substituted with the value of the \fIN\fRth argument
+to the invocation of the shell (\fIargn\fR).
+`$0' is substituted with
+.IR name .
+.PP
+In both interactive and non-interactive shells,
+`$$' is always substituted with a representation
+of the process ID of this instance of the shell.
+The value is a 5-digit decimal string,
+padded on the left with zeros.
+.PP
+All substitution on a command line occurs
+.I before
+the line is interpreted.
+Thus, no action which alters the value of any parameter
+can have any effect on a reference to that parameter
+occurring on the
+.I same
+line.
+.PP
+A positional-parameter value may contain
+any number of characters with special meaning to the shell.
+Each one which is
+.I unquoted
+in a positional-parameter value always retains
+its special meaning when the value is substituted
+for its positional parameter in a command line.
+.SS File name generation
+Prior to executing an external command,
+the shell scans each argument for
+unquoted `*', `?', or `[' characters.
+If one or more of these characters appears,
+the argument is treated as a
+.I pattern
+(see
+.IR glob (3))
+and causes the shell to search for file names which
+.I match
+the given pattern.
+.PP
+The `.' character at the beginning of a file name,
+or immediately following a `/',
+is special in that it must be matched explicitly.
+Similarly, the `/' character itself must
+always be matched explicitly.
+The meaning of the special glob characters is as follows.
+.PP
+The character `*' in a pattern matches any string of characters
+in a file name (including the null string).
+.PP
+The character `?' matches any single character in a file name.
+.PP
+Square brackets `[...]' specify a class of characters which
+matches any single file-name character in the class.
+Within the brackets,
+each ordinary character is taken
+to be a member of the class.
+A pair of characters separated by `\-' places
+in the class
+each character lexically greater than or equal to
+the first and less than or equal to the second
+member of the pair.
+.PP
+For example,
+in the current directory,
+`*' matches all file names;
+`?' matches all one-character file names; `[ab]*.s' matches
+all file names beginning with `a' or `b' and ending with `.s';
+`?[zi\-m]' matches all two-character file names ending
+with `z' or the letters `i' through `m'.
+.PP
+If the pattern also contains a `/',
+the directory used is the one obtained by taking the pattern up
+to the last `/' before a `*', `?', or `['.
+The matching process matches the remainder of the pattern
+after this `/' against the files in the derived directory.
+For example:  `/usr/ken/a*.s' matches all files
+in directory `/usr/ken' which begin
+with `a' and end with `.s'.
+.PP
+In any event,
+a list of names is obtained which match
+the given pattern.
+This list is sorted into alphabetical order,
+and the resulting sequence of arguments replaces the
+given pattern.
+The same process is carried out
+for each of the given patterns
+(the resulting lists are
+.I not
+merged),
+and finally the command is executed
+with the resulting argument list.
+.PP
+If a command has only one pattern argument,
+a diagnostic is printed if it fails
+to match any files.
+If a command has more than one pattern argument,
+a diagnostic is only printed if they
+.I all
+fail to match any files.
+Otherwise,
+each pattern argument failing to match any files
+is removed from the argument list.
+.SS End of file
+An end-of-file in the shell's input causes it to exit.
+.PP
+If the shell is interactive, this means it exits when the
+user types an EOT (^D) at the beginning of a line.
+If not at the beginning of a line,
+3 sequential EOTs are required to exit
+an interactive shell.
+.SS Special commands
+The following commands are executed by the shell without
+creating a new process.
+Attempts to pipe, redirect, or run these commands
+asynchronously are ignored.
+.TP
+\fB:\fR [\fIarg ...\fR]
+Does nothing; exit status is set to zero.
+This command can be used to place labels for the
+.I goto
+command or to add commentary to command files,
+among other things.
+.TP
+\fBchdir\fR \fIdir\fR
+Changes the shell's working directory to
+.IR dir .
+.TP
+.B exit
+Terminates a non-interactive shell which is reading
+commands from a file.
+The exit status is that of the last command executed.
+.TP
+\fBlogin\fR [\fIarg ...\fR]
+Replaces an interactive shell with an instance of
+.IR login (1).
+.TP
+.B shift
+Shift is used in command files to shift all of
+the positional parameters to the left by 1, so that
+old `$2' can now be referred to by `$1' and so forth.
+Shift has no effect on `$0'.
+.TP
+.B wait
+Waits for all asynchronous processes to terminate,
+reporting on abnormal terminations.
+Exit status is that of the last
+terminated asynchronous process.
+.SS Signals (+)
+If the shell is interactive,
+it ignores the SIGINT, SIGQUIT, and SIGTERM
+signals (see
+.IR signal (3)).
+However, if the shell has been invoked with any
+option argument,
+it only ignores SIGINT and SIGQUIT.
+.PP
+If SIGINT or SIGQUIT is already ignored
+when the shell starts,
+it is also ignored for child processes of the shell.
+Otherwise, both signals are reset to their
+default actions for child processes.
+SIGTERM is also reset to its default action.
+.PP
+For all other signals,
+the shell inherits the signal state from its
+parent process and passes it to its children.
+.PP
+Asynchronous processes ignore both the
+SIGINT and SIGQUIT signals.
+If such a process has not redirected its
+input with a `<',
+the shell automatically redirects it to come from
+.IR /dev/null .
+.SH "EXIT STATUS (+)"
+The exit status of the shell is that of the
+last command executed prior to end-of-file or
+.BR exit .
+.PP
+If the shell is interactive and detects an error,
+it exits with a non-zero status if the user
+types an EOT at the next prompt.
+.PP
+Otherwise, if the shell is non-interactive and
+is reading commands from a file,
+any shell-detected error causes the shell
+to cease execution of that file.
+This results in a non-zero exit status.
+.PP
+A non-zero exit status from the shell may be
+one of the following values:
+.TP
+1
+A common shell-detected error occurred,
+such as a `syntax\ error'.
+.TP
+2
+A fatal shell-detected error occurred.
+.TP
+126
+An external command was found but could not be executed
+by the shell.
+.TP
+127
+An external command was not found.
+.TP
+>128
+A signal was received.
+.SH ENVIRONMENT
+.TP
+.BR PATH \ (+)
+Is the sequence of directories used by the shell to search
+for external commands.
+The Sixth Edition
+.SM UNIX
+shell
+always used `.:/bin:/usr/bin', not
+.SM PATH.
+.SH FILES
+.TP
+.I /dev/null
+default source of input for asynchronous commands
+.SH "SEE ALSO"
+env(1),
+goto(1),
+if(1),
+login(1),
+osh(1)
+.PP
+`The UNIX Time-Sharing System',
+CACM, July, 1974,
+which gives the theory of operation of the shell.
+.PP
+Osh home page: http://jneitzel.sdf1.org/osh/
+.SH AUTHORS
+This implementation of the shell is derived
+from osh-020214/osh.c by Gunnar Ritter.
+The current maintainer of the shell,
+and author of new code and documentation,
+is Jeffrey Allen Neitzel.
+.SH COMPATIBILITY
+This implementation of the shell is backward compatible
+with the Thompson shell from Sixth Edition
+.SM UNIX.
+.PP
+However, there are in fact several minor differences.
+For reliability and usability on modern
+.SM UNIX
+systems,
+several instances of undesirable behaviour found
+in the original have been purposely changed.
+At the same time,
+several other shell oddities have been purposely left
+in place as they are documented and can be quite useful.
+.PP
+When it is known to differ in some way from the original,
+this fact is marked in the manual with `(+)'.
+Otherwise,
+the only remaining difference not mentioned elsewhere
+is that this implementation can handle 8-bit character sets;
+the original can only handle 7-bit ASCII.
+.SH HISTORY
+The Thompson shell, by Ken Thompson of Bell Labs, was used as the
+standard command interpreter through Sixth Edition
+.SM UNIX.
+In the Seventh Edition,
+it was replaced by the Bourne shell and then made available as
+.IR osh .
+.SH NOTES
+.I Sh6
+has no facilities for setting, unsetting, or otherwise
+manipulating environment variables within the shell.
+This must be accomplished by using other tools such as
+.IR env (1).
+.PP
+Since
+.I sh6
+does not read any startup files,
+it should not be added to the shell database
+(see
+.IR shells (5))
+unless the system administrator is willing
+to deal with this fact.
+.PP
+Notice that some shell oddities have historically been
+undocumented in this manual page.
+Particularly noteworthy is the fact that there is no such thing
+as a usage error when invoking the shell.
+For example, the following are all perfectly legal:
+.PP
+.RS 6n
+sh6 \-cats_are_nice!!! ': "Good kitty =)"'
+.br
+sh6 \-tabbies_are_too!
+.br
+sh6 \-s
+.RE
+.PP
+The first two cases correspond to the
+.B \-c
+and
+.B \-t
+options
+respectively;
+the third case corresponds to the
+.B \-
+option.
+.SH SECURITY
+This implementation of the shell does not support
+being used in a set-ID context.
+If the effective user (group) ID of the shell
+process is not equal to its real user (group) ID,
+the shell prints a diagnostic and exits with a
+status of 2.
+The reasons for this are described below.
+.PP
+First,
+since this implementation of the shell is
+backward compatible with the Thompson shell,
+the way in which it uses positional parameters
+(see
+.I "Parameter substitution"
+above)
+makes it a simple matter to invoke an interactive shell
+from a command file if the user knows the name
+of the current terminal,
+if there is one.
+This is distinctly
+.I not
+a bug
+and can be very useful in the normal case.
+.PP
+However,
+if the shell supported set-ID execution,
+it could cause significant violations of the security policy
+on the host or site where the shell is being used.
+Just suppose what might happen if the shell were running
+setuid root,
+especially if the user who invokes it is a regular user.
+.PP
+Thus,
+for the reasons stated above,
+the author explicitly chooses to
+.I not
+support set-ID execution of the shell.
+.SH BUGS
+The shell offers no way to redirect the diagnostic output.
+.PP
+The shell makes no attempt to recover from
+.IR read (2)
+errors and exits with a status of 2 if this system call fails.
