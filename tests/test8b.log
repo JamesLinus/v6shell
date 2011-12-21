@@ -1,0 +1,52 @@
+" "" "xyz "xyz" # $ % & ' '' 'xyz 'xyz' ( ) * - 0 1 2 ; < > >> ? A B C FOO [ \ \\ \xyz \xyz\ ] ^ a b c xyz" xyz' xyz\ |
+" "" "xyz "xyz" # $ % & ' '' 'xyz 'xyz' ( ) * - 0 1 2 ; < > >> ? A B C FOO [ \ \\ \xyz \xyz\ ] ^ a b c xyz" xyz' xyz\ |
+" "" "xyz "xyz" # $ % & ' '' 'xyz 'xyz' ( ) * - 0 1 2 ; < > >> ? A B C FOO [ \ \\ \xyz \xyz\ ] ^ a b c xyz" xyz' xyz\ |
+
+" # $ % & ' ( ) * - 0 1 2 ; < > ? A B C [ \ ] ^ a b c |
+" # $ % & ' ( ) * - 0 1 2 ; < > ? A B C [ \ ] ^ a b c |
+" # $ % & ' ( ) * - 0 1 2 ; < > ? A B C [ \ ] ^ a b c |
+
+0 1 2 A B C a b c
+- 0 A a - 0 A a - 0 A a
+
+# $ % # $ % # $ %
+
+^ | ^ | ^ |
+
+( ) ( ) ( )
+
+& ; & ; & ;
+
+< > >> < > >> < > >>
+
+" ' \ " ' \
+" "" "xyz "xyz" ' '' 'xyz 'xyz' \ \\ \xyz \xyz\ xyz" xyz' xyz\
+" "" "xyz "xyz" ' '' 'xyz 'xyz' \ \\ \xyz \xyz\ xyz" xyz' xyz\
+"" "xyz" '' 'xyz' \\ \xyz\
+"" "xyz" '' 'xyz' \\ \xyz\
+
+[ ] [ ] [ ] [ ]
+* ? [ * ? [ * ? [ * ? [
+
+" # $ % & ' ( ) * - 0 1 2 ; < > ? A B C [ \ ] ^ a b c | FOO
+" # $ % & ' ( ) * - ; < > ? [ \ ] ^ | FOO
+" & ' ( ) * - ; < > ? [ \ ] ^ | FOO
+" & ' ( ) * - ; < > ? [ \ ] FOO
+" & ' * - ; < > ? [ \ ] FOO
+" ' * - < > ? [ \ ] FOO
+" ' * - ? [ \ ] FOO
+* - ? [ ] FOO
+- [ ] FOO
+- FOO
+FOO
+No match
+No match
+No match
+No match
+No match
+No match
+No match
+No match
+No match
+No match
+No match

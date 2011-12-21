@@ -1,0 +1,103 @@
+:
+: " Do some simple globbing tests. "
+: -- 
+: Jeffrey Allen Neitzel
+:
+
+$2'' $1'' = '' -o $3'' = '' exit; false
+
+$2 ! -e glob_dir $3 OK
+
+	echo "glob_dir: Already exists"; false; exit
+
+: OK - Start the target shell now.
+
+	$1 - $1 $2 $3
+
+	$2 ! { mkdir glob_dir } $3 quit
+	chdir glob_dir
+
+	../$2 ! { touch FOO \
+			0 1 2 A B C a b c \
+			\% \# \$ \
+			\| \^ \( \) \; \& \
+			\< \> \>\> \
+			\" \' \\ \"xyz \'xyz \\xyz xyz\" xyz\' xyz\\ \
+			\"\" \'\' \\\\ \"xyz\" \'xyz\' \\xyz\\ \
+			\* \? \[ \] \- } \
+	../$3 quit
+
+: Start globbing now...
+
+	echo *; echo ''*; echo *''; echo
+
+	echo ?; echo ''?; echo ?''; echo
+
+: digit and alphabetic character classes
+
+	echo [0-9A-Za-z]
+	echo [0\-9A\-Za\-z] ["0-9A-Za-z"] ['0-9A-Za-z']; echo
+
+: prompt and parameter characters
+
+	echo [\%\#\$] ["%#$"] ['%#$']; echo
+
+: pipe characters
+
+	echo [\^\|] ["^|"] ['^|']; echo
+
+: parentheses
+
+	echo [\(\)] ["()"] ['()']; echo
+
+: command/pipeline separators
+
+	echo [\;\&] [";&"] [';&']; echo
+
+: redirections
+
+	echo [\<\>]* ["<>"]* ['<>']*; echo
+
+: quotes
+
+	echo [\"\'\\] ['"'"'"'\']
+	echo *[\"\'\\]*; echo *['"'"'"'\']*
+	echo [\"\'\\]*[\"\'\\]; echo ['"'"'"'\']*['"'"'"'\']
+	echo
+
+: glob characters
+
+	echo [][] [\]\[] ["]["] ['][']
+	echo [*?[] [\*\?\[] ["*?["] ['*?[']
+	echo
+
+: Start removing files and check the no match behaviour.
+
+	echo ? F*
+	rm 0 1 2 A B C a b c; echo ? F*
+	rm \% \# \$; echo ? F*
+	rm \| \^; echo ? F*
+	rm \( \); echo ? F*
+	rm \; \&; echo ? F*
+	rm \< \> \>\>; echo ? F*
+	rm \" \' \\; echo ? F*
+	rm \* \?; echo ? F*
+	rm \[ \]; echo ? F*
+	rm \-; echo ? F*
+	echo ?
+	echo [0-9A-Za-z]
+	echo [0\-9A\-Za\-z] ["0-9A-Za-z"] ['0-9A-Za-z']
+	echo [\%\#\$] ["%#$"] ['%#$']
+	echo [\^\|] ["^|"] ['^|']
+	echo [\(\)] ["()"] ['()']
+	echo [\;\&] [";&"] [';&']
+	echo [\<\>]* ["<>"]* ['<>']*
+	echo [\"\'\\] ['"'"'"'\']
+	echo [][] [\]\[] ["]["] ['][']
+	echo [*?[] [\*\?\[] ["*?["] ['*?[']
+
+: clean up and quit
+	chdir ..; rm -rf glob_dir; exit
+
+: quit - something failed...
+	false

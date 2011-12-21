@@ -1,0 +1,30 @@
+-------------------------------------------------------------------------------
+The incorrect behaviour described below was fixed in osh-041231.
+As such, it is no longer on the TODO list, but the description is
+left here for historical reference.
+
+	The one remaining thing that still needs to be done to the
+	shell (both osh and sh6) is to better deal with quoting as
+	it relates to globbing.
+
+	Here is an example of the incorrect behaviour of osh(1) vs.
+	the correct behaviour of csh(1) and sh(1):
+
+		% osh -c "echo R???M?; echo R'???'M?"
+		README
+		README
+
+		% csh -c "set nonomatch; echo R???M?; echo R'???'M?"
+		README
+		R???M?
+
+		% sh -c "echo R???M?; echo R'???'M?"
+		README
+		R???M?
+
+-------------------------------------------------------------------------------
+At this point in time, there is nothing more that really *must* be
+done.  As such, the developer primarily intends to maintain it as
+is for the foreseeable future.
+
+Jeffrey Allen Neitzel						2005/01/30

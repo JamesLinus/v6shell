@@ -1,0 +1,78 @@
+-------------------------------------------------------------------------------
+[osh-050131]:
+*.1:
+	* Made some revisions and added some new content.
+
+osh and sh6:
+	* Did a little code cleanup for the sake of clarity and simplicity.
+	  Basically, this just removes some redundant operations.
+
+-------------------------------------------------------------------------------
+[osh-041231]:
+LICENSE:
+	* Removed clauses 3 and 4 from the license under which I release
+	  this software.  This only affects my license.  Do not worry;
+	  this software is still free!  Read LICENSE for further info.
+	  Each file on which I explicitly claim copyright also contains
+	  a copy of this license.
+
+tests:
+	* Added 2 more tests to be run by `make check' and `make check-sh6'.
+
+	* Did a little reorganization.
+
+osh and sh6:
+	* Fixed a typo in the execute() function that can cause a memory fault
+	  in sh6, and in osh when running in compatible mode.  This error was
+	  only possible when using the `chdir' special command preceded by a
+	  redirection such as `> file' (e.g., `> /dev/null chdir foo').
+
+	* Made several changes to how the shell reads input into the
+	  command-line buffer.  Generally, this is not a user-visible
+	  change but is noteworthy nonetheless.
+
+	* Made a few improvements to the parser.
+	  It now catches a few errors that could have previously caused some
+	  confusion.  Before: `echo \<<', `echo \>>', `echo foo>bar', etc...
+	  None of these would have been considered a syntax error.  Now, all
+	  of them are.  The unquoted `<' and `>' characters in the above
+	  commands are not considered to be redirection arguments.
+
+	  In this implementation of the shell, a redirection argument must be
+	  separated from other command-line arguments by one or more blanks.
+	  This is unlike other shells.  However, since this is the documented
+	  behaviour of the Thompson shell, this implementation of the shell
+	  adheres to the documented behaviour for the sake of simplicity.
+
+	* Fixed the incorrect globbing behaviour described in the TODO file.
+	  Now, the shell correctly handles quoted glob characters in an
+	  argument when the same argument also contains *unquoted* glob
+	  characters.  Note that the correct behaviour of globbing in
+	  the shell relies on a POSIX-compliant glob(3) being available
+	  on the system where the shell is built and/or used.
+
+osh only:
+	* Fixed a small problem with the `source' special command.
+	  Doing a `source /path/to/nonexistent_file' in an initialization file
+	  should not cause the shell to cease execution of that file.  Now,
+	  execution of the initialization file continues as normal.  Of course,
+	  user can test for error and have the shell act accordingly in such
+	  a case.
+
+	* Renamed the `trap' special command to `sigign' since it is really
+	  nothing like the trap command found in other shells.  Thus, I thought
+	  calling it `trap' could be misleading to the user.  On the other hand,
+	  `sigign' makes sense given what the command does, which is to ignore
+	  or unignore signals.
+
+if:
+	* Did another rewrite of the if(1) utility.
+	  Started with a fresh copy of if.c from Sixth Edition Unix.
+	  User-visible changes?  None.
+
+goto:
+	* Did another rewrite of the goto(1) utility.
+	  Started with a fresh copy of goto.c from Sixth Edition Unix.
+	  User-visible changes?  Yes, it is no longer an error for a NUL
+	  character to appear in the input.  Also, it now prints an explicit
+	  `cannot seek' diagnostic if the input file is not seekable.

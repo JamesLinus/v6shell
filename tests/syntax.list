@@ -1,0 +1,138 @@
+This is a list of command lines that should always
+cause the shell to produce a `syntax error'.
+-- 
+Jeffrey Allen Neitzel
+
+==== Unmatched " or ' ====
+  1: "
+  2: : nothing; "
+  3: "; : nothing
+  4: ( " )
+  5: : nothing; ( " )
+  6: ( " ); : nothing
+  7: ( : nothing; " )
+  8: ( "; : nothing )
+  9: '
+ 10: : nothing; '
+ 11: '; : nothing
+ 12: ( ' )
+ 13: : nothing; ( ' )
+ 14: ( ' ); : nothing
+ 15: ( : nothing; ' )
+ 16: ( '; : nothing )
+
+==== Unexpected `|', `^', or `\0' ====
+ 17: |
+ 18: ^
+ 19: |   |
+ 20: ^   ^
+ 21: | cat
+ 22: ^ cat
+ 23: echo Hello! |
+ 24: echo Hello! ^
+ 25: echo Hello! | cat |
+ 26: echo Hello! ^ cat ^
+ 27: echo Hello! |   | grep H
+ 28: echo Hello! ^   ^ grep H
+ 29: ||
+ 30: ^^
+ 31: |cat
+ 32: ^cat
+ 33: echo Hello!|
+ 34: echo Hello!^
+ 35: echo Hello!|cat|
+ 36: echo Hello!^cat^
+ 37: echo Hello!||grep H
+ 38: echo Hello!^^grep H
+
+==== Too many `(' ====
+ 39: (
+ 40: ( echo Hello!
+ 41: ( ( echo Hello! )
+ 42: ( ( echo Hello! ); echo Hello again!
+
+==== Too many `)' ====
+ 43: )
+ 44: echo Hello! )
+ 45: ( echo Hello! ) )
+ 46: ( echo Hello! ); echo Hello again! )
+
+==== Empty `(   )' ====
+ 47: (   )
+ 48: ( (   ) )
+ 49: ( ( (   ) ) )
+ 50: ( echo Hello! ) | (   ) | ( grep H )
+ 51: ()
+ 52: (())
+ 53: ((()))
+ 54: (echo Hello!)|()|(grep H)
+
+==== Garbage before `(   )' ====
+ 55: :( echo Hello! )
+ 56: echo ( Hello! )
+ 57: : nothing </dev/null ( cat )
+ 58: </dev/null : nothing ( cat )
+
+==== Garbage after `(   )' ====
+ 59: ( echo Hello! ):
+ 60: ( echo ) Hello!
+ 61: ( echo Hello! ) >/dev/null : nothing
+ 62: ( echo Hello! ) : nothing >/dev/null
+
+==== Unexpected `<', `>', `>>', or Missing file name ====
+ 63: <
+ 64: >
+ 65: >>
+ 66: <>
+ 67: ><
+ 68: <>>
+ 69: >><
+ 70: cat < >/dev/null
+ 71: cat > </dev/null
+ 72: cat </dev/null >
+ 73: cat >/dev/null <
+ 74: cat </dev/null>/dev/null
+ 75: cat >/dev/null</dev/null
+ 76: cat</dev/null
+ 77: "cat"</dev/null
+ 78: </dev/nullcat
+ 79: </dev/null"cat"
+ 80: echo Hello!>/dev/null
+ 81: echo "Hello!">/dev/null
+ 82: echo Hello!>>/dev/null
+ 83: echo "Hello!">>/dev/null
+ 84: ( cat )</dev/null
+ 85: ( echo Hello! )>/dev/null
+ 86: ( echo Hello! )>>/dev/null
+
+==== Missing command ====
+ 87: </dev/null
+ 88: </dev/null >/dev/null
+ 89: >/dev/null
+ 90: >/dev/null </dev/null
+ 91: >>/dev/null
+ 92: >>/dev/null </dev/null
+
+==== Here are some more bad subshells; Unexpected `|' ====
+ 93: </dev/null ( | )
+ 94: >/dev/null ( | )
+ 95: ( | ) </dev/null
+ 96: ( | ) >/dev/null
+ 97: </dev/null >/dev/null ( | )
+ 98: >/dev/null </dev/null ( | )
+ 99: </dev/null ( | ) >/dev/null
+100: >/dev/null ( | ) </dev/null
+101: ( | ) </dev/null >/dev/null
+102: ( | ) >/dev/null </dev/null
+
+==== Here are some more bad subshells; Missing file name ====
+103: </dev/null ( < )
+104: >/dev/null ( < )
+105: ( < ) </dev/null
+106: ( < ) >/dev/null
+107: </dev/null >/dev/null ( < )
+108: >/dev/null </dev/null ( < )
+109: </dev/null ( < ) >/dev/null
+110: >/dev/null ( < ) </dev/null
+111: ( < ) </dev/null >/dev/null
+112: ( < ) >/dev/null </dev/null
