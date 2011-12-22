@@ -1,0 +1,136 @@
+:
+: " Test for correct detection of syntax errors.               "
+: "	* All of these tests should produce a syntax error.    "
+: "	* Use 'osh -c command' since syntax errors will always "
+: "	  terminate the command file.                          "
+: -- 
+: Jeffrey Allen Neitzel
+:
+
+$2'' $1'' = '' -o $3'' = '' exit; false
+
+: missing file name
+</dev/null $2 { $1 -c '<' } echo FAIL
+
+: missing file name
+</dev/null $2 { $1 -c '>' } echo FAIL
+
+: missing file name
+</dev/null $2 { $1 -c '>>' } echo FAIL
+
+: unexpected '>'
+</dev/null $2 { $1 -c '<>' } echo FAIL
+
+: unexpected '>>'
+</dev/null $2 { $1 -c '<>>' } echo FAIL
+
+: unexpected '<'
+</dev/null $2 { $1 -c '><' } echo FAIL
+
+: unexpected '<'
+</dev/null $2 { $1 -c '>><' } echo FAIL
+
+: missing command
+</dev/null $2 { $1 -c '</dev/null' } echo FAIL
+
+: missing command
+</dev/null $2 { $1 -c '>/dev/null' } echo FAIL
+
+: missing command
+</dev/null $2 { $1 -c '>>/dev/null' } echo FAIL
+
+: unexpected '>'
+</dev/null $2 { $1 -c 'cat < >/dev/null' } echo FAIL
+
+: unexpected '<'
+</dev/null $2 { $1 -c 'cat > </dev/null' } echo FAIL
+
+: missing file name
+</dev/null $2 { $1 -c 'cat </dev/null >' } echo FAIL
+
+: missing file name
+</dev/null $2 { $1 -c 'cat >/dev/null <' } echo FAIL
+
+: unexpected '\0'
+</dev/null $2 { $1 -c 'echo Hello! |' } echo FAIL
+
+: unexpected '\0'
+</dev/null $2 { $1 -c 'echo Hello! | cat |' } echo FAIL
+
+: unexpected '|'
+</dev/null $2 { $1 -c 'echo Hello! |   | grep H' } echo FAIL
+
+: unmatched 'single' quote
+</dev/null $2 { $1 -c "'" } echo FAIL
+
+: unmatched 'single' quote
+</dev/null $2 { $1 -c ": nothing; '" } echo FAIL
+
+: unmatched 'single' quote
+</dev/null $2 { $1 -c "'; : nothing" } echo FAIL
+
+: unmatched "double" quote
+</dev/null $2 { $1 -c '"' } echo FAIL
+
+: unmatched "double" quote
+</dev/null $2 { $1 -c ': nothing; "' } echo FAIL
+
+: unmatched "double" quote
+</dev/null $2 { $1 -c '"; : nothing' } echo FAIL
+
+: empty subshell
+</dev/null $2 { $1 -c '(   )' } echo FAIL
+
+: unbalanced '('
+</dev/null $2 { $1 -c '(' } echo FAIL
+
+: unbalanced '('
+</dev/null $2 { $1 -c '( echo Hello!' } echo FAIL
+
+: unbalanced ')'
+</dev/null $2 { $1 -c ')' } echo FAIL
+
+: unbalanced ')'
+</dev/null $2 { $1 -c 'echo Hello! )' } echo FAIL
+
+: unexpected garbage before '('
+</dev/null $2 { $1 -c 'echo ( Hello! )' } echo FAIL
+
+: unexpected garbage before '('
+</dev/null $2 { $1 -c ': nothing </dev/null ( cat )' } echo FAIL
+
+: unexpected garbage before '('
+</dev/null $2 { $1 -c '</dev/null : nothing ( cat )' } echo FAIL
+
+: unexpected garbage after ')'
+</dev/null $2 { $1 -c '( echo ) Hello!' } echo FAIL
+
+: unexpected garbage after ')'
+</dev/null $2 { $1 -c '( echo Hello! ) >/dev/null : nothing' } echo FAIL
+
+: unexpected garbage after ')'
+</dev/null $2 { $1 -c '( echo Hello! ) : nothing >/dev/null' } echo FAIL
+
+: unmatched 'single' quote
+</dev/null $2 { $1 -c "( ' )" } echo FAIL
+
+: unmatched 'single' quote
+</dev/null $2 { $1 -c "echo Hello!; ( ' )" } echo FAIL
+
+: unmatched 'single' quote
+</dev/null $2 { $1 -c "( ' ); echo Hello!" } echo FAIL
+
+: unmatched 'single' quote
+</dev/null $2 { $1 -c "( echo Hello!; ' )" } echo FAIL
+
+: unmatched 'single' quote
+</dev/null $2 { $1 -c "( '; echo Hello! )" } echo FAIL
+
+: empty subshell
+</dev/null $2 { $1 -c "( echo Hello! ) | (   ) | ( grep H )" } echo FAIL
+
+: missing file name
+</dev/null $2 { $1 -c '<Input ( < )' } echo FAIL
+
+: unexpected '|'
+</dev/null $2 { $1 -c '<Input ( | )' } echo FAIL

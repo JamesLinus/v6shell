@@ -1,0 +1,12 @@
+
+Begin...
+-t1:
+This command line is not too long and should give no error.
+Command line overflow
+Command line overflow
+-4:
+This command line is not too long and should give no error.
+Command line overflow
+Command line overflow
+End.
+

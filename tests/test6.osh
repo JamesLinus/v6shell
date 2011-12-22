@@ -1,0 +1,23 @@
+:
+: " Test for correct behaviour when redirection arguments are used "
+: " w/ built-in commands.  No error messages should be printed as  "
+: " the shell should not try to open or create files in this case. "
+: -- 
+: Jeffrey Allen Neitzel
+:
+
+$2'' $1'' = '' -o $3'' = '' exit; false
+
+: input before output
+	: nothing <Cannot_open >Cannot_create
+
+	<Cannot_open : nothing >Cannot_create
+
+	<Cannot_open >Cannot_create : nothing
+
+: output before input
+	: nothing >Cannot_create <Cannot_open
+
+	>Cannot_create : nothing <Cannot_open
+
+	>Cannot_create <Cannot_open : nothing

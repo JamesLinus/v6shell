@@ -1,0 +1,106 @@
+--------
+Historical notes:
+
+The Thompson shell, by Ken Thompson of Bell Labs, was used as the
+standard command interpreter through Sixth Edition Unix.  In the
+Seventh Edition, it was replaced by the Bourne shell and then made
+available as osh.
+
+The Sixth Edition Unix shell used the following external utilities.
+
+	1) /bin/exit was used to terminate command files.
+
+	2) /bin/goto was used to transfer the shell's control
+	   from one point to another within a command file.
+
+	3) /bin/if was used to evaluate conditional expressions.
+	   This is the predecessor to test(1) which was first
+	   released in Seventh Edition Unix.
+
+	4) /etc/glob was used to expand `*', `?', and `['
+	   in command arguments.
+
+All of the utilities mentioned above are included here.  The "exit"
+utility is implemented here as a special built-in command.  "glob"
+is built into the shell and uses glob(3) from the C library.
+
+Of course, you can refer to the manual pages for if(1) and goto(1)
+for further details on those utilities.
+
+--------
+Compatibility notes:
+
+This implementation of the shell is intended to be backward compatible
+with the behaviour of sh(1) from Sixth Edition Unix.
+
+However, there are in fact several minor differences.  For reliability
+and usability on modern Unix systems, several instances of undesirable
+behaviour found in the original have been purposely changed.  At
+the same time, several other shell oddities have been purposely
+left in place as they are documented and can be quite useful.
+
+When it is known to differ in some way from the original, this fact
+is indicated in the appropriate manual page, osh(1) or sh6(1).  Some
+of the most obvious differences are further detailed below.  Aside
+from those detailed either in the manual pages or below, the only
+remaining difference is that this implementation can handle 8-bit
+character sets, whereas the original can only handle 7-bit ASCII.
+
+Note that by default, osh(1) runs with enhancements enabled.  If
+you wish only compatible behaviour, running the following commands
+in an interactive shell or from an initialization file:
+
+	setenv OSH_COMPAT clone
+	set clone
+
+...
+makes it more compatible with both the original and sh6(1).
+
+Further details on some of the known differences:
+
+1) This implementation of the shell uses PATH to search for external
+   commands; the original always uses the equivalent of `.:/bin:/usr/bin'.
+   The sh(1) manual page from Sixth Edition Unix says:
+
+       If  the  first argument is the name of an executable file,
+       it is invoked; otherwise the string `/bin/'  is  prepended
+       to  the  argument.   (In  this way most standard commands,
+       which reside in `/bin', are found.)  If no such command is
+       found,  the  string  `/usr'  is further prepended (to give
+       `/usr/bin/command') and another attempt is made to execute
+       the resulting file.  (Certain lesser-used commands live in
+       `/usr/bin'.)
+
+       If a non-directory file has executable mode, but  not  the
+       form  of  an  executable  program (does not begin with the
+       proper magic number) then it is assumed  to  be  an  ASCII
+       file of commands and a new Shell is created to execute it.
+       See ``Argument passing'' below.
+
+...
+
+   The primary reason this implementation of the shell uses PATH
+   instead of a procedure like that described above is primarily
+   for both user convenience and security.  In today's world, the
+   behaviour described above can conceivably be quite dangerous as
+   an unchangeable default.
+
+   Using PATH allows the user to choose the desired search behaviour.
+   If behaviour similar to that of the original is desired, the
+   user can set PATH to `.:/bin:/usr/bin'.
+
+   Also, this implementation of the shell does not deal with
+   executable ASCII files in the same way as the original.  Instead,
+   it lets the system's execvp() function determine what to do in
+   such a case.  Assuming that the system is POSIX-compliant,
+   execvp() executes the ASCII file with the system's sh(1) utility.
+
+2) This implementation of the shell ignores the first line of a
+   command file if it begins with `#!' in order to play nicely with
+   the kernel's `#!' mechanism.  For example, the first line might
+   be `#!/usr/local/bin/osh'.  This is just for user convenience.
+
+3) The original implementation of the shell does shell accounting
+   to record command execution data; this one does not.
+
+Jeffrey Allen Neitzel						2004/10/28

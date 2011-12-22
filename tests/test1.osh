@@ -1,0 +1,94 @@
+:
+: " All of the command lines in this command file are syntactically correct. "
+: " As such, no syntax errors should be produced.  If this command file      "
+: " does terminate w/ a syntax error, then a bug has been found.             "
+: -- 
+: Jeffrey Allen Neitzel
+:
+
+$2'' $1'' = '' -o $3'' = '' exit; false
+
+: " Odd, but perfectly legal in the Thompson shell. "
+
+	;;;;;;
+
+	 ; ; ; ; ; ; 
+
+	&&&&&&
+
+	 & & & & & & 
+
+: Redirections...
+: 1a: input before output
+
+	cat <Input >/dev/null
+
+	<Input cat >/dev/null
+
+	<Input >/dev/null cat
+
+: 1b: output before input
+
+	cat >/dev/null <Input
+
+	>/dev/null cat <Input
+
+	>/dev/null <Input cat
+
+: 2a: input before output
+
+	( cat ) <Input >/dev/null
+
+	<Input ( cat ) >/dev/null
+
+	<Input >/dev/null ( cat )
+
+: 2b: output before input
+
+	( cat ) >/dev/null <Input
+
+	>/dev/null ( cat ) <Input
+
+	>/dev/null <Input ( cat )
+
+: Pipes...
+
+	echo Hello! ^ cat ^ grep '^H'
+
+	echo Hello! | cat | grep '^H'
+
+	echo Hello! | : nothing | grep '^H'
+
+: Subshells...
+
+	( echo one ); ( echo two ); ( echo three )
+	( ( echo one ); ( echo two ); ( echo three ) )
+
+	( echo \( one \) ); ( echo \( two \) ); ( echo \( three \) )
+	( ( echo \( one \) ); ( echo \( two \) ); ( echo \( three \) ) )
+
+	( echo Hello! ) ^ ( cat ) ^ ( grep '^H' )
+
+	( echo Hello! ) | ( cat ) | ( grep '^H' )
+
+	( echo Hello! ) | ( cat >/dev/null ) | ( grep '^H' )
+
+	( echo Hello! ) | ( : nothing ) | ( grep '^H' )
+
+	( \
+		( echo Hello! ) | \
+		( cat | ( cat | cat | cat ) | cat ) | \
+		( grep '^H' ) \
+	)
+
+	( \
+		( echo Hello! ) | \
+		( cat | ( cat | : nothing | cat ) | cat ) | \
+		( grep '^H' ) \
+	)
+
+: Asynchronous...
+	( sleep 3; echo "sleep 3 done." )&\
+	( sleep 4; echo "sleep 4 done." )&\
+	( sleep 5; echo "sleep 5 done." )&\
+	wait

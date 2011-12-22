@@ -1,0 +1,48 @@
+Contents of this directory:
+
+	1) etc.osh.login
+		This is an example of a system-wide initialization file
+		for login shells.
+
+	2) dot.osh.login
+		This is an example of a user initialization file
+		for login shells.
+
+	3) dot.oshrc
+		This is an example of a user initialization file
+		for interactive shells.
+
+From OSH(1):
+
+   Initialization (+)
+       If the first character of the  name  used  to  invoke  the
+       shell  is  `-'  (e.g.,  -osh), it is assumed to be a login
+       shell and shall attempt to read the following three  files
+       in sequence: /etc/osh.login, $h/.osh.login, and $h/.oshrc.
+       For each of these files which exists and is readable,  the
+       shell executes the commands contain within.
+
+       In  the  case  where  an  interactive shell is not a login
+       shell, it shall only try  to  execute  commands  from  one
+       file:  $h/.oshrc.   In  any case, after the shell finishes
+       with the appropriate initialization file(s) it shall  then
+       prompt the user for input as usual.
+
+       In the normal case, a SIGINT or SIGQUIT signal received by
+       the shell during  execution  of  any  initialization  file
+       causes  it  to cease execution of that file, but this does
+       not terminate the shell.  Note that in some cases  it  may
+       be  desirable  to use the trap special command in order to
+       ignore these, and possibly other signals as well.
+
+       Any signal which is not being ignored, or an exit command,
+       in  any  of  the  initialization files causes the shell to
+       terminate immediately.
+
+       Note that all initialization files intended to be used  by
+       the shell must be of a regular type.  That is, they cannot
+       be directories, FIFOs, or any other type of file.  If  the
+       file  is  not a regular file, the shell simply ignores it,
+       prints a diagnostic, and tries the next file  (if any)  or
+       prompts the user for input as it normally does.
+
