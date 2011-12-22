@@ -1,0 +1,23 @@
+:
+: " Test the if utility for correct behaviour. "
+: -- 
+: Jeffrey Allen Neitzel
+:
+
+$2 xyz = xyz \
+	echo "if xyz = xyz is true."
+
+$2 xyz != zyx \
+	echo "if xyz != zyx is true."
+
+$2 ! xyz != xyz \
+	echo "if ! xyz != xyz is true."
+
+$2 ! xyz = zyx \
+	echo "if ! xyz = zyx is true."
+
+$2 { true } \
+	echo "if { true } is true."
+
+$2 ! { false } \
+	echo "if ! { false } is true."

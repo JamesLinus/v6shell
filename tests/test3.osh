@@ -1,0 +1,28 @@
+:
+: " Test for correct behaviour when redirection arguments refer to files "
+: " that cannot be opened or created.                                    "
+: "	* All of these tests should print a `file: cannot open'          "
+: "	  or `file: cannot create' error message.                        "
+: "	* Use `osh -c command' since these errors will always            "
+: "	  terminate the command file.                                    "
+: -- 
+: Jeffrey Allen Neitzel
+:
+
+if x$1 != x -a x$2 != x goto OK
+	echo "test3.osh: usage error"; false; exit
+
+: OK
+: input before output
+</dev/null $2 { $1 -c 'cat <tests/Cannot_open >tests/Cannot_create' } echo FAIL
+
+</dev/null $2 { $1 -c '<tests/Cannot_open cat >tests/Cannot_create' } echo FAIL
+
+</dev/null $2 { $1 -c '<tests/Cannot_open >tests/Cannot_create cat' } echo FAIL
+
+: output before input
+</dev/null $2 { $1 -c 'cat >tests/Cannot_create <tests/Cannot_open' } echo FAIL
+
+</dev/null $2 { $1 -c '>tests/Cannot_create cat <tests/Cannot_open' } echo FAIL
+
+</dev/null $2 { $1 -c '>tests/Cannot_create <tests/Cannot_open cat' } echo FAIL
