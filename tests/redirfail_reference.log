@@ -1,0 +1,18 @@
+% cat <tests/Cannot_open >tests/Cannot_create
+tests/Cannot_open: cannot open
+PASS
+% <tests/Cannot_open cat >tests/Cannot_create
+tests/Cannot_open: cannot open
+PASS
+% <tests/Cannot_open >tests/Cannot_create cat
+tests/Cannot_open: cannot open
+PASS
+% cat >tests/Cannot_create <tests/Cannot_open
+tests/Cannot_create: cannot create
+PASS
+% >tests/Cannot_create cat <tests/Cannot_open
+tests/Cannot_create: cannot create
+PASS
+% >tests/Cannot_create <tests/Cannot_open cat
+tests/Cannot_create: cannot create
+PASS

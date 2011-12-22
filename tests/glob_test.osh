@@ -1,0 +1,80 @@
+:
+: " Do some simple globbing tests.                                 "
+: " The test results are correct if run with osh.c 1.101 or later. "
+:
+: " usage: osh tests/glob_test.osh /path/to/target/shell "
+: -- 
+: Jeffrey Allen Neitzel
+:
+
+if $1x != x goto OK1
+
+echo "usage: osh tests/glob_test.osh /path/to/target/shell"; false; exit
+
+: OK1
+: " Start the target shell now. "; $1 -
+if -d tests goto OK2
+
+echo "tests: No such directory"; false; exit
+
+: OK2
+if ! -e tests/glob goto OK3
+
+echo "tests/glob: Already exists"; false; exit
+
+: OK3
+if ! { mkdir tests/glob } goto quit
+chdir tests/glob
+if ! { touch \% \# } goto quit
+if ! { touch \| \^ \( \) \; \& } goto quit
+if ! { touch \< \> \>> } goto quit
+if ! { touch \\ \" \' \\xyz \"xyz \'xyz xyz\\ xyz\" xyz\' } goto quit
+if ! { touch \\xyz\\ \"xyz\" \'xyz\' } goto quit
+if ! { touch \$ \* \? \[ \] } goto quit
+
+: ---- Start globbing now! ----
+
+echo *
+echo *''
+echo
+
+echo ?
+echo ?''
+echo
+
+: prompts
+echo [%#]
+echo
+
+: pipes
+echo [\^\|] ["^|"] ['^|']
+echo
+
+: parentheses
+echo [\(\)] ["()"] ['()']
+echo
+
+: command/pipeline separators
+echo [\;\&] [";&"] [';&']
+echo
+
+: redirections
+echo [\<\>]* ["<>"]* ['<>']*
+echo
+
+: quotes
+echo [\"\'\\]
+echo [\"\'\\]??? ["'\"]??? ['"\']???
+echo ???[\"\'\\] ???["'\"] ???['"\']
+echo [\"\'\\]???[\"\'\\] ["'\"]???["'\"] ['"\']???['"\']
+echo
+
+: glob characters
+echo [][] [\]\[] ["]["] ['][']
+echo [*?[] [\*\?\[] ["*?["] ['*?[']
+
+: clean up and quit
+chdir ..; rm -rf glob; exit
+
+: quit - something failed...
+false

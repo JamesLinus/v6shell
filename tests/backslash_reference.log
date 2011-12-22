@@ -1,0 +1,25 @@
+Backslashes: \ (1) - \\\\\\\\\ (9)
+
+Using `osh -c command' ...
+2) XYZ\
+4) XYZ\\
+6) XYZ\\\
+8) XYZ\\\\
+
+Using `osh -t' ...
+2) XYZ\
+4) XYZ\\
+6) XYZ\\\
+8) XYZ\\\\
+
+Effect in command files and interactive shells ...
+1) XYZ
+2) XYZ\
+3) XYZ\
+4) XYZ\\
+5) XYZ\\
+6) XYZ\\\
+7) XYZ\\\
+8) XYZ\\\\
+9) XYZ\\\\
+
