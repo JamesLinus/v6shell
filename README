@@ -1,0 +1,50 @@
+Welcome to release 040731 of osh!
+
+This is an enhanced, backward-compatible reimplementation of the
+Sixth Edition Unix shell.  The original implementation was written
+by Ken Thompson of Bell Labs.  This release of osh was originally
+derived from osh-020214 by Gunnar Ritter.  See the manual pages for
+additional details.
+
+The NOTES file gives additional information about this implementation
+of osh, including some historical and compatibility notes.
+
+--------
+INSTALL:
+The following steps will normally suffice to build/install osh and
+its supporting utilities:
+
+1) Adjust the CONFIGURATION section in the Makefile to match
+   your desires and/or the requirements of your system.
+
+2) Type `make' to compile osh, if, and goto.
+
+3) Optionally, type `make check' to run a minimal test suite.
+   *) This should be done as a regular user, not the superuser.
+
+4) Type `make install' to install the binaries and manual pages.
+
+--------
+Osh is currently developed and maintained on NetBSD and OpenBSD.
+The latest release is always tested and known to work correctly on
+these systems and also on FreeBSD.  I have received reports that
+previous releases build and work correctly on various distributions
+of GNU/Linux as well.
+
+To the best of my knowledge this software should build on most any
+POSIX-compliant Unix system, but I have not verified this as I do
+not have access to other operating systems.  I do welcome reports
+of success or failure to build it on other systems.
+
+If you find a bug, please send a bug report to me at the following
+email address.  Before reporting a bug, please try to reproduce it
+with the latest version of the code.  With bug reports, please try
+to ensure that enough information to reproduce the problem is
+enclosed, and if a known fix for it exists, include that as well.
+
+If you have any questions about this software, I encourage you to
+contact me via email.  Enjoy!
+
+Jeffrey Allen Neitzel
+jneitzel@sdf.lonestar.org
+http://jneitzel.sdf1.org/osh/

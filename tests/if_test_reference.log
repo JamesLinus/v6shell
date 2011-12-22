@@ -1,0 +1,12 @@
+Test: if string1 = string2
+PASS
+Test: if string1 != string2
+PASS
+Test: if ! string1 != string2
+PASS
+Test: if ! string1 = string2
+PASS
+Test: if { command }
+PASS
+Test: if ! { command }
+PASS

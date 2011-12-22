@@ -1,0 +1,15 @@
+:
+: 3 of 3
+: Test the goto utility for correct behaviour.
+: -- 
+: Jeffrey Allen Neitzel
+:
+
+goto loop_label
+
+: The following label should give a 'label too long' error.
+: In any case, it should not be found since it does not match
+: the requested label.
+: loop_label............................................................................................................is_too_long
+
+: do nothing

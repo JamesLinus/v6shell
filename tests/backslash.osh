@@ -1,0 +1,62 @@
+if $1x != x goto OK
+
+echo "Tell me which shell and where it is..."
+false
+exit
+
+: OK
+echo "Backslashes: \ (1) - \\\\\\\\\ (9)"
+echo
+echo "Using `"$1" -c command' ..."
+$1 -c 'echo 1\) XYZ\'
+$1 -c 'echo 2\) XYZ\\'
+$1 -c 'echo 3\) XYZ\\\'
+$1 -c 'echo 4\) XYZ\\\\'
+$1 -c 'echo 5\) XYZ\\\\\'
+$1 -c 'echo 6\) XYZ\\\\\\'
+$1 -c 'echo 7\) XYZ\\\\\\\'
+$1 -c 'echo 8\) XYZ\\\\\\\\'
+$1 -c 'echo 9\) XYZ\\\\\\\\\'
+echo
+
+echo "Using `"$1" -t' ..."
+$1 -t
+echo 1\) XYZ\
+$1 -t
+echo 2\) XYZ\\
+$1 -t
+echo 3\) XYZ\\\
+$1 -t
+echo 4\) XYZ\\\\
+$1 -t
+echo 5\) XYZ\\\\\
+$1 -t
+echo 6\) XYZ\\\\\\
+$1 -t
+echo 7\) XYZ\\\\\\\
+$1 -t
+echo 8\) XYZ\\\\\\\\
+$1 -t
+echo 9\) XYZ\\\\\\\\\
+echo
+
+echo "Effect in command files and interactive shells ..."
+echo 1\) XYZ\
+
+echo 2\) XYZ\\
+
+echo 3\) XYZ\\\
+
+echo 4\) XYZ\\\\
+
+echo 5\) XYZ\\\\\
+
+echo 6\) XYZ\\\\\\
+
+echo 7\) XYZ\\\\\\\
+
+echo 8\) XYZ\\\\\\\\
+
+echo 9\) XYZ\\\\\\\\\
+
+echo
