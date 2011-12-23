@@ -1,0 +1,120 @@
+% <
+syntax error
+PASS
+% >
+syntax error
+PASS
+% >>
+syntax error
+PASS
+% <>
+syntax error
+PASS
+% <>>
+syntax error
+PASS
+% ><
+syntax error
+PASS
+% >><
+syntax error
+PASS
+% </dev/null
+syntax error
+PASS
+% >/dev/null
+syntax error
+PASS
+% >>/dev/null
+syntax error
+PASS
+% cat < >/dev/null
+syntax error
+PASS
+% cat > </dev/null
+syntax error
+PASS
+% cat </dev/null >
+syntax error
+PASS
+% cat >/dev/null <
+syntax error
+PASS
+% echo Hello! |
+syntax error
+PASS
+% echo Hello! | cat |
+syntax error
+PASS
+% echo Hello! |   | grep H
+syntax error
+PASS
+% '
+syntax error
+PASS
+% : nothing; '
+syntax error
+PASS
+% '; : nothing
+syntax error
+PASS
+% "
+syntax error
+PASS
+% : nothing; "
+syntax error
+PASS
+% "; : nothing
+syntax error
+PASS
+% (   )
+syntax error
+PASS
+% (
+syntax error
+PASS
+% ( echo Hello!
+syntax error
+PASS
+% )
+syntax error
+PASS
+% echo Hello! )
+syntax error
+PASS
+% echo ( Hello! )
+syntax error
+PASS
+% : nothing </dev/null ( cat )
+syntax error
+PASS
+% </dev/null : nothing ( cat )
+syntax error
+PASS
+% ( echo ) Hello!
+syntax error
+PASS
+% ( echo Hello! ) >/dev/null : nothing
+syntax error
+PASS
+% ( echo Hello! ) : nothing >/dev/null
+syntax error
+PASS
+% ( ' )
+syntax error
+PASS
+% echo Hello!; ( ' )
+syntax error
+PASS
+% ( ' ); echo Hello!
+syntax error
+PASS
+% ( echo Hello!; ' )
+syntax error
+PASS
+% ( '; echo Hello! )
+syntax error
+PASS
+% ( echo Hello! ) | (   ) | ( grep H )
+syntax error
+PASS

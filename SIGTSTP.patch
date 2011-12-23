@@ -1,0 +1,47 @@
+Date: 2004-02-16
+Description:
+	Osh is not a job-control shell, and Sixth Edition Unix did not
+	support job control.  Because of this, I prefer to make '^Z'
+	have no effect for my own personal use.
+
+	Ignore and block the SIGTSTP signal.
+	This patch effectively disables job control when osh is
+	invoked from a job-control shell such as csh(1) or ksh(1).
+	Some job-control shells let you disable job control from
+	within the shell.  For example, `set +o monitor' in ksh
+	is supposed to do this.  From what I have seen, this often
+	produces unexpected results and does not actually disable
+	job control entirely.  Hence, the reason for this patch...
+
+	Note that when osh is invoked by login(1), rxvt(1), xterm(1),
+	etc...  SIGTSTP is ignored by default.  Hence, this patch
+	will have no real effect in such a case since there is no
+	parent shell trying to do job control.
+
+	If you wish, you can apply this patch to osh.c (revision 1.93)
+	as released in osh-040216.  Then compile and install osh as
+	described in the README.
+
+Jeffrey Allen Neitzel
+======================================================================
+--- osh.c.orig	Mon Feb 16 16:32:55 2004
++++ osh.c	Mon Feb 16 16:39:05 2004
+@@ -151,6 +151,7 @@
+ main(int argc, char **argv)
+ {
+ 	off_t ioff;
++	sigset_t block;
+ 	int bsc, ch;
+ 	char line[LINELEN];
+ 	char *pr;
+@@ -201,6 +202,10 @@
+ 			signal(SIGINT, SIG_IGN);
+ 			signal(SIGQUIT, SIG_IGN);
+ 			signal(SIGTERM, SIG_IGN);
++			signal(SIGTSTP, SIG_IGN);
++			sigemptyset(&block);
++			sigaddset(&block, SIGTSTP);
++			sigprocmask(SIG_BLOCK, &block, NULL);
+ 		}
+ 	} else {
+ 		close(0);

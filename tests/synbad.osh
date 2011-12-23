@@ -1,0 +1,169 @@
+:
+: Test for correct detection of syntax errors.
+:	* Some of these tests are a little redundant.
+:	* All of these tests should produce a syntax error.
+:	* Use 'osh -c command' since syntax errors will always
+:	  terminate the command file.
+: -- 
+: Jeffrey Allen Neitzel
+:
+
+: missing file name
+echo '% <'
+if ! { osh -c '<' } echo PASS
+
+: missing file name
+echo '% >'
+if ! { osh -c '>' } echo PASS
+
+: missing file name
+echo '% >>'
+if ! { osh -c '>>' } echo PASS
+
+: unexpected '>'
+echo '% <>'
+if ! { osh -c '<>' } echo PASS
+
+: unexpected '>>'
+echo '% <>>'
+if ! { osh -c '<>>' } echo PASS
+
+: unexpected '<'
+echo '% ><'
+if ! { osh -c '><' } echo PASS
+
+: unexpected '<'
+echo '% >><'
+if ! { osh -c '>><' } echo PASS
+
+: missing command
+echo '% </dev/null'
+if ! { osh -c '</dev/null' } echo PASS
+
+: missing command
+echo '% >/dev/null'
+if ! { osh -c '>/dev/null' } echo PASS
+
+: missing command
+echo '% >>/dev/null'
+if ! { osh -c '>>/dev/null' } echo PASS
+
+: unexpected '>'
+echo '% cat < >/dev/null'
+if ! { osh -c 'cat < >/dev/null' } echo PASS
+
+: unexpected '<'
+echo '% cat > </dev/null'
+if ! { osh -c 'cat > </dev/null' } echo PASS
+
+: missing file name
+echo '% cat </dev/null >'
+if ! { osh -c 'cat </dev/null >' } echo PASS
+
+: missing file name
+echo '% cat >/dev/null <'
+if ! { osh -c 'cat >/dev/null <' } echo PASS
+
+: unexpected '\0'
+echo '% echo Hello! |'
+if ! { osh -c 'echo Hello! |' } echo PASS
+
+: unexpected '\0'
+echo '% echo Hello! | cat |'
+if ! { osh -c '% echo Hello! | cat |' } echo PASS
+
+: unexpected '|'
+echo '% echo Hello! |   | grep H'
+if ! { osh -c 'echo Hello! |   | grep H' } echo PASS
+
+: unmatched 'single' quote
+echo "% '"
+if ! { osh -c "'" } echo PASS
+
+: unmatched 'single' quote
+echo "% : nothing; '"
+if ! { osh -c ": nothing; '" } echo PASS
+
+: unmatched 'single' quote
+echo "% '; : nothing"
+if ! { osh -c "'; : nothing" } echo PASS
+
+: unmatched "double" quote
+echo '% "'
+if ! { osh -c '"' } echo PASS
+
+: unmatched "double" quote
+echo '% : nothing; "'
+if ! { osh -c ': nothing; "' } echo PASS
+
+: unmatched "double" quote
+echo '% "; : nothing'
+if ! { osh -c '"; : nothing' } echo PASS
+
+: empty subshell
+echo '% (   )'
+if ! { osh -c '(   )' } echo PASS
+
+: unbalanced '('
+echo '% ('
+if ! { osh -c '(' } echo PASS
+
+: unbalanced '('
+echo '% ( echo Hello!'
+if ! { osh -c '( echo Hello!' } echo PASS
+
+: unbalanced ')'
+echo '% )'
+if ! { osh -c ')' } echo PASS
+
+: unbalanced ')'
+echo '% echo Hello! )'
+if ! { osh -c 'echo Hello! )' } echo PASS
+
+: unexpected garbage before '('
+echo '% echo ( Hello! )'
+if ! { osh -c 'echo ( Hello! )' } echo PASS
+
+: unexpected garbage before '('
+echo '% : nothing </dev/null ( cat )'
+if ! { osh -c ': nothing </dev/null ( cat )' } echo PASS
+
+: unexpected garbage before '('
+echo '% </dev/null : nothing ( cat )'
+if ! { osh -c '</dev/null : nothing ( cat )' } echo PASS
+
+: unexpected garbage after ')'
+echo '% ( echo ) Hello!'
+if ! { osh -c '( echo ) Hello!' } echo PASS
+
+: unexpected garbage after ')'
+echo '% ( echo Hello! ) >/dev/null : nothing'
+if ! { osh -c '( echo Hello! ) >/dev/null : nothing' } echo PASS
+
+: unexpected garbage after ')'
+echo '% ( echo Hello! ) : nothing >/dev/null'
+if ! { osh -c '( echo Hello! ) : nothing >/dev/null' } echo PASS
+
+: unmatched 'single' quote
+echo "% ( ' )"
+if ! { osh -c "( ' )" } echo PASS
+
+: unmatched 'single' quote
+echo "% echo Hello!; ( ' )"
+if ! { osh -c "echo Hello!; ( ' )" } echo PASS
+
+: unmatched 'single' quote
+echo "% ( ' ); echo Hello!"
+if ! { osh -c "( ' ); echo Hello!" } echo PASS
+
+: unmatched 'single' quote
+echo "% ( echo Hello!; ' )"
+if ! { osh -c "( echo Hello!; ' )" } echo PASS
+
+: unmatched 'single' quote
+echo "% ( '; echo Hello! )"
+if ! { osh -c "( '; echo Hello! )" } echo PASS
+
+: empty subshell
+echo "% ( echo Hello! ) | (   ) | ( grep H )"
+if ! { osh -c "( echo Hello! ) | (   ) | ( grep H )" } echo PASS
