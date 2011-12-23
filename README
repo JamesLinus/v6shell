@@ -1,0 +1,22 @@
+Welcome to osh, an old shell!  This is version 030730.
+
+This is a reimplementation of the Sixth Edition Unix shell.  See
+the manual page for details.  The software contained here descends
+directly from osh-020214 by Gunnar Ritter and includes the "if" and
+"goto" commands ported from Sixth Edition Unix sources.
+
+Building and installing osh is really quite simple.
+The following steps should do the job:
+
+1) Adjust the CONFIGURATION section in the Makefile to match
+   your desires and/or the requirements of your system.
+2) Type `make' to compile.
+3) Type `make install' to install.
+
+That's about it.
+Enjoy!
+
+Jeffrey Allen Neitzel
+jneitzel@sdf.lonestar.org
+http://jneitzel.sdf1.org/osh/
+

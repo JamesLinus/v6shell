@@ -1,0 +1,176 @@
+.\"
+.\" Sccsid @(#)osh.1	1.3 (gritter) 2/13/02
+.TH OSH 1 "2/13/02" "Gunnar Ritter" "User Commands"
+.SH NAME
+osh \- old shell
+.SH SYNOPSIS
+osh [
+.B \-c
+command ] [
+.B \-t
+] [ file [ arg1 ... [ arg9 ] ] ]
+.SH DESCRIPTION
+.I Osh
+is a re-implementation of the old shell version, which was in
+standard use up to
+.SM UNIX
+6th Edition and was supplied as
+.I osh
+with
+.SM UNIX
+7th Edition.
+Its command language is a sparse subset of those of modern shells and
+is mostly common both to sh(1) and csh(1).
+.SH OPTIONS
+.TP
+.BI "\-c" \ command
+Execute 
+.I "command"
+and terminate.
+.TP
+.B "\-t"
+Read only one line from standard input, execute it and terminate.
+.SH USAGE
+.I Osh
+reads a 
+.I "command line"
+from standard input or from the file argument. This process is repeated
+until the end of file (on terminals EOF, mostly '^D') appears.
+.PP
+A command line consists of one or more pipelines. They are seperated by ';'
+or '&'. If the second form is used,
+.I osh
+does not wait for completion
+of the previous pipeline.
+.PP
+A 
+.I "pipeline"
+consists of one or more commands separated by '|' or '^',
+which are both equivalent. The standard output of the command before
+is connected to the standard input of the command after that sign.
+.PP
+A command's input can be
+.I "redirected"
+by the sign '<' and a following
+filename. Its standard output can be redirected by the sign '>' and a
+following filename. If '>>' is being used instead, the command's
+output is appended to the named file. The redirection argument can
+appear at any position of the command's regular arguments.
+The diagnostic output cannot be redirected. If standard input or output
+is assigned to a pipe, the redirection argument is ignored.
+.PP
+A 
+.I command
+consists of the command name itself and a varying number of
+arguments, separated by space or tabulator signs.
+These are normally interpreted by the command itself, not
+by the shell.
+The command name is used to locate the command
+in the current directory, and if it is not found there, 
+by searching the directories in the environment variable
+.SM PATH
+like sh(1) does.
+If you want to assign environment variables
+to an external command, use env(1).
+.PP
+Note: neither
+.SM PATH
+nor other variables can be set from inside
+.I osh.
+The
+original
+.SM UNIX
+6th Edition shell always uses '/bin:/usr/bin' instead of
+.SM PATH.
+.PP
+If a command terminates
+.I abnormally\|,
+i.e. not by exit or interrupt,
+.I osh
+reports the cause and also if a core
+file has been dumped. Because
+.I osh
+implements only termination reasons
+the
+.SM UNIX
+6th Edition shell also reports, not all signals in modern
+.SM UNIX
+versions are being reported.
+.TP
+Quoting
+If the backslash sign '\\' appears before any character, the backslash sign
+is removed and the following character looses its special meaning.
+If a string is enclosed in single ''' or double '"' quotes, its contents
+also loose their special meaning.
+.TP
+Argument conclusion
+One ore more commands enclosed by brackets '(' ')' are handled by
+executing a subshell. This can be used especially
+within a redirection or pipe.
+.TP
+Globbing
+If the characters '*', '?' or '[' are found at the command name or
+its regular arguments and are unquoted, they are treated specially to
+match filenames. '*' matches any string, '?' refers to any single
+character. '[xyz]', where x, y and z can be any sign, matches one
+of the specified characters.
+.TP
+Command Files
+If an argument not beginning with '-' is supplied to the shell, its
+contents are taken as input to the shell. If further arguments are
+given, they are assigned to '$1' ... '$9', which is replaced anywhere on
+the command line by the given argument, if unquoted. The file name
+itself is assigned to '$0'. If the shell detects an error or it
+receives a signal, it terminates.
+.TP
+Special commands
+The following command names are handled specially by the shell:
+.RS
+.TP
+.BI "chdir" \ dir
+changes the shell's working directory to
+.I dir\|.
+.TP
+.B "login"
+/bin/login is executed without creating a new process.
+.TP
+.B "shift"
+shifts the positional parameters.
+.TP
+.B "wait"
+waits for all asynchronous processes.
+.TP
+.B ":"
+arguments are ignored; return value is always 0.
+.RE
+.SH ENVIRONMENT VARIABLES
+.TP
+.B PATH
+Is used to determine the location of commands external to
+.I osh.
+.SH EXIT STATUS
+.I Osh
+exits with the termination status of the last command executed.
+If
+.I osh
+has detected a syntax error and is then exited, it returns 1.
+.SH SEE ALSO
+goto(1),
+if(1),
+sh(1),
+csh(1),
+env(1)
+.SH NOTES
+Much silly behavior is implemented for compatibility, including
+error-messages.
+.PP
+Because
+.I osh
+does not read any startup files, do not use
+it as a login shell unless you know what you are doing.
+.PP
+Some features
+of the original
+.SM UNIX
+6th Edition shell are undocumented in its
+manual page and are left undocumented here, too.

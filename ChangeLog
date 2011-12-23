@@ -1,0 +1,27 @@
+[030730]:
+	* Initial maintenance release by Jeffrey Allen Neitzel
+osh.c:
+	* Add '#ifdef CLONE' so the desired command search behaviour
+	  can be chosen at build time.
+	* Fixed segfault when command line contains only whitespace.
+	  We simply ignore this situation now.
+	* Fixed segfault when redirections are used w/o a command.
+	  This will now result in a syntax error.
+	* Fixed segfault when redirecting a command w/o a filename.
+	  This will now result in a syntax error.
+	* Fixed a small memory leak when using redirection arguments.
+	* Make osh correctly detect when a command line contains
+	  too many arguments.  This allows command lines to have a
+	  maximum of 255 arguments.
+if.c:
+	* Add '#ifdef CLONE' to make if(1) search for external commands
+	  the same way osh(1) does.
+goto.c:
+	* Fixed a bug where goto should produce a 'label not found' error
+	  but would instead go into an infinite loop at the end of the
+	  command file.  We now correctly detect EOF and successfully
+	  report 'label not found' errors.
+
+[020214]:
+	* Maintained by Gunnar Ritter
+
