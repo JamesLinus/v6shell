@@ -1,0 +1,21 @@
+The overall design of this implementation requires various workarounds
+because of the way that pipes are created.  The workarounds should
+not be necessary, but they are.  See the CHANGES file for more info
+about some of these workarounds.
+
+For example, pipes are created in pxpipe().  This is done in the
+parent process before fork.  I believe they should really be created
+in the child process.  This is basically how Ken Thompson's
+implementation of the shell does it.
+
+Here is a note I once made to myself in pxpipe():
+/*
+ * XXX: It should be noted that this is quite simply the wrong place
+ *	to create pipes.  Doing it here requires various workarounds
+ *	that would not otherwise be required if pipes were created
+ *	in forkexec() instead.  I may look into fixing this issue,
+ *	but since it works well enough as it is I doubt I will
+ *	actually do anything about it in the near future.
+ */
+
+Jeffrey Allen Neitzel						2004/07/14

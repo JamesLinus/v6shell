@@ -1,0 +1,30 @@
+:
+: Test for correct behaviour when redirection arguments refer to files
+: that cannot be opened or created.
+:	* All of these tests should print a 'cannot open' or 'cannot create'
+:	  error message.
+:	* Use 'osh -c command' since these errors will always terminate
+:	  the command file.
+: -- 
+: Jeffrey Allen Neitzel
+:
+
+: input before output
+echo '% cat <tests/Cannot_open >tests/Cannot_create'
+if ! { osh -c 'cat <tests/Cannot_open >tests/Cannot_create' } echo PASS
+
+echo '% <tests/Cannot_open cat >tests/Cannot_create'
+if ! { osh -c '<tests/Cannot_open cat >tests/Cannot_create' } echo PASS
+
+echo '% <tests/Cannot_open >tests/Cannot_create cat'
+if ! { osh -c '<tests/Cannot_open >tests/Cannot_create cat' } echo PASS
+
+: output before input
+echo '% cat >tests/Cannot_create <tests/Cannot_open'
+if ! { osh -c 'cat >tests/Cannot_create <tests/Cannot_open' } echo PASS
+
+echo '% >tests/Cannot_create cat <tests/Cannot_open'
+if ! { osh -c '>tests/Cannot_create cat <tests/Cannot_open' } echo PASS
+
+echo '% >tests/Cannot_create <tests/Cannot_open cat'
+if ! { osh -c '>tests/Cannot_create <tests/Cannot_open cat' } echo PASS

@@ -1,0 +1,8 @@
+Contents of this directory:
+
+	1) dot.osh.login
+		Is an example of a user initialization file for login shells.
+
+	2) etc.osh.login
+		Is an example of a system-wide initialization file
+		for login shells.
