@@ -1,0 +1,111 @@
+:
+: All of the command lines in this command file are syntactically correct.
+: As such, no syntax errors should be produced.  If this command file
+: does terminate w/ a syntax error, then a bug has been found.
+: -- 
+: Jeffrey Allen Neitzel
+:
+
+: Not syntax errors...
+: The following strangeness matches the V6 shell.
+echo '% ;;;;;;'
+;;;;;;
+echo '%  ; ; ; ; ; ; '
+ ; ; ; ; ; ; 
+echo '% &&&&&&'
+&&&&&&
+echo '%  & & & & & & '
+ & & & & & & 
+
+: Redirections...
+: 1a: input before output
+echo '% cat <tests/Input >/dev/null'
+cat <tests/Input >/dev/null
+
+echo '% <tests/Input cat >/dev/null'
+<tests/Input cat >/dev/null
+
+echo '% <tests/Input >/dev/null cat'
+<tests/Input >/dev/null cat
+
+: 1b: output before input
+echo '% cat >/dev/null <tests/Input'
+cat >/dev/null <tests/Input
+
+echo '% >/dev/null cat <tests/Input'
+>/dev/null cat <tests/Input
+
+echo '% >/dev/null <tests/Input cat'
+>/dev/null <tests/Input cat
+
+: 2a: input before output
+echo '% ( cat ) <tests/Input >/dev/null'
+( cat ) <tests/Input >/dev/null
+
+echo '% <tests/Input ( cat ) >/dev/null'
+<tests/Input ( cat ) >/dev/null
+
+echo '% <tests/Input >/dev/null ( cat )'
+<tests/Input >/dev/null ( cat )
+
+: 2b: output before input
+echo '% ( cat ) >/dev/null <tests/Input'
+( cat ) >/dev/null <tests/Input
+
+echo '% >/dev/null ( cat ) <tests/Input'
+>/dev/null ( cat ) <tests/Input
+
+echo '% >/dev/null <tests/Input ( cat )'
+>/dev/null <tests/Input ( cat )
+
+: Pipes...
+echo "% echo Hello! ^ cat ^ grep '^H'"
+echo Hello! ^ cat ^ grep '^H'
+
+echo "% echo Hello! | cat | grep '^H'"
+echo Hello! | cat | grep '^H'
+
+echo "% echo Hello! | : nothing | grep '^H';\"
+echo "  : No output because of ':' command."
+echo Hello! | : nothing | grep '^H';\
+: No output because of ':' command.
+
+: Subshells...
+echo '% ( echo one ); ( echo two ); ( echo three )'
+( echo one ); ( echo two ); ( echo three )
+
+echo '% ( echo \( one \) ); ( echo \( two \) ); ( echo \( three \) )'
+( echo \( one \) ); ( echo \( two \) ); ( echo \( three \) )
+
+echo "% ( echo Hello! ) ^ ( cat ) ^ ( grep '^H' )"
+( echo Hello! ) ^ ( cat ) ^ ( grep '^H' )
+
+echo "% ( echo Hello! ) | ( cat ) | ( grep '^H' )"
+( echo Hello! ) | ( cat ) | ( grep '^H' )
+
+echo "% ( echo Hello! ) | ( cat >/dev/null ) | ( grep '^H' );\"
+echo "  : No output because of  ^^^^^^^^^^."
+( echo Hello! ) | ( cat >/dev/null ) | ( grep '^H' );\
+: No output because of '^^^^^^^^^^'.
+
+echo "% ( echo Hello! ) | ( : nothing ) | ( grep '^H' );\"
+echo "  : No output because of ':' command."
+( echo Hello! ) | ( : nothing ) | ( grep '^H' );\
+: No output because of ':' command.
+
+echo "% ( ( echo Hello! ) | ( cat | ( cat | cat | cat ) | cat ) |\
+( grep '^H' ) )"
+( ( echo Hello! ) | ( cat | ( cat | cat | cat ) | cat ) | ( grep '^H' ) )
+
+echo "% ( ( echo Hello! ) | ( cat | ( cat | : | cat ) | cat ) | ( grep '^H' ) )"
+( ( echo Hello! ) | ( cat | ( cat | : | cat ) | cat ) | ( grep '^H' ) )
+
+: Asynchronous
+echo '% ( sleep 3; echo "sleep 3 done." )&\'
+echo '  ( sleep 4; echo "sleep 4 done." )&\'
+echo '  ( sleep 5; echo "sleep 5 done." )&\'
+echo '  wait'
+( sleep 3; echo "sleep 3 done." )&\
+( sleep 4; echo "sleep 4 done." )&\
+( sleep 5; echo "sleep 5 done." )&\
+wait

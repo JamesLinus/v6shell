@@ -1,0 +1,51 @@
+% ;;;;;;
+%  ; ; ; ; ; ; 
+% &&&&&&
+%  & & & & & & 
+% cat <tests/Input >/dev/null
+% <tests/Input cat >/dev/null
+% <tests/Input >/dev/null cat
+% cat >/dev/null <tests/Input
+% >/dev/null cat <tests/Input
+% >/dev/null <tests/Input cat
+% ( cat ) <tests/Input >/dev/null
+% <tests/Input ( cat ) >/dev/null
+% <tests/Input >/dev/null ( cat )
+% ( cat ) >/dev/null <tests/Input
+% >/dev/null ( cat ) <tests/Input
+% >/dev/null <tests/Input ( cat )
+% echo Hello! ^ cat ^ grep '^H'
+Hello!
+% echo Hello! | cat | grep '^H'
+Hello!
+% echo Hello! | : nothing | grep '^H';\
+  : No output because of ':' command.
+% ( echo one ); ( echo two ); ( echo three )
+one
+two
+three
+% ( echo \( one \) ); ( echo \( two \) ); ( echo \( three \) )
+( one )
+( two )
+( three )
+% ( echo Hello! ) ^ ( cat ) ^ ( grep '^H' )
+Hello!
+% ( echo Hello! ) | ( cat ) | ( grep '^H' )
+Hello!
+% ( echo Hello! ) | ( cat >/dev/null ) | ( grep '^H' );\
+  : No output because of  ^^^^^^^^^^.
+% ( echo Hello! ) | ( : nothing ) | ( grep '^H' );\
+  : No output because of ':' command.
+% ( ( echo Hello! ) | ( cat | ( cat | cat | cat ) | cat ) | ( grep '^H' ) )
+Hello!
+% ( ( echo Hello! ) | ( cat | ( cat | : | cat ) | cat ) | ( grep '^H' ) )
+% ( sleep 3; echo "sleep 3 done." )&\
+  ( sleep 4; echo "sleep 4 done." )&\
+  ( sleep 5; echo "sleep 5 done." )&\
+  wait
+?????
+?????
+?????
+sleep 3 done.
+sleep 4 done.
+sleep 5 done.
