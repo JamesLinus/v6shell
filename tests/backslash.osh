@@ -1,0 +1,55 @@
+echo "Backslashes: \ (1) - \\\\\\\\\ (9)"
+echo
+echo "Using `osh -c command' ..."
+osh -c 'echo 1\) XYZ\'
+osh -c 'echo 2\) XYZ\\'
+osh -c 'echo 3\) XYZ\\\'
+osh -c 'echo 4\) XYZ\\\\'
+osh -c 'echo 5\) XYZ\\\\\'
+osh -c 'echo 6\) XYZ\\\\\\'
+osh -c 'echo 7\) XYZ\\\\\\\'
+osh -c 'echo 8\) XYZ\\\\\\\\'
+osh -c 'echo 9\) XYZ\\\\\\\\\'
+echo
+
+echo "Using `osh -t' ..."
+osh -t
+echo 1\) XYZ\
+osh -t
+echo 2\) XYZ\\
+osh -t
+echo 3\) XYZ\\\
+osh -t
+echo 4\) XYZ\\\\
+osh -t
+echo 5\) XYZ\\\\\
+osh -t
+echo 6\) XYZ\\\\\\
+osh -t
+echo 7\) XYZ\\\\\\\
+osh -t
+echo 8\) XYZ\\\\\\\\
+osh -t
+echo 9\) XYZ\\\\\\\\\
+echo
+
+echo "Effect in command files and interactive shells ..."
+echo 1\) XYZ\
+
+echo 2\) XYZ\\
+
+echo 3\) XYZ\\\
+
+echo 4\) XYZ\\\\
+
+echo 5\) XYZ\\\\\
+
+echo 6\) XYZ\\\\\\
+
+echo 7\) XYZ\\\\\\\
+
+echo 8\) XYZ\\\\\\\\
+
+echo 9\) XYZ\\\\\\\\\
+
+echo

@@ -1,0 +1,18 @@
+:
+: Test parameter substitution w/ redirection arguments.
+: -- 
+: Jeffrey Allen Neitzel
+:
+
+if $1x != x -a $2x != x -a $3x = x goto Run
+: wrong number of args
+echo -n 'usage: '
+basename $0 | tr -d '\n'
+echo ' input_file output_file'
+false; exit
+
+: Run
+cat <$1 ^ cat ^ cat >$2
+cat < $1 ^ cat ^ cat > $2
+<$1 cat ^ cat ^ >$2 cat
+< $1 cat ^ cat ^ > $2 cat

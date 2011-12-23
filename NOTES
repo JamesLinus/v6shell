@@ -1,0 +1,56 @@
+--------
+Historical notes:
+The Sixth Edition Unix shell used the following external utilities.
+
+	1) /bin/exit was used to terminate command files.
+
+	2) /bin/goto was used to transfer the shell's control
+	   from one point to another within a command file.
+
+	3) /bin/if was used to evaluate conditional expressions.
+	   This is the predecessor to test(1) which was first
+	   released in Seventh Edition Unix.
+
+	4) /etc/glob was used to expand `*', `?', and `['
+	   in command arguments.
+
+All of the utilities mentioned above are included in this version
+of osh.  The "exit" utility is implemented as a built-in command.
+"glob" is built into the shell by using glob(3) from the C library.
+
+--------
+Compatibility notes:
+This implementation of the shell is intended to be compatible with
+the behaviour of sh(1) from Sixth Edition Unix.  However, there are
+a few minor differences, the primary one being that this version
+can handle 8-bit character sets, whereas the original can only
+handle 7-bit ASCII.
+
+The last major incompatibility is related to parameter substitution.
+The Sixth Edition Unix shell did parameter substitution while reading
+a command from input.  So, substitution happened before any parsing
+or execution took place.  This implementation of the shell differs
+in that it does not do parameter substitution until the execution
+stage.  Here is just one example of an effect of this difference.
+
+--------
+Example:
+The following command file will give different results depending
+on which shell is used.
+
+: Begin runcom
+
+$1 $2 $3 $4 $5 $6 $7 $8 $9
+
+: End runcom
+
+Running this command file with this version of osh:
+
+% osh runcom echo hello \| grep h \; echo hello again
+hello | grep h ; echo hello again
+
+Running this command file with sh on V6, or osh on V7:
+
+% osh runcom echo hello \| grep h \; echo hello again
+hello
+hello again
