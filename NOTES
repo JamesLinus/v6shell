@@ -1,0 +1,27 @@
+This implementation is intended to be compatible with the behaviour
+of sh(1) from Sixth Edition (V6) Unix.  However, it is not fully
+compatible at the present time.  It is getting closer though as I
+find compatibility problems and fix them.
+
+At the same time, this implementation is mostly compatible with
+osh(1) from Seventh Edition (V7) Unix.  Both shells were largely
+the same, but the version in V7 had a few changes/improvements.
+The changes were quite minimal though.
+
+The intention is to make this version of osh as usable as it would
+have been if it were running on V6.  The strange thing is that the
+system changes between V6 and V7 made osh less usable for running
+command files (scripts) than it had previously been.  This is because
+the if(1), goto(1), and exit(1) utilities were not distributed with
+V7.  Also, glob(8) which had previously lived in /etc/glob was no
+longer available on V7.
+
+It was largely due to the existence of these utilities that shell
+programming was possible at all; without them the shell was just a
+command interpreter.  Especially, without glob(8) it would have
+been virtually useless in my opinion.
+
+The "if" and "goto" utilities, as well as "exit", are included in
+this version of osh.  The "exit" utility has been implemented here
+as a built-in command.  "glob" uses glob(3) from the C library.
+
