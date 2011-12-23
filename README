@@ -1,0 +1,40 @@
+Welcome to osh, an old shell!  This is version 031014.
+
+This is a reimplementation of the Sixth Edition Unix shell.  The
+original implementation was written by Ken Thompson at Bell Labs.
+The software contained here descends directly from osh-020214 by
+Gunnar Ritter and includes the "if" and "goto" commands which he
+ported from Sixth Edition Unix sources.  See the manual pages for
+additional details.
+
+Building and installing osh is really quite simple.
+The following steps should do the job:
+
+1) Adjust the CONFIGURATION section in the Makefile to match
+   your desires and/or the requirements of your system.
+2) Type `make' to compile.
+3) Type `make install' to install.
+
+Osh is currently developed, maintained, and known to work correctly
+on FreeBSD, NetBSD and OpenBSD.  To the best of my knowledge it
+should build on most any Unix system, but I have not verified this
+as I do not have access to other operating systems.  I welcome
+reports of success or failure to build it on other systems.
+
+If you find a bug, please send a bug report to me at the following
+email address.  Please include all relevant information needed to
+reproduce the problem.  If I can reproduce it I will fix it.  Of
+course, if you fix the bug yourself please send me a patch.
+
+Also, being that I am human and by definition am less than perfect...
+If you notice that I have misinterpreted something about the original
+implementation and have stated that something is compatible when
+it is not, I do encourage you to contact me about it.
+
+Well, that's about it.
+Enjoy!
+
+Jeffrey Allen Neitzel
+jneitzel@sdf.lonestar.org
+http://jneitzel.sdf1.org/osh/
+

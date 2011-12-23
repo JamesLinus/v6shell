@@ -1,0 +1,19 @@
+This implementation intends to take the behaviour of osh on V7 and
+treat it as sh on V6.  Both shells are largely the same, but the
+version in V7 had a few changes/improvements.  The changes were
+quite minimal.
+
+The intention is to make osh as usable as it would have been if it
+were running on V6.  The system changes between V6 and V7 made osh
+less usable for running command files (scripts) than it had previously
+been.  This is because the if(1), goto(1), and exit(1) utilities
+were not distributed with V7.
+
+It was largely due to the existence of these utilities that shell
+programming was possible at all; without them the shell was just a
+command interpreter.
+
+The "if" and "goto" utilities, as well as "exit", are included in
+this version of osh.  The "exit" utility has been implemented here
+in a built-in form.
+
