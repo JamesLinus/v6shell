@@ -1,0 +1,112 @@
+.\"
+.\" Modified by Jeffrey Allen Neitzel, October 2003.
+.\"
+.\" Changes by Gunnar Ritter, Freiburg i. Br., Germany, February 2001.
+.\"
+.\" Copyright(C) Caldera International Inc. 2001-2002. All rights reserved.
+.\"
+.\" Redistribution and use in source and binary forms, with or without
+.\" modification, are permitted provided that the following conditions
+.\" are met:
+.\"   Redistributions of source code and documentation must retain the
+.\"    above copyright notice, this list of conditions and the following
+.\"    disclaimer.
+.\"   Redistributions in binary form must reproduce the above copyright
+.\"    notice, this list of conditions and the following disclaimer in the
+.\"    documentation and/or other materials provided with the distribution.
+.\"   All advertising materials mentioning features or use of this software
+.\"    must display the following acknowledgement:
+.\"      This product includes software developed or owned by Caldera
+.\"      International, Inc.
+.\"   Neither the name of Caldera International, Inc. nor the names of
+.\"    other contributors may be used to endorse or promote products
+.\"    derived from this software without specific prior written permission.
+.\"
+.\" USE OF THE SOFTWARE PROVIDED FOR UNDER THIS LICENSE BY CALDERA
+.\" INTERNATIONAL, INC. AND CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR
+.\" IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+.\" WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+.\" ARE DISCLAIMED. IN NO EVENT SHALL CALDERA INTERNATIONAL, INC. BE
+.\" LIABLE FOR ANY DIRECT, INDIRECT INCIDENTAL, SPECIAL, EXEMPLARY, OR
+.\" CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+.\" SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+.\" BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+.\" WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+.\" OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+.\" EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+.\"
+.\" from .th IF I 5/2/74
+.\" Sccsid @(#)if.1	1.2 (gritter) 2/13/02
+.TH IF 1 "October 12, 2003" "Ancient Unix Ports" "User Commands"
+.SH NAME
+if \- conditional command
+.SH SYNOPSIS
+.B if
+expr command [ arg ... ]
+.SH DESCRIPTION
+.I If
+evaluates the expression
+.IR expr ,
+and if its value is true, executes the given
+.I command
+with the given arguments.
+.PP
+The following primitives are used to construct
+.IR expr :
+.TP 10n
+.BR \-r " file"
+true if the file exists and is readable.
+.TP
+.BR \-w " file"
+true if the file exists and is writable.
+.TP
+.RB s1 " = " s2
+true
+if the strings
+.I s1
+and
+.I s2
+are equal.
+.TP
+.RB s1 " != " s2
+true
+if the strings
+.I s1
+and
+.I s2
+are not equal.
+.TP
+.BR "{" " command " "}"
+The bracketed command is executed to obtain the exit status.
+Status zero is considered \fItrue\fP.
+The command must not be another \fIif\fP.
+.PP
+These primaries may be combined with the following operators:
+.TP
+.B !
+unary negation operator
+.TP
+.B \-a
+binary
+.I and
+operator
+.TP
+.B \-o
+binary
+.I or
+operator
+.TP
+.BR "(" " expr " ")"
+parentheses for grouping.
+.PP
+.B \-a
+has higher precedence than
+.BR \-o .
+Notice that all the operators and flags are separate arguments to
+.I if
+and hence must be surrounded by spaces.
+Notice also that parentheses are meaningful
+to the Shell and must be escaped.
+.SH "SEE ALSO"
+osh(1),
+find(1)
