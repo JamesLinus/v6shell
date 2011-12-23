@@ -1,0 +1,43 @@
+--------
+Historical notes:
+The Sixth Edition Unix shell used the following external utilities.
+
+	1) /bin/exit was used to terminate command files.
+
+	2) /bin/goto was used to transfer the shell's control
+	   from one point to another within a command file.
+
+	3) /bin/if was used to evaluate conditional expressions.
+	   This is the predecessor to test(1) which was first
+	   released in Seventh Edition Unix.
+
+	4) /etc/glob was used to expand `*', `?', and `['
+	   in command arguments.
+
+All of the utilities mentioned above are included in this version
+of osh.  The "exit" utility is implemented as a built-in command.
+"glob" is built into the shell by using glob(3) from the C library.
+
+--------
+Compatibility notes:
+
+This implementation of the shell is intended to be backward compatible
+with the behaviour of sh(1) from Sixth Edition Unix.  However, there
+are a few minor differences, the primary one being that this version
+can handle 8-bit character sets, whereas the original can only
+handle 7-bit ASCII.
+
+Another  noteworthy  difference is that this version can read
+initialization files, whereas the original cannot.
+
+By default, the shell runs with enhancements enabled.  If you wish
+only compatible behaviour, running the following commands in an
+interactive shell or from an initialization file:
+
+	setenv OSH_COMPAT clone
+	set clone
+
+...
+makes it fully-compatible with the Sixth Edition Unix shell.
+
+Jeffrey Allen Neitzel						2004/07/14

@@ -1,0 +1,13 @@
+:
+: 2 of 3
+: Test the goto utility for correct behaviour.
+: -- 
+: Jeffrey Allen Neitzel
+:
+
+goto loop_label
+
+: The following label should not be found.
+: loop_label_not_found
+
+: do nothing

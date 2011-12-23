@@ -1,0 +1,23 @@
+:
+: Test the if utility for correct behaviour.
+: -- 
+: Jeffrey Allen Neitzel
+:
+
+echo "Test: if string1 = string2"
+if xyz = xyz echo PASS
+
+echo "Test: if string1 != string2"
+if xyz != zyx echo PASS
+
+echo "Test: if ! string1 != string2"
+if ! xyz != xyz echo PASS
+
+echo "Test: if ! string1 = string2"
+if ! xyz = zyx echo PASS
+
+echo "Test: if { command }"
+if { true } echo PASS
+
+echo "Test: if ! { command }"
+if ! { false } echo PASS
