@@ -968,10 +968,21 @@ execute(struct tnode *t, int *pin, int *pout)
 		if (glob_flag) {
 			for (i = 0; t->nav[i] != NULL; i++)
 				;	/* nothing */
+#ifdef	DEBUG
+			fd_print(FD2, "execute: (i + 2) == %d;\n", (i + 2));
+#endif
 			gav = xmalloc((i + 2) * sizeof(char *));
 			gav[0] = "glob6";
 			cmd = gav[0];
 			(void)memcpy(&gav[1], t->nav, (i + 1) * sizeof(char *));
+#ifdef	DEBUG
+			fd_print(FD2, "       : (i + 1) == %d;\n", (i + 1));
+			for (i = 0; gav[i] != NULL; i++)
+				fd_print(FD2, "       : gav[%d] == %s;\n",
+				    i, gav[i]);
+			fd_print(FD2, "       : gav[%d] == NULL;\n", i);
+			fd_print(FD2, "       : i (new) == %d;\n", i);
+#endif
 			(void)err_pexec(cmd, (char *const *)gav);
 		} else {
 			vscan(t->nav, &trim);

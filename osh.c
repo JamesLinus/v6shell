@@ -748,6 +748,9 @@ xgetc(bool dolsub)
 	}
 
 	if (wordp >= ewordp) {
+#ifdef	DEBUG
+		fd_print(FD2, "xgetc: wordp: %p, ewordp: %p;\n", wordp, ewordp);
+#endif
 		wordp -= 10;
 		while ((c = xgetc(!DOLSUB)) != EOF && c != EOL)
 			;	/* nothing */
@@ -756,6 +759,9 @@ xgetc(bool dolsub)
 		goto geterr;
 	}
 	if (linep >= elinep) {
+#ifdef	DEBUG
+		fd_print(FD2, "xgetc: linep: %p, elinep: %p;\n", linep, elinep);
+#endif
 		linep -= 10;
 		while ((c = xgetc(!DOLSUB)) != EOF && c != EOL)
 			;	/* nothing */
@@ -1296,6 +1302,9 @@ syn3(char **p1, char **p2)
 			 */
 			if (error_message != NULL)
 				goto synerr;
+#ifdef	DEBUG
+			fd_print(FD2, "syn3: alcnt == %d;\n", alcnt);
+#endif
 			if (alcnt > 2) {
 				error_message = ERR_ALIASLOOP;
 				goto synerr;
@@ -1305,12 +1314,24 @@ syn3(char **p1, char **p2)
 			ac   = vacount(av);
 			tav  = xmalloc((ac + n) * sizeof(char *));
 			tavp = tav;
+#ifdef	DEBUG
+			fd_print(FD2, "    : (%d + %d) == %d;\n",ac,n,(ac+n));
+			fd_print(FD2, "    : av  : %p;\n", av);
+			fd_print(FD2, "    : tav : %p;\n", tav);
+#endif
 			for (ac = 0; *av[ac] != EOL; ac++)
 				*tavp++ = xstrdup(av[ac]);
 			for (ac = 1; ac < n; ac++)
 				*tavp++ = xstrdup(pv[ac]);
 			*tavp++ = xstrdup("\n");
 			*tavp   = NULL;
+#ifdef	DEBUG
+			for (tavp = tav; *tavp != NULL; tavp++)
+				fd_print(FD2, "    : tavp: %p, %p, %s;\n",
+				    tavp, *tavp, (**tavp==EOL) ? "\\n" : *tavp);
+			fd_print(FD2, "    : tavp: %p, NULL;\n", tavp);
+			fd_print(FD2,"    : (tavp - tav) == %d;\n",(tavp-tav));
+#endif
 			alcnt++;
 			t = talloc();
 			t->ntype = TSUBSHELL;
@@ -1517,8 +1538,12 @@ execute(struct tnode *t, int *pin, int *pout)
 				fd_print(FD2, "%u\n", (unsigned)cpid);
 			if ((f & FAND) != 0)
 				return;
-			if ((f & FPOUT) == 0)
+			if ((f & FPOUT) == 0) {
+#ifdef	DEBUG
+				fd_print(FD2, "execute: pwait(%d);\n", cpid);
+#endif
 				pwait(cpid);
+			}
 			return;
 		}
 		/**** Child! ****/
@@ -2268,6 +2293,9 @@ prsig(int s, pid_t tp, pid_t cp)
 		if (WCOREDUMP(s) != 0)
 			c = sigmsg[0];
 #endif
+#ifdef	DEBUG
+		fd_print(FD2, "prsig: tp == %d, cp == %d;\n", tp, cp);
+#endif
 		if (tp != cp)
 			fd_print(FD2, "%u: %s%s\n", (unsigned)tp, m, c);
 		else
@@ -2973,8 +3001,15 @@ gnew(const char **gav)
 
 	if (gavp == gave) {
 		gavmult *= GAVMULT;
+#ifdef	DEBUG
+		fd_print(FD2, "gnew: gavmult == %u;\n", gavmult);
+#endif
 		gidx = (ptrdiff_t)(gavp - gav);
 		siz  = (size_t)((gidx + (GAVNEW * gavmult)) * sizeof(char *));
+#ifdef	DEBUG
+		fd_print(FD2, "    : (GAVNEW * gavmult) == %u, siz == %zu;\n",
+		    (GAVNEW * gavmult), siz);
+#endif
 		gav  = xrealloc(gav, siz);
 		gavp = gav + gidx;
 		gave = &gav[gidx + (GAVNEW * gavmult) - 1];
@@ -3023,6 +3058,11 @@ gcat(const char *src1, const char *src2, bool slash)
 		err(-2, FMT2S, getmyname(), ERR_E2BIG);
 		return NULL;
 	}
+#ifdef	DEBUG
+	fd_print(FD2, "gcat: siz == %zu, (%p < %p) == %s;\n",
+	    siz, b, &buf[PATHMAX], (b < &buf[PATHMAX]) ? "true" : "false");
+	fd_print(FD2, "    : strlen(buf) == %zu;\n", strlen(buf));
+#endif
 	dst = xmalloc(siz);
 
 	(void)memcpy(dst, buf, siz);

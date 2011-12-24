@@ -205,6 +205,9 @@ err_pexec(const char *file, char *const *argv)
 	const char *f, *n;
 
 	(void)pexec(file, argv);
+#ifdef	DEBUG
+	fd_print(FD2, "err_pexec: strerror(errno) == %s;\n", strerror(errno));
+#endif
 
 	f = (file == NULL) ? "(null)" : file;
 	n = getmyname();

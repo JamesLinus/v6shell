@@ -144,8 +144,15 @@ gnew(const char **gav)
 
 	if (gavp == gave) {
 		mult *= GAVMULT;
+#ifdef	DEBUG
+		fd_print(FD2, "gnew: mult == %u;\n", mult);
+#endif
 		gidx  = (ptrdiff_t)(gavp - gav);
 		siz   = (size_t)((gidx + (GAVNEW * mult)) * sizeof(char *));
+#ifdef	DEBUG
+		fd_print(FD2, "    : (GAVNEW * mult) == %u, siz == %zu;\n",
+		    (GAVNEW * mult), siz);
+#endif
 		if ((nav = realloc(gav, siz)) == NULL) {
 			err(SH_ERR, FMT1S, ERR_NOMEM);
 			/*NOTREACHED*/
@@ -189,6 +196,11 @@ gcat(const char *src1, const char *src2)
 	gavtot += siz;
 	if (gavtot > GAVMAX)
 		err(SH_ERR, FMT1S, ERR_E2BIG);
+#ifdef	DEBUG
+	fd_print(FD2, "gcat: siz == %zu, (%p < %p) == %s;\n",
+	    siz, b, &buf[PATHMAX], (b < &buf[PATHMAX]) ? "true" : "false");
+	fd_print(FD2, "    : strlen(buf) == %zu;\n", strlen(buf));
+#endif
 	if ((dst = malloc(siz)) == NULL) {
 		err(SH_ERR, FMT1S, ERR_NOMEM);
 		/*NOTREACHED*/
