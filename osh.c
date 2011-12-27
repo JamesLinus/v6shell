@@ -472,7 +472,6 @@ cmd_lookup(const char *cmd)
 		else
 			rp = mp;
 	}
-
 	return SBI_UNKNOWN;
 }
 
