@@ -1539,7 +1539,7 @@ execute(struct tnode *t, int *pin, int *pout)
 				return;
 			if ((f & FPOUT) == 0) {
 #ifdef	DEBUG
-#if	0
+#ifdef	DEBUG_PROC
 				fd_print(FD2, "execute: pwait(%d);\n", cpid);
 #endif
 #endif
@@ -2295,7 +2295,7 @@ prsig(int s, pid_t tp, pid_t cp)
 			c = sigmsg[0];
 #endif
 #ifdef	DEBUG
-#if	0
+#ifdef	DEBUG_PROC
 		fd_print(FD2, "prsig: tp == %d, cp == %d;\n", tp, cp);
 #endif
 #endif

@@ -119,7 +119,7 @@ uexec(enum sbikey key, int ac, char **av)
 		s = r;
 
 #ifdef	DEBUG
-#if	0
+#ifdef	DEBUG_PROC
 	if (cnt == 0) fd_print(FD2, "uexec: return %d;\n", s);
 #endif
 #endif
