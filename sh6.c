@@ -969,19 +969,23 @@ execute(struct tnode *t, int *pin, int *pout)
 			for (i = 0; t->nav[i] != NULL; i++)
 				;	/* nothing */
 #ifdef	DEBUG
+#ifdef	DEBUG_GLOB
 			fd_print(FD2, "execute:  i      == %2d;\n", i);
 			fd_print(FD2, "       : (i + 2) == %2d;\n", (i + 2));
 			fd_print(FD2, "       : (i + 1) == %2d;\n", (i + 1));
+#endif
 #endif
 			gav = xmalloc((i + 2) * sizeof(char *));
 			gav[0] = "glob6";
 			cmd = gav[0];
 			(void)memcpy(&gav[1], t->nav, (i + 1) * sizeof(char *));
 #ifdef	DEBUG
+#ifdef	DEBUG_GLOB
 			for (i = 0; gav[i] != NULL; i++)
 				fd_print(FD2, "       : gav[%2d] == %s;\n",
 				    i, gav[i]);
 			fd_print(FD2, "       : gav[%2d] == NULL;\n", i);
+#endif
 #endif
 			(void)err_pexec(cmd, (char *const *)gav);
 		} else {
@@ -1076,7 +1080,7 @@ sh_errexit(int es)
 {
 
 #ifdef	DEBUG
-	fd_print(FD2, "sh_errexit: es == %d;\n", es);
+	fd_print(FD2,"sh_errexit: getmypid() == %d, es == %d;\n",getmypid(),es);
 #endif
 
 	status = es;

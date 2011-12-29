@@ -1302,7 +1302,9 @@ syn3(char **p1, char **p2)
 			if (error_message != NULL)
 				goto synerr;
 #ifdef	DEBUG
+#ifdef	DEBUG_ALIAS
 			fd_print(FD2, "syn3: alcnt == %d;\n", alcnt);
+#endif
 #endif
 			if (alcnt > 2) {
 				error_message = ERR_ALIASLOOP;
@@ -1314,9 +1316,11 @@ syn3(char **p1, char **p2)
 			tav  = xmalloc((ac + n) * sizeof(char *));
 			tavp = tav;
 #ifdef	DEBUG
+#ifdef	DEBUG_ALIAS
 			fd_print(FD2, "    : (%d + %d) == %d;\n",ac,n,(ac+n));
-			fd_print(FD2, "    : av  : %p;\n", av);
+			fd_print(FD2, "    :  av : %p;\n", av);
 			fd_print(FD2, "    : tav : %p;\n", tav);
+#endif
 #endif
 			for (ac = 0; *av[ac] != EOL; ac++)
 				*tavp++ = xstrdup(av[ac]);
@@ -1325,11 +1329,13 @@ syn3(char **p1, char **p2)
 			*tavp++ = xstrdup("\n");
 			*tavp   = NULL;
 #ifdef	DEBUG
+#ifdef	DEBUG_ALIAS
 			for (tavp = tav; *tavp != NULL; tavp++)
 				fd_print(FD2, "    : tavp: %p, %p, %s;\n",
 				    tavp, *tavp, (**tavp==EOL) ? "\\n" : *tavp);
 			fd_print(FD2, "    : tavp: %p, NULL;\n", tavp);
 			fd_print(FD2,"    : (tavp - tav) == %d;\n",(tavp-tav));
+#endif
 #endif
 			alcnt++;
 			t = talloc();
@@ -2320,7 +2326,7 @@ sh_errexit(int es)
 {
 
 #ifdef	DEBUG
-	fd_print(FD2, "sh_errexit: es == %d;\n", es);
+	fd_print(FD2,"sh_errexit: getmypid() == %d, es == %d;\n",getmypid(),es);
 #endif
 
 	switch (es) {
@@ -3005,13 +3011,17 @@ gnew(const char **gav)
 	if (gavp == gave) {
 		gavmult *= GAVMULT;
 #ifdef	DEBUG
+#ifdef	DEBUG_GLOB
 		fd_print(FD2, "gnew: gavmult == %u;\n", gavmult);
+#endif
 #endif
 		gidx = (ptrdiff_t)(gavp - gav);
 		siz  = (size_t)((gidx + (GAVNEW * gavmult)) * sizeof(char *));
 #ifdef	DEBUG
+#ifdef	DEBUG_GLOB
 		fd_print(FD2, "    : (GAVNEW * gavmult) == %u, siz == %zu;\n",
 		    (GAVNEW * gavmult), siz);
+#endif
 #endif
 		gav  = xrealloc(gav, siz);
 		gavp = gav + gidx;
@@ -3062,9 +3072,11 @@ gcat(const char *src1, const char *src2, bool slash)
 		return NULL;
 	}
 #ifdef	DEBUG
+#ifdef	DEBUG_GLOB
 	fd_print(FD2, "gcat: siz == %zu, (%p < %p) == %s;\n",
 	    siz, b, &buf[PATHMAX], (b < &buf[PATHMAX]) ? "true" : "false");
 	fd_print(FD2, "    : strlen(buf) == %zu;\n", strlen(buf));
+#endif
 #endif
 	dst = xmalloc(siz);
 

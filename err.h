@@ -107,6 +107,8 @@
  * #undef DEBUG* for production build
  */
 #undef	DEBUG
+#undef	DEBUG_ALIAS
+#undef	DEBUG_GLOB
 #undef	DEBUG_PROC
 
 /*@maynotreturn@*/
