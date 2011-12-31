@@ -4,6 +4,12 @@ command in porting them to run on modern UNIX systems.
 
 -------------------------------------------------------------------------------
 [osh-current]:
+err.h:
+	* Added DEBUG_GLOB definition (undefined by default) for
+	  printf debugging in sh6.c and glob6.c if/when needed.
+
+sh6.1:
+	* Removed sed(1) from "SEE ALSO" section.
 
 -------------------------------------------------------------------------------
 [osh-20111129-p1]:
@@ -418,6 +424,6 @@ glob.c:
     Date: May 14, 1975
     From: Sixth Edition UNIX /usr/source/s1/glob.c
 
-Jeffrey Allen Neitzel						2011/12/08
+Jeffrey Allen Neitzel						2011/12/31
 
 @(#)$Id$

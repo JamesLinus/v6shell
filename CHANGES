@@ -3,6 +3,31 @@ Thompson shell are marked w/ a `C:' in the details below.
 
 -------------------------------------------------------------------------------
 [osh-current]:
+mkconfig:
+	* Changed _XOPEN_SOURCE definition from 600 to 600L .
+
+err.h:
+	* Added DEBUG_ALIAS, DEBUG_GLOB, and DEBUG_PROC definitions
+	  (undefined by default) for printf debugging in osh.c and
+	  util.c if/when needed.
+
+osh.c:
+	* Changed exit status for alias and unalias so that they exit w/ a
+	  false (1) status when there are no aliases to print, set, or unset.
+	  Otherwise, they exit w/ a true (0) status when there is no error.
+
+	* Added 'version' as special built-in command.
+
+osh.1:
+	* Adjusted $v description in "Parameter substitution" subsection.
+
+	* Added version description to "Special commands" subsection.
+
+	* Added uname(1) to "SEE ALSO" section.
+
+examples/dot.oshrc:
+	* Replaced the 'version' alias w/ alias 'v1' 'version'
+	  to invoke the 'version' special built-in command.
 
 -------------------------------------------------------------------------------
 [osh-20111129-p1]:
@@ -1675,6 +1700,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2011/12/08
+Jeffrey Allen Neitzel						2011/12/31
 
 @(#)$Id$
