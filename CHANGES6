@@ -3,7 +3,7 @@ code for the Sixth Edition (V6) UNIX Thompson shell and global
 command in porting them to run on modern UNIX systems.
 
 -------------------------------------------------------------------------------
-[osh-current]:
+[osh-20120102]:
 err.h:
 	* Added DEBUG_GLOB definition (undefined by default) for
 	  printf debugging in sh6.c and glob6.c if/when needed.
