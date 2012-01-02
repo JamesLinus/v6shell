@@ -2,6 +2,9 @@ Changes that improve compatibility w/ the Sixth Edition (V6) UNIX
 Thompson shell are marked w/ a `C:' in the details below.
 
 -------------------------------------------------------------------------------
+[osh-current]:
+
+-------------------------------------------------------------------------------
 [osh-20120102]:
 mkconfig:
 	* Changed _XOPEN_SOURCE definition from 600 to 600L .
