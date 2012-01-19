@@ -8,8 +8,19 @@ the enhanced, backward-compatible port of the Sixth Edition (V6)
 UNIX Thompson shell (and all other software) released as part of
 the osh project.
 
-Notice that I have developed two different implementations of osh(1)
-since July 2003.  The origin of each one is described below.
+============
+Definitions:
+	compatibility - backward compatibility
+
+	osh - enhanced port of the Sixth Edition (V6) UNIX Thompson shell
+
+	sh6 - port of the Sixth Edition (V6) UNIX Thompson shell
+		(sh6 references include glob6 implicitly)
+===
+
+Notice that I have developed three different implementations of
+osh(1) since July 2003.  The origin and primary objectives of
+each one are described below.
 
 ================================
 [osh-030730 through osh-060124]:
@@ -27,10 +38,12 @@ since July 2003.  The origin of each one is described below.
 	in the most basic sense.  The only catch was that word
 	splitting was still incompatible.  Thus, this partial
 	solution was always destined for eventual replacement.
+
+	Primary objective was compatibility.
 ===
 
-===================================
-[osh-20061230 through osh-current]:
+====================================
+[osh-20061230 through osh-20100228]:
 	The second implementation was originally authored by Ken
 	Thompson as Sixth Edition UNIX /usr/source/s2/sh.c and was
 	then ported by Jeffrey Allen Neitzel for personal use in
@@ -48,6 +61,17 @@ since July 2003.  The origin of each one is described below.
 	them to osh.c, and began working on it during my free time
 	in 2006.  Finally, I released the new implementation of
 	osh(1) in osh-20061230.
+
+	Primary objective was compatibility.
+===
+
+===================================
+[osh-20100430 through osh-current]:
+	The third implementation continues with primary objectives
+	of compatibility and long-term stability.  Consequently,
+	all new features (if/when added) must work in concert
+	with the primary objectives.  Otherwise, they will not
+	be added.
 ===
 
 I wish to thank the original authors very much for their efforts.
@@ -56,6 +80,6 @@ would exist today.
 
 See the DEDICATIONS file for further info.
 
-Jeffrey Allen Neitzel						2012/01/02
+Jeffrey Allen Neitzel						2012/01/19
 
 @(#)$Id$
