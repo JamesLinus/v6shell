@@ -70,7 +70,7 @@ each one are described below.
 	The third implementation continues with primary objectives
 	of compatibility and long-term stability.  Consequently,
 	all new features (if/when added) must work in concert
-	with the primary objectives.  Otherwise, they will not
+	with primary objectives.  Otherwise, they will not
 	be added.
 ===
 
