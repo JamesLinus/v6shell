@@ -1,5 +1,7 @@
 Welcome to Osh (V6Shell)!
 
+This is osh-current, current development of third implementation.
+
 The osh package provides two ports of the original /bin/sh from
 Sixth Edition (V6) UNIX (circa 1975).
 
@@ -57,6 +59,6 @@ you to contact me via email.  Thanks & Enjoy!
 
 Jeffrey Allen Neitzel
 <jan (at) v6shell (dot) org>
-http://v6shell.org/						2012/01/02
+http://v6shell.org/						2012/01/20
 
 @(#)$Id$
