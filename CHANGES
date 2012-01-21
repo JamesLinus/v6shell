@@ -3,6 +3,7 @@ Thompson shell are marked w/ a `C:' in the details below.
 
 -------------------------------------------------------------------------------
 [osh-current]:
+	* Work In Progress
 
 -------------------------------------------------------------------------------
 [osh-20120102]:
@@ -1703,6 +1704,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2012/01/02
+Jeffrey Allen Neitzel						2012/01/21
 
 @(#)$Id$
