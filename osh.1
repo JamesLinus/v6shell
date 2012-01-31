@@ -571,6 +571,11 @@ to the shell.
 The values of the positional parameters currently available
 to the shell, from \fB$\fR\fI1\fR through the end of its argument list.
 .TP
+\fB$\fR\fI?\fR (*)
+The exit status of the last sequential command from the
+.I previous
+command line.
+.TP
 \fB$\fR\fId\fR
 The value of the environment variable OSHDIR.
 .TP
@@ -590,9 +595,7 @@ A synonym for the \fB$\fR\fI#\fR parameter.
 The value of the environment variable PATH.
 .TP
 \fB$\fR\fIs\fR (*)
-The exit status of the last sequential command from the
-.I previous
-command line.
+A synonym for the \fB$\fR\fI?\fR parameter.
 .TP
 \fB$\fR\fIt\fR
 The terminal name with which the standard input

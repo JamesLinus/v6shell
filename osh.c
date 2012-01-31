@@ -893,6 +893,7 @@ get_dolp(int c)
 		if ((v = getenv("PATH")) == NULL)
 			v = dolbuf;
 		break;
+	case QUESTION:
 	case 's':
 		r = snprintf(dolbuf, sizeof(dolbuf), "%u", (unsigned)status);
 		v = (r < 0 || r >= (int)sizeof(dolbuf)) ? NULL : dolbuf;
