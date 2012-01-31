@@ -952,9 +952,9 @@ Three examples of alias usage follow:
 .PP
 .nf
 	% : Example One
-	% alias s 'echo $s;:' ; alias status 's'
+	% alias s 'echo $?;:' ; alias status 's'
 	% alias s ; alias status
-	(echo $s;:)
+	(echo $?;:)
 	(s)
 	% false
 	% status

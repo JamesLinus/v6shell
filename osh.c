@@ -207,7 +207,7 @@ static	const char *const sigmsg[] = {
 /*@null@*/
 static	const char	*argv2p;	/* string for `-c' option           */
 static	int		dolac;		/* $* dollar-argument count         */
-static	char		dolbuf[DOLMAX];	/* dollar buffer for $$, $n, $s, $v */
+static	char		dolbuf[DOLMAX];	/* dollar buffer for $$, $#, $?, $v */
 static	int		dolc;		/* $N dollar-argument count         */
 /*@null@*/ /*@only@*/
 static	const char	*dolp;		/* $ dollar-value pointer           */

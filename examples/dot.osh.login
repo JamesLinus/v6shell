@@ -45,7 +45,7 @@ if X$u != Xroot goto Continue
 	: " Change `$h/.ssh/SshKeyFile' to private ssh key file. "
 	:
 	which ssh ssh-agent ssh-add >/dev/null
-	if ! \( $s = 0 -a -e $h/.ssh/SshKeyFile \) goto NoSshAgentOrKey
+	if ! \( $? = 0 -a -e $h/.ssh/SshKeyFile \) goto NoSshAgentOrKey
 	if { printenv SSH_AUTH_SOCK } -a ! { printenv IS_OSH_SSH_AGENT } goto AddOrReAddKey >/dev/null
 		if -e $h/.osh-ssh-agent goto SourceSshAgent
 			( : ) >$h/.osh-ssh-agent ; chmod 0600 $h/.osh-ssh-agent
@@ -58,7 +58,7 @@ if X$u != Xroot goto Continue
 			: fallthrough
 	: AddOrReAddKey
 		ssh-add -l | grep $h/.ssh/SshKeyFile                 >/dev/null
-		</dev/null if $s != 0 fd2 ssh-add $h/.ssh/SshKeyFile >/dev/null
+		</dev/null if $? != 0 fd2 ssh-add $h/.ssh/SshKeyFile >/dev/null
 		: " Copy & adjust previous 2 lines for additional ssh keys... "
 		: fallthrough
 	: NoSshAgentOrKey

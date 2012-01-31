@@ -23,7 +23,7 @@
 
 if X$0 != XFILEPREP -a X$0 != X./FILEPREP\
 	if { exit } fd2 -e echo FILEPREP: $0: Invalid FILEPREP pathname ; false
-if $n != 1 -o X$1 = X\
+if $# != 1 -o X$1 = X\
 	if { exit } fd2 -e echo usage: osh $0 /path/to/nonexistent_directory ;\
 	false
 if -e $1'' -o -h $1''\
@@ -37,7 +37,7 @@ if ! { which chmod cp head mkdir pwd rm strings tee tr >/dev/null }\
 
 	sigign + 2 3 ; umask 0022
 	if { mkdir -p $1'' } cp *osh* $1/
-	if $s != 0 if { exit } false
+	if $? != 0 if { exit } false
 	cd $1'' ; chmod 0644 *
 	if ! { mkdir tmp-$$ } if { exit } false
 	setenv OSHDIR tmp-$$
@@ -52,7 +52,7 @@ if ! { which chmod cp head mkdir pwd rm strings tee tr >/dev/null }\
 	osh - etc.osh.login etc.osh.oshrc etc.osh.logout ; goto EXECSHELL
 	: Loop
 		osh $d/sysconfdir $1 ; shift
-		if $n = 0 exit
+		if $# = 0 exit
 		goto Loop
 
 : EXECSHELL
@@ -94,5 +94,5 @@ if ! { fd2 which oshdir >/dev/null } goto NotFound
 	: Loop1
 		echo -n '	'$1'	to  '
 		head -1 <$1 | sed 's,^: \(.*\) - .*$,echo \1,' | osh ; shift
-		if $n = 0 exit
+		if $# = 0 exit
 		goto Loop1
