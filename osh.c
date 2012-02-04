@@ -319,7 +319,7 @@ static	void		xfree(/*@null@*/ /*@only@*/ void *);
 static	void		*xmalloc(size_t);
 static	void		*xrealloc(/*@only@*/ void *, size_t);
 static	char		*xstrdup(const char *);
-/*@maynotreturn@*/ /*@null@*/ /*@only@*/
+/*@null@*/ /*@only@*/
 static	const char	**glob(enum sbikey, /*@only@*/ char **);
 
 /*
@@ -2959,33 +2959,34 @@ static	DIR		*gopendir(/*@out@*/ char *, const char *);
 
 /*
  * Attempt to generate file-name arguments which match the given
- * pattern arguments in av.  Return a pointer to a newly allocated
+ * pattern arguments in av.  Return pointer to newly allocated
  * argument vector, gav, on success.  Return NULL on error.
  */
 static const char **
 glob(enum sbikey key, char **av)
 {
-	char **sav;
+	char *tpap;		/* temporary pattern argument pointer  */
+	char **oav;		/* points to original argument vector  */
 	const char **gav;	/* points to generated argument vector */
-	char *gp;
-	int pmc = 0;		/* pattern-match count                 */
+	int pmc = 0;		/* pattern match count                 */
 	bool gerr = false;	/* glob error flag                     */
 
 	gavmult = 1;
 	gavtot  = 0;
 
-	sav  = av;
+	oav  = av;
 	gav  = xmalloc(GAVNEW * sizeof(char *));
 	*gav = NULL;
 	gavp = gav;
 	gave = &gav[GAVNEW - 1];
 	while (*av != NULL) {
-		if ((gp = gtrim(UCPTR(*av))) == NULL) {
+		if ((tpap = gtrim(UCPTR(*av))) == NULL) {
 			*gavp = NULL;
 			gerr  = true;
 			break;
 		}
-		gav = glob1(key, gav, gp, &pmc, &gerr);
+		*av = tpap;/* for successful vfree(oav); */
+		gav = glob1(key, gav, tpap, &pmc, &gerr);
 		if (gerr)
 			break;
 		av++;
@@ -2996,11 +2997,13 @@ glob(enum sbikey key, char **av)
 		err(-2, FMT2S, getmyname(), ERR_NOMATCH);
 		gerr = true;
 	}
-	if (gerr)
+	if (gerr) {
 		vfree((char **)gav);
-	vfree(sav);
-
-	return gerr ? NULL : gav;
+		gav = NULL;
+	}
+	vfree(oav);
+	oav = NULL;
+	return gav;
 }
 
 static const char **
