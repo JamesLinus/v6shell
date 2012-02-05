@@ -116,6 +116,7 @@ static	char		peekc;		/* just-read, pushed-back character */
 static	const char	*prompt;	/* interactive-shell prompt pointer */
 static	enum sigflags	sig_child;	/* SIG(INT|QUIT|TERM) child flags   */
 static	int		status;		/* shell exit status                */
+static	int		tree_count;	/* talloc() call count (per line)   */
 static	char		*word[WORDMAX];	/* argument/word pointer array      */
 static	char		**wordp;	/* word pointer                     */
 
@@ -152,6 +153,7 @@ static	void		sh_init(/*@dependent@*/ /*@null@*/ /*@temp@*/
 static	void		sh_magic(void);
 static	void		fd_free(void);
 static	bool		fd_isdir(int);
+static	void		xfree(/*@null@*/ /*@only@*/ void *);
 /*@out@*/
 static	void		*xmalloc(size_t);
 
@@ -236,6 +238,7 @@ rpx_line(void)
 	wordp = word;
 	error_message = NULL;
 	nul_count = 0;
+	tree_count = 0;
 	do {
 		wp = linep;
 		get_word();
@@ -446,13 +449,21 @@ readc(void)
 /*
  * Allocate and initialize memory for a new tree node.
  * Return a pointer to the new node on success.
- * Do not return on error (ENOMEM).
+ * Return a pointer to NULL if >= TREEMAX.
+ * Do not return on ENOMEM error.
  */
 static struct tnode *
 talloc(void)
 {
 	struct tnode *t;
 
+	if (tree_count >= TREEMAX) {
+/*
+		fd_print(FD2, "talloc: tree_count == %d\n", tree_count);
+ */
+		error_message = ERR_CLOVERFLOW;
+		return NULL;
+	}
 	t = xmalloc(sizeof(struct tnode));
 	t->nleft  = NULL;
 	t->nright = NULL;
@@ -462,6 +473,7 @@ talloc(void)
 	t->nav    = NULL;
 	t->nflags = 0;
 	t->ntype  = 0;
+	tree_count++;
 	return t;
 }
 
@@ -481,13 +493,13 @@ tfree(struct tnode *t)
 		tfree(t->nright);
 		break;
 	case TCOMMAND:
-		free(t->nav);
+		xfree(t->nav);
 		break;
 	case TSUBSHELL:
 		tfree(t->nsub);
 		break;
 	}
-	free(t);
+	xfree(t);
 }
 
 /*
@@ -538,7 +550,8 @@ syn1(char **p1, char **p2)
 		case EOL:
 			if (subcnt == 0) {
 				c = **p;
-				t = talloc();
+				if ((t = talloc()) == NULL)
+					return NULL;
 				t->ntype  = TLIST;
 				t->nleft  = syn2(p1, p);
 				if (c == AMPERSAND && t->nleft != NULL)
@@ -585,7 +598,8 @@ syn2(char **p1, char **p2)
 		case VERTICALBAR:
 		case CARET:
 			if (subcnt == 0) {
-				t = talloc();
+				if ((t = talloc()) == NULL)
+					return NULL;
 				t->ntype  = TPIPE;
 				t->nleft  = syn3(p1, p);
 				t->nright = syn2(p + 1, p2);
@@ -672,7 +686,8 @@ syn3(char **p1, char **p2)
 	if (lp == NULL) {
 		if (n == 0)
 			goto synerr;
-		t = talloc();
+		if ((t = talloc()) == NULL)
+			return NULL;
 		t->ntype = TCOMMAND;
 		t->nav   = xmalloc((n + 1) * sizeof(char *));
 		for (ac = 0; ac < n; ac++)
@@ -681,7 +696,8 @@ syn3(char **p1, char **p2)
 	} else {
 		if (n != 0)
 			goto synerr;
-		t = talloc();
+		if ((t = talloc()) == NULL)
+			return NULL;
 		t->ntype = TSUBSHELL;
 		t->nsub  = syn1(lp, rp);
 	}
@@ -1189,9 +1205,22 @@ fd_isdir(int fd)
 }
 
 /*
+ * Deallocate the memory allocation pointed to by p.
+ */
+static void
+xfree(void *p)
+{
+
+	if (p != NULL) {
+		free(p);
+		p = NULL;
+	}
+}
+
+/*
  * Allocate memory, and check for error.
  * Return a pointer to the allocated space on success.
- * Do not return on error (ENOMEM).
+ * Do not return on ENOMEM error.
  */
 static void *
 xmalloc(size_t s)

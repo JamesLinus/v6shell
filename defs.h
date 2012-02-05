@@ -80,6 +80,7 @@
 #define	SOURCEMAX	64	/* Maximum # of nested source invocations   */
 
 #define	LINEMAX		2048	/* 1000 in the original Sixth Edition shell */
+#define	TREEMAX		544	/*  100 ...                                 */
 #define	WORDMAX		1024	/*   50 ...                                 */
 
 #define	ASCII		0177

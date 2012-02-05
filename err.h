@@ -48,6 +48,7 @@
 #define	ERR_PIPE	"Cannot pipe - try again"
 #define	ERR_TRIM	"Cannot trim"
 #define	ERR_WRITE	"Cannot write"
+#define	ERR_CLOVERFLOW	"Command line overflow"
 #define	ERR_GNOTFOUND	"Command not found."
 #define	ERR_ALINVAL	"Invalid argument list"
 #define	ERR_AVIINVAL	"Invalid argv index"

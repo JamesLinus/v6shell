@@ -6,6 +6,8 @@ command in porting them to run on modern UNIX systems.
 [osh-current]:
 	* Work In Progress
 
+	* Added missing `Command line overflow' diagnostic for compatibility.
+
 -------------------------------------------------------------------------------
 [osh-20120102]:
 err.h:
@@ -428,6 +430,6 @@ glob.c:
     Date: May 14, 1975
     From: Sixth Edition UNIX /usr/source/s1/glob.c
 
-Jeffrey Allen Neitzel						2012/01/21
+Jeffrey Allen Neitzel						2012/02/05
 
 @(#)$Id$
