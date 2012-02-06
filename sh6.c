@@ -127,6 +127,7 @@ static	void		rpx_line(void);
 static	void		get_word(void);
 static	char		xgetc(bool);
 static	char		readc(void);
+/*@maynotreturn@*/ /*@null@*/
 static	struct tnode	*talloc(void);
 static	void		tfree(/*@null@*/ /*@only@*/ struct tnode *);
 /*@null@*/
@@ -154,7 +155,7 @@ static	void		sh_magic(void);
 static	void		fd_free(void);
 static	bool		fd_isdir(int);
 static	void		xfree(/*@null@*/ /*@only@*/ void *);
-/*@out@*/
+/*@maynotreturn@*/ /*@out@*/
 static	void		*xmalloc(size_t);
 
 /*
@@ -542,7 +543,7 @@ syn1(char **p1, char **p2)
 		case RPARENTHESIS:
 			subcnt--;
 			if (subcnt < 0)
-				goto synerr;
+				goto syn1err;
 			continue;
 
 		case SEMICOLON:
@@ -551,7 +552,7 @@ syn1(char **p1, char **p2)
 			if (subcnt == 0) {
 				c = **p;
 				if ((t = talloc()) == NULL)
-					return NULL;
+					goto syn1err;
 				t->ntype  = TLIST;
 				t->nleft  = syn2(p1, p);
 				if (c == AMPERSAND && t->nleft != NULL)
@@ -566,8 +567,9 @@ syn1(char **p1, char **p2)
 	if (subcnt == 0)
 		return syn2(p1, p2);
 
-synerr:
-	error_message = ERR_SYNTAX;
+syn1err:
+	if (error_message == NULL)
+		error_message = ERR_SYNTAX;
 	return NULL;
 }
 
@@ -641,7 +643,7 @@ syn3(char **p1, char **p2)
 		case LPARENTHESIS:
 			if (subcnt == 0) {
 				if (lp != NULL)
-					goto synerr;
+					goto syn3err;
 				lp = p + 1;
 			}
 			subcnt++;
@@ -665,14 +667,14 @@ syn3(char **p1, char **p2)
 			if (subcnt == 0) {
 				p++;
 				if (p == p2 || any(**p, REDIRERR))
-					goto synerr;
+					goto syn3err;
 				if (c == LESSTHAN) {
 					if (fin != NULL)
-						goto synerr;
+						goto syn3err;
 					fin = *p;
 				} else {
 					if (fout != NULL)
-						goto synerr;
+						goto syn3err;
 					fout = *p;
 				}
 			}
@@ -685,9 +687,9 @@ syn3(char **p1, char **p2)
 
 	if (lp == NULL) {
 		if (n == 0)
-			goto synerr;
+			goto syn3err;
 		if ((t = talloc()) == NULL)
-			return NULL;
+			goto syn3err;
 		t->ntype = TCOMMAND;
 		t->nav   = xmalloc((n + 1) * sizeof(char *));
 		for (ac = 0; ac < n; ac++)
@@ -695,9 +697,9 @@ syn3(char **p1, char **p2)
 		t->nav[ac] = NULL;
 	} else {
 		if (n != 0)
-			goto synerr;
+			goto syn3err;
 		if ((t = talloc()) == NULL)
-			return NULL;
+			goto syn3err;
 		t->ntype = TSUBSHELL;
 		t->nsub  = syn1(lp, rp);
 	}
@@ -706,8 +708,9 @@ syn3(char **p1, char **p2)
 	t->nflags = flags;
 	return t;
 
-synerr:
-	error_message = ERR_SYNTAX;
+syn3err:
+	if (error_message == NULL)
+		error_message = ERR_SYNTAX;
 	return NULL;
 }
 
