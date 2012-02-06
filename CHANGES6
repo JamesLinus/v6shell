@@ -6,6 +6,7 @@ command in porting them to run on modern UNIX systems.
 [osh-current]:
 	* Work In Progress
 
+sh6:
 	* Added missing `Command line overflow' diagnostic for compatibility.
 
 -------------------------------------------------------------------------------
