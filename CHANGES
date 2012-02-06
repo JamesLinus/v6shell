@@ -8,6 +8,8 @@ Thompson shell are marked w/ a `C:' in the details below.
 osh:
 	* Added $? (as a synonym for $s) parameter.
 
+	C: Added missing `Command line overflow' diagnostic for compatibility.
+
 -------------------------------------------------------------------------------
 [osh-20120102]:
 mkconfig:
@@ -1707,6 +1709,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2012/01/31
+Jeffrey Allen Neitzel						2012/02/06
 
 @(#)$Id$

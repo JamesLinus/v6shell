@@ -231,6 +231,7 @@ static	enum stflags	shtype;		/* shell type (determines behavior) */
 static	enum sigflags	sig_child;	/* SIG(INT|QUIT|TERM) child flags   */
 static	enum sigflags	sig_state;	/* SIG(INT|QUIT|TERM) state flags   */
 static	int		status;		/* shell exit status                */
+static	int		tree_count;	/* talloc() call count (per line)   */
 static	char		*word[WORDMAX];	/* arg/word pointer array           */
 static	char		*aword[WORDMAX];/* alias arg/word pointer array     */
 static	char		**wordp;	/* [a]word pointer                  */
@@ -536,6 +537,7 @@ rpx_line(void)
 	ewordp = &word[WORDMAX - 5];
 	error_message = NULL;
 	nul_count = 0;
+	tree_count = 0;
 	do {
 		wp = linep;
 		if (get_word() == EOF)
@@ -969,7 +971,7 @@ aalloc(const char *name, const char *string)
 /*
  * Allocate and initialize memory for new alias node
  * specified by name and string.  Return pointer to new
- * node on success.  Do not return on error (ENOMEM).
+ * node on success.  Do not return on ENOMEM error.
  */
 static struct anode *
 aalloc1(const char *name, const char *string)
@@ -1056,13 +1058,21 @@ asget(const char *name)
 /*
  * Allocate and initialize memory for a new tree node.
  * Return a pointer to the new node on success.
- * Do not return on error (ENOMEM).
+ * Return a pointer to NULL if >= TREEMAX.
+ * Do not return on ENOMEM error.
  */
 static struct tnode *
 talloc(void)
 {
 	struct tnode *t;
 
+	if (tree_count >= TREEMAX) {
+/*
+		fd_print(FD2, "talloc: tree_count == %d;\n", tree_count);
+ */
+		error_message = ERR_CLOVERFLOW;
+		return NULL;
+	}
 	t = xmalloc(sizeof(struct tnode));
 	t->nleft  = NULL;
 	t->nright = NULL;
@@ -1073,6 +1083,7 @@ talloc(void)
 	t->nkey   = 0;
 	t->nflags = 0;
 	t->ntype  = 0;
+	tree_count++;
 	return t;
 }
 
@@ -1145,7 +1156,7 @@ syn1(char **p1, char **p2)
 		case RPARENTHESIS:
 			subcnt--;
 			if (subcnt < 0)
-				goto synerr;
+				goto syn1err;
 			continue;
 
 		case SEMICOLON:
@@ -1153,7 +1164,8 @@ syn1(char **p1, char **p2)
 		case EOL:
 			if (subcnt == 0) {
 				c = **p;
-				t = talloc();
+				if ((t = talloc()) == NULL)
+					goto syn1err;
 				t->ntype  = TLIST;
 				t->nleft  = syn2(p1, p);
 				if (c == AMPERSAND && t->nleft != NULL)
@@ -1168,8 +1180,9 @@ syn1(char **p1, char **p2)
 	if (subcnt == 0)
 		return syn2(p1, p2);
 
-synerr:
-	error_message = ERR_SYNTAX;
+syn1err:
+	if (error_message == NULL)
+		error_message = ERR_SYNTAX;
 	return NULL;
 }
 
@@ -1200,7 +1213,8 @@ syn2(char **p1, char **p2)
 		case VERTICALBAR:
 		case CARET:
 			if (subcnt == 0) {
-				t = talloc();
+				if ((t = talloc()) == NULL)
+					return NULL;
 				t->ntype  = TPIPE;
 				t->nleft  = syn3(p1, p);
 				t->nright = syn2(p + 1, p2);
@@ -1248,7 +1262,7 @@ syn3(char **p1, char **p2)
 		case LPARENTHESIS:
 			if (subcnt == 0) {
 				if (lp != NULL)
-					goto synerr;
+					goto syn3err;
 				lp = p + 1;
 			}
 			subcnt++;
@@ -1272,14 +1286,14 @@ syn3(char **p1, char **p2)
 			if (subcnt == 0) {
 				p++;
 				if (p == p2 || any(**p, REDIRERR))
-					goto synerr;
+					goto syn3err;
 				if (c == LESSTHAN) {
 					if (fin != NULL)
-						goto synerr;
+						goto syn3err;
 					fin = xstrdup(*p);
 				} else {
 					if (fout != NULL)
-						goto synerr;
+						goto syn3err;
 					fout = xstrdup(*p);
 				}
 			}
@@ -1292,7 +1306,7 @@ syn3(char **p1, char **p2)
 
 	if (lp == NULL) {
 		if (n == 0)
-			goto synerr;
+			goto syn3err;
 		if ((as = asget(pv[0])) != NULL && asp == NULL) {
 			/*
 			 * Substitute alias string pointed to by as for
@@ -1301,7 +1315,7 @@ syn3(char **p1, char **p2)
 			 * TSUBSHELL w/o ( ) .
 			 */
 			if (error_message != NULL)
-				goto synerr;
+				goto syn3err;
 #ifdef	DEBUG
 #ifdef	DEBUG_ALIAS
 			fd_print(FD2, "syn3: alcnt == %d;\n", alcnt);
@@ -1309,10 +1323,10 @@ syn3(char **p1, char **p2)
 #endif
 			if (alcnt > 2) {
 				error_message = ERR_ALIASLOOP;
-				goto synerr;
+				goto syn3err;
 			}
 			if ((av = rp_alias(as)) == NULL)
-				goto synerr;
+				goto syn3err;
 			ac   = vacount(av);
 			tav  = xmalloc((ac + n) * sizeof(char *));
 			tavp = tav;
@@ -1339,7 +1353,8 @@ syn3(char **p1, char **p2)
 #endif
 #endif
 			alcnt++;
-			t = talloc();
+			if ((t = talloc()) == NULL)
+				goto syn3err;
 			t->ntype = TSUBSHELL;
 			t->nsub  = syn1(tav, tavp);
 			vfree(tav);
@@ -1348,7 +1363,8 @@ syn3(char **p1, char **p2)
 			/*
 			 * Execute as TCOMMAND.
 			 */
-			t = talloc();
+			if ((t = talloc()) == NULL)
+				goto syn3err;
 			t->ntype = TCOMMAND;
 			t->nav   = xmalloc((n + 1) * sizeof(char *));
 			for (ac = 0; ac < n; ac++)
@@ -1361,8 +1377,9 @@ syn3(char **p1, char **p2)
 		 * Execute as TSUBSHELL w/ ( ) .
 		 */
 		if (n != 0)
-			goto synerr;
-		t = talloc();
+			goto syn3err;
+		if ((t = talloc()) == NULL)
+			goto syn3err;
 		t->ntype = TSUBSHELL;
 		t->nsub  = syn1(lp, rp);
 	}
@@ -1373,7 +1390,7 @@ syn3(char **p1, char **p2)
 	vfree(pv);
 	return t;
 
-synerr:
+syn3err:
 	xfree(fin);
 	xfree(fout);
 	pv[n] = NULL;
@@ -2893,7 +2910,7 @@ xfree(void *p)
 /*
  * Allocate memory, and check for error.
  * Return a pointer to the allocated space on success.
- * Do not return on error (ENOMEM).
+ * Do not return on ENOMEM error.
  */
 static void *
 xmalloc(size_t s)
@@ -2910,7 +2927,7 @@ xmalloc(size_t s)
 /*
  * Reallocate memory, and check for error.
  * Return a pointer to the reallocated space on success.
- * Do not return on error (ENOMEM).
+ * Do not return on ENOMEM error.
  */
 static void *
 xrealloc(void *p, size_t s)
@@ -2927,7 +2944,7 @@ xrealloc(void *p, size_t s)
 /*
  * Allocate memory for a copy of the string src, and copy it to dst.
  * Return a pointer to dst on success.
- * Do not return on error (ENOMEM).
+ * Do not return on ENOMEM error.
  */
 static char *
 xstrdup(const char *src)
