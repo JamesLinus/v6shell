@@ -1,14 +1,25 @@
 : osh
 :
-: "  Exit w/ zero status (true) when all tests pass.       "
-: "  Exit w/ non-zero status (false) when any test fails.  "
-: "  --  "
-: "  Jeffrey Allen Neitzel  "
+: osh - " Force sh(1), csh(1), and other shells to exit w/ error! " <'' ;;;
 :
+: "  The author of this file, J.A. Neitzel <jan (at) v6shell (dot) org>,  "
+: "  hereby grants it to the public domain.                               "
+:
+
+:
+: "  Exit w/ zero status (true) when all tests pass.       "
+: "  Exit w/ non-zero status (false) when any tests fail.  "
+:
+: "  usage: ../osh run.osh [-newlog] osh sh6  "
+:
+
+: >>$0'' <'' ; : >>$1'' <'' ; : >>$2'' <'' ; : >>$3'' <''
 
 if X$u = Xroot if { fd2 -e echo Cannot run tests as superuser } \
 	if { exit } if A = B
 if X$0 != Xrun.osh -a X$0 != X./run.osh if { fd2 -e echo Wrong directory } \
+	if { exit } if A = B
+if $# = # if { fd2 -e echo Invalid shell - osh\(1\) required } \
 	if { exit } if A = B
 
 sigign + 1 2 3 15 ; : sigign
@@ -22,7 +33,7 @@ if $# = 3 -a X$1 = X-newlog -a X$2 = Xosh -a X$3 = Xsh6 goto NewLog
 : Again - " Check for correct usage and/or test other binary. "
 
 	if ! \( \( $# = 1 -o $# = 2 \) -a \( X$1 = Xosh -o X$1 = Xsh6 \) \) \
-		if { fd2 -e echo Usage error } \
+		if { fd2 -e echo usage: ../osh run.osh \[-newlog\] osh sh6 } \
 			if { exit } if A = B
 	: fallthrough
 
