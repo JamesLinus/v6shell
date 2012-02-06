@@ -262,10 +262,12 @@ static	int		readc(void);
 /*@null@*/ /*@only@*/
 static	const char	*get_dolp(int);
 static	void		aalloc(/*@null@*/const char *, /*@null@*/const char *);
+/*@maynotreturn@*/
 static	struct anode	*aalloc1(const char *, const char *);
 static	bool		afree(/*@null@*/ const char *);
 /*@null@*/
 static	const char	*asget(/*@null@*/ const char *);
+/*@maynotreturn@*/ /*@null@*/
 static	struct tnode	*talloc(void);
 static	void		tfree(/*@null@*/ /*@only@*/ struct tnode *);
 /*@null@*/
@@ -310,17 +312,19 @@ static	void		fd_free(void);
 static	bool		fd_type(int, mode_t);
 /*@maynotreturn@*/ /*@null@*/
 static	char		*atrim(/*@returned@*/ UChar *);
-/*@null@*/
+/*@maynotreturn@*/ /*@null@*/
 static	char		*gtrim(/*@returned@*/ UChar *);
 /*@null@*/
 static	char		*gchar(/*@returned@*/ const char *);
 static	void		vfree(/*@null@*/ char **);
 static	void		xfree(/*@null@*/ /*@only@*/ void *);
-/*@out@*/
+/*@maynotreturn@*/ /*@out@*/
 static	void		*xmalloc(size_t);
+/*@maynotreturn@*/
 static	void		*xrealloc(/*@only@*/ void *, size_t);
+/*@maynotreturn@*/
 static	char		*xstrdup(const char *);
-/*@null@*/ /*@only@*/
+/*@maynotreturn@*/ /*@null@*/ /*@only@*/
 static	const char	**glob(enum sbikey, /*@only@*/ char **);
 
 /*
