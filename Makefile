@@ -159,6 +159,14 @@ fd2bin: v.o fd2.o err.o pexec.o
 	$(CC) $(LDFLAGS) -o fd2 v.o fd2.o err.o pexec.o $(LIBS)
 
 #
+# Test targets
+#
+check: all
+	@( cd tests && ../osh run.osh osh sh6 )
+check-newlog: all
+	@( cd tests && ../osh run.osh -newlog osh sh6 )
+
+#
 # Install targets
 #
 DESTBINDIR=	$(DESTDIR)$(BINDIR)

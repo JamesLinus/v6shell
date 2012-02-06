@@ -1,0 +1,86 @@
+: osh
+:
+: "  Exit w/ zero status (true) when all tests pass.       "
+: "  Exit w/ non-zero status (false) when any test fails.  "
+: "  --  "
+: "  Jeffrey Allen Neitzel  "
+:
+
+if X$u = Xroot if { fd2 -e echo Cannot run tests as superuser } \
+	if { exit } if A = B
+if X$0 != Xrun.osh -a X$0 != X./run.osh if { fd2 -e echo Wrong directory } \
+	if { exit } if A = B
+
+sigign + 1 2 3 15 ; : sigign
+setenv PATH ..:$p ; : printenv PATH
+umask 22 ; : umask
+rm -f TestFailCount TestPassCount
+( : ) >TestFailCount ; ( : ) >TestPassCount
+
+if $# = 3 -a X$1 = X-newlog -a X$2 = Xosh -a X$3 = Xsh6 goto NewLog
+
+: Again - " Check for correct usage and/or test other binary. "
+
+	if ! \( \( $# = 1 -o $# = 2 \) -a \( X$1 = Xosh -o X$1 = Xsh6 \) \) \
+		if { fd2 -e echo Usage error } \
+			if { exit } if A = B
+	: fallthrough
+
+: NewLog - " Generate new test logs if needed. "
+
+	if X$1 != X-newlog goto BinCheck
+	rm -f test0[1-4]_[os][sh][h6].log
+	fd2 $2 test01 >test01_$2.log ; fd2 $3 test01 >test01_$3.log
+	fd2 $2 test02 >test02_$2.log ; fd2 $3 test02 >test02_$3.log
+	fd2 $2 test03 >test03_$2.log ; fd2 $3 test03 >test03_$3.log
+	fd2 $2 test04 >test04_$2.log ; fd2 $3 test04 >test04_$3.log
+	shift
+	: fallthrough
+
+: BinCheck - " Ensure that needed binaries are present and executable. "
+
+if ! -x ../$1 if { fd2 -e echo $1: Missing or not executable } \
+	if { exit } if A = B
+if X$1 = Xosh goto Jump
+	if ! -x ../glob6 if { fd2 -e echo glob6: Missing or not executable } \
+		if { exit } if A = B
+	if ! -x ../if if { fd2 -e echo if: Missing or not executable } \
+		if { exit } if A = B
+	if ! -x ../goto if { fd2 -e echo goto: Missing or not executable } \
+		if { exit } if A = B
+	if ! -x ../fd2 if { fd2 -e echo fd2: Missing or not executable } \
+		if { exit } if A = B
+	: which sh6 glob6 if goto fd2
+	goto Run
+: Jump
+	: which osh
+	: fallthrough
+
+: Run - " Run all tests w/ $1 binary. "
+
+	fd2 $1 test01 | diff -u test01_$1.log -
+	if $? != 0 if { fd2 -e echo Test 1 Failed } echo >>TestFailCount
+	echo >>TestPassCount
+	fd2 $1 test02 | diff -u test02_$1.log -
+	if $? != 0 if { fd2 -e echo Test 2 Failed } echo >>TestFailCount
+	echo >>TestPassCount
+	fd2 $1 test03 | diff -u test03_$1.log -
+	if $? != 0 if { fd2 -e echo Test 3 Failed } echo >>TestFailCount
+	echo >>TestPassCount
+	fd2 $1 test04 | diff -u test04_$1.log -
+	if $? != 0 if { fd2 -e echo Test 4 Failed } echo >>TestFailCount
+	echo >>TestPassCount
+	shift
+	if $# = 0 goto Done
+	goto Again
+
+: Done - " Print final results and exit false/true as needed. "
+
+	if ! -s TestFailCount goto TestsPassed
+		( wc -l <TestFailCount | tr -d ' \t\n' ; \
+		  echo ' Test(s) Failed' ) | fd2 -e cat
+		rm -f TestFailCount TestPassCount ; if A = B ; exit
+	: TestsPassed
+		( wc -l <TestPassCount | tr -d ' \t\n' ; \
+		  echo ' Test(s) Passed' ) | fd2 -e cat
+		rm -f TestFailCount TestPassCount ; : zero status
