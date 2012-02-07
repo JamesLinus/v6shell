@@ -44,7 +44,8 @@ if $# = 3 -a X$1 = X-newlog -a X$2 = Xosh -a X$3 = Xsh6 goto NewLog
 	fd2 $2 test01 >test01_$2.log ; fd2 $3 test01 >test01_$3.log
 	fd2 $2 test02 >test02_$2.log ; fd2 $3 test02 >test02_$3.log
 	fd2 $2 test03 >test03_$2.log ; fd2 $3 test03 >test03_$3.log
-	fd2 $2 test04 >test04_$2.log ; fd2 $3 test04 >test04_$3.log
+	fd2 $2 test04 >test04_$2.log
+	fd2 $2 test05 >test05_$2.log ; fd2 $3 test05 >test05_$3.log
 	shift
 	: fallthrough
 
@@ -67,7 +68,7 @@ if X$1 = Xosh goto Jump
 	: which osh
 	: fallthrough
 
-: Run - " Run all tests w/ $1 binary. "
+: Run - " Run appropriate tests w/ $1 binary. "
 
 	fd2 $1 test01 | diff -u test01_$1.log -
 	if $? != 0 if { fd2 -e echo Test 1 Failed } echo >>TestFailCount
@@ -78,8 +79,15 @@ if X$1 = Xosh goto Jump
 	fd2 $1 test03 | diff -u test03_$1.log -
 	if $? != 0 if { fd2 -e echo Test 3 Failed } echo >>TestFailCount
 	echo >>TestPassCount
-	fd2 $1 test04 | diff -u test04_$1.log -
-	if $? != 0 if { fd2 -e echo Test 4 Failed } echo >>TestFailCount
+	if X$1 = Xsh6 goto Next
+		: " Test 4 is for osh only. "
+		fd2 $1 test04 | diff -u test04_$1.log -
+		if $? != 0 if { fd2 -e echo Test 4 Failed } echo >>TestFailCount
+		echo >>TestPassCount
+		: fallthrough
+	: Next
+	fd2 $1 test05 | diff -u test05_$1.log -
+	if $? != 0 if { fd2 -e echo Test 5 Failed } echo >>TestFailCount
 	echo >>TestPassCount
 	shift
 	if $# = 0 goto Done

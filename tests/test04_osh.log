@@ -1,8 +1,54 @@
 Begin ...
-osh: No directory
-osh: No directory
-osh: No match
-osh: No match
-osh: Pattern too long
-osh: Pattern too long
+No Aliases Set
+Aliases Set
+1	All	(echo *^tr ' ' '\n';:)
+2	HelloWorld	(echo 'Hello World!'^cat^cat^cat^cat^cat^cat^cat^cat^cat^grep '^H')
+3	TestCounts	(echo Test*Count^tr ' ' '\n';:)
+4	logs	(echo *.log^tr ' ' '\n';:)
+5	tests	(echo test??^tr ' ' '\n';:)
+HelloWorld ...
+1	Hello World!
+.
+All ...
+1	TestFailCount
+2	TestPassCount
+3	run.osh
+4	test01
+5	test01_osh.log
+6	test01_sh6.log
+7	test02
+8	test02_osh.log
+9	test02_sh6.log
+10	test03
+11	test03_osh.log
+12	test03_sh6.log
+13	test04
+14	test04_osh.log
+15	test05
+16	test05_osh.log
+17	test05_sh6.log
+.
+tests ...
+1	test01
+2	test02
+3	test03
+4	test04
+5	test05
+.
+logs ...
+1	test01_osh.log
+2	test01_sh6.log
+3	test02_osh.log
+4	test02_sh6.log
+5	test03_osh.log
+6	test03_sh6.log
+7	test04_osh.log
+8	test05_osh.log
+9	test05_sh6.log
+.
+TestCounts ...
+1	TestFailCount
+2	TestPassCount
+.
+Aliases Unset
 End .
