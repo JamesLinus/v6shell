@@ -24,7 +24,7 @@ if $? = 1 if { fd2 -e echo Unexpected alias result } if { exit } if A = B
 ( alias ) ^ wc -l ^ tr -d ' \t\n' ; echo ' Aliases Set'
 ( alias ) ^ awk '{ print NR "\t" $0 }'
 echo HelloWorld ...;HelloWorld^awk '{ print NR "\t" $0 }';echo HelloWorld .
-echo All ...;       All       ^awk '{ print NR "\t" $0 }';echo All .
+echo All ...;       All                                  ;echo All .
 echo tests ...;     tests     ^awk '{ print NR "\t" $0 }';echo tests .
 echo logs ...;      logs      ^awk '{ print NR "\t" $0 }';echo logs .
 echo TestCounts ...;TestCounts^awk '{ print NR "\t" $0 }';echo TestCounts .

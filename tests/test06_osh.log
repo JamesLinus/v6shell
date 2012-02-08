@@ -10,32 +10,32 @@ HelloWorld ...
 1	Hello World!
 HelloWorld .
 All ...
-1	Input
-2	Syntax.list
-3	SyntaxError.in
-4	TestFailCount
-5	TestPassCount
-6	run.osh
-7	test01
-8	test01_osh.log
-9	test01_sh6.log
-10	test02
-11	test02_osh.log
-12	test02_sh6.log
-13	test03
-14	test03_osh.log
-15	test03_sh6.log
-16	test04
-17	test04_osh.log
-18	test04_sh6.log
-19	test05
-20	test05_osh.log
-21	test05_sh6.log
-22	test06
-23	test06_osh.log
-24	test07
-25	test07_osh.log
-26	test07_sh6.log
+Input
+Syntax.list
+SyntaxError.in
+TestFailCount
+TestPassCount
+run.osh
+test01
+test01_osh.log
+test01_sh6.log
+test02
+test02_osh.log
+test02_sh6.log
+test03
+test03_osh.log
+test03_sh6.log
+test04
+test04_osh.log
+test04_sh6.log
+test05
+test05_osh.log
+test05_sh6.log
+test06
+test06_osh.log
+test07
+test07_osh.log
+test07_sh6.log
 All .
 tests ...
 1	test01

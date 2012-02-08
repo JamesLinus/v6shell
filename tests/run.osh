@@ -76,30 +76,30 @@ if X$1 = Xosh goto Jump
 	fd2 $1 test01 | diff -u test01_$1.log -
 	if $? != 0 if { fd2 -e echo $1: Test 1 Failed } echo >>TestFailCount
 	echo >>TestPassCount
-	fd2 -e -- echo -n .
+	fd2 -e -- echo -n .\ 
 	fd2 $1 test02 | diff -u test02_$1.log -
 	if $? != 0 if { fd2 -e echo $1: Test 2 Failed } echo >>TestFailCount
 	echo >>TestPassCount
-	fd2 -e -- echo -n .
+	fd2 -e -- echo -n .\ 
 	fd2 $1 test03 | diff -u test03_$1.log -
 	if $? != 0 if { fd2 -e echo $1: Test 3 Failed } echo >>TestFailCount
 	echo >>TestPassCount
-	fd2 -e -- echo -n .
+	fd2 -e -- echo -n .\ 
 	fd2 -f/dev/null $1 test04 | diff -u test04_$1.log -
 	if $? != 0 if { fd2 -e echo $1: Test 4 Failed } echo >>TestFailCount
 	echo >>TestPassCount
-	fd2 -e -- echo -n .
+	fd2 -e -- echo -n .\ 
 	fd2 $1 test05 $1 | diff -u test05_$1.log -
 	if $? != 0 if { fd2 -e echo $1: Test 5 Failed } echo >>TestFailCount
 	echo >>TestPassCount
-	fd2 -e -- echo -n .
+	fd2 -e -- echo -n .\ 
 	if X$1 = Xsh6 goto Next
 		: " Test 6 is for osh only. "
 		rm -f SyntaxError
 		fd2 $1 test06 | diff -u test06_$1.log -
 		if $? != 0 if { fd2 -e echo $1: Test 6 Failed } echo >>TestFailCount
 		echo >>TestPassCount
-		fd2 -e -- echo -n .
+		fd2 -e -- echo -n .\ 
 		: fallthrough
 	: Next
 	fd2 $1 test07 | diff -u test07_$1.log -
