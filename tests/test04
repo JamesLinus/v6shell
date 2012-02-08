@@ -1,31 +1,193 @@
-: osh
+: osh/sh6
 :
-: test04 - Aliases
+: test04 - syntactically correct
 :
 
 echo Begin ...
-if $# = # if { fd2 -e echo Invalid shell - osh\(1\) required } \
-	if { exit } if A = B
-alias
-if $? = 1 echo No Aliases Set
-alias	tests		"echo test??^tr ' ' '\n';:"
-alias	logs		"echo *.log^tr ' ' '\n';:"
-alias	TestCounts	"echo Test*Count^tr ' ' '\n';:"
-alias	HelloWorld	"echo 'Hello World!'^cat^cat^cat^cat^cat^cat^cat^cat^cat^grep '^H'"
-alias	All		"echo *^tr ' ' '\n';:"
-( alias ) >/dev/null
-if $? = 0 echo Aliases Set
-( alias ) ^ awk '{ print NR "\t" $0 }'
-echo HelloWorld ... ; HelloWorld ^ awk '{ print NR "\t" $0 }' ; echo .
-echo All ... ;        All        ^ awk '{ print NR "\t" $0 }' ; echo .
-echo tests ... ;      tests      ^ awk '{ print NR "\t" $0 }' ; echo .
-echo logs ... ;       logs       ^ awk '{ print NR "\t" $0 }' ; echo .
-echo TestCounts ... ; TestCounts ^ awk '{ print NR "\t" $0 }' ; echo .
-unalias	tests
-unalias	logs
-unalias	TestCounts
-unalias	HelloWorld
-unalias	All
-alias
-if $? = 1 echo Aliases Unset
+
+: The following is perfectly legal in osh and sh6 ...
+
+	;;;;;;
+	 ; ; ; ; ; ; 
+	&&&&&&
+	 & & & & & & 
+
+: Redirections ...
+
+	cat <Input >/dev/null
+	<Input cat >/dev/null
+	<Input >/dev/null cat
+	cat < Input > /dev/null
+	< Input cat > /dev/null
+	< Input > /dev/null cat
+
+	cat <Input >>/dev/null
+	<Input cat >>/dev/null
+	<Input >>/dev/null cat
+	cat < Input >> /dev/null
+	< Input cat >> /dev/null
+	< Input >> /dev/null cat
+
+	cat >/dev/null <Input
+	>/dev/null cat <Input
+	>/dev/null <Input cat
+	cat > /dev/null < Input
+	> /dev/null cat < Input
+	> /dev/null < Input cat
+
+	cat >>/dev/null <Input
+	>>/dev/null cat <Input
+	>>/dev/null <Input cat
+	cat >> /dev/null < Input
+	>> /dev/null cat < Input
+	>> /dev/null < Input cat
+
+	( cat ) <Input >/dev/null
+	<Input ( cat ) >/dev/null
+	<Input >/dev/null ( cat )
+	( cat ) < Input > /dev/null
+	< Input ( cat ) > /dev/null
+	< Input > /dev/null ( cat )
+
+	( cat ) <Input >>/dev/null
+	<Input ( cat ) >>/dev/null
+	<Input >>/dev/null ( cat )
+	( cat ) < Input >> /dev/null
+	< Input ( cat ) >> /dev/null
+	< Input >> /dev/null ( cat )
+
+	(cat) <Input >/dev/null
+	<Input (cat) >/dev/null
+	<Input >/dev/null (cat)
+	(cat) < Input > /dev/null
+	< Input (cat) > /dev/null
+	< Input > /dev/null (cat)
+
+	(cat) <Input >>/dev/null
+	<Input (cat) >>/dev/null
+	<Input >>/dev/null (cat)
+	(cat) < Input >> /dev/null
+	< Input (cat) >> /dev/null
+	< Input >> /dev/null (cat)
+
+	( cat ) >/dev/null <Input
+	>/dev/null ( cat ) <Input
+	>/dev/null <Input ( cat )
+	( cat ) > /dev/null < Input
+	> /dev/null ( cat ) < Input
+	> /dev/null < Input ( cat )
+
+	( cat ) >>/dev/null <Input
+	>>/dev/null ( cat ) <Input
+	>>/dev/null <Input ( cat )
+	( cat ) >> /dev/null < Input
+	>> /dev/null ( cat ) < Input
+	>> /dev/null < Input ( cat )
+
+	(cat) >/dev/null <Input
+	>/dev/null (cat) <Input
+	>/dev/null <Input (cat)
+	(cat) > /dev/null < Input
+	> /dev/null (cat) < Input
+	> /dev/null < Input (cat)
+
+	(cat) >>/dev/null <Input
+	>>/dev/null (cat) <Input
+	>>/dev/null <Input (cat)
+	(cat) >> /dev/null < Input
+	>> /dev/null (cat) < Input
+	>> /dev/null < Input (cat)
+
+: Pipes ...
+
+	echo Hello 01! | cat | grep '^H'
+	echo Hello 02! ^ cat ^ grep '^H'
+	echo Hello 03! | : nothing | grep '^H'
+	echo Hello 04! ^ : nothing ^ grep '^H'
+	echo Hello 05! | cat | : nothing | cat | grep '^H'
+	echo Hello 06! ^ cat ^ : nothing ^ cat ^ grep '^H'
+	echo Hello 07!|cat|grep '^H'
+	echo Hello 08!^cat^grep '^H'
+	echo Hello 09!|: nothing|grep '^H'
+	echo Hello 10!^: nothing^grep '^H'
+	echo Hello 11!|cat|: nothing|cat|grep '^H'
+	echo Hello 12!^cat^: nothing^cat^grep '^H'
+
+: Subshells ...
+
+	( echo Hello 13! ) | ( cat ) | ( grep '^H' )
+	( ( echo Hello 14! ) | ( cat ) | ( grep '^H' ) )
+	( echo Hello 15! ) ^ ( cat ) ^ ( grep '^H' )
+	( ( echo Hello 16! ) ^ ( cat ) ^ ( grep '^H' ) )
+	echo Hello 17! | ( ( cat ) | grep '^H' )
+	( echo Hello 18! | ( ( cat ) | grep '^H' ) )
+	echo Hello 19! ^ ( ( cat ) ^ grep '^H' )
+	( echo Hello 20! ^ ( ( cat ) ^ grep '^H' ) )
+	( echo Hello 21! | ( cat ) ) | grep '^H'
+	( ( echo Hello 22! | ( cat ) ) | grep '^H' )
+	( echo Hello 23! ^ ( cat ) ) ^ grep '^H'
+	( ( echo Hello 24! ^ ( cat ) ) ^ grep '^H' )
+	( echo Hello 25! ) | ( cat >/dev/null ) | ( grep '^H' )
+	( ( echo Hello 26! ) | ( cat >/dev/null ) | ( grep '^H' ) )
+	( echo Hello 27! ) ^ ( cat >/dev/null ) ^ ( grep '^H' )
+	( ( echo Hello 28! ) ^ ( cat >/dev/null ) ^ ( grep '^H' ) )
+	( echo Hello 29! ) | ( : nothing ) | ( grep '^H' )
+	( ( echo Hello 30! ) | ( : nothing ) | ( grep '^H' ) )
+	( echo Hello 31! ) ^ ( : nothing ) ^ ( grep '^H' )
+	( ( echo Hello 32! ) ^ ( : nothing ) ^ ( grep '^H' ) )
+	( echo one ) ; ( echo two ) ; ( echo three )
+	( ( echo one ) ; ( echo two ) ; ( echo three ) )
+	( echo \( one \) ) ; ( echo \( two \) ) ; ( echo \( three \) )
+	( ( echo \( one \) ) ; ( echo \( two \) ) ; ( echo \( three \) ) )
+
+	(echo Hello 33!)|(cat)|(grep '^H')
+	((echo Hello 34!)|(cat)|(grep '^H'))
+	(echo Hello 35!)^(cat)^(grep '^H')
+	((echo Hello 36!)^(cat)^(grep '^H'))
+	echo Hello 37!|((cat)|grep '^H')
+	(echo Hello 38!|((cat)|grep '^H'))
+	echo Hello 39!^((cat)^grep '^H')
+	(echo Hello 40!^((cat)^grep '^H'))
+	(echo Hello 41!|(cat))|grep '^H'
+	((echo Hello 42!|(cat))|grep '^H')
+	(echo Hello 43!^(cat))^grep '^H'
+	((echo Hello 44!^(cat))^grep '^H')
+	(echo Hello 45!)|(cat >/dev/null)|(grep '^H')
+	((echo Hello 46!)|(cat >/dev/null)|(grep '^H'))
+	(echo Hello 47!)^(cat >/dev/null)^(grep '^H')
+	((echo Hello 48!)^(cat >/dev/null)^(grep '^H'))
+	(echo Hello 49!)|(: nothing)|(grep '^H')
+	((echo Hello 50!)|(: nothing)|(grep '^H'))
+	(echo Hello 51!)^(: nothing)^(grep '^H')
+	((echo Hello 52!)^(: nothing)^(grep '^H'))
+	(echo one);(echo two);(echo three)
+	((echo one);(echo two);(echo three))
+	(echo \(one\));(echo \(two\));(echo \(three\))
+	((echo \(one\));(echo \(two\));(echo \(three\)))
+
+	( ( echo Hello 53! ) | \
+	  ( cat | ( cat | cat | cat ) | cat ) | \
+	  ( grep '^H' ) )
+	( ( echo Hello 54! ) ^ \
+	  ( cat ^ ( cat ^ cat ^ cat ) ^ cat ) ^ \
+	  ( grep '^H' ) )
+	( ( echo Hello 55! ) | \
+	  ( cat | ( cat | : nothing | cat ) | cat ) | \
+	  ( grep '^H' ) )
+	( ( echo Hello 56! ) ^ \
+	  ( cat ^ ( cat ^ : nothing ^ cat ) ^ cat ) ^ \
+	  ( grep '^H' ) )
+
+	((echo Hello 57!)|(cat|(cat|cat|cat)|cat)|(grep '^H'))
+	((echo Hello 58!)^(cat^(cat^cat^cat)^cat)^(grep '^H'))
+	((echo Hello 59!)|(cat|(cat|: nothing|cat)|cat)|(grep '^H'))
+	((echo Hello 60!)^(cat^(cat^: nothing^cat)^cat)^(grep '^H'))
+
+: Asynchronous ...
+
+	( sleep 3 ; echo 'sleep 3 : done' ) & \
+	( sleep 4 ; echo 'sleep 4 : done' ) & \
+	( sleep 5 ; echo 'sleep 5 : done' ) & \
+	wait
+
 echo End .

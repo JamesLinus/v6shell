@@ -1,0 +1,69 @@
+Begin ...
+0 Aliases Set
+5 Aliases Set
+1	All	(echo *^tr ' ' '\n';:)
+2	HelloWorld	(echo 'Hello World!'^cat^cat^cat^cat^cat^cat^cat^cat^cat^grep '^H')
+3	TestCounts	(echo Test*Count^tr ' ' '\n';:)
+4	logs	(echo *.log^tr ' ' '\n';:)
+5	tests	(echo test??^tr ' ' '\n';:)
+HelloWorld ...
+1	Hello World!
+HelloWorld .
+All ...
+1	Input
+2	Syntax.list
+3	SyntaxError.in
+4	TestFailCount
+5	TestPassCount
+6	run.osh
+7	test01
+8	test01_osh.log
+9	test01_sh6.log
+10	test02
+11	test02_osh.log
+12	test02_sh6.log
+13	test03
+14	test03_osh.log
+15	test03_sh6.log
+16	test04
+17	test04_osh.log
+18	test04_sh6.log
+19	test05
+20	test05_osh.log
+21	test05_sh6.log
+22	test06
+23	test06_osh.log
+24	test07
+25	test07_osh.log
+26	test07_sh6.log
+All .
+tests ...
+1	test01
+2	test02
+3	test03
+4	test04
+5	test05
+6	test06
+7	test07
+tests .
+logs ...
+1	test01_osh.log
+2	test01_sh6.log
+3	test02_osh.log
+4	test02_sh6.log
+5	test03_osh.log
+6	test03_sh6.log
+7	test04_osh.log
+8	test04_sh6.log
+9	test05_osh.log
+10	test05_sh6.log
+11	test06_osh.log
+12	test07_osh.log
+13	test07_sh6.log
+logs .
+TestCounts ...
+1	TestFailCount
+2	TestPassCount
+TestCounts .
+0 Aliases Set
+End .

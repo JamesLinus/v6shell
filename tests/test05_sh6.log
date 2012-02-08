@@ -1,8 +1,224 @@
 Begin ...
-No directory
-No directory
-No match
-No match
-Pattern too long
-Pattern too long
+% "
+syntax error
+% : nothing; "
+syntax error
+% "; : nothing
+syntax error
+% ( " )
+syntax error
+% : nothing; ( " )
+syntax error
+% ( " ); : nothing
+syntax error
+% ( : nothing; " )
+syntax error
+% ( "; : nothing )
+syntax error
+% '
+syntax error
+% : nothing; '
+syntax error
+% '; : nothing
+syntax error
+% ( ' )
+syntax error
+% : nothing; ( ' )
+syntax error
+% ( ' ); : nothing
+syntax error
+% ( : nothing; ' )
+syntax error
+% ( '; : nothing )
+syntax error
+% |
+syntax error
+% ^
+syntax error
+% |   |
+syntax error
+% ^   ^
+syntax error
+% | cat
+syntax error
+% ^ cat
+syntax error
+% echo Hello! |
+syntax error
+% echo Hello! ^
+syntax error
+% echo Hello! | cat |
+syntax error
+% echo Hello! ^ cat ^
+syntax error
+% echo Hello! |   | grep H
+syntax error
+% echo Hello! ^   ^ grep H
+syntax error
+% ||
+syntax error
+% ^^
+syntax error
+% |cat
+syntax error
+% ^cat
+syntax error
+% echo Hello!|
+syntax error
+% echo Hello!^
+syntax error
+% echo Hello!|cat|
+syntax error
+% echo Hello!^cat^
+syntax error
+% echo Hello!||grep H
+syntax error
+% echo Hello!^^grep H
+syntax error
+% (
+syntax error
+% ( echo Hello!
+syntax error
+% ( ( echo Hello! )
+syntax error
+% ( ( echo Hello! ); echo Hello again!
+syntax error
+% echo Hello! | ( ( cat ) | grep H
+syntax error
+% ( echo Hello! | ( ( cat ) | grep H )
+syntax error
+% echo Hello! ^ ( ( cat ) ^ grep H
+syntax error
+% ( echo Hello! ^ ( ( cat ) ^ grep H )
+syntax error
+% )
+syntax error
+% echo Hello! )
+syntax error
+% ( echo Hello! ) )
+syntax error
+% ( echo Hello! ); echo Hello again! )
+syntax error
+% echo Hello! | ( cat ) ) | grep H
+syntax error
+% ( echo Hello! | ( cat ) ) | grep H )
+syntax error
+% echo Hello! ^ ( cat ) ) ^ grep H
+syntax error
+% ( echo Hello! ^ ( cat ) ) ^ grep H )
+syntax error
+% (   )
+syntax error
+% ( (   ) )
+syntax error
+% ( ( (   ) ) )
+syntax error
+% ( echo Hello! ) | (   ) | ( grep H )
+syntax error
+% ( ( echo Hello! ) | (   ) | ( grep H ) )
+syntax error
+% ()
+syntax error
+% (())
+syntax error
+% ((()))
+syntax error
+% (echo Hello!)|()|(grep H)
+syntax error
+% ((echo Hello!)|()|(grep H))
+syntax error
+% :( echo Hello! )
+syntax error
+% echo ( Hello! )
+syntax error
+% : nothing </dev/null ( cat )
+syntax error
+% </dev/null : nothing ( cat )
+syntax error
+% ( echo Hello! ):
+syntax error
+% ( echo ) Hello!
+syntax error
+% ( echo Hello! ) >/dev/null : nothing
+syntax error
+% ( echo Hello! ) : nothing >/dev/null
+syntax error
+% <
+syntax error
+% >
+syntax error
+% >>
+syntax error
+% <>
+syntax error
+% ><
+syntax error
+% <>>
+syntax error
+% >><
+syntax error
+% cat < >/dev/null
+syntax error
+% cat > </dev/null
+syntax error
+% cat </dev/null >
+syntax error
+% cat >/dev/null <
+syntax error
+% </dev/nullcat
+syntax error
+% </dev/null"cat"
+syntax error
+% </dev/null
+syntax error
+% </dev/null >/dev/null
+syntax error
+% >/dev/null
+syntax error
+% >/dev/null </dev/null
+syntax error
+% >>/dev/null
+syntax error
+% >>/dev/null </dev/null
+syntax error
+% </dev/null ( | )
+syntax error
+% >/dev/null ( | )
+syntax error
+% ( | ) </dev/null
+syntax error
+% ( | ) >/dev/null
+syntax error
+% </dev/null >/dev/null ( | )
+syntax error
+% >/dev/null </dev/null ( | )
+syntax error
+% </dev/null ( | ) >/dev/null
+syntax error
+% >/dev/null ( | ) </dev/null
+syntax error
+% ( | ) </dev/null >/dev/null
+syntax error
+% ( | ) >/dev/null </dev/null
+syntax error
+% </dev/null ( < )
+syntax error
+% >/dev/null ( < )
+syntax error
+% ( < ) </dev/null
+syntax error
+% ( < ) >/dev/null
+syntax error
+% </dev/null >/dev/null ( < )
+syntax error
+% >/dev/null </dev/null ( < )
+syntax error
+% </dev/null ( < ) >/dev/null
+syntax error
+% >/dev/null ( < ) </dev/null
+syntax error
+% ( < ) </dev/null >/dev/null
+syntax error
+% ( < ) >/dev/null </dev/null
+syntax error
 End .

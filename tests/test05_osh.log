@@ -1,8 +1,224 @@
 Begin ...
-osh: No directory
-osh: No directory
-osh: No match
-osh: No match
-osh: Pattern too long
-osh: Pattern too long
+% "
+osh: syntax error
+% : nothing; "
+osh: syntax error
+% "; : nothing
+osh: syntax error
+% ( " )
+osh: syntax error
+% : nothing; ( " )
+osh: syntax error
+% ( " ); : nothing
+osh: syntax error
+% ( : nothing; " )
+osh: syntax error
+% ( "; : nothing )
+osh: syntax error
+% '
+osh: syntax error
+% : nothing; '
+osh: syntax error
+% '; : nothing
+osh: syntax error
+% ( ' )
+osh: syntax error
+% : nothing; ( ' )
+osh: syntax error
+% ( ' ); : nothing
+osh: syntax error
+% ( : nothing; ' )
+osh: syntax error
+% ( '; : nothing )
+osh: syntax error
+% |
+osh: syntax error
+% ^
+osh: syntax error
+% |   |
+osh: syntax error
+% ^   ^
+osh: syntax error
+% | cat
+osh: syntax error
+% ^ cat
+osh: syntax error
+% echo Hello! |
+osh: syntax error
+% echo Hello! ^
+osh: syntax error
+% echo Hello! | cat |
+osh: syntax error
+% echo Hello! ^ cat ^
+osh: syntax error
+% echo Hello! |   | grep H
+osh: syntax error
+% echo Hello! ^   ^ grep H
+osh: syntax error
+% ||
+osh: syntax error
+% ^^
+osh: syntax error
+% |cat
+osh: syntax error
+% ^cat
+osh: syntax error
+% echo Hello!|
+osh: syntax error
+% echo Hello!^
+osh: syntax error
+% echo Hello!|cat|
+osh: syntax error
+% echo Hello!^cat^
+osh: syntax error
+% echo Hello!||grep H
+osh: syntax error
+% echo Hello!^^grep H
+osh: syntax error
+% (
+osh: syntax error
+% ( echo Hello!
+osh: syntax error
+% ( ( echo Hello! )
+osh: syntax error
+% ( ( echo Hello! ); echo Hello again!
+osh: syntax error
+% echo Hello! | ( ( cat ) | grep H
+osh: syntax error
+% ( echo Hello! | ( ( cat ) | grep H )
+osh: syntax error
+% echo Hello! ^ ( ( cat ) ^ grep H
+osh: syntax error
+% ( echo Hello! ^ ( ( cat ) ^ grep H )
+osh: syntax error
+% )
+osh: syntax error
+% echo Hello! )
+osh: syntax error
+% ( echo Hello! ) )
+osh: syntax error
+% ( echo Hello! ); echo Hello again! )
+osh: syntax error
+% echo Hello! | ( cat ) ) | grep H
+osh: syntax error
+% ( echo Hello! | ( cat ) ) | grep H )
+osh: syntax error
+% echo Hello! ^ ( cat ) ) ^ grep H
+osh: syntax error
+% ( echo Hello! ^ ( cat ) ) ^ grep H )
+osh: syntax error
+% (   )
+osh: syntax error
+% ( (   ) )
+osh: syntax error
+% ( ( (   ) ) )
+osh: syntax error
+% ( echo Hello! ) | (   ) | ( grep H )
+osh: syntax error
+% ( ( echo Hello! ) | (   ) | ( grep H ) )
+osh: syntax error
+% ()
+osh: syntax error
+% (())
+osh: syntax error
+% ((()))
+osh: syntax error
+% (echo Hello!)|()|(grep H)
+osh: syntax error
+% ((echo Hello!)|()|(grep H))
+osh: syntax error
+% :( echo Hello! )
+osh: syntax error
+% echo ( Hello! )
+osh: syntax error
+% : nothing </dev/null ( cat )
+osh: syntax error
+% </dev/null : nothing ( cat )
+osh: syntax error
+% ( echo Hello! ):
+osh: syntax error
+% ( echo ) Hello!
+osh: syntax error
+% ( echo Hello! ) >/dev/null : nothing
+osh: syntax error
+% ( echo Hello! ) : nothing >/dev/null
+osh: syntax error
+% <
+osh: syntax error
+% >
+osh: syntax error
+% >>
+osh: syntax error
+% <>
+osh: syntax error
+% ><
+osh: syntax error
+% <>>
+osh: syntax error
+% >><
+osh: syntax error
+% cat < >/dev/null
+osh: syntax error
+% cat > </dev/null
+osh: syntax error
+% cat </dev/null >
+osh: syntax error
+% cat >/dev/null <
+osh: syntax error
+% </dev/nullcat
+osh: syntax error
+% </dev/null"cat"
+osh: syntax error
+% </dev/null
+osh: syntax error
+% </dev/null >/dev/null
+osh: syntax error
+% >/dev/null
+osh: syntax error
+% >/dev/null </dev/null
+osh: syntax error
+% >>/dev/null
+osh: syntax error
+% >>/dev/null </dev/null
+osh: syntax error
+% </dev/null ( | )
+osh: syntax error
+% >/dev/null ( | )
+osh: syntax error
+% ( | ) </dev/null
+osh: syntax error
+% ( | ) >/dev/null
+osh: syntax error
+% </dev/null >/dev/null ( | )
+osh: syntax error
+% >/dev/null </dev/null ( | )
+osh: syntax error
+% </dev/null ( | ) >/dev/null
+osh: syntax error
+% >/dev/null ( | ) </dev/null
+osh: syntax error
+% ( | ) </dev/null >/dev/null
+osh: syntax error
+% ( | ) >/dev/null </dev/null
+osh: syntax error
+% </dev/null ( < )
+osh: syntax error
+% >/dev/null ( < )
+osh: syntax error
+% ( < ) </dev/null
+osh: syntax error
+% ( < ) >/dev/null
+osh: syntax error
+% </dev/null >/dev/null ( < )
+osh: syntax error
+% >/dev/null </dev/null ( < )
+osh: syntax error
+% </dev/null ( < ) >/dev/null
+osh: syntax error
+% >/dev/null ( < ) </dev/null
+osh: syntax error
+% ( < ) </dev/null >/dev/null
+osh: syntax error
+% ( < ) >/dev/null </dev/null
+osh: syntax error
 End .

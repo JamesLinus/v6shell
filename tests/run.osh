@@ -22,10 +22,10 @@ if X$0 != Xrun.osh -a X$0 != X./run.osh if { fd2 -e echo Wrong directory } \
 if $# = # if { fd2 -e echo Invalid shell - osh\(1\) required } \
 	if { exit } if A = B
 
-sigign + 1 2 3 15 ; : sigign
+sigign + 1 2 3 13 15 ; : sigign
 setenv PATH ..:$p ; : printenv PATH
 umask 22 ; : umask
-rm -f TestFailCount TestPassCount
+rm -f SyntaxError TestFailCount TestPassCount
 ( : ) >TestFailCount ; ( : ) >TestPassCount
 
 if $# = 3 -a X$1 = X-newlog -a X$2 = Xosh -a X$3 = Xsh6 goto NewLog
@@ -40,12 +40,16 @@ if $# = 3 -a X$1 = X-newlog -a X$2 = Xosh -a X$3 = Xsh6 goto NewLog
 : NewLog - " Generate new test logs if needed. "
 
 	if X$1 != X-newlog goto BinCheck
-	rm -f test0[1-4]_[os][sh][h6].log
+	rm -f test0[1-7]_[os][sh][h6].log
 	fd2 $2 test01 >test01_$2.log ; fd2 $3 test01 >test01_$3.log
 	fd2 $2 test02 >test02_$2.log ; fd2 $3 test02 >test02_$3.log
 	fd2 $2 test03 >test03_$2.log ; fd2 $3 test03 >test03_$3.log
-	fd2 $2 test04 >test04_$2.log
-	fd2 $2 test05 >test05_$2.log ; fd2 $3 test05 >test05_$3.log
+	fd2 -f/dev/null $2 test04 >test04_$2.log
+	fd2 -f/dev/null $3 test04 >test04_$3.log
+	fd2 $2 test05 $2 >test05_$2.log ; fd2 $3 test05 $3 >test05_$3.log
+	rm -f SyntaxError
+	fd2 $2 test07 >test07_$2.log ; fd2 $3 test07 >test07_$3.log
+	fd2 $2 test06 >test06_$2.log
 	shift
 	: fallthrough
 
@@ -71,23 +75,30 @@ if X$1 = Xosh goto Jump
 : Run - " Run appropriate tests w/ $1 binary. "
 
 	fd2 $1 test01 | diff -u test01_$1.log -
-	if $? != 0 if { fd2 -e echo Test 1 Failed } echo >>TestFailCount
+	if $? != 0 if { fd2 -e echo $1: Test 1 Failed } echo >>TestFailCount
 	echo >>TestPassCount
 	fd2 $1 test02 | diff -u test02_$1.log -
-	if $? != 0 if { fd2 -e echo Test 2 Failed } echo >>TestFailCount
+	if $? != 0 if { fd2 -e echo $1: Test 2 Failed } echo >>TestFailCount
 	echo >>TestPassCount
 	fd2 $1 test03 | diff -u test03_$1.log -
-	if $? != 0 if { fd2 -e echo Test 3 Failed } echo >>TestFailCount
+	if $? != 0 if { fd2 -e echo $1: Test 3 Failed } echo >>TestFailCount
+	echo >>TestPassCount
+	fd2 -f/dev/null $1 test04 | diff -u test04_$1.log -
+	if $? != 0 if { fd2 -e echo $1: Test 4 Failed } echo >>TestFailCount
+	echo >>TestPassCount
+	fd2 $1 test05 $1 | diff -u test05_$1.log -
+	if $? != 0 if { fd2 -e echo $1: Test 5 Failed } echo >>TestFailCount
 	echo >>TestPassCount
 	if X$1 = Xsh6 goto Next
-		: " Test 4 is for osh only. "
-		fd2 $1 test04 | diff -u test04_$1.log -
-		if $? != 0 if { fd2 -e echo Test 4 Failed } echo >>TestFailCount
+		: " Test 6 is for osh only. "
+		rm -f SyntaxError
+		fd2 $1 test06 | diff -u test06_$1.log -
+		if $? != 0 if { fd2 -e echo $1: Test 6 Failed } echo >>TestFailCount
 		echo >>TestPassCount
 		: fallthrough
 	: Next
-	fd2 $1 test05 | diff -u test05_$1.log -
-	if $? != 0 if { fd2 -e echo Test 5 Failed } echo >>TestFailCount
+	fd2 $1 test07 | diff -u test07_$1.log -
+	if $? != 0 if { fd2 -e echo $1: Test 7 Failed } echo >>TestFailCount
 	echo >>TestPassCount
 	shift
 	if $# = 0 goto Done
@@ -98,8 +109,8 @@ if X$1 = Xosh goto Jump
 	if ! -s TestFailCount goto TestsPassed
 		( wc -l <TestFailCount | tr -d ' \t\n' ; \
 		  echo ' Test(s) Failed' ) | fd2 -e cat
-		rm -f TestFailCount TestPassCount ; if A = B ; exit
+		rm -f SyntaxError TestFailCount TestPassCount ; if A = B ; exit
 	: TestsPassed
 		( wc -l <TestPassCount | tr -d ' \t\n' ; \
 		  echo ' Test(s) Passed' ) | fd2 -e cat
-		rm -f TestFailCount TestPassCount ; : zero status
+		rm -f SyntaxError TestFailCount TestPassCount ; : zero status
