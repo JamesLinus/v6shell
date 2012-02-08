@@ -82,6 +82,11 @@ The following targets are available.
 	sh6all		Compiles sh6, glob6, if, goto, fd2 and
 			generates manual pages.
 
+	check		Runs the regression test suite with osh and sh6.
+
+	check-newlog	Generates new test logs for the osh and sh6
+			regression test suite.
+
 	install		Installs all binaries and manual pages.
 
 	install-oshall	Installs osh binary and manual pages.
@@ -145,6 +150,6 @@ OpenSolaris.
 	% gmake
 	# gmake INSTALL=/usr/bin/ginstall install install-doc install-exp
 
-Jeffrey Allen Neitzel						2012/01/02
+Jeffrey Allen Neitzel						2012/02/08
 
 @(#)$Id$
