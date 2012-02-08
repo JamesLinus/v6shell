@@ -1,5 +1,3 @@
-: osh
-:
 : osh - " Force sh(1), csh(1), and other shells to exit w/ error! " <'' ;;;
 :
 : "  The author of this file, J.A. Neitzel <jan (at) v6shell (dot) org>,  "
