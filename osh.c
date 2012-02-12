@@ -645,6 +645,7 @@ static int
 get_word(void)
 {
 	int c, c1;
+	bool ds;
 
 	*wordp++ = linep;
 
@@ -657,11 +658,12 @@ get_word(void)
 		case TAB:
 			continue;
 
-		case DQUOT:
-		case SQUOT:
+		case DQUOT:/* "..." == multi-char literal + $ substitution */
+		case SQUOT:/* '...' == multi-char literal                  */
 			c1 = c;
+			ds = (c1 == DQUOT) ? DOLSUB : !DOLSUB;
 			*linep++ = c;
-			while ((c = xgetc(!DOLSUB)) != c1) {
+			while ((c = xgetc(ds)) != c1) {
 				if (c == EOF)
 					return EOF;
 				if (c == EOL) {
@@ -675,7 +677,7 @@ get_word(void)
 					if ((c = xgetc(!DOLSUB)) == EOF)
 						return EOF;
 					if (c == EOL)
-						c = SPACE;
+						c = SPACE;/* continue line */
 					else {
 						peekc = c;
 						c = BQUOT;
@@ -686,7 +688,7 @@ get_word(void)
 			*linep++ = c;
 			break;
 
-		case BQUOT:
+		case BQUOT:/* \. == one-char literal */
 			if ((c = xgetc(!DOLSUB)) == EOF)
 				return EOF;
 			if (c == EOL)
@@ -715,7 +717,7 @@ get_word(void)
 				if ((c = xgetc(!DOLSUB)) == EOF)
 					return EOF;
 				if (c == EOL)
-					c = SPACE;
+					c = SPACE;/* continue line */
 				else {
 					*linep++ = BQUOT;
 					*linep++ = c;

@@ -284,8 +284,8 @@ loop:
 	case TAB:
 		goto loop;
 
-	case DQUOT:
-	case SQUOT:
+	case DQUOT:/* "..." == multi-char literal */
+	case SQUOT:/* '...' == ...                */
 		c1 = c;
 		while ((c = xgetc(!DOLSUB)) != c1) {
 			if (c == EOL) {
@@ -297,7 +297,7 @@ loop:
 			}
 			if (c == BQUOT) {
 				if ((c = xgetc(!DOLSUB)) == EOL)
-					c = SPACE;
+					c = SPACE;/* continue line */
 				else {
 					peekc = c;
 					c = BQUOT;
@@ -307,7 +307,7 @@ loop:
 		}
 		break;
 
-	case BQUOT:
+	case BQUOT:/* \. == one-char literal */
 		if ((c = xgetc(!DOLSUB)) == EOL)
 			goto loop;
 		c |= QUOTE;
@@ -330,7 +330,7 @@ loop:
 	for (;;) {
 		if ((c = xgetc(DOLSUB)) == BQUOT) {
 			if ((c = xgetc(!DOLSUB)) == EOL)
-				c = SPACE;
+				c = SPACE;/* continue line */
 			else
 				c |= QUOTE;
 		}
