@@ -171,12 +171,14 @@ static	const struct sbicmd {
 	{ "if",		SBI_IF       },
 	{ "login",	SBI_LOGIN    },
 	{ "newgrp",	SBI_NEWGRP   },
+	{ "set",	SBI_SET      },
 	{ "setenv",	SBI_SETENV   },
 	{ "shift",	SBI_SHIFT    },
 	{ "sigign",	SBI_SIGIGN   },
 	{ "source",	SBI_SOURCE   },
 	{ "umask",	SBI_UMASK    },
 	{ "unalias",	SBI_UNALIAS  },
+	{ "unset",	SBI_UNSET    },
 	{ "unsetenv",	SBI_UNSETENV },
 	{ "version",	SBI_VERSION  },
 	{ "wait",	SBI_WAIT     }
@@ -243,6 +245,8 @@ static	const char	*asp;		/* shell alias string pointer       */
 /*@only@*/
 static	struct tnode	*tnp;		/* shell command tree node pointer  */
 /*@null@*/ /*@only@*/
+static	struct vnode	*vnp;		/* shell variable node pointer      */
+/*@null@*/ /*@only@*/
 static	char		*tty;		/* $t - terminal name               */
 /*@null@*/ /*@only@*/
 static	char		*user;		/* $u - effective user name         */
@@ -261,6 +265,12 @@ static	int		xgetc(bool);
 static	int		readc(void);
 /*@null@*/ /*@only@*/
 static	const char	*get_dolp(int);
+static	void		varalloc(int, /*@null@*/const char *);
+/*@maynotreturn@*/
+static	struct vnode	*varalloc1(int, const char *);
+static	bool		varfree(int);
+/*@null@*/
+static	const char	*varget(int);
 static	void		aalloc(/*@null@*/const char *, /*@null@*/const char *);
 /*@maynotreturn@*/
 static	struct anode	*aalloc1(const char *, const char *);
@@ -454,6 +464,7 @@ logout:
 done:
 	xfree(tty);
 	xfree(user);
+	(void)varfree(0);
 	(void)afree(NULL);
 	return status;
 }
@@ -917,9 +928,153 @@ get_dolp(int c)
 		v = (r < 0 || r >= (int)sizeof(dolbuf)) ? NULL : dolbuf;
 		break;
 	default:
-		v = NULL;
+		v = varget(c);
 	}
 	return v;
+}
+
+/*
+ * Allocate memory for new variable node (specified by name and string)
+ * if needed, and link it to variable node list.  Insert new variable,
+ * or replace old variable string w/ new variable string if needed.
+ */
+static void
+varalloc(int name, const char *string)
+{
+	struct vnode *n, *p, *v;
+	int d;
+
+	if (name == 0 || string == NULL)
+		return;
+
+	v = vnp;
+	if (v == NULL) { /* First */
+		vnp = varalloc1(name, string);
+		return;
+	}
+	p = v;
+	/* ascending ASCII sort */
+	while (v != NULL) {
+#if 0
+		fd_print(FD2,
+		    "varalloc: name == %d, v->name == %d, (%d - %d) == %d\n",
+		    name,v->name,name,v->name,(name - v->name));
+#endif
+		if ((d = (name - v->name)) == 0) {
+			if (!EQUAL(string, v->string)) {
+				/* Replace old string w/ new string. */
+				xfree(v->string);
+				v->string = xstrdup(string);
+			}
+			return;
+		}
+		if (d < 0)
+			break;
+		p = v;
+		v = v->next;
+	}
+	if (v == NULL) { /* Last */
+		p->next = varalloc1(name, string);
+		return;
+	}
+
+	/* Insert new variable between p and v (ascending ASCII insert). */
+	if (v == vnp) { /* New Head */
+		n = varalloc1(name, string);
+		n->next = vnp;
+		vnp = n;
+		return;
+	}
+	n = varalloc1(name, string);
+	n->next = p->next;
+	p->next = n;
+}
+
+/*
+ * Allocate and initialize memory for new variable node
+ * specified by name and string.  Return pointer to new
+ * node on success.  Do not return on ENOMEM error.
+ */
+static struct vnode *
+varalloc1(int name, const char *string)
+{
+	struct vnode *v;
+
+	v = xmalloc(sizeof(struct vnode));
+	v->next   = NULL;
+	v->name   = name /* & ASCII */ ;
+	v->string = xstrdup(string);
+	return v;
+}
+
+/*
+ * If name is specified (is not 0), free its variable.
+ * If name is not specified (is 0), free all variables.
+ * Return true (1) or false (0) as needed.
+ */
+static bool
+varfree(int name)
+{
+	struct vnode *p, *v;
+	bool r;
+
+	if (name != 0) {
+		v = vnp;
+		p = v;
+		r = false;
+		while (v != NULL) {
+			if (name == v->name) {
+				if (v == vnp)
+					vnp = v->next;
+				else
+					p->next = v->next;
+				v->name = 0;
+				xfree(v->string);
+				xfree(v);
+				r = true;
+				break;
+			}
+			p = v;
+			v = v->next;
+		}
+	} else {
+		r = (vnp != NULL) ? true : false;
+		v = vnp;
+		while (v != NULL) {
+			p = v;
+			v->name = 0;
+			xfree(v->string);
+			v = v->next;
+			xfree(p);
+		}
+	}
+	return r;
+}
+
+/*
+ * Get the variable string specified by name.
+ * Return a pointer to the variable string on success.
+ * Return a pointer to NULL on error.
+ */
+static const char *
+varget(int name)
+{
+	struct vnode *v;
+	const char *vs;
+
+	if (name == 0)
+		return NULL;
+
+	vs = NULL;
+	v  = vnp;
+	while (v != NULL) {
+		if (name == v->name) {
+			vs = v->string;
+			break;
+		}
+		v = v->next;
+	}
+	return vs;
 }
 
 /*
@@ -1037,7 +1192,7 @@ afree(const char *name)
 
 /*
  * Get the alias string specified by name.
- * Return a pointer the alias string on success.
+ * Return a pointer to the alias string on success.
  * Return a pointer to NULL on error.
  */
 static const char *
@@ -1591,6 +1746,7 @@ static void
 execute1(struct tnode *t)
 {
 	struct anode *a;
+	struct vnode *v;
 	mode_t m;
 	const char *emsg, *p;
 	bool aok;
@@ -1702,6 +1858,36 @@ execute1(struct tnode *t)
 		}
 		emsg = ERR_EXEC;
 		break;
+
+	case SBI_SET:
+		/*
+		 * usage: set [name [string]]
+		 */
+		if (t->nav[1] != NULL) {
+			if (!IS_VARNAME(t->nav[1])) {
+				err(-1, FMT4S, getmyname(),
+				    t->nav[0], t->nav[1], ERR_BADNAME);
+				return;
+			}
+			if (t->nav[2] != NULL && t->nav[3] != NULL) {
+				emsg = ERR_ARGCOUNT;
+				break;
+			}
+#if 0
+			fd_print(FD2,"execute1: t->nav[2] %s NULL;\n",(t->nav[2] != NULL)?"!=":"==");
+#endif
+			p = (t->nav[2] != NULL) ? t->nav[2] : "";
+			varalloc(*t->nav[1], p);
+			status = SH_TRUE;
+		} else {
+			v = vnp;
+			while (v != NULL) {
+				fd_print(FD1, "%c\t%s\n", v->name, v->string);
+				v = v->next;
+			}
+			status = (vnp != NULL) ? SH_TRUE : SH_FALSE;
+		}
+		return;
 
 	case SBI_SETENV:
 		/*
@@ -1817,6 +2003,24 @@ execute1(struct tnode *t)
 				return;
 			}
 			status = (afree(t->nav[1])) ? SH_TRUE : SH_FALSE;
+			return;
+		}
+		emsg = ERR_ARGCOUNT;
+		break;
+
+	case SBI_UNSET:
+		/*
+		 * Unset the specified variable name and its string.
+		 *
+		 * usage: unset name
+		 */
+		if (t->nav[1] != NULL && t->nav[2] == NULL) {
+			if (!IS_VARNAME(t->nav[1])) {
+				err(-1, FMT4S, getmyname(),
+				    t->nav[0], t->nav[1], ERR_BADNAME);
+				return;
+			}
+			status = (varfree(*t->nav[1])) ? SH_TRUE : SH_FALSE;
 			return;
 		}
 		emsg = ERR_ARGCOUNT;

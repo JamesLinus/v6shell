@@ -46,11 +46,21 @@ enum sigflags {
  * shell special built-in (sbi) command keys
  */
 enum sbikey {
-	SBI_NULL,   SBI_ALIAS,  SBI_CD,      SBI_CHDIR,    SBI_ECHO,
-	SBI_EXEC,   SBI_EXIT,   SBI_FD2,     SBI_GOTO,     SBI_IF,
-	SBI_LOGIN,  SBI_NEWGRP, SBI_SETENV,  SBI_SHIFT,    SBI_SIGIGN,
-	SBI_SOURCE, SBI_UMASK,  SBI_UNALIAS, SBI_UNSETENV, SBI_VERSION,
-	SBI_WAIT,   SBI_UNKNOWN
+	SBI_NULL,     SBI_ALIAS,   SBI_CD,    SBI_CHDIR,   SBI_ECHO,
+	SBI_EXEC,     SBI_EXIT,    SBI_FD2,   SBI_GOTO,    SBI_IF,
+	SBI_LOGIN,    SBI_NEWGRP,  SBI_SET,   SBI_SETENV,  SBI_SHIFT,
+	SBI_SIGIGN,   SBI_SOURCE,  SBI_UMASK, SBI_UNALIAS, SBI_UNSET,
+	SBI_UNSETENV, SBI_VERSION, SBI_WAIT,  SBI_UNKNOWN
+};
+
+/*
+ * shell variable node structure
+ */
+struct vnode {
+	/*@null@*/ /*@only@*/
+	struct vnode	*next;	/* Pointer to next variable node.       */
+	int		 name;	/* This variable name (one ASCII char). */
+	char		*string;/* Pointer to this variable string.     */
 };
 
 /*
