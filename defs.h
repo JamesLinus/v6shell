@@ -109,7 +109,6 @@
 
 #define	EQUAL(a, b)	(*(a) == *(b) && strcmp((a), (b)) == 0)
 #define	IS_DIGIT(d, c)	((d) >= 0 && (d) <= 9 && "0123456789"[(d) % 10] == (c))
-#define	IS_VARNAME(v)	(((*(v) >= 'A' && *(v) <= 'Z') || (*(v) >= 'a' && *(v) <= 'z')) && !any(*(v), "#$*?0123456789dehmnpstuv") && *((v) + 1) == EOS)
 
 /*
  * special character literals
