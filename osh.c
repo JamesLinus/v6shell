@@ -1002,7 +1002,7 @@ varalloc1(int name, const char *string)
 
 	v = xmalloc(sizeof(struct vnode));
 	v->next   = NULL;
-	v->name   = name /* & ASCII */ ;
+	v->name   = name;/* one ASCII char - enforced by IS_VARNAME() macro */
 	v->string = xstrdup(string);
 	return v;
 }
