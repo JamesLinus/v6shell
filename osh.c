@@ -1778,6 +1778,10 @@ execute1(struct tnode *t)
 		 * usage: alias [name [string]]
 		 */
 		if (t->nav[1] != NULL) {
+			if (t->nav[2] != NULL && t->nav[3] != NULL) {
+				emsg = ERR_ARGCOUNT;
+				break;
+			}
 			aok = true;
 			for (p = t->nav[1]; *p != EOS; p++)
 				if (any(*p, BANCHARS)) {
@@ -1791,10 +1795,6 @@ execute1(struct tnode *t)
 				return;
 			}
 			if (t->nav[2] != NULL) {
-				if (t->nav[3] != NULL) {
-					emsg = ERR_ARGCOUNT;
-					break;
-				}
 				if (rp_alias(t->nav[2]) == NULL) {
 					emsg = error_message;
 					break;
@@ -1864,18 +1864,18 @@ execute1(struct tnode *t)
 		 * usage: set [name [string]]
 		 */
 		if (t->nav[1] != NULL) {
-			if (!IS_VARNAME(t->nav[1])) {
-				err(-1, FMT4S, getmyname(),
-				    t->nav[0], t->nav[1], ERR_BADNAME);
-				return;
-			}
 			if (t->nav[2] != NULL && t->nav[3] != NULL) {
 				emsg = ERR_ARGCOUNT;
 				break;
 			}
 #if 0
-			fd_print(FD2,"execute1: t->nav[2] %s NULL;\n",(t->nav[2] != NULL)?"!=":"==");
+			fd_print(FD2,"set: t->nav[2] %s NULL;\n",(t->nav[2] != NULL)?"!=":"==");
 #endif
+			if (!IS_VARNAME(t->nav[1])) {
+				err(-1, FMT4S, getmyname(),
+				    t->nav[0], t->nav[1], ERR_BADNAME);
+				return;
+			}
 			p = (t->nav[2] != NULL) ? t->nav[2] : "";
 			varalloc(*t->nav[1], p);
 			status = SH_TRUE;
