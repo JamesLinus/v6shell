@@ -1769,7 +1769,7 @@ execute1(struct tnode *t)
 		 * If both name and string are specified, set alias name
 		 * to alias string.  If no string is specified, print the
 		 * current value of alias name's string.  If no arguments
-		 * are specified, print the name and string of each alias.
+		 * are specified, print each alias name and string.
 		 *
 		 * NOTE: Each alias string value is printed as (value)
 		 *	 to indicate that the shell executes each alias
@@ -1861,7 +1861,12 @@ execute1(struct tnode *t)
 
 	case SBI_SET:
 		/*
-		 * usage: set [name [string]]
+		 * If both name and value are specified, set variable
+		 * name to variable value.  If no value is specified,
+		 * set variable name to empty string.  If no arguments
+		 * are specified, print each variable name and value.
+		 *
+		 * usage: set [name [value]]
 		 */
 		if (t->nav[1] != NULL) {
 			if (t->nav[2] != NULL && t->nav[3] != NULL) {
@@ -1891,7 +1896,7 @@ execute1(struct tnode *t)
 
 	case SBI_SETENV:
 		/*
-		 * Set the specified environment variable.
+		 * Set the specified environment variable name.
 		 *
 		 * usage: setenv name [value]
 		 */
@@ -2010,7 +2015,7 @@ execute1(struct tnode *t)
 
 	case SBI_UNSET:
 		/*
-		 * Unset the specified variable name and its string.
+		 * Unset the specified variable name.
 		 *
 		 * usage: unset name
 		 */
@@ -2028,7 +2033,7 @@ execute1(struct tnode *t)
 
 	case SBI_UNSETENV:
 		/*
-		 * Unset the specified environment variable.
+		 * Unset the specified environment variable name.
 		 *
 		 * usage: unsetenv name
 		 */
