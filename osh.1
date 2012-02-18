@@ -1073,6 +1073,14 @@ Replaces the current interactive shell with
 Replaces the current interactive shell with
 .IR newgrp (1).
 .TP
+\fBset\fR [\fIname\fR [\fIvalue\fR]] (+)
+Sets the variable \fIname\fR to the string \fIvalue\fR in the
+current shell if both \fIname\fR and \fIvalue\fR are specified.
+If \fIvalue\fR is not specified,
+the variable name is set to the empty string.
+Prints the name and value of each variable set in
+the current shell if no arguments are specified.
+.TP
 \fBsetenv\fR \fIname\fR [\fIvalue\fR] (+)
 Sets the environment variable \fIname\fR to
 the string \fIvalue\fR.
@@ -1126,6 +1134,9 @@ its current value is printed.
 .TP
 \fBunalias\fR \fIname\fR (+)
 Removes the alias \fIname\fR and its string from the current shell.
+.TP
+\fBunset\fR \fIname\fR (+)
+Removes the variable \fIname\fR from the current shell.
 .TP
 \fBunsetenv\fR \fIname\fR (+)
 Removes the variable \fIname\fR from the environment.
