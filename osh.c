@@ -934,22 +934,22 @@ get_dolp(int c)
 }
 
 /*
- * Allocate memory for new variable node (specified by name and string)
+ * Allocate memory for new variable node (specified by name and value)
  * if needed, and link it to variable node list.  Insert new variable,
- * or replace old variable string w/ new variable string if needed.
+ * or replace old variable value w/ new variable value if needed.
  */
 static void
-varalloc(int name, const char *string)
+varalloc(int name, const char *value)
 {
 	struct vnode *n, *p, *v;
 	int d;
 
-	if (name == 0 || string == NULL)
+	if (name == 0 || value == NULL)
 		return;
 
 	v = vnp;
 	if (v == NULL) { /* First */
-		vnp = varalloc1(name, string);
+		vnp = varalloc1(name, value);
 		return;
 	}
 	p = v;
@@ -961,10 +961,10 @@ varalloc(int name, const char *string)
 		    name,v->name,name,v->name,(name - v->name));
 #endif
 		if ((d = (name - v->name)) == 0) {
-			if (!EQUAL(string, v->string)) {
-				/* Replace old string w/ new string. */
-				xfree(v->string);
-				v->string = xstrdup(string);
+			if (!EQUAL(value, v->value)) {
+				/* Replace old value w/ new value. */
+				xfree(v->value);
+				v->value = xstrdup(value);
 			}
 			return;
 		}
@@ -974,36 +974,36 @@ varalloc(int name, const char *string)
 		v = v->next;
 	}
 	if (v == NULL) { /* Last */
-		p->next = varalloc1(name, string);
+		p->next = varalloc1(name, value);
 		return;
 	}
 
 	/* Insert new variable between p and v (ascending ASCII insert). */
 	if (v == vnp) { /* New Head */
-		n = varalloc1(name, string);
+		n = varalloc1(name, value);
 		n->next = vnp;
 		vnp = n;
 		return;
 	}
-	n = varalloc1(name, string);
+	n = varalloc1(name, value);
 	n->next = p->next;
 	p->next = n;
 }
 
 /*
  * Allocate and initialize memory for new variable node
- * specified by name and string.  Return pointer to new
+ * specified by name and value.  Return pointer to new
  * node on success.  Do not return on ENOMEM error.
  */
 static struct vnode *
-varalloc1(int name, const char *string)
+varalloc1(int name, const char *value)
 {
 	struct vnode *v;
 
 	v = xmalloc(sizeof(struct vnode));
-	v->next   = NULL;
-	v->name   = name;/* one ASCII char - enforced by IS_VARNAME() macro */
-	v->string = xstrdup(string);
+	v->next  = NULL;
+	v->name  = name;/* one ASCII char - enforced by IS_VARNAME() macro */
+	v->value = xstrdup(value);
 	return v;
 }
 
@@ -1029,7 +1029,7 @@ varfree(int name)
 				else
 					p->next = v->next;
 				v->name = 0;
-				xfree(v->string);
+				xfree(v->value);
 				xfree(v);
 				r = true;
 				break;
@@ -1043,7 +1043,7 @@ varfree(int name)
 		while (v != NULL) {
 			p = v;
 			v->name = 0;
-			xfree(v->string);
+			xfree(v->value);
 			v = v->next;
 			xfree(p);
 		}
@@ -1052,29 +1052,29 @@ varfree(int name)
 }
 
 /*
- * Get the variable string specified by name.
- * Return a pointer to the variable string on success.
+ * Get the variable value specified by name.
+ * Return a pointer to the variable value on success.
  * Return a pointer to NULL on error.
  */
 static const char *
 varget(int name)
 {
 	struct vnode *v;
-	const char *vs;
+	const char *vv;
 
 	if (name == 0)
 		return NULL;
 
-	vs = NULL;
+	vv = NULL;
 	v  = vnp;
 	while (v != NULL) {
 		if (name == v->name) {
-			vs = v->string;
+			vv = v->value;
 			break;
 		}
 		v = v->next;
 	}
-	return vs;
+	return vv;
 }
 
 /*
@@ -1887,7 +1887,7 @@ execute1(struct tnode *t)
 		} else {
 			v = vnp;
 			while (v != NULL) {
-				fd_print(FD1, "%c\t%s\n", v->name, v->string);
+				fd_print(FD1, "%c\t%s\n", v->name, v->value);
 				v = v->next;
 			}
 			status = (vnp != NULL) ? SH_TRUE : SH_FALSE;
@@ -1990,7 +1990,7 @@ execute1(struct tnode *t)
 
 	case SBI_UNALIAS:
 		/*
-		 * Unset the specified alias name and its string.
+		 * Unset the specified alias name.
 		 *
 		 * usage: unalias name
 		 */

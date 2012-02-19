@@ -53,7 +53,7 @@ enum sbikey {
 	SBI_UNSETENV, SBI_VERSION, SBI_WAIT,  SBI_UNKNOWN
 };
 
-#define	IS_VARNAME(v)	(((*(v) >= 'A' && *(v) <= 'Z')||(*(v) >= 'a' && *(v) <= 'z')) && !any(*(v), "#$*?0123456789dehmnpstuv") && *((v) + 1) == EOS)
+#define	IS_VARNAME(v)	(((*(v) >= 'A' && *(v) <= 'Z') || (*(v) >= 'a' && *(v) <= 'z')) && !any(*(v), "#$*?0123456789dehmnpstuv") && *((v) + 1) == EOS)
 
 /*
  * shell variable node structure
@@ -62,7 +62,7 @@ struct vnode {
 	/*@null@*/ /*@only@*/
 	struct vnode	*next;	/* Pointer to next variable node.       */
 	int		 name;	/* This variable name (one ASCII char). */
-	char		*string;/* Pointer to this variable string.     */
+	char		*value;	/* Pointer to this variable value.      */
 };
 
 /*

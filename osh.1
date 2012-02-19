@@ -441,6 +441,8 @@ to another location.
 If the file for a redirection cannot be opened or created,
 a diagnostic is printed.
 .SS Quoting
+==== WIP ====
+.PP
 The shell treats all
 .I quoted
 characters literally,
@@ -452,6 +454,23 @@ above).
 If such characters are quoted,
 they represent themselves and may be passed
 as part of arguments.
+.PP
+====
+.PP
+Add text to describe the difference between double and single quotes.
+.PP
+In short,
+.I double
+(\fB"\fR) quotes
+cause the shell to
+perform parameter and variable substitution.
+On the other hand,
+.I single
+(\fB'\fR) quotes
+do not.
+EG: The diff between "$1" and '$1'...
+.PP
+====
 .PP
 An individual
 .I backslash
@@ -491,6 +510,8 @@ which is then passed as a single argument to awk.
 If a double or single quote appears
 but is not part of a matched pair,
 a diagnostic is printed.
+.PP
+====
 .SS Parameter substitution
 When the shell is invoked with arguments besides
 .BR \-v ,
@@ -666,6 +687,12 @@ in the value substituted by \fB$\fR\fI1\fR.
 This causes the shell to pass `>/dev/null'
 as a single argument to echo instead of interpreting
 it as a redirection.
+.SS Variable substitution (+)
+==== WIP ====
+.PP
+This is a placeholder for the new variable-substitution subsection.
+.PP
+====
 .SS File name generation
 Prior to executing a command,
 the shell scans each argument for
@@ -1133,7 +1160,7 @@ If the mask is not specified,
 its current value is printed.
 .TP
 \fBunalias\fR \fIname\fR (+)
-Removes the alias \fIname\fR and its string from the current shell.
+Removes the alias \fIname\fR from the current shell.
 .TP
 \fBunset\fR \fIname\fR (+)
 Removes the variable \fIname\fR from the current shell.
