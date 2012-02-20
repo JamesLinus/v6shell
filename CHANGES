@@ -14,9 +14,22 @@ Makefile:
 	  for the osh and sh6 tests.
 
 osh:
+	C: Added missing `Command line overflow' diagnostic for compatibility.
+
 	* Added $? (as a synonym for $s) parameter.
 
-	C: Added missing `Command line overflow' diagnostic for compatibility.
+	* Changed quoting to allow $ substitution within double (") quotes.
+	  For example: "$$", "$*", "$1", and so forth. This makes parameter
+	  and variable substitution much more flexible.
+
+	* Added simple shell variables. This allows the user to `set' and
+	  `unset' shell variables. For compatibility, these variables are
+	  limited to uppercase and lowercase ASCII alpha names that are
+	  one character in length. For example: $A $B $C and $a $b $c
+	  and so forth.
+
+osh.1:
+	* Work In Progress (Quoting and Variable substitution subsections)
 
 -------------------------------------------------------------------------------
 [osh-20120102]:
@@ -1717,6 +1730,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2012/02/08
+Jeffrey Allen Neitzel						2012/02/20
 
 @(#)$Id$
