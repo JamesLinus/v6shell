@@ -955,11 +955,6 @@ varalloc(int name, const char *value)
 	p = v;
 	/* ascending ASCII sort */
 	while (v != NULL) {
-#if 0
-		fd_print(FD2,
-		    "varalloc: name == %d, v->name == %d, (%d - %d) == %d\n",
-		    name,v->name,name,v->name,(name - v->name));
-#endif
 		if ((d = (name - v->name)) == 0) {
 			if (!EQUAL(value, v->value)) {
 				/* Replace old value w/ new value. */
@@ -1873,9 +1868,6 @@ execute1(struct tnode *t)
 				emsg = ERR_ARGCOUNT;
 				break;
 			}
-#if 0
-			fd_print(FD2,"set: t->nav[2] %s NULL;\n",(t->nav[2] != NULL)?"!=":"==");
-#endif
 			if (!IS_VARNAME(t->nav[1])) {
 				err(-1, FMT4S, getmyname(),
 				    t->nav[0], t->nav[1], ERR_BADNAME);
