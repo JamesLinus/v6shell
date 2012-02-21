@@ -62,6 +62,7 @@ struct vnode {
 	/*@null@*/ /*@only@*/
 	struct vnode	*next;	/* Pointer to next variable node.       */
 	int		 name;	/* This variable name (one ASCII char). */
+	/*@only@*/
 	char		*value;	/* Pointer to this variable value.      */
 };
 
@@ -71,7 +72,9 @@ struct vnode {
 struct anode {
 	/*@null@*/ /*@only@*/
 	struct anode	*next;	/* Pointer to next alias node.   */
+	/*@only@*/
 	char		*name;	/* Pointer to this alias name.   */
+	/*@only@*/
 	char		*string;/* Pointer to this alias string. */
 };
 #endif

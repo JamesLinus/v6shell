@@ -236,6 +236,7 @@ static	int		status;		/* shell exit status                */
 static	int		tree_count;	/* talloc() call count (per line)   */
 static	char		*word[WORDMAX];	/* arg/word pointer array           */
 static	char		*aword[WORDMAX];/* alias arg/word pointer array     */
+/*@null@*/
 static	char		**wordp;	/* [a]word pointer                  */
 static	char		**ewordp;	/* end of [a]word pointer           */
 /*@null@*/ /*@only@*/
@@ -1044,6 +1045,7 @@ varfree(int name)
 			v = v->next;
 			xfree(p);
 		}
+		vnp = NULL;
 	}
 	return r;
 }
@@ -1183,6 +1185,7 @@ afree(const char *name)
 			a = a->next;
 			xfree(p);
 		}
+		anp = NULL;
 	}
 	return r;
 }

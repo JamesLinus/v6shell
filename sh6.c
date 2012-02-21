@@ -118,6 +118,7 @@ static	enum sigflags	sig_child;	/* SIG(INT|QUIT|TERM) child flags   */
 static	int		status;		/* shell exit status                */
 static	int		tree_count;	/* talloc() call count (per line)   */
 static	char		*word[WORDMAX];	/* argument/word pointer array      */
+/*@null@*/
 static	char		**wordp;	/* word pointer                     */
 
 /*
