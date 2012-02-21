@@ -463,7 +463,9 @@ logout:
 
 done:
 	xfree(tty);
+	tty = NULL;
 	xfree(user);
+	user = NULL;
 	(void)varfree(0);
 	(void)afree(NULL);
 	return status;
