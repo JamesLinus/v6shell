@@ -1228,9 +1228,6 @@ talloc(void)
 	struct tnode *t;
 
 	if (tree_count >= TREEMAX) {
-/*
-		fd_print(FD2, "talloc: tree_count == %d;\n", tree_count);
- */
 		error_message = ERR_CLOVERFLOW;
 		return NULL;
 	}
