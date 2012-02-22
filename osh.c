@@ -302,6 +302,7 @@ static	void		do_chdir(char **);
 static	void		do_sigign(char **, enum tnflags);
 static	void		set_ss_flags(int, action_type);
 static	void		do_source(char **);
+static	int		source_open(const char *);
 static	void		pwait(pid_t);
 static	int		prsig(int, pid_t, pid_t);
 /*@maynotreturn@*/
@@ -2396,8 +2397,9 @@ do_source(char **av)
 	int nfd, sfd, sdolc;
 	static int cnt;
 
-	if ((nfd = open(av[1], O_RDONLY | O_NONBLOCK)) == -1) {
-		err(-1, FMT4S, getmyname(), av[0], av[1], ERR_OPEN);
+	if ((nfd = source_open(av[1])) == -1) {
+		err(-1, FMT4S, getmyname(), av[0], av[1],
+		    (errno!=ENOENT && errno!=ENOTDIR)?ERR_OPEN:ERR_NOTFOUND);
 		return;
 	}
 	if (nfd >= SAVFD0 || !fd_type(nfd, FD_ISREG)) {
@@ -2463,6 +2465,110 @@ do_source(char **av)
 
 	if (cnt == 0)
 		shtype &= ~ST_SOURCE;
+}
+
+/*
+ * Open file or path name for `source' special built-in command.
+ * Return file descriptor (fd >= 0) for open file on success.
+ * Return fd == -1 on error.
+ *
+ * Derived from pexec() function found in osh-20120102/pexec.c
+ * and this tree.  See pexec.c or LICENSE for license details.
+ */
+static int
+source_open(const char *file)
+{
+	size_t dlen, flen;
+	int fd;
+	const char *d, *f, *pnp, *upp;
+	char pnbuf[PATHMAX];
+
+	/* Fail if the value of file is invalid. */
+	errno = 0;
+	if (*file == EOS)
+		goto open_fail;
+	flen = strlen(file);
+
+	/*
+	 * If the name of the specified file contains one or more
+	 * `/' characters, it is used as the path name to source.
+	 */
+	for (f = file; *f != EOS; f++)
+		if (*f == SLASH) {
+			pnp = file;
+			upp = "";
+			goto source_pathname;
+		}
+	*pnbuf = EOS;
+	pnp = pnbuf;
+
+	/* Get the user's PATH or fail. */
+	upp = getenv("PATH");
+	if (upp == NULL || *upp == EOS)
+		goto open_fail;
+
+	do {
+		/* Find the end of this PATH element. */
+		for (d = upp; *upp != COLON && *upp != EOS; upp++)
+			;	/* nothing */
+		/*
+		 * Since this is a shell PATH, double, leading, and/or
+		 * trailing colons indicate the current directory.
+		 */
+		if (d == upp) {
+			d = ".";
+			dlen = 1;
+		} else
+			dlen = (size_t)(upp - d);
+
+		/*
+		 * Complain if this path name for file would be too long.
+		 * Otherwise, use this PATH element to build a possible
+		 * path name for file.  Then, attempt to open(2) it.
+		 */
+		if (dlen + flen + 1 >= sizeof(pnbuf)) {
+			struct iovec msg[5];
+			msg[0].iov_base = (char *)getmyname();
+			msg[0].iov_len  = strlen(getmyname());
+			msg[1].iov_base = ": ";
+			msg[1].iov_len  = (size_t)2;
+			msg[2].iov_base = "source: ";
+			msg[2].iov_len  = (size_t)8;
+			msg[3].iov_base = (char *)d;
+			msg[3].iov_len  = dlen;
+			msg[4].iov_base = ": path too long\n";
+			msg[4].iov_len  = (size_t)16;
+			(void)writev(FD2, msg, 5);
+			continue;
+		}
+		(void)memcpy(pnbuf, d, dlen);
+		pnbuf[dlen] = SLASH;
+		(void)memcpy(pnbuf + dlen + 1, file, flen);
+		pnbuf[dlen + flen + 1] = EOS;
+
+source_pathname:
+#if 0
+		fd_print(FD2, "source_open: pnp == %s;\n", pnp);
+#endif
+		if ((fd = open(pnp, O_RDONLY | O_NONBLOCK)) != -1)
+			return fd;
+		switch (errno) {
+		case EACCES: case EISDIR:
+		case ELOOP:  case ENAMETOOLONG:
+		case ENOENT: case ENOTDIR:
+			break;
+		default:
+			goto open_fail;
+		}
+	} while (*upp++ == COLON);	/* Otherwise, *upp was NUL. */
+
+open_fail:
+	if (errno == 0)
+		errno = ENOENT;
+#ifdef	DEBUG
+	fd_print(FD2, "source_open: strerror(errno) == %s;\n", strerror(errno));
+#endif
+	return -1;
 }
 
 /*
