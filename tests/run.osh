@@ -38,7 +38,7 @@ if $# = 3 -a X$1 = X-newlog -a X$2 = Xosh -a X$3 = Xsh6 goto NewLog
 : NewLog - " Generate new test logs if needed. "
 
 	if X$1 != X-newlog goto BinCheck
-	rm -f test0[1-7]_[os][sh][h6].log
+	rm -f test0[1-8]_[os][sh][h6].log
 	fd2 $2 test01 >test01_$2.log ; fd2 $3 test01 >test01_$3.log
 	fd2 $2 test02 >test02_$2.log ; fd2 $3 test02 >test02_$3.log
 	fd2 $2 test03 >test03_$2.log ; fd2 $3 test03 >test03_$3.log
@@ -46,8 +46,10 @@ if $# = 3 -a X$1 = X-newlog -a X$2 = Xosh -a X$3 = Xsh6 goto NewLog
 	fd2 -f/dev/null $3 test04 >test04_$3.log
 	fd2 $2 test05 $2 >test05_$2.log ; fd2 $3 test05 $3 >test05_$3.log
 	rm -f SyntaxError
-	fd2 $2 test07 >test07_$2.log ; fd2 $3 test07 >test07_$3.log
+	fd2 $2 test08 >test08_$2.log ; fd2 $3 test08 >test08_$3.log
+	( : ) >test06_$2.log ; ( : ) >test07_$2.log
 	fd2 $2 test06 >test06_$2.log
+	fd2 $2 test07 >test07_$2.log
 	shift
 	: fallthrough
 
@@ -94,16 +96,20 @@ if X$1 = Xosh goto Jump
 	echo >>TestPassCount
 	fd2 -e -- echo -n .\ 
 	if X$1 = Xsh6 goto Next
-		: " Test 6 is for osh only. "
+		: " Tests 6 and 7 are for osh only. "
 		rm -f SyntaxError
 		fd2 $1 test06 | diff -u test06_$1.log -
 		if $? != 0 if { fd2 -e echo $1: Test 6 Failed } echo >>TestFailCount
 		echo >>TestPassCount
 		fd2 -e -- echo -n .\ 
+		fd2 $1 test07 | diff -u test07_$1.log -
+		if $? != 0 if { fd2 -e echo $1: Test 7 Failed } echo >>TestFailCount
+		echo >>TestPassCount
+		fd2 -e -- echo -n .\ 
 		: fallthrough
 	: Next
-	fd2 $1 test07 | diff -u test07_$1.log -
-	if $? != 0 if { fd2 -e echo $1: Test 7 Failed } echo >>TestFailCount
+	fd2 $1 test08 | diff -u test08_$1.log -
+	if $? != 0 if { fd2 -e echo $1: Test 8 Failed } echo >>TestFailCount
 	echo >>TestPassCount
 	fd2 -e echo . Done .
 	shift

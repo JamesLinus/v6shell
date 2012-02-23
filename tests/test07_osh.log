@@ -1,8 +1,85 @@
 Begin ...
-osh: No directory
-osh: No directory
-osh: No match
-osh: No match
-osh: Pattern too long
-osh: Pattern too long
+0 Variables Set
+11 Variables Set
+1	A	echo *^tr ' ' '\n'
+2	B	echo 'Hello World!'^cat^cat^cat^cat^cat^cat^cat^cat^cat^grep '^H'
+3	C	echo Test*Count^tr ' ' '\n'
+4	D	echo *.log^tr ' ' '\n'
+5	E	echo test??^tr ' ' '\n'
+6	X	X...
+7	Y	Y...
+8	Z	Z...
+9	a	a...
+10	b	b...
+11	c	c...
+$B ...
+1	Hello World!
+$B .
+$A ...
+Input
+Syntax.list
+SyntaxError.in
+TestFailCount
+TestPassCount
+run.osh
+test01
+test01_osh.log
+test01_sh6.log
+test02
+test02_osh.log
+test02_sh6.log
+test03
+test03_osh.log
+test03_sh6.log
+test04
+test04_osh.log
+test04_sh6.log
+test05
+test05_osh.log
+test05_sh6.log
+test06
+test06_osh.log
+test07
+test07_osh.log
+test08
+test08_osh.log
+test08_sh6.log
+$A .
+$E ...
+1	test01
+2	test02
+3	test03
+4	test04
+5	test05
+6	test06
+7	test07
+8	test08
+$E .
+$D ...
+1	test01_osh.log
+2	test01_sh6.log
+3	test02_osh.log
+4	test02_sh6.log
+5	test03_osh.log
+6	test03_sh6.log
+7	test04_osh.log
+8	test04_sh6.log
+9	test05_osh.log
+10	test05_sh6.log
+11	test06_osh.log
+12	test07_osh.log
+13	test08_osh.log
+14	test08_sh6.log
+$D .
+$C ...
+1	TestFailCount
+2	TestPassCount
+$C .
+$a $b $c ...
+a... b... c...
+$a $b $c .
+$X $Y $Z ...
+X... Y... Z...
+$X $Y $Z .
+0 Variables Set
 End .

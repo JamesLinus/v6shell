@@ -2,7 +2,7 @@ Begin ...
 0 Aliases Set
 5 Aliases Set
 1	All	(echo *^tr ' ' '\n';:)
-2	HelloWorld	(echo 'Hello World!'^cat^cat^cat^cat^cat^cat^cat^cat^cat^grep '^H')
+2	HelloWorld	(echo 'Hello World!'^cat^cat^cat^cat^cat^cat^cat^cat^cat^grep '^H';:)
 3	TestCounts	(echo Test*Count^tr ' ' '\n';:)
 4	logs	(echo *.log^tr ' ' '\n';:)
 5	tests	(echo test??^tr ' ' '\n';:)
@@ -35,7 +35,9 @@ test06
 test06_osh.log
 test07
 test07_osh.log
-test07_sh6.log
+test08
+test08_osh.log
+test08_sh6.log
 All .
 tests ...
 1	test01
@@ -45,6 +47,7 @@ tests ...
 5	test05
 6	test06
 7	test07
+8	test08
 tests .
 logs ...
 1	test01_osh.log
@@ -59,7 +62,8 @@ logs ...
 10	test05_sh6.log
 11	test06_osh.log
 12	test07_osh.log
-13	test07_sh6.log
+13	test08_osh.log
+14	test08_sh6.log
 logs .
 TestCounts ...
 1	TestFailCount

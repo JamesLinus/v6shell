@@ -17,7 +17,7 @@ if $? = 1 echo 0 Aliases Set
 alias	tests		"echo test??^tr ' ' '\n';:"
 alias	logs		"echo *.log^tr ' ' '\n';:"
 alias	TestCounts	"echo Test*Count^tr ' ' '\n';:"
-alias	HelloWorld	"echo 'Hello World!'^cat^cat^cat^cat^cat^cat^cat^cat^cat^grep '^H'"
+alias	HelloWorld	"echo 'Hello World!'^cat^cat^cat^cat^cat^cat^cat^cat^cat^grep '^H';:"
 alias	All		"echo *^tr ' ' '\n';:"
 ( alias ) >/dev/null
 if $? = 1 if { fd2 -e echo Unexpected alias result } if { exit } if A = B
