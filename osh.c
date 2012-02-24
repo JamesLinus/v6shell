@@ -159,6 +159,7 @@ static	const struct sbicmd {
 	const char *sbi_command;
 	const enum sbikey sbi_key;
 } sbi[] = {
+	{ ".",		SBI_DOT      },
 	{ ":",		SBI_NULL     },
 	{ "alias",	SBI_ALIAS    },
 	{ "cd",		SBI_CD       },
@@ -302,7 +303,7 @@ static	void		do_chdir(char **);
 static	void		do_sigign(char **, enum tnflags);
 static	void		set_ss_flags(int, action_type);
 static	void		do_source(char **);
-static	int		source_open(const char *);
+static	int		source_open(const char *, const char *);
 static	void		pwait(pid_t);
 static	int		prsig(int, pid_t, pid_t);
 /*@maynotreturn@*/
@@ -1672,6 +1673,9 @@ execute(struct tnode *t, int *pin, int *pout)
 				return;
 		} else if (DO_TRIM(t->nkey))
 			vtrim(t->nav);
+#if 0
+		fd_print(FD2, "execute: t->nkey == %d;\n", t->nkey);
+#endif
 		switch (t->nkey) {
 		case SBI_ECHO:
 			break;
@@ -1942,6 +1946,7 @@ execute1(struct tnode *t)
 		do_sigign(t->nav, t->nflags);
 		return;
 
+	case SBI_DOT:
 	case SBI_SOURCE:
 		/*
 		 * Read and execute commands from file and return.
@@ -2397,7 +2402,7 @@ do_source(char **av)
 	int nfd, sfd, sdolc;
 	static int cnt;
 
-	if ((nfd = source_open(av[1])) == -1) {
+	if ((nfd = source_open(av[0], av[1])) == -1) {
 		err(-1, FMT4S, getmyname(), av[0], av[1],
 		    (errno!=ENOENT && errno!=ENOTDIR)?ERR_OPEN:ERR_NOTFOUND);
 		return;
@@ -2468,15 +2473,15 @@ do_source(char **av)
 }
 
 /*
- * Open file or path name for `source' special built-in command.
- * Return file descriptor (fd >= 0) for open file on success.
- * Return fd == -1 on error.
+ * Open the specified file (or path name) for the specified `.' or
+ * `source' special built-in command.  Return the file descriptor
+ * fd >= 0 for the open file on success.  Return fd == -1 on error.
  *
- * Derived from pexec() function found in osh-20120102/pexec.c
- * and this tree.  See pexec.c or LICENSE for license details.
+ *	Derived from:
+ *		- pexec() in osh-20120102/pexec.c
  */
 static int
-source_open(const char *file)
+source_open(const char *command, const char *file)
 {
 	size_t dlen, flen;
 	int fd;
@@ -2527,18 +2532,21 @@ source_open(const char *file)
 		 * path name for file.  Then, attempt to open(2) it.
 		 */
 		if (dlen + flen + 1 >= sizeof(pnbuf)) {
-			struct iovec msg[5];
+			struct iovec msg[6];
 			msg[0].iov_base = (char *)getmyname();
 			msg[0].iov_len  = strlen(getmyname());
 			msg[1].iov_base = ": ";
 			msg[1].iov_len  = (size_t)2;
-			msg[2].iov_base = "source: ";
-			msg[2].iov_len  = (size_t)8;
-			msg[3].iov_base = (char *)d;
-			msg[3].iov_len  = dlen;
-			msg[4].iov_base = ": path too long\n";
-			msg[4].iov_len  = (size_t)16;
-			(void)writev(FD2, msg, 5);
+			msg[2].iov_base = (char *)command;
+			msg[2].iov_len  = strlen(command);
+			msg[3].iov_base = ": ";
+			msg[3].iov_len  = (size_t)2;
+			msg[4].iov_base = (char *)d;
+			msg[4].iov_len  = dlen;
+			msg[5].iov_base = ": path too long\n";
+			msg[5].iov_len  = (size_t)16;
+			(void)writev(FD2, msg, 6);
+			errno = ENAMETOOLONG;
 			continue;
 		}
 		(void)memcpy(pnbuf, d, dlen);
