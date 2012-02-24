@@ -39,7 +39,7 @@ following systems:
 	OpenSolaris	2008.05, 2008.11, 2009.06 (See last example
 			in EXAMPLES section of INSTALL file.)
 	GNU/Linux	CentOS 5.2, Debian 5.0.3 (lenny), Linpus,
-			Slackware 13.0, Ubuntu 10.04.3 LTS
+			Slackware 13.0, Ubuntu 10.04.[34] LTS
 
 If your system is not reported above, simply try to build the osh
 package to see if it works or not.  In either case, please report
@@ -57,6 +57,6 @@ you to contact me via email.  Thanks & Enjoy!
 
 Jeffrey Allen Neitzel
 <jan (at) v6shell (dot) org>
-http://v6shell.org/						2012/01/26
+http://v6shell.org/						2012/02/24
 
 @(#)$Id$
