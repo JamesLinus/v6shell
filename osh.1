@@ -1141,8 +1141,19 @@ special command.
 .TP
 \fBsource\fR \fIfile\fR [\fIarg1 ...\fR] (+)
 Causes the shell to read and execute commands
-from \fIfile\fR and return.
-The specified file and any arguments
+from the specified \fIfile\fR and return.
+
+If the file name contains no `/' characters,
+the sequence of directories in the environment
+variable PATH is searched for the first occurrence
+of a file by that name.
+However,
+if the file name contains one or more `/' characters,
+the shell attempts to execute it without performing
+any PATH search.
+Notice that the file does not need to be executable.
+
+The file and any arguments
 are treated as positional parameters
 (see
 .I "Parameter substitution"
@@ -1313,7 +1324,10 @@ the \fB$\fR\fId\fR special parameter.
 If set to a non-empty string,
 the value of this variable is taken as the
 sequence of directories used
-by the shell to search for external commands.
+by the shell to search both for external commands
+and for files executed by the
+.B source
+special command.
 Its value is available to the shell via
 the \fB$\fR\fIp\fR special parameter.
 Notice that the Sixth Edition UNIX
