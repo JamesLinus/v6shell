@@ -28,8 +28,12 @@ osh:
 	  one character in length. For example: $A $B $C and $a $b $c
 	  and so forth.
 
+	* Added `.' as a synonym for `source'.
+
+	* Added PATH search when opening file for `.' and `source'.
+
 osh.1:
-	* Work In Progress (Quoting and Variable substitution subsections)
+	* Work In Progress
 
 -------------------------------------------------------------------------------
 [osh-20120102]:
@@ -1730,6 +1734,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2012/02/20
+Jeffrey Allen Neitzel						2012/02/24
 
 @(#)$Id$
