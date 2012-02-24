@@ -141,6 +141,7 @@ pexec(const char *file, char *const *argv)
 			msg[2].iov_base = ": path too long\n";
 			msg[2].iov_len  = (size_t)16;
 			(void)writev(FD2, msg, 3);
+			errno = ENAMETOOLONG;
 			continue;
 		}
 		(void)memcpy(pnbuf, d, dlen);
