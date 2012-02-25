@@ -57,7 +57,11 @@
 #endif
 
 #ifdef	PATH_MAX
+#if PATH_MAX > 1024
+#define	PATHMAX		1024
+#else
 #define	PATHMAX		PATH_MAX
+#endif
 #else
 #define	PATHMAX		1024
 #endif
