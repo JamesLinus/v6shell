@@ -21,7 +21,7 @@ if $# = # if { fd2 -e echo Invalid shell - osh\(1\) required } \
 	if { exit } if A = B
 
 sigign + 1 2 3 13 15 ; : sigign
-setenv PATH ..:$p ; : printenv PATH
+setenv PATH ..:./bin:$p ; : printenv PATH
 umask 22 ; : umask
 rm -f SyntaxError TestFailCount TestPassCount
 ( : ) >TestFailCount ; ( : ) >TestPassCount
@@ -74,6 +74,7 @@ if X$1 = Xosh goto Jump
 
 : Run - " Run appropriate tests w/ $1 binary. "
 
+	if $# = 2 fd2 -e -- now
 	fd2 -e -- echo -n Testing $1 binary\ 
 	fd2 $1 test01 | diff -u test01_$1.log -
 	if $? != 0 if { fd2 -e echo $1: Test 1 Failed } echo >>TestFailCount
@@ -118,6 +119,7 @@ if X$1 = Xosh goto Jump
 
 : Done - " Print final results and exit false/true as needed. "
 
+	fd2 -e -- now
 	if ! -s TestFailCount goto TestsPassed
 		( wc -l <TestFailCount | tr -d ' \t\n' ; \
 		  echo ' Test(s) Failed' ) | fd2 -e cat

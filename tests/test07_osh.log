@@ -21,6 +21,7 @@ Syntax.list
 SyntaxError.in
 TestFailCount
 TestPassCount
+bin
 run.osh
 test01
 test01_osh.log
