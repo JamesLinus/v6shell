@@ -100,11 +100,13 @@ if X$1 = Xosh goto Jump
 		: " Tests 6 and 7 are for osh only. "
 		rm -f SyntaxError
 		fd2 $1 test06 | diff -u test06_$1.log -
-		if $? != 0 if { fd2 -e echo $1: Test 6 Failed } echo >>TestFailCount
+		if $? != 0 if { fd2 -e echo $1: Test 6 Failed } \
+			echo >>TestFailCount
 		echo >>TestPassCount
 		fd2 -e -- echo -n .\ 
 		fd2 $1 test07 | diff -u test07_$1.log -
-		if $? != 0 if { fd2 -e echo $1: Test 7 Failed } echo >>TestFailCount
+		if $? != 0 if { fd2 -e echo $1: Test 7 Failed } \
+			echo >>TestFailCount
 		echo >>TestPassCount
 		fd2 -e -- echo -n .\ 
 		: fallthrough
