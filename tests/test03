@@ -34,7 +34,6 @@ echo hello20^cat^cat^cat^cat^cat^cat^cat^cat^cat^grep '^h';\
 echo hello21^cat^cat^cat^cat^cat^cat^cat^cat^cat^grep '^h';\
 echo hello22^cat^cat^cat^cat^cat^cat^cat^cat^cat^grep '^h';\
 echo hello23^cat^cat^cat^cat^cat^cat^cat^cat^cat^grep '^h';\
-echo hello24^cat^cat^cat^cat^cat^cat^cat^cat^cat^grep '^h';\
 now)>/dev/null
 echo 1 .
 echo 2 ...
@@ -63,7 +62,6 @@ echo hello21^cat^cat^cat^cat^cat^cat^cat^cat^cat^grep '^h';\
 echo hello22^cat^cat^cat^cat^cat^cat^cat^cat^cat^grep '^h';\
 echo hello23^cat^cat^cat^cat^cat^cat^cat^cat^cat^grep '^h';\
 echo hello24^cat^cat^cat^cat^cat^cat^cat^cat^cat^grep '^h';\
-echo hello25^cat^cat^cat^cat^cat^cat^cat^grep '^h';\
 now)>/dev/null
 echo 2 .
 echo 3 ...
@@ -93,7 +91,6 @@ echo hello22^cat^cat^cat^cat^cat^cat^cat^cat^cat^grep '^h';\
 echo hello23^cat^cat^cat^cat^cat^cat^cat^cat^cat^grep '^h';\
 echo hello24^cat^cat^cat^cat^cat^cat^cat^cat^cat^grep '^h';\
 echo hello25^cat^cat^cat^cat^cat^cat^cat^cat^cat^grep '^h';\
-echo hello26^cat^cat^cat^cat^cat^cat^cat^cat^cat^grep '^h';\
 now)>/dev/null
 echo 3 .
 echo End .
