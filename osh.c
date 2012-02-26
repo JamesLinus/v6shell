@@ -1673,9 +1673,6 @@ execute(struct tnode *t, int *pin, int *pout)
 				return;
 		} else if (DO_TRIM(t->nkey))
 			vtrim(t->nav);
-#if 0
-		fd_print(FD2, "execute: t->nkey == %d;\n", t->nkey);
-#endif
 		switch (t->nkey) {
 		case SBI_ECHO:
 			break;
@@ -2555,9 +2552,6 @@ source_open(const char *command, const char *file)
 		pnbuf[dlen + flen + 1] = EOS;
 
 source_pathname:
-#if 0
-		fd_print(FD2, "source_open: pnp == %s;\n", pnp);
-#endif
 		if ((fd = open(pnp, O_RDONLY | O_NONBLOCK)) != -1)
 			return fd;
 		switch (errno) {
