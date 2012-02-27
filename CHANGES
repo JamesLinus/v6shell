@@ -18,6 +18,8 @@ osh:
 
 	* Added $? (as a synonym for $s) parameter.
 
+	* Deprecated $n and $s parameters in favor of $# and $?.
+
 	* Changed quoting to allow $ substitution within double (") quotes.
 	  For example: "$$", "$*", "$1", and so forth. This makes parameter
 	  and variable substitution much more flexible.
@@ -1734,6 +1736,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2012/02/24
+Jeffrey Allen Neitzel						2012/02/27
 
 @(#)$Id$

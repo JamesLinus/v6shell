@@ -908,7 +908,7 @@ get_dolp(int c)
 			v = dolbuf;
 		break;
 	case HASH:
-	case 'n':
+	case 'n':	/* NOTE: $n is deprecated. */
 		n = (dolc > 1) ? dolc - 1 : 0;
 		r = snprintf(dolbuf, sizeof(dolbuf), "%u", (unsigned)n);
 		v = (r < 0 || r >= (int)sizeof(dolbuf)) ? NULL : dolbuf;
@@ -918,7 +918,7 @@ get_dolp(int c)
 			v = dolbuf;
 		break;
 	case QUESTION:
-	case 's':
+	case 's':	/* NOTE: $s is deprecated. */
 		r = snprintf(dolbuf, sizeof(dolbuf), "%u", (unsigned)status);
 		v = (r < 0 || r >= (int)sizeof(dolbuf)) ? NULL : dolbuf;
 		break;
