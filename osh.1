@@ -242,9 +242,9 @@ A
 is any one of the following:
 .PP
 .RS 6
-\fB\\\fR
 \fB"\fR
 \fB'\fR
+\fB\\\fR
 .RE
 .PP
 See
@@ -260,8 +260,11 @@ is a:
 .PP
 See
 .I "Parameter substitution"
+and
+.I "Variable substitution"
 below.
-A
+Finally,
+a
 .I "pattern metacharacter"
 is any one of the following:
 .PP
@@ -441,9 +444,12 @@ to another location.
 If the file for a redirection cannot be opened or created,
 a diagnostic is printed.
 .SS Quoting
-==== WIP ====
-.PP
 The shell treats all
+.I single
+(\fB'\fR)
+and
+.I backslash
+(\fB\\\fR)
 .I quoted
 characters literally,
 including characters which have
@@ -455,22 +461,44 @@ If such characters are quoted,
 they represent themselves and may be passed
 as part of arguments.
 .PP
-====
-.PP
-Add text to describe the difference between double and single quotes.
-.PP
-In short,
+(+) Similar to the above description,
 .I double
 (\fB"\fR) quotes
-cause the shell to
-perform parameter and variable substitution.
+cause the shell to treat characters literally.
 On the other hand,
+double quotes also allow the shell to perform
+parameter and variable substitution
+via the dollar (\fB$\fR) metacharacter,
+whereas
 .I single
 (\fB'\fR) quotes
+and
+.I backslash
+(\fB\\\fR) quotes
 do not.
-EG: The diff between "$1" and '$1'...
 .PP
-====
+Individual characters, and sequences of characters,
+are quoted when enclosed by a matched pair of
+.I double
+(\fB"\fR) or
+.I single
+(\fB'\fR) quotes.
+For example:
+.PP
+.nf
+	% awk '{ print NR "\\t" $0 }' README ^ more
+.fi
+.PP
+causes
+.IR awk (1)
+to write each line from the `README' file,
+preceded by its line number and a tab,
+to the standard output which is piped to
+.IR more (1)
+for viewing.
+The outer single quotes prevent the shell from trying
+to interpret any part of the string,
+which is then passed as a single argument to awk.
 .PP
 An individual
 .I backslash
@@ -484,34 +512,9 @@ onto the next line.
 Each backslash-newline sequence in the input
 is translated into a blank.
 .PP
-Individual characters, and sequences of characters,
-are also quoted when enclosed by a matched pair of
-.I double
-(\fB"\fR) or
-.I single
-(\fB'\fR) quotes.
-For example:
-.PP
-.nf
-	% awk '{ print NR "\\t" $0 }' README ^ more
-.fi
-.PP
-causes
-.IR awk (1)
-to write each line in `README',
-preceded by its line number and a tab,
-to the standard output which is piped to
-.IR more (1)
-for viewing.
-The quotes prevent the shell from trying
-to interpret any part of the string,
-which is then passed as a single argument to awk.
-.PP
 If a double or single quote appears
 but is not part of a matched pair,
 a diagnostic is printed.
-.PP
-====
 .SS Parameter substitution
 When the shell is invoked with arguments besides
 .BR \-v ,
@@ -1421,7 +1424,7 @@ because of known portability problems
 with the Bourne shell's memory management
 in Seventh Edition UNIX.
 .SH LICENSE
-See either the LICENSE file which is distributed with
+See either the `LICENSE' file which is distributed with
 .B osh
 or
 http://v6shell.org/license/
