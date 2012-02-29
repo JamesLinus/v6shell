@@ -158,9 +158,9 @@ A
 is any one of the following:
 .PP
 .RS 6
-\fB\\\fR
 \fB"\fR
 \fB'\fR
+\fB\\\fR
 .RE
 .PP
 See
@@ -177,7 +177,8 @@ is a:
 See
 .I "Parameter substitution"
 below.
-A
+Finally,
+a
 .I "pattern metacharacter"
 is any one of the following:
 .PP
@@ -358,20 +359,8 @@ If such characters are quoted,
 they represent themselves and may be passed
 as part of arguments.
 .PP
-An individual
-.I backslash
-(\fB\\\fR) quotes,
-or
-.IR escapes ,
-the next individual character.
-A backslash followed by a newline is a special case
-which allows continuation of command-line input
-onto the next line.
-Each backslash-newline sequence in the input
-is translated into a blank.
-.PP
 Individual characters, and sequences of characters,
-are also quoted when enclosed by a matched pair of
+are quoted when enclosed by a matched pair of
 .I double
 (\fB"\fR) or
 .I single
@@ -384,14 +373,26 @@ For example:
 .PP
 causes
 .IR awk (1)
-to write each line in `README',
+to write each line from the `README' file,
 preceded by its line number and a tab,
 to the standard output which is piped to
 .IR more (1)
 for viewing.
-The quotes prevent the shell from trying
+The outer single quotes prevent the shell from trying
 to interpret any part of the string,
 which is then passed as a single argument to awk.
+.PP
+An individual
+.I backslash
+(\fB\\\fR) quotes,
+or
+.IR escapes ,
+the next individual character.
+A backslash followed by a newline is a special case
+which allows continuation of command-line input
+onto the next line.
+Each backslash-newline sequence in the input
+is translated into a blank.
 .PP
 If a double or single quote appears
 but is not part of a matched pair,
@@ -785,7 +786,7 @@ because of known portability problems
 with the Bourne shell's memory management
 in Seventh Edition UNIX.
 .SH LICENSE
-See either the LICENSE file which is distributed with
+See either the `LICENSE' file which is distributed with
 .B osh
 or
 http://v6shell.org/license/
