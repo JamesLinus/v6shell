@@ -3053,6 +3053,7 @@ atrim(UChar *ap)
 	size_t siz;
 	UChar buf[LINEMAX], c;
 	UChar *a, *b;
+	bool d;
 
 	*buf = UCHAR(EOS);
 	for (a = ap, b = buf; b < &buf[LINEMAX]; a++, b++) {
@@ -3065,9 +3066,12 @@ atrim(UChar *ap)
 		case DQUOT:
 		case SQUOT:
 			c = *a++;
+			d = (c == DQUOT) ? true : false;
 			while (*a != c && b < &buf[LINEMAX]) {
 				if (*a == EOS)
 					goto aterr;
+				if (d && *a == BQUOT && *(a + 1) == DOLLAR)
+					a++;
 				*b++ = *a++;
 			}
 			b--;
@@ -3105,6 +3109,7 @@ gtrim(UChar *ap)
 	size_t siz;
 	UChar buf[PATHMAX], c;
 	UChar *a, *b, *nap;
+	bool d;
 
 	*buf = UCHAR(EOS);
 	for (a = ap, b = buf; b < &buf[PATHMAX]; a++, b++) {
@@ -3122,13 +3127,18 @@ gtrim(UChar *ap)
 		case DQUOT:
 		case SQUOT:
 			c = *a++;
+			d = (c == DQUOT) ? true : false;
 			while (*a != c && b < &buf[PATHMAX]) {
 				switch (*a) {
 				case EOS:
 					goto gterr;
+				case BQUOT:
+					if (d && *(a + 1) == DOLLAR)
+						a++;
+					/*FALLTHROUGH*/
 				case ASTERISK: case QUESTION:
 				case LBRACKET: case RBRACKET: case HYPHEN:
-				case DQUOT:    case SQUOT:    case BQUOT:
+				case DQUOT:    case SQUOT:
 					*b = UCHAR(BQUOT);
 					if (++b >= &buf[PATHMAX])
 						goto gterr;
