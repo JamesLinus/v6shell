@@ -135,3 +135,9 @@ Jeffrey Allen Neitzel
 109: >/dev/null ( < ) </dev/null
 110: ( < ) </dev/null >/dev/null
 111: ( < ) >/dev/null </dev/null
+
+==== Here are some more bad quotes; Cannot backslash escape same quote ====
+112: echo "\""
+113: echo '\''
+114: echo "\"Hello World! =)\""
+115: echo '\'Hello World! =)\''

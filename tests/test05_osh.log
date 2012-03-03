@@ -221,4 +221,12 @@ osh: syntax error
 osh: syntax error
 % ( < ) >/dev/null </dev/null
 osh: syntax error
+% echo "\""
+osh: syntax error
+% echo '\''
+osh: syntax error
+% echo "\"Hello World! =)\""
+osh: syntax error
+% echo '\'Hello World! =)\''
+osh: syntax error
 End .

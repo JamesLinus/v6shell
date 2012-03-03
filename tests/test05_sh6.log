@@ -221,4 +221,12 @@ syntax error
 syntax error
 % ( < ) >/dev/null </dev/null
 syntax error
+% echo "\""
+syntax error
+% echo '\''
+syntax error
+% echo "\"Hello World! =)\""
+syntax error
+% echo '\'Hello World! =)\''
+syntax error
 End .

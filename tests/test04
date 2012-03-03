@@ -17,6 +17,15 @@ echo Begin ...
 	&&&&&&
 	 & & & & & & 
 
+: Quotes ...
+
+	echo "\"
+	echo '\'
+	echo \\
+	echo "Hello World! =)"
+	echo 'Hello World! =)'
+	echo Hello\ World!\ =\)
+
 : Redirections ...
 
 	cat <Input >/dev/null
