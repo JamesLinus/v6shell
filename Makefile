@@ -43,6 +43,7 @@ WARNINGS=	-Wall -W
 # NOTE: It seems that -Wno-unused-result first appeared in gcc-4.4.0 .
 #WARNINGS=	-Wno-unused-result
 #WARNINGS+=	-Wstack-protector
+#WARNINGS+=	-Wshorten-64-to-32
 #CFLAGS+=	-g
 CFLAGS+=	-Os $(OPTIONS) $(WARNINGS)
 #LDFLAGS+=	-static
@@ -78,7 +79,8 @@ GHEAD=	config.h defs.h
 ERRSRC=	err.h err.c
 PEXSRC=	pexec.h pexec.c
 SIGSRC=	sasignal.h sasignal.c
-OBJ=	err.o fd2.o glob6.o goto.o if.o osh.o pexec.o sasignal.o sh6.o util.o v.o
+INTSRC=	strtoint.h strtoint.c
+OBJ=	err.o fd2.o glob6.o goto.o if.o osh.o pexec.o sasignal.o strtoint.o sh6.o util.o v.o
 OSHMAN=	osh.1.out
 SH6MAN=	sh6.1.out glob6.1.out
 UMAN=	fd2.1.out goto.1.out if.1.out
@@ -110,7 +112,7 @@ utils: $(UBIN) $(UMAN)
 
 man: $(MANALL)
 
-osh: sh.h v.c osh.c util.c $(GHEAD) $(ERRSRC) $(PEXSRC) $(SIGSRC)
+osh: sh.h v.c osh.c util.c $(GHEAD) $(ERRSRC) $(PEXSRC) $(SIGSRC) $(INTSRC)
 	@$(MAKE) $@bin
 
 sh6: sh.h v.c sh6.c $(GHEAD) $(ERRSRC) $(PEXSRC) $(SIGSRC)
@@ -119,7 +121,7 @@ sh6: sh.h v.c sh6.c $(GHEAD) $(ERRSRC) $(PEXSRC) $(SIGSRC)
 glob6: v.c glob6.c $(GHEAD) $(ERRSRC) $(PEXSRC)
 	@$(MAKE) $@bin
 
-if: v.c if.c $(GHEAD) $(ERRSRC) $(PEXSRC) $(SIGSRC)
+if: v.c if.c $(GHEAD) $(ERRSRC) $(PEXSRC) $(SIGSRC) $(INTSRC)
 	@$(MAKE) $@bin
 
 goto: v.c goto.c $(GHEAD) $(ERRSRC)
@@ -128,20 +130,22 @@ goto: v.c goto.c $(GHEAD) $(ERRSRC)
 fd2: v.c fd2.c $(GHEAD) $(ERRSRC) $(PEXSRC)
 	@$(MAKE) $@bin
 
-$(OBJ)                                              : $(GHEAD)
-fd2.o glob6.o goto.o if.o osh.o pexec.o sh6.o util.o: err.h
-fd2.o glob6.o if.o osh.o sh6.o                      : pexec.h
-if.o osh.o sh6.o                                    : sasignal.h
-osh.o sh6.o util.o                                  : sh.h
-err.o                                               : $(ERRSRC)
-pexec.o                                             : $(PEXSRC)
-sasignal.o                                          : $(SIGSRC)
+$(OBJ)                                                         : $(GHEAD)
+fd2.o glob6.o goto.o if.o osh.o pexec.o sh6.o util.o strtoint.o: err.h
+fd2.o glob6.o if.o osh.o sh6.o                                 : pexec.h
+if.o osh.o sh6.o                                               : sasignal.h
+if.o util.o                                                    : strtoint.h
+osh.o sh6.o util.o                                             : sh.h
+err.o                                                          : $(ERRSRC)
+pexec.o                                                        : $(PEXSRC)
+sasignal.o                                                     : $(SIGSRC)
+strtoint.o                                                     : $(INTSRC)
 
 config.h: mkconfig
 	$(SHELL) ./mkconfig
 
-oshbin: v.o osh.o err.o util.o pexec.o sasignal.o
-	$(CC) $(LDFLAGS) -o osh v.o osh.o err.o util.o pexec.o sasignal.o $(LIBS)
+oshbin: v.o osh.o err.o util.o pexec.o sasignal.o strtoint.o
+	$(CC) $(LDFLAGS) -o osh v.o osh.o err.o util.o pexec.o sasignal.o strtoint.o $(LIBS)
 
 sh6bin: v.o sh6.o err.o pexec.o sasignal.o
 	$(CC) $(LDFLAGS) -o sh6 v.o sh6.o err.o pexec.o sasignal.o $(LIBS)
@@ -149,8 +153,8 @@ sh6bin: v.o sh6.o err.o pexec.o sasignal.o
 glob6bin: v.o glob6.o err.o pexec.o
 	$(CC) $(LDFLAGS) -o glob6 v.o glob6.o err.o pexec.o $(LIBS)
 
-ifbin: v.o if.o err.o pexec.o sasignal.o
-	$(CC) $(LDFLAGS) -o if v.o if.o err.o pexec.o sasignal.o $(LIBS)
+ifbin: v.o if.o err.o pexec.o sasignal.o strtoint.o
+	$(CC) $(LDFLAGS) -o if v.o if.o err.o pexec.o sasignal.o strtoint.o $(LIBS)
 
 gotobin: v.o goto.o err.o
 	$(CC) $(LDFLAGS) -o goto v.o goto.o err.o $(LIBS)

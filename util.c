@@ -73,6 +73,7 @@
 #include "err.h"
 #include "pexec.h"
 #include "sh.h"
+#include "strtoint.h"
 
 #define	IS_SBI(k)	\
 	((k) == SBI_ECHO || (k) == SBI_FD2 || (k) == SBI_GOTO || (k) == SBI_IF)
@@ -439,7 +440,8 @@ e3(void)
 	bool re;
 	pid_t cpid, tpid;
 	int cstat, d;
-	char *a, *b;
+	int ai, ci;
+	char *a, *b, *c;
 
 	if ((a = nxtarg(RETERR)) == NULL)
 		err(FC_ERR, FMT3S, getmyname(), iav[iap - 2], ERR_EXPR);
@@ -520,12 +522,37 @@ e3(void)
 		return  equal(a, nxtarg(!RETERR));
 	if (equal(b, "!="))
 		return !equal(a, nxtarg(!RETERR));
-	if (equal(b, "-ot"))
-		return ifstat2(a, nxtarg(!RETERR), F_OT);
-	if (equal(b, "-nt"))
-		return ifstat2(a, nxtarg(!RETERR), F_NT);
+	if (equal(b, "<"))
+		return strcmp(a, nxtarg(!RETERR)) < 0;
+	if (equal(b, ">"))
+		return strcmp(a, nxtarg(!RETERR)) > 0;
 	if (equal(b, "-ef"))
 		return ifstat2(a, nxtarg(!RETERR), F_EF);
+	if (equal(b, "-nt"))
+		return ifstat2(a, nxtarg(!RETERR), F_NT);
+	if (equal(b, "-ot"))
+		return ifstat2(a, nxtarg(!RETERR), F_OT);
+	if (equal(b, "-eq") || equal(b, "-ne") || equal(b, "-gt") ||
+	    equal(b, "-ge") || equal(b, "-lt") || equal(b, "-le")) {
+		if ((c = nxtarg(RETERR)) == NULL)
+			err(FC_ERR, FMT3S, getmyname(), b, ERR_INTEGER);
+		if (!strtoint(&ai, a))
+			err(FC_ERR, NULL);
+		if (!strtoint(&ci, c))
+			err(FC_ERR, NULL);
+		if (equal(b, "-eq"))
+			return ai == ci;
+		if (equal(b, "-ne"))
+			return ai != ci;
+		if (equal(b, "-gt"))
+			return ai >  ci;
+		if (equal(b, "-ge"))
+			return ai >= ci;
+		if (equal(b, "-lt"))
+			return ai <  ci;
+		if (equal(b, "-le"))
+			return ai <= ci;
+	}
 	err(FC_ERR, FMT3S, getmyname(), b, ERR_OPUNKNOWN);
 	/*NOTREACHED*/
 	return false;

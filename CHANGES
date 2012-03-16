@@ -7,6 +7,8 @@ Thompson shell are marked w/ a `C:' in the details below.
 
 	* New files: tests/* (regression test suite for osh/sh6)
 
+	* New files: strtoint.[ch] (to support new `if' command operators)
+
 Makefile:
 	* Added a "check" target to run the tests w/ osh and sh6.
 
@@ -33,6 +35,13 @@ osh:
 	* Added `.' as a synonym for `source'.
 
 	* Added PATH search when opening file for `.' and `source'.
+
+if:
+
+	* Added new operators to the built-in `if' command for osh
+	  and to the external `if' command for sh6. Updated the if.1
+	  manual page accordingly. The new operators include: <, >,
+	  -eq, -ne, -gt, -ge, -lt, -le
 
 osh.1:
 	* Work In Progress
@@ -1736,6 +1745,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2012/02/27
+Jeffrey Allen Neitzel						2012/03/15
 
 @(#)$Id$

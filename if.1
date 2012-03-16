@@ -58,6 +58,43 @@
 .\" IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .\" POSSIBILITY OF SUCH DAMAGE.
 .\"
+.\" Includes content derived from:
+.\"		- /usr/src/bin/test/test.1
+.\"			$OpenBSD: test.1,v 1.30 2010/09/11 20:54:22 jmc Exp $
+.\"			$NetBSD: test.1,v 1.6 1995/03/21 07:04:03 cgd Exp $
+.\"
+.\" Copyright (c) 1991, 1993
+.\"	The Regents of the University of California.  All rights reserved.
+.\"
+.\" This code is derived from software contributed to Berkeley by
+.\" the Institute of Electrical and Electronics Engineers, Inc.
+.\"
+.\" Redistribution and use in source and binary forms, with or without
+.\" modification, are permitted provided that the following conditions
+.\" are met:
+.\" 1. Redistributions of source code must retain the above copyright
+.\"    notice, this list of conditions and the following disclaimer.
+.\" 2. Redistributions in binary form must reproduce the above copyright
+.\"    notice, this list of conditions and the following disclaimer in the
+.\"    documentation and/or other materials provided with the distribution.
+.\" 3. Neither the name of the University nor the names of its contributors
+.\"    may be used to endorse or promote products derived from this software
+.\"    without specific prior written permission.
+.\"
+.\" THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+.\" ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+.\" IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+.\" ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+.\" FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+.\" DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+.\" OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+.\" HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+.\" LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+.\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+.\" SUCH DAMAGE.
+.\"
+.\"	@(#)test.1	8.1 (Berkeley) 5/31/93
+.\"
 .\" Includes public domain content derived from:
 .\"		- /usr/src/bin/ksh/sh.1
 .\"			$OpenBSD: sh.1,v 1.91 2011/09/03 22:59:08 jmc Exp $
@@ -153,6 +190,64 @@ True if the strings
 and
 .I s2
 are not equal.
+.TP
+.IB s1 \ < \ s2
+True if the string
+.I s1
+comes before
+.I s2
+according to their ASCII character values.
+.\" according to the ASCII values
+.\" of their characters.
+.TP
+.IB s1 \ > \ s2
+True if the string
+.I s1
+comes after
+.I s2
+according to their ASCII character values.
+.\" according to the ASCII values
+.\" of their characters.
+.TP
+.IB n1 \ \-eq \ n2
+True if the integers
+.I n1
+and
+.I n2
+are algebraically equal.
+.TP
+.IB n1 \ \-ne \ n2
+True if the integers
+.I n1
+and
+.I n2
+are not algebraically equal.
+.TP
+.IB n1 \ \-gt \ n2
+True if the integer
+.I n1
+is algebraically greater than the integer
+.IR n2 .
+.TP
+.IB n1 \ \-ge \ n2
+True if the integer
+.I n1
+is algebraically greater than
+or equal to the integer
+.IR n2 .
+.TP
+.IB n1 \ \-lt \ n2
+True if the integer
+.I n1
+is algebraically less than the integer
+.IR n2 .
+.TP
+.IB n1 \ \-le \ n2
+True if the integer
+.I n1
+is algebraically less than
+or equal to the integer
+.IR n2 .
 .PP
 These primaries may also be combined
 with the following operators:
@@ -258,6 +353,8 @@ The
 .B if
 command from Sixth Edition UNIX
 does not support the
+.BR < ,
+.BR > ,
 .BR \-d ,
 .BR \-e ,
 .BR \-f ,
@@ -267,8 +364,14 @@ does not support the
 .BR \-x ,
 .BR \-ef ,
 .BR \-nt ,
+.BR \-ot ,
+.BR \-eq ,
+.BR \-ne ,
+.BR \-gt ,
+.BR \-ge ,
+.BR \-lt ,
 and
-.B \-ot
+.B \-le
 operators.
 .PP
 In addition to supporting the above operators,
