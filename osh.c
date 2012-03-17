@@ -74,6 +74,7 @@
 #include "pexec.h"
 #include "sasignal.h"
 #include "sh.h"
+#include "strtoint.h"
 
 #ifdef	__GNUC__
 #define	IS_UNUSED	__attribute__((__unused__))
@@ -2248,8 +2249,6 @@ do_sigign(char **av, enum tnflags f)
 {
 	struct sigaction act, oact;
 	sigset_t new_mask, old_mask;
-	char *sigbad;
-	long lsigno;
 	int i, sigerr, signo;
 	static bool ignlst[NSIG], gotlst;
 
@@ -2289,14 +2288,11 @@ do_sigign(char **av, enum tnflags f)
 		act.sa_flags = SA_RESTART;
 
 		for (i = 2; av[i] != NULL; i++) {
-			errno = 0;
-			lsigno = strtol(av[i], &sigbad, 10);
-			if (errno  != 0 || *av[i] == EOS || *sigbad != EOS ||
-			    lsigno <= 0 || lsigno >= NSIG) {
+			if (!strtoint(&signo, av[i]) ||
+			     signo <= 0 || signo >= NSIG) {
 				sigerr = i;
 				goto sigdone;
 			}
-			signo = (int)lsigno;
 
 			/* Do nothing if no signal changes are needed. */
 			if (sigaction(signo, NULL, &oact) < 0 ||

@@ -69,7 +69,7 @@ LDFLAGS+=	$(MOXARCH)
 #	osh-YYYYMMDD           == official release
 #	osh-YYYYMMDD-p[1-9]    == patched  release
 #
-OSH_DATE=	January 2, 2012
+OSH_DATE=	March 17, 2012
 OSH_VERSION=	osh-current
 
 OSH=	osh
@@ -80,7 +80,7 @@ ERRSRC=	err.h err.c
 PEXSRC=	pexec.h pexec.c
 SIGSRC=	sasignal.h sasignal.c
 INTSRC=	strtoint.h strtoint.c
-OBJ=	err.o fd2.o glob6.o goto.o if.o osh.o pexec.o sasignal.o strtoint.o sh6.o util.o v.o
+OBJ=	err.o fd2.o glob6.o goto.o if.o osh.o pexec.o sasignal.o sh6.o strtoint.o util.o v.o
 OSHMAN=	osh.1.out
 SH6MAN=	sh6.1.out glob6.1.out
 UMAN=	fd2.1.out goto.1.out if.1.out
@@ -132,9 +132,9 @@ fd2: v.c fd2.c $(GHEAD) $(ERRSRC) $(PEXSRC)
 
 $(OBJ)                                                         : $(GHEAD)
 fd2.o glob6.o goto.o if.o osh.o pexec.o sh6.o util.o strtoint.o: err.h
-fd2.o glob6.o if.o osh.o sh6.o                                 : pexec.h
+fd2.o glob6.o if.o osh.o sh6.o util.o                          : pexec.h
 if.o osh.o sh6.o                                               : sasignal.h
-if.o util.o                                                    : strtoint.h
+if.o osh.o util.o                                              : strtoint.h
 osh.o sh6.o util.o                                             : sh.h
 err.o                                                          : $(ERRSRC)
 pexec.o                                                        : $(PEXSRC)
@@ -220,11 +220,12 @@ install-exp:
 #
 # Cleanup targets
 #
+clean-man:
+	rm -f $(MANALL)
 clean-obj:
 	rm -f $(OBJ)
-
-clean: clean-obj
-	rm -f $(OSH) $(SH6) $(UBIN) $(MANALL) config.h
+clean: clean-man clean-obj
+	rm -f $(OSH) $(SH6) $(UBIN) config.h
 
 #
 # Release target

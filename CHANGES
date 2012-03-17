@@ -37,7 +37,6 @@ osh:
 	* Added PATH search when opening file for `.' and `source'.
 
 if:
-
 	* Added new operators to the built-in `if' command for osh
 	  and to the external `if' command for sh6. Updated the if.1
 	  manual page accordingly. The new operators include: <, >,
@@ -1745,6 +1744,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2012/03/15
+Jeffrey Allen Neitzel						2012/03/17
 
 @(#)$Id$

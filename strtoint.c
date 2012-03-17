@@ -76,21 +76,25 @@ strtoint(int *num, const char *str)
 {
 	long lnum;
 	char *numbad;
+	const char *nam;
+
+	nam = getmyname();
 
 	errno = 0;
 	lnum  = strtol(str, &numbad, 10);
 	if (*str == EOS || *numbad != EOS) {
-		fd_print(FD2, FMT3S, getmyname(), str, ERR_NOTINTEGER);
+		if (EQUAL(nam, "if"))
+			fd_print(FD2, FMT3S, nam, str, ERR_NOTINTEGER);
 		*num = 0;
 		return false;
 	}
 	if ((errno == ERANGE  && (lnum == LONG_MAX || lnum == LONG_MIN)) ||
 	    (lnum  >  INT_MAX ||  lnum <  INT_MIN)) {
-		fd_print(FD2, FMT3S, getmyname(), str, ERR_RANGE);
+		if (EQUAL(nam, "if"))
+			fd_print(FD2, FMT3S, nam, str, ERR_RANGE);
 		*num = 0;
 		return false;
 	}
-
 	*num = (int)lnum;
 	return true;
 }
