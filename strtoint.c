@@ -72,7 +72,7 @@
  * Return true on success.  Return false on error.
  */
 bool
-strtoint(int *num, const char *str)
+strtoint(const char *str, int *num)
 {
 	long lnum;
 	char *numbad;

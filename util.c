@@ -536,9 +536,9 @@ e3(void)
 	    equal(b, "-ge") || equal(b, "-lt") || equal(b, "-le")) {
 		if ((c = nxtarg(RETERR)) == NULL)
 			err(FC_ERR, FMT3S, getmyname(), b, ERR_INTEGER);
-		if (!strtoint(&ai, a))
+		if (!strtoint(a, &ai))
 			err(FC_ERR, NULL);
-		if (!strtoint(&ci, c))
+		if (!strtoint(c, &ci))
 			err(FC_ERR, NULL);
 		if (equal(b, "-eq"))
 			return ai == ci;

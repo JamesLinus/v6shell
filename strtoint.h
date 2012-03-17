@@ -27,4 +27,4 @@
  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-bool	strtoint(int *, const char *);
+bool	strtoint(const char *, int *);

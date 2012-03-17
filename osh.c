@@ -2288,7 +2288,7 @@ do_sigign(char **av, enum tnflags f)
 		act.sa_flags = SA_RESTART;
 
 		for (i = 2; av[i] != NULL; i++) {
-			if (!strtoint(&signo, av[i]) ||
+			if (!strtoint(av[i], &signo) ||
 			     signo <= 0 || signo >= NSIG) {
 				sigerr = i;
 				goto sigdone;
