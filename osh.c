@@ -1863,8 +1863,9 @@ execute1(struct tnode *t)
 		/*
 		 * If both name and value are specified, set variable
 		 * name to variable value.  If no value is specified,
-		 * set variable name to empty string.  If no arguments
-		 * are specified, print each variable name and value.
+		 * print the current value of variable name.  If no
+		 * arguments are specified, print the name and value
+		 * of each variable.
 		 *
 		 * usage: set [name [value]]
 		 */
@@ -1878,9 +1879,14 @@ execute1(struct tnode *t)
 				    t->nav[0], t->nav[1], ERR_BADNAME);
 				return;
 			}
-			p = (t->nav[2] != NULL) ? t->nav[2] : "";
-			varalloc(*t->nav[1], p);
-			status = SH_TRUE;
+			if (t->nav[2] != NULL) {
+				varalloc(*t->nav[1], t->nav[2]);
+				status = SH_TRUE;
+			} else {
+				if ((p = varget(*t->nav[1])) != NULL)
+					fd_print(FD1, "%s\n", p);
+				status = (p != NULL) ? SH_TRUE : SH_FALSE;
+			}
 		} else {
 			v = vnp;
 			while (v != NULL) {
