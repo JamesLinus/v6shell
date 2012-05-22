@@ -693,9 +693,45 @@ This causes the shell to pass `>/dev/null'
 as a single argument to echo instead of interpreting
 it as a redirection.
 .SS Variable substitution (+)
+The shell can substitute simple variables set by the user.
+A user may cause the shell to set and unset
+variables by using the
+.B set
+and
+.B unset
+special commands.
+.PP
 ==== WIP ====
 .PP
-This is a placeholder for the new variable-substitution subsection.
+Three examples of variable usage follow:
+.PP
+.nf
+	% : Example One
+	% unset C
+	% set C
+	% if X"$C" = XC echo 'C is unset.'
+	C is unset.
+
+	% : Example Two
+	% set C ''
+	% set C
+
+	% if X"$C" = X echo 'C is set to the empty string.'
+	C is set to the empty string.
+
+	% : Example Three
+	% set H serenity
+	% set C "( now ; echo Running as: $u@$H ; loadavg )"
+	% set
+	C	( now ; echo Running as: jneitzel@serenity ; loadavg )
+	H	serenity
+	% if X"$C" != X echo "C == `$C'"
+	C == `( now ; echo Running as: jneitzel@serenity ; loadavg )'
+	% $C | awk '{ print NR "\\t" $0 }'
+	1	Tuesday, 2012-05-22, 14:16:00 UTC
+	2	Running as: jneitzel@serenity
+	3	serenity: load averages: 0.59 0.34 0.28
+.fi
 .PP
 ====
 .SS File name generation
@@ -1108,8 +1144,8 @@ Replaces the current interactive shell with
 \fBset\fR [\fIname\fR [\fIvalue\fR]] (+)
 Sets the variable \fIname\fR to the string \fIvalue\fR in the
 current shell if both \fIname\fR and \fIvalue\fR are specified.
-If \fIvalue\fR is not specified,
-the variable name is set to the empty string.
+Prints the current value of variable \fIname\fR
+if \fIname\fR is specified and set in the current shell.
 Prints the name and value of each variable set in
 the current shell if no arguments are specified.
 .TP
