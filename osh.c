@@ -1901,10 +1901,9 @@ execute1(struct tnode *t)
 		/*
 		 * Set the specified environment variable name.
 		 *
-		 * usage: setenv name [value]
+		 * usage: setenv name value
 		 */
-		if (t->nav[1] != NULL &&
-		    (t->nav[2] == NULL || t->nav[3] == NULL)) {
+		if (t->nav[1]!=NULL && t->nav[2]!=NULL && t->nav[3]==NULL) {
 
 			for (p = t->nav[1]; *p != '=' && *p != EOS; p++)
 				;	/* nothing */
@@ -1913,8 +1912,7 @@ execute1(struct tnode *t)
 				    t->nav[0], t->nav[1], ERR_BADNAME);
 				return;
 			}
-			p = (t->nav[2] != NULL) ? t->nav[2] : "";
-			if (setenv(t->nav[1], p, 1) == -1)
+			if (setenv(t->nav[1], t->nav[2], 1) == -1)
 				err(ESTATUS, FMT2S, getmyname(), ERR_NOMEM);
 
 			status = SH_TRUE;
