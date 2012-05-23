@@ -720,17 +720,14 @@ Three examples of variable usage follow:
 	C is set to the empty string.
 
 	% : Example Three
-	% set H serenity
-	% set C "( now ; echo Running as: $u@$H ; loadavg )"
-	% set
-	C	( now ; echo Running as: jneitzel@serenity ; loadavg )
-	H	serenity
+	% set C '( now ; loadavg )' ; : 'C == Command'
+	% set C
+	( now ; loadavg )
 	% if X"$C" != X echo "C == `$C'"
-	C == `( now ; echo Running as: jneitzel@serenity ; loadavg )'
+	C == `( now ; loadavg )'
 	% $C | awk '{ print NR "\\t" $0 }'
-	1	Tuesday, 2012-05-22, 14:16:00 UTC
-	2	Running as: jneitzel@serenity
-	3	serenity: load averages: 0.59 0.34 0.28
+	1	Wednesday, 2012-05-23, 19:03:59 UTC
+	2	serenity: load average: 0.09, 0.04, 0.05
 .fi
 .PP
 ====
