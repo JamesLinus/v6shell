@@ -69,7 +69,7 @@ LDFLAGS+=	$(MOXARCH)
 #	osh-YYYYMMDD           == official release
 #	osh-YYYYMMDD-p[1-9]    == patched  release
 #
-OSH_DATE=	March 17, 2012
+OSH_DATE=	May 23, 2012
 OSH_VERSION=	osh-current
 
 OSH=	osh
