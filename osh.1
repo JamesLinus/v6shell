@@ -672,9 +672,9 @@ in a command line by the invoked shell.
 Take the following two shell invocations for example:
 .PP
 .nf
-	% osh \-c '$1' 'echo Hello! >/dev/null'
-	% osh \-c '$1' 'echo Hello! \\>/dev/null'
-	Hello! >/dev/null
+	% osh \-c '$1' 'echo Hello World! >/dev/null'
+	% osh \-c '$1' 'echo Hello World! \\>/dev/null'
+	Hello World! >/dev/null
 .fi
 .PP
 In the first invocation,
@@ -701,7 +701,30 @@ and
 .B unset
 special commands.
 .PP
-==== WIP ====
+A variable consists of a name,
+a single ASCII character,
+which matches
+either the [A-Z] range
+or the [a-cfgi-loq-rw-z] range,
+inclusive.
+A variable must also contain a value set by the user.
+.PP
+Variables may be used both in interactive shells
+and in non-interactive shells.
+However,
+notice that variables are not functional
+when a non-interactive shell is invoked
+either with the
+.B \-c
+option followed by a
+.I string
+or with the
+.B \-t
+option.
+Such a shell only executes one command line,
+but setting and using a variable requires
+executing two command lines in the same shell,
+one to set it and one to use it.
 .PP
 Three examples of variable usage follow:
 .PP
@@ -709,28 +732,65 @@ Three examples of variable usage follow:
 	% : Example One
 	% unset C
 	% set C
-	% if X"$C" = XC echo 'C is unset.'
+	% if $? -eq 1 -a X"$C" = XC echo 'C is unset.'
 	C is unset.
 
 	% : Example Two
 	% set C ''
-	% set C
-
-	% if X"$C" = X echo 'C is set to the empty string.'
-	C is set to the empty string.
+	% ( set C ) >/dev/null
+	% if $? -eq 0 -a X"$C" = X echo 'C == "'"$C"'"'
+	C == ""
+	% set H 'Hello ' ; set W 'World!'
+	% if X"$H$W" != X -a X"$H$W" != XHW echo "$H$W"
+	Hello World!
 
 	% : Example Three
-	% set C '( now ; loadavg )' ; : 'C == Command'
-	% set C
-	( now ; loadavg )
-	% if X"$C" != X echo "C == `$C'"
+	% alias now "date '+%A, %Y-%m-%d, %T %Z';:"
+	% alias loadavg "uname -n|sed 's/\\([^.]*\\).*/\\1/'|tr -d \\\\n;\\
+	  echo \-n ': ';uptime|sed 's/^.*user[s,][ ,] *//';:"
+	% set C '( now ; loadavg )' ; : 'C == Command Line (or List)'
+	% ( set C ) >/dev/null
+	% if $? -eq 0 -a X"$C" != X echo "C == `$C'"
 	C == `( now ; loadavg )'
 	% $C | awk '{ print NR "\\t" $0 }'
 	1	Wednesday, 2012-05-23, 19:03:59 UTC
 	2	serenity: load average: 0.09, 0.04, 0.05
 .fi
 .PP
-====
+As with parameters
+(see
+.I "Parameter substitution"
+above),
+all substitution on a command line is performed
+.I before
+the line is interpreted.
+Thus,
+no action which alters the value of any variable
+can have any effect on a reference to that variable
+occurring on the
+.I same
+line.
+.PP
+Also,
+a variable value may contain
+any number of metacharacters.
+Each one which is
+.IR unquoted ,
+or
+.IR unescaped ,
+within a variable value retains
+its special meaning when the value
+is substituted in a command line.
+.PP
+If a variable name passed as an argument to
+.B set
+or
+.B unset
+is invalid,
+a diagnostic is printed.
+Similarly,
+if a variable value causes an error,
+a diagnostic is printed.
 .SS File name generation
 Prior to executing a command,
 the shell scans each argument for
@@ -1039,7 +1099,7 @@ Three examples of alias usage follow:
 	(uname \-n|sed 's/\\([^.]*\\).*/\\1/'|tr -d \\\\n;\\
 	 echo \-n ': ';uptime|sed 's/^.*user[s,][ ,] *//';:)
 	% loadavg | awk '{ print NR "\\t" $0 }'
-	1       haven: load averages: 0.49 0.39 0.29
+	1       serenity: load average: 0.49 0.39 0.29
 .fi
 .PP
 If an alias,
