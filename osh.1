@@ -1562,33 +1562,28 @@ the third case corresponds to the
 option.
 .SH SECURITY
 This port of the Thompson shell does not support
-being used in a set-ID context.
+set-ID execution.
 If the effective user (group) ID of the shell
 process is not equal to its real user (group) ID,
 the shell prints a diagnostic and exits with a
 non-zero status.
-The reasons for this are as follows.
-.PP
-First,
-the way in which the shell uses positional parameters
-(see
-.I "Parameter substitution"
-above)
-makes it a simple matter to invoke an interactive shell
-from a command file if the user knows the name
-of the current terminal (if any).
-This is distinctly
-.I not
-a bug and can be very useful in the normal case.
 .PP
 However,
 if the shell did support set-ID execution,
-this could possibly allow a user to violate the
+it could possibly allow a user to violate the
 security policy on a host where the shell is used.
 For example,
 if the shell were running a setuid-root command file,
-a regular user could invoke an interactive root shell
-as a result.
+a regular user could possibly invoke an interactive
+root shell as a result.
+.PP
+This is
+.I not
+a bug.
+It is a fact of how the shell works.
+Thus,
+.B osh
+does not support set-ID execution.
 .SH BUGS
 The shell makes no attempt to recover from
 .IR read (2)
