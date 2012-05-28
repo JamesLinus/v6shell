@@ -485,9 +485,9 @@ in a command line by the invoked shell.
 Take the following two shell invocations for example:
 .PP
 .nf
-	% sh6 \-c '$1' 'echo Hello! >/dev/null'
-	% sh6 \-c '$1' 'echo Hello! \\>/dev/null'
-	Hello! >/dev/null
+	% sh6 \-c '$1' 'echo Hello World! >/dev/null'
+	% sh6 \-c '$1' 'echo Hello World! \\>/dev/null'
+	Hello World! >/dev/null
 .fi
 .PP
 In the first invocation,
