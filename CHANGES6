@@ -4,10 +4,11 @@ command in porting them to run on modern UNIX systems.
 
 -------------------------------------------------------------------------------
 [osh-current]:
-	* Work In Progress
-
 sh6:
 	* Added missing `Command line overflow' diagnostic for compatibility.
+
+sh6.1:
+	* TODO: Describe changes.
 
 -------------------------------------------------------------------------------
 [osh-20120102]:
@@ -431,6 +432,6 @@ glob.c:
     Date: May 14, 1975
     From: Sixth Edition UNIX /usr/source/s1/glob.c
 
-Jeffrey Allen Neitzel						2012/03/15
+Jeffrey Allen Neitzel						2012/05/29
 
 @(#)$Id$

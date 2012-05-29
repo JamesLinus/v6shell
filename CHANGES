@@ -3,8 +3,6 @@ Thompson shell are marked w/ a `C:' in the details below.
 
 -------------------------------------------------------------------------------
 [osh-current] (will most likely be released as osh-20120603):
-	* Work In Progress
-
 	* New files: tests/* (regression test suite for osh/sh6)
 
 	* New files: strtoint.[ch] (to support new `if' command operators)
@@ -46,7 +44,7 @@ if:
 	  -eq, -ne, -gt, -ge, -lt, -le
 
 osh.1:
-	* Work In Progress
+	* TODO: Describe changes.
 
 -------------------------------------------------------------------------------
 [osh-20120102]:
@@ -1747,6 +1745,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2012/05/25
+Jeffrey Allen Neitzel						2012/05/29
 
 @(#)$Id$
