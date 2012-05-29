@@ -5,7 +5,7 @@ Thompson shell are marked w/ a `C:' in the details below.
 [osh-current] (will most likely be released as osh-20120603):
 	* New files: tests/* (regression test suite for osh/sh6)
 
-	* New files: strtoint.[ch] (to support new `if' command operators)
+	* New files: strtoint.[ch] (string to integer converter)
 
 Makefile:
 	* Added a "check" target to run the tests w/ osh and sh6.
