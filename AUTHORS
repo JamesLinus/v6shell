@@ -15,10 +15,10 @@ Definitions:
 	osh - enhanced port of the Sixth Edition (V6) UNIX Thompson shell
 
 	sh6 - port of the Sixth Edition (V6) UNIX Thompson shell
-		(sh6 references include glob6 implicitly)
+		(sh6 references implicitly include glob6)
 ===
 
-Notice that I have developed three different implementations of
+Notice that I have released three different implementations of
 osh(1) since July 2003.  The origin and primary objectives of
 each one are described below.
 
@@ -80,6 +80,6 @@ would exist today.
 
 See the DEDICATIONS file for further info.
 
-Jeffrey Allen Neitzel						2012/01/19
+Jeffrey Allen Neitzel						2012/06/02
 
 @(#)$Id$

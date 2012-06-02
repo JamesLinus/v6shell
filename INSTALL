@@ -150,6 +150,6 @@ OpenSolaris.
 	% gmake
 	# gmake INSTALL=/usr/bin/ginstall install install-doc install-exp
 
-Jeffrey Allen Neitzel						2012/02/08
+Jeffrey Allen Neitzel						2012/06/02
 
 @(#)$Id$

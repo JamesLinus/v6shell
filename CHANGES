@@ -2,7 +2,7 @@ Changes that improve compatibility w/ the Sixth Edition (V6) UNIX
 Thompson shell are marked w/ a `C:' in the details below.
 
 -------------------------------------------------------------------------------
-[osh-current] (will most likely be released as osh-20120603):
+[osh-current]:
 	* New files: tests/* (regression test suite for osh/sh6)
 
 	* New files: strtoint.[ch] (string to integer converter)
@@ -13,8 +13,14 @@ Makefile:
 	* Added a "check-newlog" target to generate new test logs
 	  for the osh and sh6 tests.
 
+defs.h:
+	* Limited maximum PATHMAX definition to 1024.
+
+pexec.c:
+	* Changed errno to ENAMETOOLONG for each `path too long' error.
+
 osh:
-	C: Added missing `Command line overflow' diagnostic for compatibility.
+	C: Added missing `Command line overflow' diagnostic.
 
 	* Added $# (as a synonym for $n) parameter.
 
@@ -23,19 +29,22 @@ osh:
 	* Deprecated $n and $s parameters in favor of $# and $?.
 	  $n and $s parameters will be removed after this release.
 
-	* Changed quoting to allow $ substitution within double (") quotes.
-	  For example: "$$", "$*", "$1", and so forth. This makes parameter
-	  and variable substitution much more flexible.
-
 	* Added simple shell variables. This allows the user to `set' and
 	  `unset' shell variables. For compatibility, these variables are
 	  limited to uppercase and lowercase ASCII alpha names that are
 	  one character in length. For example: $A $B $C and $a $b $c
 	  and so forth.
 
+	* Changed quoting to allow $ substitution within double (") quotes.
+	  For example: "$$", "$*", "$1", and so forth. This makes parameter
+	  and variable substitution much more flexible.
+
 	* Added `.' as a synonym for `source'.
 
-	* Added PATH search when opening file for `.' and `source'.
+	* Enabled PATH search when opening file for `.' and `source'.
+
+	* Changed `setenv' built-in command usage and behavior. Now, name
+	  requires value argument. Updated osh.1 manual page accordingly.
 
 if:
 	* Added new operators to the built-in `if' command for osh
@@ -44,7 +53,22 @@ if:
 	  -eq, -ne, -gt, -ge, -lt, -le
 
 osh.1:
-	* TODO: Describe changes.
+	* Flagged $n and $s parameters as deprecated.
+
+	* Added `set' and `unset' documentation to the
+	  "Special commands" subsection.
+
+	* Added a new "Variable substitution (+)" subsection.
+
+	* Documented `.' as a synonym for `source', and added relevant
+	  PATH search documentation.
+
+	* Simplified "SECURITY" section a bit.
+
+	* Updated "Quoting" subsection to describe double (") quotes handling.
+
+examples/*:
+	* Made various changes to reflect current and future osh behavior.
 
 -------------------------------------------------------------------------------
 [osh-20120102]:
@@ -1745,6 +1769,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2012/05/29
+Jeffrey Allen Neitzel						2012/06/02
 
 @(#)$Id$
