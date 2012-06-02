@@ -63,7 +63,11 @@ if $? = 0 goto Continue
 	: " The terminating ` ; : ' or `;:' (in effect) turns  "
 	: " alias arguments into a no-op.                      "
 	:
+	alias	aliases	'(alias;:)'
+	alias	aman	'setenv LC_ALL C;setenv LESSCHARSET ascii;man'
+	alias	anroff	'setenv LC_ALL C;setenv LESSCHARSET ascii;nroff -mandoc -Tascii'
 	alias	hcount	"setenv LC_ALL C;awk '{print $1;}'<$h/.osh.history|sort|uniq -c|sort -k1 -rn|head -25;:"
+	alias	isset	'set'
 	alias	l	'leaks $$;:'
 	alias	lf	'ls -F'
 	alias	li	'ls -i'
@@ -83,3 +87,4 @@ if $? = 0 goto Continue
 	if $? != 0 goto Jump
 		alias	logout	'fd2 -e echo "Not an osh login shell - Type an EOT (^D) instead";false'
 	: Jump
+		: nothing
