@@ -2,7 +2,7 @@ Changes that improve compatibility w/ the Sixth Edition (V6) UNIX
 Thompson shell are marked w/ a `C:' in the details below.
 
 -------------------------------------------------------------------------------
-[osh-current]:
+[osh-20120603]:
 	* New files: tests/* (regression test suite for osh/sh6)
 
 	* New files: strtoint.[ch] (string to integer converter)
@@ -1769,6 +1769,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2012/06/02
+Jeffrey Allen Neitzel						2012/06/03
 
 @(#)$Id$
