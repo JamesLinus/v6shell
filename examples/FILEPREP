@@ -44,11 +44,11 @@ if ! { which chmod cp head mkdir pwd rm strings tee tr >/dev/null }\
 
 : " Prepare files for installation. "
 
-	echo -n "<$1 ( rm -f $1 ; sed 's,@SYSCONFDIR@," >$d/sysconfdir
+	echo -n '<$1 ( rm -f $1 ; sed "s,@SYSCONFDIR@,' >$d/sysconfdir
 	which osh | sed 's,.*,strings &,' | osh |\
 		sed -n 's,\(.*\)/osh.login,\1,p' >$d/sysconfdir_path
 	<$d/sysconfdir_path tr -d '\n' >>$d/sysconfdir
-	echo ",' >$1 )" >>$d/sysconfdir
+	echo '," >$1 )' >>$d/sysconfdir
 	osh - etc.osh.login etc.osh.oshrc etc.osh.logout ; goto EXECSHELL
 	: Loop
 		osh $d/sysconfdir $1 ; shift
@@ -58,8 +58,8 @@ if ! { which chmod cp head mkdir pwd rm strings tee tr >/dev/null }\
 : EXECSHELL
 
 	(\
-	 echo -n "<$1 ( rm -f $1 ; sed 's,@EXECSHELL@," ;\
-	 which osh | tr -d '\n' ; echo ",' >$1 )"       ;\
+	 echo -n '<$1 ( rm -f $1 ; sed "s,@EXECSHELL@,' ;\
+	 which osh | tr -d '\n' ; echo '," >$1 )'       ;\
 	) >$d/execshell
 	osh $d/execshell dot.osh.login
 	: fallthrough
@@ -68,16 +68,16 @@ if ! { which chmod cp head mkdir pwd rm strings tee tr >/dev/null }\
 
 if ! { fd2 which oshdir >/dev/null } goto NotFound
 	(\
-	 echo -n "<$1 ( rm -f $1 ; sed 's,@SOURCE_OSHDIR@,source " ;\
-	 which oshdir | tr -d '\n' ; echo " $$,' >$1 )"            ;\
+	 echo -n '<$1 ( rm -f $1 ; sed "s,@SOURCE_OSHDIR@,source ' ;\
+	 which oshdir | tr -d '\n' ; echo ' \$\$," >$1 )'          ;\
 	) >$d/oshdir
 	goto Done
 
 : NotFound
 
 	(\
-	 echo -n "<$1 ( rm -f $1 ; sed 's,@SOURCE_OSHDIR@,"             ;\
-	 echo ": See http://v6shell.org/v6scripts/oshdir.osh .,' >$1 )" ;\
+	 echo -n '<$1 ( rm -f $1 ; sed "s,@SOURCE_OSHDIR@,'             ;\
+	 echo ': See http://v6shell.org/v6scripts/oshdir.osh .," >$1 )' ;\
 	) >$d/oshdir
 	: fallthrough
 
