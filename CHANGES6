@@ -6,7 +6,7 @@ command in porting them to run on modern UNIX systems.
 [osh-current]:
 
 -------------------------------------------------------------------------------
-[osh-20120603]:
+[osh-20120604]:
 sh6:
 	* Added missing `Command line overflow' diagnostic.
 
@@ -435,6 +435,6 @@ glob.c:
     Date: May 14, 1975
     From: Sixth Edition UNIX /usr/source/s1/glob.c
 
-Jeffrey Allen Neitzel						2012/06/03
+Jeffrey Allen Neitzel						2012/06/04
 
 @(#)$Id$
