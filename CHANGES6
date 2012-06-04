@@ -3,11 +3,11 @@ code for the Sixth Edition (V6) UNIX Thompson shell and global
 command in porting them to run on modern UNIX systems.
 
 -------------------------------------------------------------------------------
-[osh-current]:
+[osh-current] (development):
 	* Work In Progress ( see http://v6shell.org/src/current/ )
 
 -------------------------------------------------------------------------------
-[osh-20120604]:
+[osh-20120604] (latest):
 sh6:
 	* Added missing `Command line overflow' diagnostic.
 
