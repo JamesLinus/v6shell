@@ -43,10 +43,14 @@ if $? = 0 goto Continue
 : Continue - " Continue as normal. "
 
 	:
-	: " Set terminal options and window title. "
+	: " Set terminal options and window title if possible. "
 	:
-	( stty altwerase imaxbel -oxtabs ; stty status '^T' ) <-
-	xtitle
+	uname -s | grep '^Linux$' >/dev/null
+	if $? -eq 0 goto Uname-S-Linux
+		( stty altwerase imaxbel -oxtabs ; stty status '^T' ) <-
+		: fallthrough
+	: Uname-S-Linux
+		xtitle
 
 	:
 	: " Set some useful aliases.                           "
@@ -66,9 +70,14 @@ if $? = 0 goto Continue
 	alias	aliases	'(alias;:)'
 	alias	aman	'setenv LC_ALL C;setenv LESSCHARSET ascii;man'
 	alias	anroff	'setenv LC_ALL C;setenv LESSCHARSET ascii;nroff -mandoc -Tascii'
+	alias	glob	'echo'
 	alias	hcount	"setenv LC_ALL C;awk '{print $1;}'<$h/.osh.history|sort|uniq -c|sort -k1 -rn|head -25;:"
 	alias	isset	'set'
-	alias	l	'leaks $$;:'
+	uname -s | grep '^Darwin$' >/dev/null
+	if $? -ne 0 goto Uname-S-NotDarwin
+		alias	l	'leaks $$;:'
+		: fallthrough
+	: Uname-S-NotDarwin
 	alias	lf	'ls -F'
 	alias	li	'ls -i'
 	alias	ll	'ls -AlF'
@@ -77,7 +86,6 @@ if $? = 0 goto Continue
 	alias	n	'echo "日本語 Nihongo";:'
 	alias	path	'echo $p;:'
 	alias	pparm	'echo $0: $#: $*;:'
-	alias	pspg	'ps -Oppid,pgid;:'
 	alias	sh6i	'sh6 -c xtitle;sh6;xtitle;:'
 	alias	s	'echo $?;:'
 	alias	status	's'
