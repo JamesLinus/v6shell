@@ -7,9 +7,11 @@ Thompson shell are marked w/ a `C:' in the details below.
 
 -------------------------------------------------------------------------------
 [osh-20120604]:
-	* New files: tests/* (regression test suite for osh/sh6)
+	* New file:  Makefile.config  (included by Makefile)
 
 	* New files: strtoint.[ch] (string to integer converter)
+
+	* New files: tests/* (regression test suite for osh/sh6)
 
 Makefile:
 	* Added a "check" target to run the tests w/ osh and sh6.

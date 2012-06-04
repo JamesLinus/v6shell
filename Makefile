@@ -61,16 +61,9 @@ CFLAGS+=	$(MOXARCH)
 LDFLAGS+=	$(MOXARCH)
 
 #
-# The following specifies the osh date and version:
+# Include osh date and version from Makefile.config .
 #
-#	osh-current            == current master branch development
-#	osh-YYYYMMDD-current   == current development snapshot
-#	osh-YYYYMMDD-beta[1-9] == beta     release
-#	osh-YYYYMMDD           == official release
-#	osh-YYYYMMDD-p[1-9]    == patched  release
-#
-OSH_DATE=	June 4, 2012
-OSH_VERSION=	osh-current
+include	./Makefile.config
 
 OSH=	osh
 SH6=	sh6 glob6
