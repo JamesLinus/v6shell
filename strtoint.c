@@ -22,6 +22,8 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ *	@(#)$Id$
  */
 /*
  *	Derived from:
@@ -68,33 +70,45 @@
 #include "strtoint.h"
 
 /*
- * Convert the string pointed to by str into an integer pointed to by num.
- * Return true on success.  Return false on error.
+ * Convert a string value into an int integer value.
  */
 bool
-strtoint(const char *str, int *num)
+strtoint(const char *string, int *integer)
 {
-	long lnum;
-	char *numbad;
-	const char *nam;
+	long lint;
+	char *lintbad;
+	const char *name;
 
-	nam = getmyname();
+	name = getmyname();
 
+	/*
+	 * Fail if the specified string or integer is (or points to) NULL.
+	 */
 	errno = 0;
-	lnum  = strtol(str, &numbad, 10);
-	if (*str == EOS || *numbad != EOS) {
-		if (EQUAL(nam, "if"))
-			fd_print(FD2, FMT3S, nam, str, ERR_NOTINTEGER);
-		*num = 0;
+	if (string == NULL || integer == NULL) {
+		errno = EINVAL;
+		fd_print(FD2, FMT3S, name, "strtoint", strerror(errno));
+		if (integer != NULL)
+			*integer = 0;
 		return false;
 	}
-	if ((errno == ERANGE  && (lnum == LONG_MAX || lnum == LONG_MIN)) ||
-	    (lnum  >  INT_MAX ||  lnum <  INT_MIN)) {
-		if (EQUAL(nam, "if"))
-			fd_print(FD2, FMT3S, nam, str, ERR_RANGE);
-		*num = 0;
+
+	lint = strtol(string, &lintbad, 10);
+	if (*string == EOS || *lintbad != EOS) {
+		errno = EINVAL;
+		if (EQUAL(name, "if"))
+			fd_print(FD2, FMT3S, name, string, ERR_NOTINTEGER);
+		*integer = 0;
 		return false;
 	}
-	*num = (int)lnum;
+	if ((errno == ERANGE  && (lint == LONG_MAX || lint == LONG_MIN)) ||
+	    (lint  >  INT_MAX ||  lint <  INT_MIN)) {
+		errno = ERANGE;
+		if (EQUAL(name, "if"))
+			fd_print(FD2, FMT3S, name, string, ERR_RANGE);
+		*integer = 0;
+		return false;
+	}
+	*integer = (int)lint;
 	return true;
 }

@@ -25,6 +25,43 @@
  * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ *	@(#)$Id$
  */
 
-bool	strtoint(const char *, int *);
+#ifndef	STRTOINT_H
+#define	STRTOINT_H
+
+/*
+ * NAME
+ *	strtoint - convert a string value into an int integer value
+ *
+ * SYNOPSIS
+ *	#include "strtoint.h"
+ *
+ *	bool
+ *	strtoint(const char *string, int *integer);
+ *
+ * DESCRIPTION
+ *	The strtoint() function converts the specified string into a
+ *	decimal integer value of type int.  It assigns the converted
+ *	value to the storage pointed to by the specified integer.
+ *
+ * RETURN VALUES
+ *	On success, strtoint() returns true with the converted int
+ *	integer value assigned to the storage pointed to by integer.
+ *	On error, it returns false with 0 assigned to the storage
+ *	pointed to by integer and sets errno according to the error.
+ *
+ * ERRORS
+ *	EINVAL	The specified string is NULL, empty,
+ *		or cannot be converted by strtol(3).
+ *
+ *	EINVAL	The specified integer is NULL.
+ *
+ *	ERANGE	The specified string is out of range.
+ */
+
+bool	strtoint(/*@null@*/ const char *, /*@null@*/ /*@out@*/ int *);
+
+#endif	/* !STRTOINT_H */
