@@ -3387,7 +3387,7 @@ gcat(const char *src1, const char *src2, bool slash)
 
 	if (src1 == NULL || src2 == NULL) {
 		/* never true, but appease splint(1) */
-		err(-2, FMT2S, getmyname(), "gcat: Invalid argument");
+		err(-2, FMT3S, getmyname(), "gcat", strerror(EINVAL));
 		return NULL;
 	}
 
