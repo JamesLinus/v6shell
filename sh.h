@@ -53,7 +53,7 @@ enum sbikey {
 	SBI_UNSET,  SBI_UNSETENV, SBI_VERSION, SBI_WAIT,   SBI_UNKNOWN
 };
 
-#define	IS_VARNAME(v)	(((*(v) >= 'A' && *(v) <= 'Z') || (*(v) >= 'a' && *(v) <= 'z')) && !any(*(v), "#$*?0123456789dehmnpstuv") && *((v) + 1) == EOS)
+#define	IS_VARNAME(v)	(((*(v) >= 'A' && *(v) <= 'Z') || (*(v) >= 'a' && *(v) <= 'z')) && !any(*(v), "#$*?0123456789dehmptuv") && *((v) + 1) == EOS)
 
 /*
  * shell variable node structure

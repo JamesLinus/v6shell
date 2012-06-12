@@ -3,11 +3,21 @@ Thompson shell are marked w/ a `C:' in the details below.
 
 -------------------------------------------------------------------------------
 [osh-current] (development):
+*sh.[1ch]:
+	* Removed the deprecated $n and $s parameters.
+	  Now, the user can `set' and `unset' n and s as shell variables.
+	  The following command line is a simple way to replace
+	  all instances of $n w/ $# and $s w/ $? in file:
+
+		% <file(rm -f file;sed 's/$n/$#/g;s/$s/$?/g'>file)
+
+	  .
+
 	* Work In Progress ( see http://v6shell.org/src/current/ )
 
 -------------------------------------------------------------------------------
 [osh-20120604] (latest):
-	* New file:  Makefile.config  (included by Makefile)
+	* New file:  Makefile.config  (included from Makefile)
 
 	* New files: strtoint.[ch] (string to integer converter)
 
@@ -1775,6 +1785,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2012/06/04
+Jeffrey Allen Neitzel						2012/06/12
 
 @(#)$Id$

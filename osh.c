@@ -880,6 +880,11 @@ get_dolp(int c)
 
 	*dolbuf = EOS;
 	switch (c) {
+	case HASH:
+		n = (dolc > 1) ? dolc - 1 : 0;
+		r = snprintf(dolbuf, sizeof(dolbuf), "%u", (unsigned)n);
+		v = (r < 0 || r >= (int)sizeof(dolbuf)) ? NULL : dolbuf;
+		break;
 	case DOLLAR:
 		r = snprintf(dolbuf,sizeof(dolbuf),"%05u",(unsigned)getmypid());
 		v = (r < 0 || r >= (int)sizeof(dolbuf)) ? NULL : dolbuf;
@@ -891,6 +896,10 @@ get_dolp(int c)
 			v = (n > 0) ? dolv[n] : name;
 		else
 			v = dolbuf;
+		break;
+	case QUESTION:
+		r = snprintf(dolbuf, sizeof(dolbuf), "%u", (unsigned)status);
+		v = (r < 0 || r >= (int)sizeof(dolbuf)) ? NULL : dolbuf;
 		break;
 	case 'd':
 		if ((v = getenv("OSHDIR")) == NULL)
@@ -908,20 +917,9 @@ get_dolp(int c)
 		if ((v = getenv("MANPATH")) == NULL)
 			v = dolbuf;
 		break;
-	case HASH:
-	case 'n':	/* NOTE: $n is deprecated. */
-		n = (dolc > 1) ? dolc - 1 : 0;
-		r = snprintf(dolbuf, sizeof(dolbuf), "%u", (unsigned)n);
-		v = (r < 0 || r >= (int)sizeof(dolbuf)) ? NULL : dolbuf;
-		break;
 	case 'p':
 		if ((v = getenv("PATH")) == NULL)
 			v = dolbuf;
-		break;
-	case QUESTION:
-	case 's':	/* NOTE: $s is deprecated. */
-		r = snprintf(dolbuf, sizeof(dolbuf), "%u", (unsigned)status);
-		v = (r < 0 || r >= (int)sizeof(dolbuf)) ? NULL : dolbuf;
 		break;
 	case 't':
 		v = tty;
