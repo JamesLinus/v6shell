@@ -134,7 +134,7 @@ pexec.o                                                        : $(PEXSRC)
 sasignal.o                                                     : $(SIGSRC)
 strtoint.o                                                     : $(INTSRC)
 
-config.h: mkconfig
+config.h: Makefile Makefile.config mkconfig
 	$(SHELL) ./mkconfig
 
 oshbin: v.o osh.o err.o util.o pexec.o sasignal.o strtoint.o
