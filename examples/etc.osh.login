@@ -19,7 +19,8 @@ umask	0022
 
 setenv	MAIL	/var/mail/$u
 setenv	CTTY	$t
-stty status '^T' <-
+uname -s | grep '^Linux$' >/dev/null
+if $? -ne 0 stty status '^T' <-
 
 if X$h = X -o ! -d $h'' goto finish
 if ! { mkdir $h/.osh.setenv.$$ } goto finish
