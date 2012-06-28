@@ -71,7 +71,7 @@ if $? = 0 goto Continue
 	alias	aman	'setenv LC_ALL C;setenv LESSCHARSET ascii;man'
 	alias	anroff	'setenv LC_ALL C;setenv LESSCHARSET ascii;nroff -mandoc -Tascii'
 	alias	glob	'echo'
-	alias	hcount	"setenv LC_ALL C;awk '{print $1;}'<$h/.osh.history|sort|uniq -c|sort -k1 -rn|head -25;:"
+	alias	hcount	"setenv LC_ALL C;awk '{print \$1;}'<$h/.osh.history|sort|uniq -c|sort -k1 -rn|head -25;:"
 	alias	isset	'set'
 	uname -s | grep '^Darwin$' >/dev/null
 	if $? -ne 0 goto Uname-S-NotDarwin
