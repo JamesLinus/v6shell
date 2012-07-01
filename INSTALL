@@ -129,12 +129,12 @@ documentation and examples, into the default location.
 	% make SYSCONFDIR=/etc
 	# make install install-doc install-exp
 
-The following compiles each program as a 2-way 32-bit universal
-binary for Mac OS X running on Intel and PowerPC Macs.  Then, it
-installs the entire osh package, including package documentation
-and examples, into the default location.
+The following compiles each program as a 2-way 64/32-bit universal
+binary for Mac OS X running on Intel Macs.  Then, it installs the
+entire osh package, including package documentation and examples,
+into the default location.
 
-	% make MOXARCH='-arch i386 -arch ppc'
+	% make MOXARCH='-arch x86_64 -arch i386'
 	# make install install-doc install-exp
 
 The following compiles and installs the entire osh package, including
@@ -150,6 +150,6 @@ OpenSolaris.
 	% gmake
 	# gmake INSTALL=/usr/bin/ginstall install install-doc install-exp
 
-Jeffrey Allen Neitzel						2012/06/04
+Jeffrey Allen Neitzel						2012/07/01
 
 @(#)$Id$
