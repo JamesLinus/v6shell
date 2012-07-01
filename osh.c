@@ -956,8 +956,9 @@ varalloc(int name, const char *value)
 		vnp = varalloc1(name, value);
 		return;
 	}
+
+	/* Do ascending ASCII sort. */
 	p = v;
-	/* ascending ASCII sort */
 	while (v != NULL) {
 		if ((d = (name - v->name)) == 0) {
 			if (!EQUAL(value, v->value)) {
@@ -972,18 +973,19 @@ varalloc(int name, const char *value)
 		p = v;
 		v = v->next;
 	}
+
+	/* Do ascending ASCII insert. */
 	if (v == NULL) { /* Last */
 		p->next = varalloc1(name, value);
 		return;
 	}
-
-	/* Insert new variable between p and v (ascending ASCII insert). */
 	if (v == vnp) { /* New Head */
 		n = varalloc1(name, value);
 		n->next = vnp;
 		vnp = n;
 		return;
 	}
+	/* Insert new variable between p and v. */
 	n = varalloc1(name, value);
 	n->next = p->next;
 	p->next = n;
@@ -1054,7 +1056,7 @@ varfree(int name)
 /*
  * Get the variable value specified by name.
  * Return a pointer to the variable value on success.
- * Return a pointer to NULL on error.
+ * Return a pointer to NULL on no-such-name error.
  */
 static const char *
 varget(int name)
@@ -1096,8 +1098,9 @@ aalloc(const char *name, const char *string)
 		anp = aalloc1(name, string);
 		return;
 	}
+
+	/* Do ascending ASCII sort. */
 	p = a;
-	/* ascending ASCII sort */
 	while (a != NULL) {
 		if ((d = strcmp(name, a->name)) == 0) {
 			if (!EQUAL(string, a->string)) {
@@ -1112,18 +1115,19 @@ aalloc(const char *name, const char *string)
 		p = a;
 		a = a->next;
 	}
+
+	/* Do ascending ASCII insert. */
 	if (a == NULL) { /* Last */
 		p->next = aalloc1(name, string);
 		return;
 	}
-
-	/* Insert new alias between p and a (ascending ASCII insert). */
 	if (a == anp) { /* New Head */
 		n = aalloc1(name, string);
 		n->next = anp;
 		anp = n;
 		return;
 	}
+	/* Insert new alias between p and a. */
 	n = aalloc1(name, string);
 	n->next = p->next;
 	p->next = n;
@@ -1194,7 +1198,7 @@ afree(const char *name)
 /*
  * Get the alias string specified by name.
  * Return a pointer to the alias string on success.
- * Return a pointer to NULL on error.
+ * Return a pointer to NULL on no-such-name error.
  */
 static const char *
 asget(const char *name)
