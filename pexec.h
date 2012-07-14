@@ -106,7 +106,8 @@ int	pexec(/*@null@*/ const char *, /*@null@*/ char *const *);
  * SYNOPSIS
  *	#include "pexec.h"
  *
- *	extern char **environ;
+ *	extern const char *name;
+ *	extern bool       no_lnum;
  *
  *	void
  *	err_pexec(const char *file, char *const argv[]);

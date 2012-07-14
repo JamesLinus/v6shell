@@ -68,6 +68,9 @@
 #include "err.h"
 #include "pexec.h"
 
+const char	*name;
+bool		no_lnum	= true;	/* no line number flag */
+
 static	const char	**gavp;	/* points to current gav position     */
 static	const char	**gave;	/* points to current gav end          */
 static	size_t		gavtot;	/* total bytes used for all arguments */

@@ -72,6 +72,9 @@
 #include "sasignal.h"
 #include "strtoint.h"
 
+const char	*name;
+bool		no_lnum	= true;	/* no line number flag */
+
 static	int	ac;
 static	int	ap;
 static	char	**av;

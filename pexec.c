@@ -196,6 +196,9 @@ fail:
 	return -1;
 }
 
+extern const char *name;
+extern bool no_lnum;
+
 /*
  * Execute a file or path name w/ error handling.
  * This function never returns.
@@ -203,6 +206,7 @@ fail:
 void
 err_pexec(const char *file, char *const *argv)
 {
+	long l;
 	const char *f, *n;
 
 	(void)pexec(file, argv);
@@ -228,12 +232,46 @@ err_pexec(const char *file, char *const *argv)
 			err(126, FMT2S, f, ERR_EXEC);
 		err(127, FMT2S, f, ERR_NOTFOUND);
 	} else {
-		if (errno == ENOEXEC)
-			err(125, FMT3S, n, f, ERR_NOSHELL);
-		if (errno == E2BIG)
-			err(126, FMT3S, n, f, ERR_E2BIG);
-		if (errno != ENOENT && errno != ENOTDIR)
-			err(126, FMT3S, n, f, ERR_EXEC);
-		err(127, FMT3S, n, f, ERR_NOTFOUND);
+		l = no_lnum ? -1 : get_lnum();
+/*
+		fd_print(FD2, "err_pexec: l == %ld;\n", l);
+ */
+		if (name != NULL) {
+			if (l != -1) {
+				if (errno == ENOEXEC)
+					err(125,FMT4LS,n,name,l,f, ERR_NOSHELL);
+				if (errno == E2BIG)
+					err(126,FMT4LS,n,name, l, f, ERR_E2BIG);
+				if (errno != ENOENT && errno != ENOTDIR)
+					err(126,FMT4LS,n, name, l, f, ERR_EXEC);
+				err(127, FMT4LS, n, name, l, f, ERR_NOTFOUND);
+			} else {
+				if (errno == ENOEXEC)
+					err(125,FMT4S, n, name, f, ERR_NOSHELL);
+				if (errno == E2BIG)
+					err(126, FMT4S, n, name, f, ERR_E2BIG);
+				if (errno != ENOENT && errno != ENOTDIR)
+					err(126, FMT4S, n, name, f, ERR_EXEC);
+				err(127, FMT4S, n, name, f, ERR_NOTFOUND);
+			}
+		} else {
+			if (l != -1) {
+				if (errno == ENOEXEC)
+					err(125, FMT3LFS, n, l, f, ERR_NOSHELL);
+				if (errno == E2BIG)
+					err(126, FMT3LFS, n, l, f, ERR_E2BIG);
+				if (errno != ENOENT && errno != ENOTDIR)
+					err(126, FMT3LFS, n, l, f, ERR_EXEC);
+				err(127, FMT3LFS, n, l, f, ERR_NOTFOUND);
+			} else {
+				if (errno == ENOEXEC)
+					err(125, FMT3S, n, f, ERR_NOSHELL);
+				if (errno == E2BIG)
+					err(126, FMT3S, n, f, ERR_E2BIG);
+				if (errno != ENOENT && errno != ENOTDIR)
+					err(126, FMT3S, n, f, ERR_EXEC);
+				err(127, FMT3S, n, f, ERR_NOTFOUND);
+			}
+		}
 	}
 }

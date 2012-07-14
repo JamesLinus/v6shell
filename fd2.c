@@ -33,6 +33,9 @@
 #include "err.h"
 #include "pexec.h"
 
+const char	*name;
+bool		no_lnum	= true;	/* no line number flag */
+
 static	bool	fd_isopen(int);
 /*@noreturn@*/
 static	void	usage(void);

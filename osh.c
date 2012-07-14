@@ -151,7 +151,9 @@ enum stflags {
 /*
  * **** Global Variables ****
  */
-uid_t	sheuid;	/* effective shell user ID */
+const char	*name;	/* $0 - shell command name */
+bool		no_lnum;/* no line number flag     */
+uid_t		sheuid;	/* effective shell user ID */
 
 /*
  * shell sbi command structure array
@@ -221,16 +223,20 @@ static	int		dupfd0;		/* duplicate of the standard input  */
 static	const char	*error_message;	/* error msg for read/parse errors  */
 static	bool		error_source;	/* error flag for `source' command  */
 static	int		hwfd = -1;	/* history write file descriptor    */
-static	bool		is_login;	/* login shell flag (true if login) */
+static	bool		is_first;	/* first line flag                  */
+static	bool		is_login;	/* login shell flag                 */
+static	bool		is_noexec;	/* not executable file flag         */
+static	bool		is_verbose;	/* verbose flag for `-v' option     */
 static	char		line[LINEMAX];	/* command-line buffer              */
 static	char		aline[LINEMAX];	/* alias-line buffer                */
 static	char		*linep;		/* [a]line pointer                  */
 static	char		*elinep;	/* end of [a]line pointer           */
 static	volatile sig_atomic_t
 			logout_now;	/* SIGHUP caught flag (1 if caught) */
-static	const char	*name;		/* $0 - shell command name          */
 static	int		nul_count;	/* `\0'-character count (per line)  */
 static	int		peekc;		/* just-read, pushed-back character */
+/*@null@*/ /*@only@*/
+static	char		*rcfilename;	/* rc file name for diagnostics     */
 static	enum stflags	shtype;		/* shell type (determines behavior) */
 static	enum sigflags	sig_child;	/* SIG(INT|QUIT|TERM) child flags   */
 static	enum sigflags	sig_state;	/* SIG(INT|QUIT|TERM) state flags   */
@@ -253,13 +259,15 @@ static	struct vnode	*vnp;		/* shell variable node pointer      */
 static	char		*tty;		/* $t - terminal name               */
 /*@null@*/ /*@only@*/
 static	char		*user;		/* $u - effective user name         */
-static	bool		verbose_flag;	/* verbose flag for `-v' option     */
 
 /*
  * **** Function Prototypes ****
  */
 static	void		cmd_loop(bool);
 static	void		cmd_verbose(void);
+static	void		error(int, /*@null@*/ const char *);
+static	void		error1(int, /*@null@*/ const char *, /*@null@*/ const char *, /*@null@*/ const char *);
+static	void		error2(int, /*@null@*/ const char *, /*@null@*/ const char *);
 static	int		rpx_line(void);
 /*@null@*/
 static	const char	**rp_alias(const char *);
@@ -354,7 +362,7 @@ static	const char	**glob(enum sbikey, /*@only@*/ char **);
 int
 main(int argc, char **argv)
 {
-	char *av0p;
+	char *av0p, *snamep;
 	int rcflag = 0;
 	bool dosigs = false;
 
@@ -365,7 +373,7 @@ main(int argc, char **argv)
 		goto done;
 
 	if (argc > 1 && *argv[1] == HYPHEN && argv[1][1] == 'v') {
-		verbose_flag = true;
+		is_verbose = true;
 		av0p = argv[0], argv = &argv[1], argv[0] = av0p;
 		argc--;
 	}
@@ -376,10 +384,11 @@ main(int argc, char **argv)
 		if (*argv[1] == HYPHEN) {
 			dosigs = true;
 			if (argv[1][1] == 'c' && argc > 2) {
-				shtype = ST_ONELINE;
-				dolv  += 1;
-				dolc  -= 1;
-				argv2p = argv[2];
+				shtype  = ST_ONELINE;
+				no_lnum = true;
+				dolv   += 1;
+				dolc   -= 1;
+				argv2p  = argv[2];
 			} else if (argv[1][1] == 'i') {
 				rcflag = DO_SYSTEM_OSHRC;
 				shtype = ST_INTERACTIVE;
@@ -393,8 +402,10 @@ main(int argc, char **argv)
 				if (!sh_on_tty())
 					err(SH_ERR, FMT3S,
 					    getmyname(), argv[1], ERR_NOTTY);
-			} else if (argv[1][1] == 't')
-				shtype = ST_ONELINE;
+			} else if (argv[1][1] == 't') {
+				shtype  = ST_ONELINE;
+				no_lnum = true;
+			}
 		} else {
 			shtype = ST_COMMANDFILE;
 			(void)close(FD0);
@@ -438,7 +449,13 @@ main(int argc, char **argv)
 	else {
 		/* Read and execute any rc init files if needed. */
 		while (SHTYPE(ST_RCFILE)) {
+			snamep = (char *)name;
+			name   = rcfilename;
 			cmd_loop(!HALT);
+			xfree(rcfilename);
+			rcfilename = NULL;
+			name = NULL;
+			name = snamep;
 			if (logout_now != 0) {
 				logout_now = 0;
 				if (is_login)
@@ -458,7 +475,13 @@ logout:
 		rcflag = DO_SYSTEM_LOGOUT;
 		rc_logout(&rcflag);
 		while (SHTYPE(ST_RCFILE)) {
+			snamep = (char *)name;
+			name   = rcfilename;
 			cmd_loop(!HALT);
+			xfree(rcfilename);
+			rcfilename = NULL;
+			name = NULL;
+			name = snamep;
 			if (logout_now != 0)
 				logout_now = 0;
 			rc_logout(&rcflag);
@@ -526,7 +549,7 @@ cmd_loop(bool halt)
 }
 
 /*
- * If verbose_flag is true, print each argument/word
+ * If is_verbose is true, print each argument/word
  * in the word pointer array to the standard error.
  * Otherwise, do nothing.
  */
@@ -535,11 +558,101 @@ cmd_verbose(void)
 {
 	char **vp;
 
-	if (!verbose_flag)
+	if (!is_verbose)
 		return;
 	for (vp = word; **vp != EOL; vp++)
 		fd_print(FD2, "%s%s", *vp, (**(vp + 1) != EOL) ? " " : "");
 	fd_print(FD2, FMT1S, "");
+}
+
+/*
+ * Print diagnostic w/ $0, line number, and so forth if possible.
+ */
+static void
+error(int s, const char *m)
+{
+	long ln;
+
+	if (m == NULL) {
+		err(ESTATUS, FMT3S, getmyname(), "error", strerror(EINVAL));
+		/*NOTREACHED*/
+	}
+
+	ln = (is_noexec || no_lnum) ? -1 : get_lnum();
+/*
+	fd_print(FD2, "error: ln == %ld;\n", ln);
+ */
+	if (name != NULL) {
+		if (ln != -1)
+			err(s, FMT3LS, getmyname(), name, ln, m);
+		else
+			err(s, FMT3S, getmyname(), name, m);
+	} else {
+		if (ln != -1)
+			err(s, FMT2LS, getmyname(), ln, m);
+		else
+			err(s, FMT2S, getmyname(), m);
+	}
+}
+
+/*
+ * Print diagnostic w/ $0, line number, and so forth if possible.
+ */
+static void
+error1(int s, const char *c, const char *a, const char *m)
+{
+	long ln;
+
+	if (c == NULL || a == NULL || m == NULL) {
+		err(ESTATUS, FMT3S, getmyname(), "error1", strerror(EINVAL));
+		/*NOTREACHED*/
+	}
+
+	ln = (is_noexec || no_lnum) ? -1 : get_lnum();
+/*
+	fd_print(FD2, "error1: ln == %ld;\n", ln);
+ */
+	if (name != NULL) {
+		if (ln != -1)
+			err(s, FMT5LS, getmyname(), name, ln, c, a, m);
+		else
+			err(s, FMT5S, getmyname(), name, c, a, m);
+	} else {
+		if (ln != -1)
+			err(s, FMT4LFS, getmyname(), ln, c, a, m);
+		else
+			err(s, FMT4S, getmyname(), c, a, m);
+	}
+}
+
+/*
+ * Print diagnostic w/ $0, line number, and so forth if possible.
+ */
+static void
+error2(int s, const char *f, const char *m)
+{
+	long ln;
+
+	if (f == NULL || m == NULL) {
+		err(ESTATUS, FMT3S, getmyname(), "error2", strerror(EINVAL));
+		/*NOTREACHED*/
+	}
+
+	ln = (is_noexec || no_lnum) ? -1 : get_lnum();
+/*
+	fd_print(FD2, "error2: ln == %ld;\n", ln);
+ */
+	if (name != NULL) {
+		if (ln != -1)
+			err(s, FMT4LS, getmyname(), name, ln, f, m);
+		else
+			err(s, FMT4S, getmyname(), name, f, m);
+	} else {
+		if (ln != -1)
+			err(s, FMT3LFS, getmyname(), ln, f, m);
+		else
+			err(s, FMT3S, getmyname(), f, m);
+	}
 }
 
 /*
@@ -570,7 +683,7 @@ rpx_line(void)
 	hist_write(PROMPT && wordp - word > 1);
 
 	if (error_message != NULL) {
-		err(-1, FMT2S, getmyname(), error_message);
+		error(-1, error_message);
 		return 1;
 	}
 
@@ -582,7 +695,7 @@ rpx_line(void)
 		tnp = syntax(word, wordp);
 		(void)sigprocmask(SIG_SETMASK, &omask, NULL);
 		if (error_message != NULL)
-			err(-1, FMT2S, getmyname(), error_message);
+			error(-1, error_message);
 		else
 			execute(tnp, NULL, NULL);
 		tfree(tnp);
@@ -819,17 +932,25 @@ getd:
 		if ((dolp = get_dolp(c)) != NULL)
 			goto getd;
 	}
-	/* Ignore all EOS/NUL characters. */
+	/* Handle EOS/NUL characters as needed. */
 	if (c == EOS) do {
-		if (++nul_count >= LINEMAX) {
-			error_message = ERR_TMCHARS;
-			goto geterr;
+		if (!PROMPT) {
+			if (is_first)
+				is_noexec = true;
+			if (is_first || ++nul_count >= LINEMAX) {
+				error_message = ERR_EXEC;
+				goto geterr;
+			}
 		}
 		c = readc();
 	} while (c == EOS);
+	if (c == EOL)
+		is_first = false;
 	return c;
 
 geterr:
+	if (c == EOL)
+		is_first = false;
 	return EOL;
 }
 
@@ -1647,7 +1768,7 @@ execute(struct tnode *t, int *pin, int *pout)
 
 	case TPIPE:
 		if (pipe(pfd) == -1) {
-			err(-1, FMT2S, getmyname(), ERR_PIPE);
+			error(-1, ERR_PIPE);
 			if (pin != NULL) {
 				(void)close(pin[0]);
 				(void)close(pin[1]);
@@ -1668,7 +1789,7 @@ execute(struct tnode *t, int *pin, int *pout)
 	case TCOMMAND:
 		if (t->nav == NULL || t->nav[0] == NULL) {
 			/* should never (but can) be true */
-			err(-1, FMT2S, getmyname(), "execute: Invalid command");
+			error(-1, "execute: Invalid command");
 			return;
 		}
 		if (vtglob(t->nav)) {
@@ -1711,7 +1832,7 @@ execute(struct tnode *t, int *pin, int *pout)
 	case TSUBSHELL:
 		f = t->nflags;
 		if ((cpid = ((f & FNOFORK) != 0) ? 0 : fork()) == -1) {
-			err(-1, FMT2S, getmyname(), ERR_FORK);
+			error(-1, ERR_FORK);
 			return;
 		}
 		/**** Parent! ****/
@@ -1755,7 +1876,7 @@ execute1(struct tnode *t)
 
 	if (t->nav == NULL || t->nav[0] == NULL) {
 		/* should never (but can) be true */
-		err(-1, FMT2S, getmyname(), "execute1: Invalid command");
+		error(-1, "execute1: Invalid command");
 		return;
 	}
 	switch (t->nkey) {
@@ -1792,8 +1913,7 @@ execute1(struct tnode *t)
 				}
 			if (!aok || *t->nav[1] == EOS ||
 			    cmd_lookup(t->nav[1]) != SBI_UNKNOWN) {
-				err(-1, FMT4S, getmyname(),
-				    t->nav[0], t->nav[1], ERR_BADNAME);
+				error1(-1, t->nav[0], t->nav[1], ERR_BADNAME);
 				return;
 			}
 			if (t->nav[2] != NULL) {
@@ -1877,8 +1997,7 @@ execute1(struct tnode *t)
 				break;
 			}
 			if (!IS_VARNAME(t->nav[1])) {
-				err(-1, FMT4S, getmyname(),
-				    t->nav[0], t->nav[1], ERR_BADNAME);
+				error1(-1, t->nav[0], t->nav[1], ERR_BADNAME);
 				return;
 			}
 			if (t->nav[2] != NULL) {
@@ -1910,12 +2029,11 @@ execute1(struct tnode *t)
 			for (p = t->nav[1]; *p != '=' && *p != EOS; p++)
 				;	/* nothing */
 			if (*t->nav[1] == EOS || *p == '=') {
-				err(-1, FMT4S, getmyname(),
-				    t->nav[0], t->nav[1], ERR_BADNAME);
+				error1(-1, t->nav[0], t->nav[1], ERR_BADNAME);
 				return;
 			}
 			if (setenv(t->nav[1], t->nav[2], 1) == -1)
-				err(ESTATUS, FMT2S, getmyname(), ERR_NOMEM);
+				error(ESTATUS, ERR_NOMEM);
 
 			status = SH_TRUE;
 			return;
@@ -1983,8 +2101,7 @@ execute1(struct tnode *t)
 			for (p = t->nav[1]; *p >= '0' && *p <= '7'; p++)
 				m = m * 8 + (*p - '0');
 			if (*t->nav[1] == EOS || *p != EOS || m > 0777) {
-				err(-1, FMT4S, getmyname(),
-				    t->nav[0], t->nav[1], ERR_BADMASK);
+				error1(-1, t->nav[0], t->nav[1], ERR_BADMASK);
 				return;
 			}
 			(void)umask(m);
@@ -2007,8 +2124,7 @@ execute1(struct tnode *t)
 				}
 			if (!aok || *t->nav[1] == EOS ||
 			    cmd_lookup(t->nav[1]) != SBI_UNKNOWN) {
-				err(-1, FMT4S, getmyname(),
-				    t->nav[0], t->nav[1], ERR_BADNAME);
+				error1(-1, t->nav[0], t->nav[1], ERR_BADNAME);
 				return;
 			}
 			status = (afree(t->nav[1])) ? SH_TRUE : SH_FALSE;
@@ -2025,8 +2141,7 @@ execute1(struct tnode *t)
 		 */
 		if (t->nav[1] != NULL && t->nav[2] == NULL) {
 			if (!IS_VARNAME(t->nav[1])) {
-				err(-1, FMT4S, getmyname(),
-				    t->nav[0], t->nav[1], ERR_BADNAME);
+				error1(-1, t->nav[0], t->nav[1], ERR_BADNAME);
 				return;
 			}
 			status = (varfree(*t->nav[1])) ? SH_TRUE : SH_FALSE;
@@ -2046,8 +2161,7 @@ execute1(struct tnode *t)
 			for (p = t->nav[1]; *p != '=' && *p != EOS; p++)
 				;	/* nothing */
 			if (*t->nav[1] == EOS || *p == '=') {
-				err(-1, FMT4S, getmyname(),
-				    t->nav[0], t->nav[1], ERR_BADNAME);
+				error1(-1, t->nav[0], t->nav[1], ERR_BADNAME);
 				return;
 			}
 			unsetenv(t->nav[1]);
@@ -2081,7 +2195,7 @@ execute1(struct tnode *t)
 	default:
 		emsg = ERR_EXEC;
 	}
-	err(-1, FMT3S, getmyname(), t->nav[0], emsg);
+	error2(-1, t->nav[0], emsg);
 }
 
 /*
@@ -2103,7 +2217,7 @@ execute2(struct tnode *t, int *pin, int *pout)
 	 */
 	if (pin != NULL && (f & FPIN) != 0) {
 		if (dup2(pin[0], FD0) == -1)
-			err(FC_ERR, FMT2S, getmyname(), strerror(errno));
+			error(FC_ERR, strerror(errno));
 		(void)close(pin[0]);
 		(void)close(pin[1]);
 	}
@@ -2112,7 +2226,7 @@ execute2(struct tnode *t, int *pin, int *pout)
 	 */
 	if (pout != NULL && (f & FPOUT) != 0) {
 		if (dup2(pout[1], FD1) == -1)
-			err(FC_ERR, FMT2S, getmyname(), strerror(errno));
+			error(FC_ERR, strerror(errno));
 		(void)close(pout[0]);
 		(void)close(pout[1]);
 	}
@@ -2129,9 +2243,9 @@ execute2(struct tnode *t, int *pin, int *pout)
 		else
 			i = open(atrim(UCPTR(t->nfin)), O_RDONLY);
 		if (i == -1)
-			err(FC_ERR, FMT3S, getmyname(), t->nfin, ERR_OPEN);
+			error2(FC_ERR, t->nfin, ERR_OPEN);
 		if (dup2(i, FD0) == -1)
-			err(FC_ERR, FMT2S, getmyname(), strerror(errno));
+			error(FC_ERR, strerror(errno));
 		(void)close(i);
 	}
 	/*
@@ -2143,9 +2257,9 @@ execute2(struct tnode *t, int *pin, int *pout)
 		else
 			i = O_WRONLY | O_TRUNC | O_CREAT;
 		if ((i = open(atrim(UCPTR(t->nfout)), i, 0666)) == -1)
-			err(FC_ERR, FMT3S, getmyname(), t->nfout, ERR_CREATE);
+			error2(FC_ERR, t->nfout, ERR_CREATE);
 		if (dup2(i, FD1) == -1)
-			err(FC_ERR, FMT2S, getmyname(), strerror(errno));
+			error(FC_ERR, strerror(errno));
 		(void)close(i);
 	}
 	/*
@@ -2158,8 +2272,7 @@ execute2(struct tnode *t, int *pin, int *pout)
 		if (t->nfin == NULL && (f & (FFIN|FPIN|FPRS)) == FPRS) {
 			(void)close(FD0);
 			if (open("/dev/null", O_RDONLY) != FD0)
-				err(FC_ERR, FMT3S,
-				    getmyname(), "/dev/null", ERR_OPEN);
+				error2(FC_ERR, "/dev/null", ERR_OPEN);
 		}
 	} else {
 		if ((sig_state&S_SIGINT) == 0 && (sig_child&S_SIGINT) != 0)
@@ -2178,7 +2291,7 @@ execute2(struct tnode *t, int *pin, int *pout)
 	}
 	if (t->nav == NULL || t->nav[0] == NULL) {
 		/* should never (but can) be true */
-		err(FC_ERR, FMT2S, getmyname(), "execute2: Invalid command");
+		error(FC_ERR, "execute2: Invalid command");
 		/*NOTREACHED*/
 	}
 	if (t->nkey == SBI_UNKNOWN)
@@ -2756,12 +2869,21 @@ sh_magic(void)
 	size_t len;
 	int c;
 
+	is_first  = true;
+	is_noexec = false;
 	if (fd_type(FD0, FD_ISREG) && lseek(FD0, (off_t)0, SEEK_CUR) == 0) {
 		if (readc() == HASH && readc() == BANG) {
-			for (len = 2; len < LINEMAX; len++)
-				if ((c = readc()) == EOL || c == EOF)
+			for (len = 2; len < LINEMAX; len++) {
+				if ((c = readc()) == EOS) {
+					is_noexec = true;
+					break;
+				}
+				if (c == EOL)
+					is_first = false;
+				if (c == EOL || c == EOF)
 					return;
-			err(-1, FMT2S, getmyname(), ERR_TMCHARS);
+			}
+			error(-1, ERR_EXEC);
 		} else
 			(void)lseek(FD0, (off_t)0, SEEK_SET);
 	}
@@ -2829,9 +2951,13 @@ rc_init(int *rcflag)
 			shtype &= ~ST_RCFILE;
 			return;
 		}
-		(*rcflag)++;
-		if (rc_open(file))
-			break;
+		if (file != NULL) {
+			rcfilename = xstrdup(file);
+			(*rcflag)++;
+			if (rc_open(file))
+				break;
+		} else
+			*rcflag = -1;
 	}
 }
 
@@ -2871,9 +2997,13 @@ rc_logout(int *rcflag)
 			shtype &= ~ST_RCFILE;
 			return;
 		}
-		(*rcflag)++;
-		if (rc_open(file))
-			break;
+		if (file != NULL) {
+			rcfilename = xstrdup(file);
+			(*rcflag)++;
+			if (rc_open(file))
+				break;
+		} else
+			*rcflag = -1;
 	}
 }
 
@@ -3053,8 +3183,10 @@ static char *
 atrim(UChar *ap)
 {
 	size_t siz;
+	long l;
 	UChar buf[LINEMAX], c;
 	UChar *a, *b;
+	const char *m;
 	bool d;
 
 	*buf = UCHAR(EOS);
@@ -3089,7 +3221,19 @@ atrim(UChar *ap)
 	}
 
 aterr:
-	err(ESTATUS, "%s: %s %s\n", getmyname(), ERR_TRIM, (const char *)ap);
+	l = (is_noexec || no_lnum) ? -1 : get_lnum();
+	m = (const char *)ap;
+	if (name != NULL) {
+		if (l != -1)
+			err(ESTATUS,FMTAT1LS,getmyname(), name, l, ERR_TRIM, m);
+		else
+			err(ESTATUS, FMTAT1S, getmyname(), name, ERR_TRIM, m);
+	} else {
+		if (l != -1)
+			err(ESTATUS, FMTATLS, getmyname(), l, ERR_TRIM, m);
+		else
+			err(ESTATUS, FMTATS, getmyname(), ERR_TRIM, m);
+	}
 	/*NOTREACHED*/
 	return NULL;
 }
@@ -3109,8 +3253,10 @@ static char *
 gtrim(UChar *ap)
 {
 	size_t siz;
+	long l;
 	UChar buf[PATHMAX], c;
 	UChar *a, *b, *nap;
+	const char *m;
 	bool d;
 
 	*buf = UCHAR(EOS);
@@ -3169,8 +3315,20 @@ gtrim(UChar *ap)
 	}
 
 gterr:
-	err(-2, FMT2S, getmyname(), (gchar((const char *)ap) != NULL) ?
-	    ERR_PATTOOLONG : strerror(ENAMETOOLONG));
+	l = (is_noexec || no_lnum) ? -1 : get_lnum();
+	m = (gchar((const char *)ap) != NULL) ?
+	     ERR_PATTOOLONG : strerror(ENAMETOOLONG);
+	if (name != NULL) {
+		if (l != -1)
+			err(-2, FMT3LS, getmyname(), name, l, m);
+		else
+			err(-2, FMT3S, getmyname(), name, m);
+	} else {
+		if (l != -1)
+			err(-2, FMT2LS, getmyname(), l, m);
+		else
+			err(-2, FMT2S, getmyname(), m);
+	}
 	return NULL;
 }
 
@@ -3247,7 +3405,7 @@ xmalloc(size_t s)
 	void *mp;
 
 	if ((mp = malloc(s)) == NULL) {
-		err(ESTATUS, FMT2S, getmyname(), ERR_NOMEM);
+		error(ESTATUS, ERR_NOMEM);
 		/*NOTREACHED*/
 	}
 	return mp;
@@ -3264,7 +3422,7 @@ xrealloc(void *p, size_t s)
 	void *rp;
 
 	if ((rp = realloc(p, s)) == NULL) {
-		err(ESTATUS, FMT2S, getmyname(), ERR_NOMEM);
+		error(ESTATUS, ERR_NOMEM);
 		/*NOTREACHED*/
 	}
 	return rp;
@@ -3340,7 +3498,7 @@ glob(enum sbikey key, char **av)
 	gavp = NULL;
 
 	if (pmc == 0 && !gerr) {
-		err(-2, FMT2S, getmyname(), ERR_NOMATCH);
+		error(-2, ERR_NOMATCH);
 		gerr = true;
 	}
 	if (gerr) {
@@ -3389,7 +3547,7 @@ gcat(const char *src1, const char *src2, bool slash)
 
 	if (src1 == NULL || src2 == NULL) {
 		/* never true, but appease splint(1) */
-		err(-2, FMT3S, getmyname(), "gcat", strerror(EINVAL));
+		error(-2, "gcat: Invalid argument");
 		return NULL;
 	}
 
@@ -3398,7 +3556,7 @@ gcat(const char *src1, const char *src2, bool slash)
 	s = src1;
 	while ((c = *s++) != EOS) {
 		if (b >= &buf[PATHMAX - 1]) {
-			err(-2, FMT2S, getmyname(), strerror(ENAMETOOLONG));
+			error(-2, strerror(ENAMETOOLONG));
 			return NULL;
 		}
 		*b++ = c;
@@ -3408,7 +3566,7 @@ gcat(const char *src1, const char *src2, bool slash)
 	s = src2;
 	do {
 		if (b >= &buf[PATHMAX]) {
-			err(-2, FMT2S, getmyname(), strerror(ENAMETOOLONG));
+			error(-2, strerror(ENAMETOOLONG));
 			return NULL;
 		}
 		*b++ = c = *s++;
@@ -3418,7 +3576,7 @@ gcat(const char *src1, const char *src2, bool slash)
 	siz = (b - buf) + 1;
 	gavtot += siz;
 	if (gavtot > GAVMAX) {
-		err(-2, FMT2S, getmyname(), ERR_E2BIG);
+		error(-2, ERR_E2BIG);
 		return NULL;
 	}
 #ifdef	DEBUG
@@ -3475,7 +3633,7 @@ glob1(enum sbikey key, const char **gav, char *as, int *pmc, bool *gerr)
 		}
 	}
 	if ((dirp = gopendir(dirbuf, *ds != EOS ? ds : ".")) == NULL) {
-		err(-2, FMT2S, getmyname(), ERR_NODIR);
+		error(-2, ERR_NODIR);
 		*gavp = NULL;
 		*gerr = true;
 		return gav;

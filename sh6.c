@@ -75,6 +75,9 @@
 /*
  * **** Global Variables ****
  */
+const char	*name;		/* $0 - shell command name */
+bool		no_lnum	= true;	/* no line number flag     */
+
 /*
  * shell signal messages
  */
@@ -108,7 +111,6 @@ static	const char	*error_message;	/* error msg for read/parse errors  */
 static	bool		glob_flag;	/* glob flag for `*', `?', `['      */
 static	char		line[LINEMAX];	/* command-line buffer              */
 static	char		*linep;		/* line pointer                     */
-static	const char	*name;		/* $0 - shell command name          */
 static	int		nul_count;	/* `\0'-character count (per line)  */
 static	int		one_line_flag;	/* one-line flag for `-t' option    */
 static	char		peekc;		/* just-read, pushed-back character */

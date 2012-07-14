@@ -84,6 +84,52 @@ fd_print(int pfd, const char *msgfmt, ...)
 }
 
 /*
+ * Get line number for offset of file descriptor FD0.
+ * Return line number on success.
+ * Return -1 on error.
+ */
+long
+get_lnum(void)
+{
+	struct stat sb;
+	off_t o, o1;
+	long n;
+	char c;
+	bool b;
+
+	if (fstat(FD0, &sb) == -1 || !S_ISREG(sb.st_mode))
+		return -1;
+	if ((o  = lseek(FD0, (off_t)0, SEEK_CUR)) == -1)
+		return -1;
+	if ((o1 = lseek(FD0, (off_t)0, SEEK_SET)) !=  0)
+		return -1;
+	for (b = false, n = 0; o1 != -1 && o1 < o; ) {
+		if (read(FD0, &c, (size_t)1) != 1) {
+			c = EOF;
+			break;
+		}
+		o1 = lseek(FD0, (off_t)0, SEEK_CUR);
+		if (c == EOS) {
+			b = true;
+			continue;
+		}
+		if (c == EOL)
+			if (n > -1 && n < LONG_MAX)
+				n += 1;
+	}
+	if (b)
+		if (n > -1 && n < LONG_MAX)
+			n += 1;
+	n = (lseek(FD0, o, SEEK_SET) == o && n > -1 && n < LONG_MAX) ? n : -1;
+
+/*
+	fd_print(FD2, "get_lnum: n == %ld;\n", n);
+ */
+
+	return n;
+}
+
+/*
  * Return a pointer to the global myname on success.
  * Return a pointer to "(null)" on error.
  *

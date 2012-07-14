@@ -92,9 +92,20 @@
 #define	FD2_USAGE	"usage: %s [-e] [-f file] [--] command [arg ...]\n"
 
 #define	FMT1S		"%s\n"
+#define	FMT2LS		"%s: %ld: %s\n"
 #define	FMT2S		"%s: %s\n"
+#define	FMT3LFS		"%s: %ld: %s: %s\n"
+#define	FMT3LS		"%s: %s: %ld: %s\n"
 #define	FMT3S		"%s: %s: %s\n"
+#define	FMT4LFS		"%s: %ld: %s: %s: %s\n"
+#define	FMT4LS		"%s: %s: %ld: %s: %s\n"
 #define	FMT4S		"%s: %s: %s: %s\n"
+#define	FMT5LS		"%s: %s: %ld: %s: %s: %s\n"
+#define	FMT5S		"%s: %s: %s: %s: %s\n"
+#define	FMTAT1LS	"%s: %s: %ld: %s %s\n"
+#define	FMTAT1S		"%s: %s: %s %s\n"
+#define	FMTATLS		"%s: %ld: %s %s\n"
+#define	FMTATS		"%s: %s %s\n"
 
 /*
  * exit status values
@@ -118,6 +129,7 @@
 /*@maynotreturn@*/
 void		err(int, /*@null@*/ const char *, /*@printflike@*/ ...);
 void		fd_print(int, /*@null@*/ const char *, /*@printflike@*/ ...);
+long		get_lnum(void);
 /*@observer@*/
 const char	*getmyname(void);
 pid_t		getmypid(void);
