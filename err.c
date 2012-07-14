@@ -94,7 +94,7 @@ get_lnum(void)
 	struct stat sb;
 	off_t o, o1;
 	long n;
-	char c;
+	UChar c;
 	bool b;
 
 	if (fstat(FD0, &sb) == -1 || !S_ISREG(sb.st_mode))
@@ -104,10 +104,8 @@ get_lnum(void)
 	if ((o1 = lseek(FD0, (off_t)0, SEEK_SET)) !=  0)
 		return -1;
 	for (b = false, n = 0; o1 != -1 && o1 < o; ) {
-		if (read(FD0, &c, (size_t)1) != 1) {
-			c = EOF;
+		if (read(FD0, &c, (size_t)1) != 1)
 			break;
-		}
 		o1 = lseek(FD0, (off_t)0, SEEK_CUR);
 		if (c == EOS) {
 			b = true;
