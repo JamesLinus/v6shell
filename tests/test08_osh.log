@@ -1,8 +1,8 @@
 Begin ...
-osh: No directory
-osh: No directory
-osh: No match
-osh: No match
-osh: Pattern too long
-osh: Pattern too long
+osh: test08: 12: No directory
+osh: test08: 13: No directory
+osh: test08: 14: No match
+osh: test08: 15: No match
+osh: test08: 16: Pattern too long
+osh: test08: 17: Pattern too long
 End .

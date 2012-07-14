@@ -1,232 +1,232 @@
 Begin ...
 % "
-osh: syntax error
+osh: -t: syntax error
 % : nothing; "
-osh: syntax error
+osh: -t: syntax error
 % "; : nothing
-osh: syntax error
+osh: -t: syntax error
 % ( " )
-osh: syntax error
+osh: -t: syntax error
 % : nothing; ( " )
-osh: syntax error
+osh: -t: syntax error
 % ( " ); : nothing
-osh: syntax error
+osh: -t: syntax error
 % ( : nothing; " )
-osh: syntax error
+osh: -t: syntax error
 % ( "; : nothing )
-osh: syntax error
+osh: -t: syntax error
 % '
-osh: syntax error
+osh: -t: syntax error
 % : nothing; '
-osh: syntax error
+osh: -t: syntax error
 % '; : nothing
-osh: syntax error
+osh: -t: syntax error
 % ( ' )
-osh: syntax error
+osh: -t: syntax error
 % : nothing; ( ' )
-osh: syntax error
+osh: -t: syntax error
 % ( ' ); : nothing
-osh: syntax error
+osh: -t: syntax error
 % ( : nothing; ' )
-osh: syntax error
+osh: -t: syntax error
 % ( '; : nothing )
-osh: syntax error
+osh: -t: syntax error
 % |
-osh: syntax error
+osh: -t: syntax error
 % ^
-osh: syntax error
+osh: -t: syntax error
 % |   |
-osh: syntax error
+osh: -t: syntax error
 % ^   ^
-osh: syntax error
+osh: -t: syntax error
 % | cat
-osh: syntax error
+osh: -t: syntax error
 % ^ cat
-osh: syntax error
+osh: -t: syntax error
 % echo Hello! |
-osh: syntax error
+osh: -t: syntax error
 % echo Hello! ^
-osh: syntax error
+osh: -t: syntax error
 % echo Hello! | cat |
-osh: syntax error
+osh: -t: syntax error
 % echo Hello! ^ cat ^
-osh: syntax error
+osh: -t: syntax error
 % echo Hello! |   | grep H
-osh: syntax error
+osh: -t: syntax error
 % echo Hello! ^   ^ grep H
-osh: syntax error
+osh: -t: syntax error
 % ||
-osh: syntax error
+osh: -t: syntax error
 % ^^
-osh: syntax error
+osh: -t: syntax error
 % |cat
-osh: syntax error
+osh: -t: syntax error
 % ^cat
-osh: syntax error
+osh: -t: syntax error
 % echo Hello!|
-osh: syntax error
+osh: -t: syntax error
 % echo Hello!^
-osh: syntax error
+osh: -t: syntax error
 % echo Hello!|cat|
-osh: syntax error
+osh: -t: syntax error
 % echo Hello!^cat^
-osh: syntax error
+osh: -t: syntax error
 % echo Hello!||grep H
-osh: syntax error
+osh: -t: syntax error
 % echo Hello!^^grep H
-osh: syntax error
+osh: -t: syntax error
 % (
-osh: syntax error
+osh: -t: syntax error
 % ( echo Hello!
-osh: syntax error
+osh: -t: syntax error
 % ( ( echo Hello! )
-osh: syntax error
+osh: -t: syntax error
 % ( ( echo Hello! ); echo Hello again!
-osh: syntax error
+osh: -t: syntax error
 % echo Hello! | ( ( cat ) | grep H
-osh: syntax error
+osh: -t: syntax error
 % ( echo Hello! | ( ( cat ) | grep H )
-osh: syntax error
+osh: -t: syntax error
 % echo Hello! ^ ( ( cat ) ^ grep H
-osh: syntax error
+osh: -t: syntax error
 % ( echo Hello! ^ ( ( cat ) ^ grep H )
-osh: syntax error
+osh: -t: syntax error
 % )
-osh: syntax error
+osh: -t: syntax error
 % echo Hello! )
-osh: syntax error
+osh: -t: syntax error
 % ( echo Hello! ) )
-osh: syntax error
+osh: -t: syntax error
 % ( echo Hello! ); echo Hello again! )
-osh: syntax error
+osh: -t: syntax error
 % echo Hello! | ( cat ) ) | grep H
-osh: syntax error
+osh: -t: syntax error
 % ( echo Hello! | ( cat ) ) | grep H )
-osh: syntax error
+osh: -t: syntax error
 % echo Hello! ^ ( cat ) ) ^ grep H
-osh: syntax error
+osh: -t: syntax error
 % ( echo Hello! ^ ( cat ) ) ^ grep H )
-osh: syntax error
+osh: -t: syntax error
 % (   )
-osh: syntax error
+osh: -t: syntax error
 % ( (   ) )
-osh: syntax error
+osh: -t: syntax error
 % ( ( (   ) ) )
-osh: syntax error
+osh: -t: syntax error
 % ( echo Hello! ) | (   ) | ( grep H )
-osh: syntax error
+osh: -t: syntax error
 % ( ( echo Hello! ) | (   ) | ( grep H ) )
-osh: syntax error
+osh: -t: syntax error
 % ()
-osh: syntax error
+osh: -t: syntax error
 % (())
-osh: syntax error
+osh: -t: syntax error
 % ((()))
-osh: syntax error
+osh: -t: syntax error
 % (echo Hello!)|()|(grep H)
-osh: syntax error
+osh: -t: syntax error
 % ((echo Hello!)|()|(grep H))
-osh: syntax error
+osh: -t: syntax error
 % :( echo Hello! )
-osh: syntax error
+osh: -t: syntax error
 % echo ( Hello! )
-osh: syntax error
+osh: -t: syntax error
 % : nothing </dev/null ( cat )
-osh: syntax error
+osh: -t: syntax error
 % </dev/null : nothing ( cat )
-osh: syntax error
+osh: -t: syntax error
 % ( echo Hello! ):
-osh: syntax error
+osh: -t: syntax error
 % ( echo ) Hello!
-osh: syntax error
+osh: -t: syntax error
 % ( echo Hello! ) >/dev/null : nothing
-osh: syntax error
+osh: -t: syntax error
 % ( echo Hello! ) : nothing >/dev/null
-osh: syntax error
+osh: -t: syntax error
 % <
-osh: syntax error
+osh: -t: syntax error
 % >
-osh: syntax error
+osh: -t: syntax error
 % >>
-osh: syntax error
+osh: -t: syntax error
 % <>
-osh: syntax error
+osh: -t: syntax error
 % ><
-osh: syntax error
+osh: -t: syntax error
 % <>>
-osh: syntax error
+osh: -t: syntax error
 % >><
-osh: syntax error
+osh: -t: syntax error
 % cat < >/dev/null
-osh: syntax error
+osh: -t: syntax error
 % cat > </dev/null
-osh: syntax error
+osh: -t: syntax error
 % cat </dev/null >
-osh: syntax error
+osh: -t: syntax error
 % cat >/dev/null <
-osh: syntax error
+osh: -t: syntax error
 % </dev/nullcat
-osh: syntax error
+osh: -t: syntax error
 % </dev/null"cat"
-osh: syntax error
+osh: -t: syntax error
 % </dev/null
-osh: syntax error
+osh: -t: syntax error
 % </dev/null >/dev/null
-osh: syntax error
+osh: -t: syntax error
 % >/dev/null
-osh: syntax error
+osh: -t: syntax error
 % >/dev/null </dev/null
-osh: syntax error
+osh: -t: syntax error
 % >>/dev/null
-osh: syntax error
+osh: -t: syntax error
 % >>/dev/null </dev/null
-osh: syntax error
+osh: -t: syntax error
 % </dev/null ( | )
-osh: syntax error
+osh: -t: syntax error
 % >/dev/null ( | )
-osh: syntax error
+osh: -t: syntax error
 % ( | ) </dev/null
-osh: syntax error
+osh: -t: syntax error
 % ( | ) >/dev/null
-osh: syntax error
+osh: -t: syntax error
 % </dev/null >/dev/null ( | )
-osh: syntax error
+osh: -t: syntax error
 % >/dev/null </dev/null ( | )
-osh: syntax error
+osh: -t: syntax error
 % </dev/null ( | ) >/dev/null
-osh: syntax error
+osh: -t: syntax error
 % >/dev/null ( | ) </dev/null
-osh: syntax error
+osh: -t: syntax error
 % ( | ) </dev/null >/dev/null
-osh: syntax error
+osh: -t: syntax error
 % ( | ) >/dev/null </dev/null
-osh: syntax error
+osh: -t: syntax error
 % </dev/null ( < )
-osh: syntax error
+osh: -t: syntax error
 % >/dev/null ( < )
-osh: syntax error
+osh: -t: syntax error
 % ( < ) </dev/null
-osh: syntax error
+osh: -t: syntax error
 % ( < ) >/dev/null
-osh: syntax error
+osh: -t: syntax error
 % </dev/null >/dev/null ( < )
-osh: syntax error
+osh: -t: syntax error
 % >/dev/null </dev/null ( < )
-osh: syntax error
+osh: -t: syntax error
 % </dev/null ( < ) >/dev/null
-osh: syntax error
+osh: -t: syntax error
 % >/dev/null ( < ) </dev/null
-osh: syntax error
+osh: -t: syntax error
 % ( < ) </dev/null >/dev/null
-osh: syntax error
+osh: -t: syntax error
 % ( < ) >/dev/null </dev/null
-osh: syntax error
+osh: -t: syntax error
 % echo "\""
-osh: syntax error
+osh: -t: syntax error
 % echo '\''
-osh: syntax error
+osh: -t: syntax error
 % echo "\"Hello World! =)\""
-osh: syntax error
+osh: -t: syntax error
 % echo '\'Hello World! =)\''
-osh: syntax error
+osh: -t: syntax error
 End .
