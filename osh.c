@@ -276,13 +276,13 @@ static	int		xgetc(bool);
 static	int		readc(void);
 /*@null@*/ /*@only@*/
 static	const char	*get_dolp(int);
-static	void		varalloc(int, /*@null@*/const char *);
+static	void		varalloc(int, /*@null@*/ const char *);
 /*@maynotreturn@*/
 static	struct vnode	*varalloc1(int, const char *);
 static	bool		varfree(int);
 /*@null@*/
 static	const char	*varget(int);
-static	void		aalloc(/*@null@*/const char *, /*@null@*/const char *);
+static	void		aalloc(/*@null@*/ const char *, /*@null@*/ const char *);
 /*@maynotreturn@*/
 static	struct anode	*aalloc1(const char *, const char *);
 static	bool		afree(/*@null@*/ const char *);
