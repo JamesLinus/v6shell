@@ -2957,7 +2957,8 @@ rc_init(int *rcflag)
 			if (rc_open(file))
 				break;
 		} else
-			*rcflag = -1;
+			/* should never (but can) be true */
+			err(SH_ERR,FMT2S,getmyname(),"rc_init: Invalid file");
 	}
 }
 
@@ -3003,7 +3004,8 @@ rc_logout(int *rcflag)
 			if (rc_open(file))
 				break;
 		} else
-			*rcflag = -1;
+			/* should never (but can) be true */
+			err(SH_ERR,FMT2S,getmyname(),"rc_logout: Invalid file");
 	}
 }
 
