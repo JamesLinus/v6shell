@@ -266,8 +266,8 @@ static	char		*user;		/* $u - effective user name         */
 static	void		cmd_loop(bool);
 static	void		cmd_verbose(void);
 static	void		error(int, /*@null@*/ const char *);
-static	void		error1(int, /*@null@*/ const char *, /*@null@*/ const char *, /*@null@*/ const char *);
-static	void		error2(int, /*@null@*/ const char *, /*@null@*/ const char *);
+static	void		error1(int, /*@null@*/ const char *, /*@null@*/ const char *);
+static	void		error2(int, /*@null@*/ const char *, /*@null@*/ const char *, /*@null@*/ const char *);
 static	int		rpx_line(void);
 /*@null@*/
 static	const char	**rp_alias(const char *);
@@ -599,11 +599,11 @@ error(int s, const char *m)
  * Print diagnostic w/ $0, line number, and so forth if possible.
  */
 static void
-error1(int s, const char *c, const char *a, const char *m)
+error1(int s, const char *f, const char *m)
 {
 	long ln;
 
-	if (c == NULL || a == NULL || m == NULL) {
+	if (f == NULL || m == NULL) {
 		err(ESTATUS, FMT3S, getmyname(), "error1", strerror(EINVAL));
 		/*NOTREACHED*/
 	}
@@ -611,36 +611,6 @@ error1(int s, const char *c, const char *a, const char *m)
 	ln = (is_noexec || no_lnum) ? -1 : get_lnum();
 /*
 	fd_print(FD2, "error1: ln == %ld;\n", ln);
- */
-	if (name != NULL) {
-		if (ln != -1)
-			err(s, FMT5LS, getmyname(), name, ln, c, a, m);
-		else
-			err(s, FMT5S, getmyname(), name, c, a, m);
-	} else {
-		if (ln != -1)
-			err(s, FMT4LFS, getmyname(), ln, c, a, m);
-		else
-			err(s, FMT4S, getmyname(), c, a, m);
-	}
-}
-
-/*
- * Print diagnostic w/ $0, line number, and so forth if possible.
- */
-static void
-error2(int s, const char *f, const char *m)
-{
-	long ln;
-
-	if (f == NULL || m == NULL) {
-		err(ESTATUS, FMT3S, getmyname(), "error2", strerror(EINVAL));
-		/*NOTREACHED*/
-	}
-
-	ln = (is_noexec || no_lnum) ? -1 : get_lnum();
-/*
-	fd_print(FD2, "error2: ln == %ld;\n", ln);
  */
 	if (name != NULL) {
 		if (ln != -1)
@@ -652,6 +622,36 @@ error2(int s, const char *f, const char *m)
 			err(s, FMT3LFS, getmyname(), ln, f, m);
 		else
 			err(s, FMT3S, getmyname(), f, m);
+	}
+}
+
+/*
+ * Print diagnostic w/ $0, line number, and so forth if possible.
+ */
+static void
+error2(int s, const char *c, const char *a, const char *m)
+{
+	long ln;
+
+	if (c == NULL || a == NULL || m == NULL) {
+		err(ESTATUS, FMT3S, getmyname(), "error2", strerror(EINVAL));
+		/*NOTREACHED*/
+	}
+
+	ln = (is_noexec || no_lnum) ? -1 : get_lnum();
+/*
+	fd_print(FD2, "error2: ln == %ld;\n", ln);
+ */
+	if (name != NULL) {
+		if (ln != -1)
+			err(s, FMT5LS, getmyname(), name, ln, c, a, m);
+		else
+			err(s, FMT5S, getmyname(), name, c, a, m);
+	} else {
+		if (ln != -1)
+			err(s, FMT4LFS, getmyname(), ln, c, a, m);
+		else
+			err(s, FMT4S, getmyname(), c, a, m);
 	}
 }
 
@@ -1808,13 +1808,11 @@ execute(struct tnode *t, int *pin, int *pout)
 			 * usage: exec command [arg ...]
 			 */
 			if (t->nav[1] == NULL) {
-				err(-1, FMT3S, getmyname(),
-				    t->nav[0], ERR_ARGCOUNT);
+				error1(-1, t->nav[0], ERR_ARGCOUNT);
 				return;
 			}
 			if ((t->nkey = cmd_lookup(t->nav[1])) != SBI_UNKNOWN) {
-				err(-1, FMT4S, getmyname(),
-				    t->nav[0], t->nav[1], ERR_EXEC);
+				error2(-1, t->nav[0], t->nav[1], ERR_EXEC);
 				return;
 			}
 			t->nav++;
@@ -1913,7 +1911,7 @@ execute1(struct tnode *t)
 				}
 			if (!aok || *t->nav[1] == EOS ||
 			    cmd_lookup(t->nav[1]) != SBI_UNKNOWN) {
-				error1(-1, t->nav[0], t->nav[1], ERR_BADNAME);
+				error2(-1, t->nav[0], t->nav[1], ERR_BADNAME);
 				return;
 			}
 			if (t->nav[2] != NULL) {
@@ -1997,7 +1995,7 @@ execute1(struct tnode *t)
 				break;
 			}
 			if (!IS_VARNAME(t->nav[1])) {
-				error1(-1, t->nav[0], t->nav[1], ERR_BADNAME);
+				error2(-1, t->nav[0], t->nav[1], ERR_BADNAME);
 				return;
 			}
 			if (t->nav[2] != NULL) {
@@ -2029,7 +2027,7 @@ execute1(struct tnode *t)
 			for (p = t->nav[1]; *p != '=' && *p != EOS; p++)
 				;	/* nothing */
 			if (*t->nav[1] == EOS || *p == '=') {
-				error1(-1, t->nav[0], t->nav[1], ERR_BADNAME);
+				error2(-1, t->nav[0], t->nav[1], ERR_BADNAME);
 				return;
 			}
 			if (setenv(t->nav[1], t->nav[2], 1) == -1)
@@ -2101,7 +2099,7 @@ execute1(struct tnode *t)
 			for (p = t->nav[1]; *p >= '0' && *p <= '7'; p++)
 				m = m * 8 + (*p - '0');
 			if (*t->nav[1] == EOS || *p != EOS || m > 0777) {
-				error1(-1, t->nav[0], t->nav[1], ERR_BADMASK);
+				error2(-1, t->nav[0], t->nav[1], ERR_BADMASK);
 				return;
 			}
 			(void)umask(m);
@@ -2124,7 +2122,7 @@ execute1(struct tnode *t)
 				}
 			if (!aok || *t->nav[1] == EOS ||
 			    cmd_lookup(t->nav[1]) != SBI_UNKNOWN) {
-				error1(-1, t->nav[0], t->nav[1], ERR_BADNAME);
+				error2(-1, t->nav[0], t->nav[1], ERR_BADNAME);
 				return;
 			}
 			status = (afree(t->nav[1])) ? SH_TRUE : SH_FALSE;
@@ -2141,7 +2139,7 @@ execute1(struct tnode *t)
 		 */
 		if (t->nav[1] != NULL && t->nav[2] == NULL) {
 			if (!IS_VARNAME(t->nav[1])) {
-				error1(-1, t->nav[0], t->nav[1], ERR_BADNAME);
+				error2(-1, t->nav[0], t->nav[1], ERR_BADNAME);
 				return;
 			}
 			status = (varfree(*t->nav[1])) ? SH_TRUE : SH_FALSE;
@@ -2161,7 +2159,7 @@ execute1(struct tnode *t)
 			for (p = t->nav[1]; *p != '=' && *p != EOS; p++)
 				;	/* nothing */
 			if (*t->nav[1] == EOS || *p == '=') {
-				error1(-1, t->nav[0], t->nav[1], ERR_BADNAME);
+				error2(-1, t->nav[0], t->nav[1], ERR_BADNAME);
 				return;
 			}
 			unsetenv(t->nav[1]);
@@ -2195,7 +2193,7 @@ execute1(struct tnode *t)
 	default:
 		emsg = ERR_EXEC;
 	}
-	error2(-1, t->nav[0], emsg);
+	error1(-1, t->nav[0], emsg);
 }
 
 /*
@@ -2243,7 +2241,7 @@ execute2(struct tnode *t, int *pin, int *pout)
 		else
 			i = open(atrim(UCPTR(t->nfin)), O_RDONLY);
 		if (i == -1)
-			error2(FC_ERR, t->nfin, ERR_OPEN);
+			error1(FC_ERR, t->nfin, ERR_OPEN);
 		if (dup2(i, FD0) == -1)
 			error(FC_ERR, strerror(errno));
 		(void)close(i);
@@ -2257,7 +2255,7 @@ execute2(struct tnode *t, int *pin, int *pout)
 		else
 			i = O_WRONLY | O_TRUNC | O_CREAT;
 		if ((i = open(atrim(UCPTR(t->nfout)), i, 0666)) == -1)
-			error2(FC_ERR, t->nfout, ERR_CREATE);
+			error1(FC_ERR, t->nfout, ERR_CREATE);
 		if (dup2(i, FD1) == -1)
 			error(FC_ERR, strerror(errno));
 		(void)close(i);
@@ -2272,7 +2270,7 @@ execute2(struct tnode *t, int *pin, int *pout)
 		if (t->nfin == NULL && (f & (FFIN|FPIN|FPRS)) == FPRS) {
 			(void)close(FD0);
 			if (open("/dev/null", O_RDONLY) != FD0)
-				error2(FC_ERR, "/dev/null", ERR_OPEN);
+				error1(FC_ERR, "/dev/null", ERR_OPEN);
 		}
 	} else {
 		if ((sig_state&S_SIGINT) == 0 && (sig_child&S_SIGINT) != 0)
@@ -2355,7 +2353,7 @@ do_chdir(char **av)
 chdirerr:
 	if (cwd != -1)
 		(void)close(cwd);
-	err(-1, FMT3S, getmyname(), av[0], emsg);
+	error1(-1, av[0], emsg);
 }
 
 /*
@@ -2470,9 +2468,9 @@ sigdone:
 	if (sigerr == 0)
 		status = SH_TRUE;
 	else if (sigerr == 1)
-		err(-1, FMT3S, getmyname(), av[0], ERR_GENERIC);
+		error1(-1, av[0], ERR_GENERIC);
 	else
-		err(-1, FMT4S, getmyname(), av[0], av[sigerr], ERR_BADSIGNAL);
+		error2(-1, av[0], av[sigerr], ERR_BADSIGNAL);
 }
 
 /*
@@ -2515,13 +2513,13 @@ do_source(char **av)
 	static int cnt;
 
 	if ((nfd = source_open(av[0], av[1])) == -1) {
-		err(-1, FMT4S, getmyname(), av[0], av[1],
-		    (errno!=ENOENT && errno!=ENOTDIR)?ERR_OPEN:ERR_NOTFOUND);
+		error2(-1, av[0], av[1], (errno != ENOENT && errno != ENOTDIR) ?
+		       ERR_OPEN : ERR_NOTFOUND);
 		return;
 	}
 	if (nfd >= SAVFD0 || !fd_type(nfd, FD_ISREG)) {
 		(void)close(nfd);
-		err(-1, FMT4S, getmyname(), av[0], av[1], ERR_EXEC);
+		error2(-1, av[0], av[1], ERR_EXEC);
 		return;
 	}
 	sfd = dup2(FD0, SAVFD0 + cnt);
@@ -2529,7 +2527,7 @@ do_source(char **av)
 	    fcntl(FD0, F_SETFL, O_RDONLY & ~O_NONBLOCK) == -1) {
 		(void)close(sfd);
 		(void)close(nfd);
-		err(-1, FMT4S, getmyname(), av[0], av[1], strerror(EMFILE));
+		error2(-1, av[0], av[1], strerror(EMFILE));
 		return;
 	}
 	(void)fcntl(sfd, F_SETFD, FD_CLOEXEC);
@@ -2560,8 +2558,7 @@ do_source(char **av)
 		if (cnt == 0) {
 			/* Restore original standard input or die trying. */
 			if (dup2(SAVFD0, FD0) == -1)
-				err(SH_ERR, FMT4S,
-				    getmyname(), av[0], av[1], strerror(errno));
+				error2(ESTATUS, av[0], av[1], strerror(errno));
 			(void)close(SAVFD0);
 			shtype &= ~ST_SOURCE;
 			if (!SHTYPE(ST_RCFILE))
@@ -2575,7 +2572,7 @@ do_source(char **av)
 	/* Restore previous standard input or die trying. */
 	if (dup2(sfd, FD0) == -1) {
 		(void)close(sfd);
-		err(SH_ERR, FMT4S, getmyname(), av[0], av[1], strerror(errno));
+		error2(ESTATUS, av[0], av[1], strerror(errno));
 		return;
 	}
 	(void)close(sfd);
@@ -3186,9 +3183,9 @@ atrim(UChar *ap)
 {
 	size_t siz;
 	long l;
-	UChar buf[LINEMAX], c;
-	UChar *a, *b;
 	const char *m;
+	UChar *a, *b;
+	UChar buf[LINEMAX], c;
 	bool d;
 
 	*buf = UCHAR(EOS);
@@ -3255,10 +3252,8 @@ static char *
 gtrim(UChar *ap)
 {
 	size_t siz;
-	long l;
-	UChar buf[PATHMAX], c;
 	UChar *a, *b, *nap;
-	const char *m;
+	UChar buf[PATHMAX], c;
 	bool d;
 
 	*buf = UCHAR(EOS);
@@ -3317,20 +3312,8 @@ gtrim(UChar *ap)
 	}
 
 gterr:
-	l = (is_noexec || no_lnum) ? -1 : get_lnum();
-	m = (gchar((const char *)ap) != NULL) ?
-	     ERR_PATTOOLONG : strerror(ENAMETOOLONG);
-	if (name != NULL) {
-		if (l != -1)
-			err(-2, FMT3LS, getmyname(), name, l, m);
-		else
-			err(-2, FMT3S, getmyname(), name, m);
-	} else {
-		if (l != -1)
-			err(-2, FMT2LS, getmyname(), l, m);
-		else
-			err(-2, FMT2S, getmyname(), m);
-	}
+	error(-2, (gchar((const char *)ap) != NULL) ?
+	      ERR_PATTOOLONG : strerror(ENAMETOOLONG));
 	return NULL;
 }
 
