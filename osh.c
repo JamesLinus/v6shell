@@ -579,9 +579,6 @@ error(int s, const char *m)
 	}
 
 	ln = (is_noexec || no_lnum) ? -1 : get_lnum();
-/*
-	fd_print(FD2, "error: ln == %ld;\n", ln);
- */
 	if (name != NULL) {
 		if (ln != -1)
 			err(s, FMT3LS, getmyname(), name, ln, m);
@@ -609,9 +606,6 @@ error1(int s, const char *f, const char *m)
 	}
 
 	ln = (is_noexec || no_lnum) ? -1 : get_lnum();
-/*
-	fd_print(FD2, "error1: ln == %ld;\n", ln);
- */
 	if (name != NULL) {
 		if (ln != -1)
 			err(s, FMT4LS, getmyname(), name, ln, f, m);
@@ -639,9 +633,6 @@ error2(int s, const char *c, const char *a, const char *m)
 	}
 
 	ln = (is_noexec || no_lnum) ? -1 : get_lnum();
-/*
-	fd_print(FD2, "error2: ln == %ld;\n", ln);
- */
 	if (name != NULL) {
 		if (ln != -1)
 			err(s, FMT5LS, getmyname(), name, ln, c, a, m);
