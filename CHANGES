@@ -15,6 +15,21 @@ Thompson shell are marked w/ a `C:' in the details below.
 
 	  .
 
+osh:
+	* Added code to print diagnostics w/ line numbers when possible.
+	  When reporting error(s), if a diagnostic is to be printed, the
+	  shell gets the line number of the file where the error happened,
+	  adjusts the diagnostic (adding the name of the file and the line
+	  number if the standard input from which the shell reads and
+	  interprets commands lines is seekable), and prints it.  EG:
+
+		% echo R* ; ./osh R* ; head -1 R*
+		README
+		osh: README: 1: syntax error
+		Welcome to Osh (V6Shell) - osh-current !
+
+	  .
+
 examples/*:
 	* Made stty(1) invocation conditional in .../etc.osh.login .
 
@@ -1790,6 +1805,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2012/06/30
+Jeffrey Allen Neitzel						2012/07/19
 
 @(#)$Id$
