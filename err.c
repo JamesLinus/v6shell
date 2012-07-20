@@ -84,7 +84,7 @@ fd_print(int pfd, const char *msgfmt, ...)
 }
 
 /*
- * Get line number for offset of file descriptor FD0.
+ * Get the line number for the offset of the file descriptor FD0.
  * Return line number on success.
  * Return -1 on error.
  */
@@ -120,9 +120,9 @@ get_lnum(void)
 			n += 1;
 	n = (lseek(FD0, o, SEEK_SET) == o && n > -1 && n < LONG_MAX) ? n : -1;
 
-/*
+#ifdef	DEBUG
 	fd_print(FD2, "get_lnum: n == %ld;\n", n);
- */
+#endif
 
 	return n;
 }

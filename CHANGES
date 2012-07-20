@@ -23,7 +23,7 @@ osh:
 	  number if the standard input from which the shell reads and
 	  interprets commands lines is seekable), and prints it.  EG:
 
-		% echo R* ; ./osh R* ; head -1 R*
+		% echo R* ; osh R* ; head -1 R*
 		README
 		osh: README: 1: syntax error
 		Welcome to Osh (V6Shell) - osh-current !
@@ -1805,6 +1805,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2012/07/19
+Jeffrey Allen Neitzel						2012/07/20
 
 @(#)$Id$

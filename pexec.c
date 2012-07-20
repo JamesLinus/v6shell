@@ -233,9 +233,6 @@ err_pexec(const char *file, char *const *argv)
 		err(127, FMT2S, f, ERR_NOTFOUND);
 	} else {
 		l = no_lnum ? -1 : get_lnum();
-/*
-		fd_print(FD2, "err_pexec: l == %ld;\n", l);
- */
 		if (name != NULL) {
 			if (l != -1) {
 				if (errno == ENOEXEC)
