@@ -929,7 +929,7 @@ it to cease execution of that file
 without terminating.
 Thus,
 it may be desirable to use the
-.B sigign
+.B trap
 special command to ignore these
 and other signals in some cases.
 For example,
@@ -1209,18 +1209,6 @@ so that the old value of \fB$\fR\fI2\fR becomes the new
 value of \fB$\fR\fI1\fR and so forth.
 The value of \fB$\fR\fI0\fR does not shift.
 .TP
-\fBsigign\fR [\fB+\fR | \fB\-\fR \fIsignal_number ...\fR] (+)
-\fB+\fR causes the specified signals
-to be ignored if possible,
-and \fB\-\fR causes the specified signals
-to be reset to the default action if possible.
-If a signal was already ignored when
-the shell was invoked,
-it can never be reset with \fB-\fR.
-If no arguments are specified,
-a list is printed of those signals which
-are ignored by sigign in the current shell context.
-.TP
 \fB.\fR \fIfile\fR [\fIarg1 ...\fR] (+)
 Is a synonym for the
 .B source
@@ -1253,6 +1241,18 @@ to cease execution of the file.
 If the source command is nested and
 such an error occurs,
 all nested source commands terminate.
+.TP
+\fBtrap\fR [\fB''\fR | \fB\-\fR \fIsignal_number ...\fR] (+)
+\fB''\fR (empty string) causes the specified signals
+to be ignored if possible,
+and \fB\-\fR causes the specified signals
+to be reset to the default action if possible.
+If a signal was already ignored when
+the shell was invoked,
+it can never be reset with \fB-\fR.
+If no arguments are specified,
+a list is printed of those signals which
+are ignored by trap in the current shell context.
 .TP
 \fBumask\fR [\fImask\fR] (+)
 Sets the file creation mask (see
@@ -1309,7 +1309,7 @@ For any signal not mentioned above,
 the shell inherits the signal action (default or ignore)
 from its parent process and passes it to its child processes.
 Remember that the
-.B sigign
+.B trap
 special command may be used to ignore signals
 when the shell does not do so by default.
 .PP

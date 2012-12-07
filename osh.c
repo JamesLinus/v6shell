@@ -125,7 +125,7 @@
 #define	FD_ISREG	S_IFREG	/* Does FD refer to a  regular file?          */
 
 /*
- * (NSIG - 1) is the maximum signal number value accepted by `sigign'.
+ * (NSIG - 1) is the maximum signal number value accepted by `trap'.
  */
 #ifndef	NSIG
 #define	NSIG		32
@@ -178,8 +178,8 @@ static	const struct sbicmd {
 	{ "set",	SBI_SET      },
 	{ "setenv",	SBI_SETENV   },
 	{ "shift",	SBI_SHIFT    },
-	{ "sigign",	SBI_SIGIGN   },
 	{ "source",	SBI_SOURCE   },
+	{ "trap",	SBI_TRAP     },
 	{ "umask",	SBI_UMASK    },
 	{ "unalias",	SBI_UNALIAS  },
 	{ "unset",	SBI_UNSET    },
@@ -309,7 +309,7 @@ static	void		execute1(struct tnode *);
 static	void		execute2(struct tnode *,
 				 /*@null@*/ int *, /*@null@*/ int *);
 static	void		do_chdir(char **);
-static	void		do_sigign(char **, enum tnflags);
+static	void		do_trap(char **, enum tnflags);
 static	void		set_ss_flags(int, action_type);
 static	void		do_source(char **);
 static	int		source_open(const char *, const char *);
@@ -2045,18 +2045,6 @@ execute1(struct tnode *t)
 		emsg = ERR_NOARGS;
 		break;
 
-	case SBI_SIGIGN:
-		/*
-		 * Ignore (or unignore) the specified signals, or
-		 * print a list of those signals which are ignored
-		 * because of a previous invocation of `sigign' in
-		 * the current shell.
-		 *
-		 * usage: sigign [+ | - signal_number ...]
-		 */
-		do_sigign(t->nav, t->nflags);
-		return;
-
 	case SBI_DOT:
 	case SBI_SOURCE:
 		/*
@@ -2070,6 +2058,18 @@ execute1(struct tnode *t)
 		}
 		emsg = ERR_ARGCOUNT;
 		break;
+
+	case SBI_TRAP:
+		/*
+		 * Ignore (or unignore) the specified signals, or
+		 * print a list of those signals which are ignored
+		 * because of a previous invocation of `trap' in
+		 * the current shell.
+		 *
+		 * usage: trap ['' | - signal_number ...]
+		 */
+		do_trap(t->nav, t->nflags);
+		return;
 
 	case SBI_UMASK:
 		/*
@@ -2350,10 +2350,10 @@ chdirerr:
 /*
  * Ignore (or unignore) the specified signals, or print a list of
  * those signals which are ignored because of a previous invocation
- * of `sigign' in the current shell.
+ * of `trap' in the current shell.
  */
 static void
-do_sigign(char **av, enum tnflags f)
+do_trap(char **av, enum tnflags f)
 {
 	struct sigaction act, oact;
 	sigset_t new_mask, old_mask;
@@ -2385,7 +2385,7 @@ do_sigign(char **av, enum tnflags f)
 
 		(void)memset(&act, 0, sizeof(act));
 		(void)sigemptyset(&act.sa_mask);
-		if (EQUAL(av[1], "+"))
+		if (EQUAL(av[1], ""))
 			act.sa_handler = SIG_IGN;
 		else if (EQUAL(av[1], "-"))
 			act.sa_handler = SIG_DFL;
@@ -2438,7 +2438,7 @@ do_sigign(char **av, enum tnflags f)
 			set_ss_flags(signo, act.sa_handler);
 		}
 	} else {
-		/* Print signals currently ignored because of `sigign'. */
+		/* Print signals currently ignored because of `trap'. */
 		for (i = 1; i < NSIG; i++) {
 			if (sigaction(i, NULL, &oact) < 0 ||
 			    oact.sa_handler != SIG_IGN)
@@ -2450,7 +2450,7 @@ do_sigign(char **av, enum tnflags f)
 			     (sig_child & S_SIGQUIT) != 0))) ||
 			     (i == SIGTERM && (sig_state & S_SIGTERM) != 0 &&
 			     (sig_child & S_SIGTERM) != 0))
-				fd_print(FD1, "%s + %2u\n", av[0], (unsigned)i);
+				fd_print(FD1,"%s '' %2u\n", av[0], (unsigned)i);
 		}
 	}
 
