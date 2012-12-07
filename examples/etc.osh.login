@@ -6,8 +6,8 @@
 : "  From:  http://v6shell.org/rc_files  "
 :
 
-sigign + 1 2 3 13 14 15 ; : " Ignore HUP, INT, QUIT, PIPE, ALRM, and TERM. "
-sigign + 18 21 22 ;       : " Ignore job-control signals: TSTP, TTIN, TTOU "
+trap '' 1 2 3 13 14 15 ; : " Ignore HUP, INT, QUIT, PIPE, ALRM, and TERM. "
+trap '' 18 21 22 ;       : " Ignore job-control signals: TSTP, TTIN, TTOU "
 
 :
 : " Set a default PATH and umask for all users. "
@@ -36,4 +36,4 @@ if ! { mkdir $h/.osh.setenv.$$ } goto finish
 
 : finish
 
-sigign - 1 2 3 13 14 15 ; : " Reset the ignored, non-job-control signals. "
+trap - 1 2 3 13 14 15 ; : " Reset the ignored, non-job-control signals. "

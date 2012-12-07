@@ -6,7 +6,7 @@
 : "  From:  http://v6shell.org/rc_files  "
 :
 
-sigign + 2 3
+trap '' 2 3
 
 : fd2 -e echo "debug: Executing `"$h/.osh.logout"' now..."
 
@@ -45,4 +45,4 @@ if X$d = X -o ! -d $d'' goto Logout
 		if { rm -f osh-logout-$$ } if { exit } sleep 5
 
 	rm -f osh-logout-$$ ; unsetenv TTY ; chdir -
-	clear <- ; sigign - 2 3 ; exec osh -login <-
+	clear <- ; trap - 2 3 ; exec osh -login <-
