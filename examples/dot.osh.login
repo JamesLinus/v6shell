@@ -36,7 +36,7 @@ if X$u != Xroot goto Continue
 	:
 	setenv	POSIXLY_CORRECT	''
 
-	alias	logout	'(sigign)|if { grep "^sigign +  1$">/dev/null } fd2 -e echo "SIGHUP ignored - Type an EOT (^D) instead";sigign + 1;(sigign)|if ! { grep "^sigign +  1$">/dev/null } fd2 -e echo "SIGHUP ignored - Type an EOT (^D) instead";kill -HUP $$;false'
+	alias	logout	'(trap)|if { grep "^trap ..  1$">/dev/null } fd2 -e echo "SIGHUP ignored - Type an EOT (^D) instead";trap "" 1;(trap)|if ! { grep "^trap ..  1$">/dev/null } fd2 -e echo "SIGHUP ignored - Type an EOT (^D) instead";kill -HUP $$;false'
 	@SOURCE_OSHDIR@
 
 	:
