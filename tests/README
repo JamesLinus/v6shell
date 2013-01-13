@@ -1,0 +1,28 @@
+Welcome to Osh (V6Shell) Regression Tests!
+
+-------
+
+NAME
+	run.osh - run regression test suite with osh and sh6
+
+SYNOPSIS
+	../osh run.osh [-newlog] osh sh6
+
+DESCRIPTION
+	...
+
+EXIT STATUS
+	The run.osh script exits with a zero status (true) when
+	all tests pass.  It exits with a non-zero status (false)
+	when any tests fail.
+
+-------
+
+If you have any comments or questions about this software, I encourage
+you to contact me via email.  Thanks & Enjoy!
+
+Jeffrey Allen Neitzel
+<jan (at) v6shell (dot) org>
+http://v6shell.org/re_tests					2013/01/13
+
+@(#)$Id$
