@@ -10,13 +10,15 @@ HelloWorld ...
 1	Hello World!
 HelloWorld .
 All ...
-Input
-Syntax.list
-SyntaxError.in
+LICENSE
+README
 TestFailCount
 TestPassCount
 bin
+input
 run.osh
+syntax.list
+syntax_error.in
 test01
 test01_osh.log
 test01_sh6.log

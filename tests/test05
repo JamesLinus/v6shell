@@ -12,8 +12,8 @@ if ! \( X$1 = Xosh -o X$1 = Xsh6 \) -o X$2 != X \
 	if { fd2 -e echo 'usage: {osh | sh6} test05 {osh | sh6}' } \
 		if { exit } if A = B
 
-sed 's,@SH_TO_TEST@,'$1',g' <SyntaxError.in >SyntaxError
+sed 's,@SH_TO_TEST@,'$1',g' <syntax_error.in >syntax_error
 
 echo Begin ...
-$1 SyntaxError
+$1 syntax_error
 echo End .

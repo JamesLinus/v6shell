@@ -2,4 +2,4 @@
 mkconfig ident
 *.[1ch] ident
 examples/*osh* -ident
-tests/* -ident
+tests/[a-z]* -ident

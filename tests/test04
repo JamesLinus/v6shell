@@ -28,89 +28,89 @@ echo Begin ...
 
 : Redirections ...
 
-	cat <Input >/dev/null
-	<Input cat >/dev/null
-	<Input >/dev/null cat
-	cat < Input > /dev/null
-	< Input cat > /dev/null
-	< Input > /dev/null cat
+	cat <input >/dev/null
+	<input cat >/dev/null
+	<input >/dev/null cat
+	cat < input > /dev/null
+	< input cat > /dev/null
+	< input > /dev/null cat
 
-	cat <Input >>/dev/null
-	<Input cat >>/dev/null
-	<Input >>/dev/null cat
-	cat < Input >> /dev/null
-	< Input cat >> /dev/null
-	< Input >> /dev/null cat
+	cat <input >>/dev/null
+	<input cat >>/dev/null
+	<input >>/dev/null cat
+	cat < input >> /dev/null
+	< input cat >> /dev/null
+	< input >> /dev/null cat
 
-	cat >/dev/null <Input
-	>/dev/null cat <Input
-	>/dev/null <Input cat
-	cat > /dev/null < Input
-	> /dev/null cat < Input
-	> /dev/null < Input cat
+	cat >/dev/null <input
+	>/dev/null cat <input
+	>/dev/null <input cat
+	cat > /dev/null < input
+	> /dev/null cat < input
+	> /dev/null < input cat
 
-	cat >>/dev/null <Input
-	>>/dev/null cat <Input
-	>>/dev/null <Input cat
-	cat >> /dev/null < Input
-	>> /dev/null cat < Input
-	>> /dev/null < Input cat
+	cat >>/dev/null <input
+	>>/dev/null cat <input
+	>>/dev/null <input cat
+	cat >> /dev/null < input
+	>> /dev/null cat < input
+	>> /dev/null < input cat
 
-	( cat ) <Input >/dev/null
-	<Input ( cat ) >/dev/null
-	<Input >/dev/null ( cat )
-	( cat ) < Input > /dev/null
-	< Input ( cat ) > /dev/null
-	< Input > /dev/null ( cat )
+	( cat ) <input >/dev/null
+	<input ( cat ) >/dev/null
+	<input >/dev/null ( cat )
+	( cat ) < input > /dev/null
+	< input ( cat ) > /dev/null
+	< input > /dev/null ( cat )
 
-	( cat ) <Input >>/dev/null
-	<Input ( cat ) >>/dev/null
-	<Input >>/dev/null ( cat )
-	( cat ) < Input >> /dev/null
-	< Input ( cat ) >> /dev/null
-	< Input >> /dev/null ( cat )
+	( cat ) <input >>/dev/null
+	<input ( cat ) >>/dev/null
+	<input >>/dev/null ( cat )
+	( cat ) < input >> /dev/null
+	< input ( cat ) >> /dev/null
+	< input >> /dev/null ( cat )
 
-	(cat) <Input >/dev/null
-	<Input (cat) >/dev/null
-	<Input >/dev/null (cat)
-	(cat) < Input > /dev/null
-	< Input (cat) > /dev/null
-	< Input > /dev/null (cat)
+	(cat) <input >/dev/null
+	<input (cat) >/dev/null
+	<input >/dev/null (cat)
+	(cat) < input > /dev/null
+	< input (cat) > /dev/null
+	< input > /dev/null (cat)
 
-	(cat) <Input >>/dev/null
-	<Input (cat) >>/dev/null
-	<Input >>/dev/null (cat)
-	(cat) < Input >> /dev/null
-	< Input (cat) >> /dev/null
-	< Input >> /dev/null (cat)
+	(cat) <input >>/dev/null
+	<input (cat) >>/dev/null
+	<input >>/dev/null (cat)
+	(cat) < input >> /dev/null
+	< input (cat) >> /dev/null
+	< input >> /dev/null (cat)
 
-	( cat ) >/dev/null <Input
-	>/dev/null ( cat ) <Input
-	>/dev/null <Input ( cat )
-	( cat ) > /dev/null < Input
-	> /dev/null ( cat ) < Input
-	> /dev/null < Input ( cat )
+	( cat ) >/dev/null <input
+	>/dev/null ( cat ) <input
+	>/dev/null <input ( cat )
+	( cat ) > /dev/null < input
+	> /dev/null ( cat ) < input
+	> /dev/null < input ( cat )
 
-	( cat ) >>/dev/null <Input
-	>>/dev/null ( cat ) <Input
-	>>/dev/null <Input ( cat )
-	( cat ) >> /dev/null < Input
-	>> /dev/null ( cat ) < Input
-	>> /dev/null < Input ( cat )
+	( cat ) >>/dev/null <input
+	>>/dev/null ( cat ) <input
+	>>/dev/null <input ( cat )
+	( cat ) >> /dev/null < input
+	>> /dev/null ( cat ) < input
+	>> /dev/null < input ( cat )
 
-	(cat) >/dev/null <Input
-	>/dev/null (cat) <Input
-	>/dev/null <Input (cat)
-	(cat) > /dev/null < Input
-	> /dev/null (cat) < Input
-	> /dev/null < Input (cat)
+	(cat) >/dev/null <input
+	>/dev/null (cat) <input
+	>/dev/null <input (cat)
+	(cat) > /dev/null < input
+	> /dev/null (cat) < input
+	> /dev/null < input (cat)
 
-	(cat) >>/dev/null <Input
-	>>/dev/null (cat) <Input
-	>>/dev/null <Input (cat)
-	(cat) >> /dev/null < Input
-	>> /dev/null (cat) < Input
-	>> /dev/null < Input (cat)
+	(cat) >>/dev/null <input
+	>>/dev/null (cat) <input
+	>>/dev/null <input (cat)
+	(cat) >> /dev/null < input
+	>> /dev/null (cat) < input
+	>> /dev/null < input (cat)
 
 : Pipes ...
 

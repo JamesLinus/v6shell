@@ -23,7 +23,7 @@ if $# = # if { fd2 -e echo Invalid shell - osh\(1\) required } \
 trap '' 1 2 3 13 15 ; : trap
 setenv PATH ..:./bin:$p ; : printenv PATH
 umask 22 ; : umask
-rm -f SyntaxError TestFailCount TestPassCount
+rm -f TestFailCount TestPassCount syntax_error
 ( : ) >TestFailCount ; ( : ) >TestPassCount
 
 if $# = 3 -a X$1 = X-newlog -a X$2 = Xosh -a X$3 = Xsh6 goto NewLog
@@ -45,7 +45,7 @@ if $# = 3 -a X$1 = X-newlog -a X$2 = Xosh -a X$3 = Xsh6 goto NewLog
 	fd2 -f/dev/null $2 test04 >test04_$2.log
 	fd2 -f/dev/null $3 test04 >test04_$3.log
 	fd2 $2 test05 $2 >test05_$2.log ; fd2 $3 test05 $3 >test05_$3.log
-	rm -f SyntaxError
+	rm -f syntax_error
 	fd2 $2 test08 >test08_$2.log ; fd2 $3 test08 >test08_$3.log
 	( : ) >test06_$2.log ; ( : ) >test07_$2.log
 	fd2 $2 test06 >test06_$2.log
@@ -98,7 +98,7 @@ if X$1 = Xosh goto Jump
 	fd2 -e -- echo -n .\ 
 	if X$1 = Xsh6 goto Next
 		: " Tests 6 and 7 are for osh only. "
-		rm -f SyntaxError
+		rm -f syntax_error
 		fd2 $1 test06 | diff -u test06_$1.log -
 		if $? != 0 if { fd2 -e echo $1: Test 6 Failed } \
 			echo >>TestFailCount
@@ -125,8 +125,8 @@ if X$1 = Xosh goto Jump
 	if ! -s TestFailCount goto TestsPassed
 		( wc -l <TestFailCount | tr -d ' \t\n' ; \
 		  echo ' Test(s) Failed' ) | fd2 -e cat
-		rm -f SyntaxError TestFailCount TestPassCount ; if A = B ; exit
+		rm -f TestFailCount TestPassCount syntax_error ; if A = B ; exit
 	: TestsPassed
 		( wc -l <TestPassCount | tr -d ' \t\n' ; \
 		  echo ' Test(s) Passed' ) | fd2 -e cat
-		rm -f SyntaxError TestFailCount TestPassCount ; : zero status
+		rm -f TestFailCount TestPassCount syntax_error ; : zero status
