@@ -2,4 +2,5 @@
 mkconfig ident
 *.[1ch] ident
 examples/*osh* -ident
-tests/[irst]* -ident
+tests/[ist]* -ident
+tests/run* -ident
