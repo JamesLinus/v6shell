@@ -12,8 +12,8 @@
 	101 102 103 104 105 106 107 108 109 110 111 112 113 114 115
 
 : Loop
-	sed -n 's/^ *'$1': /% /p' <Syntax.list
-	sed -n 's/^ *'$1': //p'   <Syntax.list | \
+	sed -n 's/^ *'$1': /% /p' <syntax.list
+	sed -n 's/^ *'$1': //p'   <syntax.list | \
 		if { @SH_TO_TEST@ -t } \
 			echo $1": Failure, not detected as a `syntax error'."
 	shift
