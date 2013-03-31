@@ -5,6 +5,8 @@ Thompson shell are marked w/ a `C:' in the details below.
 [osh-current] (development):
 	* Work In Progress ( see http://v6shell.org/src/current/ )
 
+-------------------------------------------------------------------------------
+[osh-20130331] (latest):
 *sh.[ch]:
 	* Removed the deprecated $n and $s parameters.
 	  Now, the user can `set' and `unset' n and s as shell variables.
@@ -26,7 +28,7 @@ osh:
 		% echo R* ; osh R* ; head -1 R*
 		README
 		osh: README: 1: syntax error
-		Welcome to Osh (V6Shell) - osh-current !
+		Welcome to Osh (V6Shell) - osh-20130331 !
 
 	  .
 
@@ -45,7 +47,7 @@ examples/*:
 	* Escaped $1 when setting hcount alias in .../dot.oshrc .
 
 -------------------------------------------------------------------------------
-[osh-20120604] (latest):
+[osh-20120604]:
 	* New file:  Makefile.config  (included from Makefile)
 
 	* New files: strtoint.[ch] (string to integer converter)

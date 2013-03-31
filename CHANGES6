@@ -6,10 +6,12 @@ command in porting them to run on modern UNIX systems.
 [osh-current] (development):
 	* Work In Progress ( see http://v6shell.org/src/current/ )
 
+-------------------------------------------------------------------------------
+[osh-20130331] (latest):
 	* No changes.
 
 -------------------------------------------------------------------------------
-[osh-20120604] (latest):
+[osh-20120604]:
 sh6:
 	* Added missing `Command line overflow' diagnostic.
 
