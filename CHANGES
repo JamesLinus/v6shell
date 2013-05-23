@@ -5,6 +5,9 @@ Thompson shell are marked w/ a `C:' in the details below.
 [osh-current] (development):
 	* Work In Progress ( see http://v6shell.org/src/current/ )
 
+examples/dot.oshrc:
+	* Added two useful pwd-related aliases: `ocpwd' and `opwd'
+
 -------------------------------------------------------------------------------
 [osh-20130331] (latest):
 *sh.[ch]:
@@ -1816,6 +1819,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2013/03/31
+Jeffrey Allen Neitzel						2013/05/23
 
-@(#)$Id$
+@(#)$Id: 66c2b9c3760c1e92668c29e69ef6a537f17e73ac $
