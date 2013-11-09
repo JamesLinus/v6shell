@@ -8,6 +8,9 @@ Thompson shell are marked w/ a `C:' in the details below.
 osh.1:
 	* Changed `LICENSE' to LICENSE to match the other manual pages.
 
+examples/FILEPREP:
+	* Changed `sigign' invocation to `trap'.
+
 examples/dot.oshrc:
 	* Added two useful pwd-related aliases: `ocpwd' and `opwd'
 

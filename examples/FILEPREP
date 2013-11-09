@@ -35,7 +35,7 @@ if ! { which chmod cp head mkdir pwd rm strings tee tr >/dev/null }\
 
 : " Do needed setup. "
 
-	sigign + 2 3 ; umask 0022
+	trap '' 2 3 ; umask 0022
 	if { mkdir -p $1'' } cp *osh* $1/
 	if $? != 0 if { exit } false
 	cd $1'' ; chmod 0644 *
