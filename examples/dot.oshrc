@@ -73,9 +73,13 @@ if $? = 0 goto Continue
 	alias	glob	'echo'
 	alias	hcount	"setenv LC_ALL C;awk '{print \$1;}'<$h/.osh.history|sort|uniq -c|sort -k1 -rn|head -25;:"
 	alias	isset	'set'
+	: " Set sysinfo alias (w/o system_profiler). "
+	alias	sysinfo	"echo -n '==== ';uname -n|tr -d \\n;echo ' ====';echo;uname -srm;echo;now;echo;uptime;:"
 	uname -s | grep '^Darwin$' >/dev/null
 	if $? -ne 0 goto Uname-S-NotDarwin
 		alias	l	'leaks $$;:'
+		: " If Darwin, reset sysinfo alias (w/ system_profiler). "
+		alias	sysinfo	"echo -n '==== ';uname -n|tr -d \\n;echo ' ====';echo;uname -srm;system_profiler SPSoftwareDataType|grep 'System Version:'|sed 's/^.*: //';echo;now;echo;uptime;:"
 		: fallthrough
 	: Uname-S-NotDarwin
 	alias	lf	'ls -F'
@@ -84,6 +88,7 @@ if $? = 0 goto Continue
 	alias	loadavg	"uname -n|sed 's/\([^.]*\).*/\1/'|tr -d \\n;echo -n ': ';uptime|sed 's/^.*user[s,][ ,] *//';:"
 	alias	manpath	'echo $m;:'
 	alias	n	'echo "日本語 Nihongo";:'
+	alias	now	"date '+%A, %Y-%m-%d, %T %Z';:"
 	alias	ocpwd	'cd -;pwd;cd -;pwd'
 	alias	opwd	'cd -;pwd'
 	alias	path	'echo $p;:'
