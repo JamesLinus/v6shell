@@ -6,6 +6,9 @@ command in porting them to run on modern UNIX systems.
 [osh-current] (development):
 	* Work In Progress ( see http://v6shell.org/src/current/ )
 
+sh6.1:
+	* Changed `LICENSE' to LICENSE to match the other manual pages.
+
 -------------------------------------------------------------------------------
 [osh-20130331] (latest):
 	* No changes.
@@ -440,6 +443,6 @@ glob.c:
     Date: May 14, 1975
     From: Sixth Edition UNIX /usr/source/s1/glob.c
 
-Jeffrey Allen Neitzel						2013/03/31
+Jeffrey Allen Neitzel						2013/11/09
 
 @(#)$Id$

@@ -5,8 +5,13 @@ Thompson shell are marked w/ a `C:' in the details below.
 [osh-current] (development):
 	* Work In Progress ( see http://v6shell.org/src/current/ )
 
+osh.1:
+	* Changed `LICENSE' to LICENSE to match the other manual pages.
+
 examples/dot.oshrc:
 	* Added two useful pwd-related aliases: `ocpwd' and `opwd'
+
+	* Added a `now' and a `sysinfo' alias.
 
 -------------------------------------------------------------------------------
 [osh-20130331] (latest):
