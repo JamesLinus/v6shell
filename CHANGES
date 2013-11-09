@@ -5,6 +5,8 @@ Thompson shell are marked w/ a `C:' in the details below.
 [osh-current] (development):
 	* Work In Progress ( see http://v6shell.org/src/current/ )
 
+-------------------------------------------------------------------------------
+[osh-20131109] (latest):
 osh.1:
 	* Changed `LICENSE' to LICENSE to match the other manual pages.
 
@@ -17,7 +19,7 @@ examples/dot.oshrc:
 	* Added a `now' and a `sysinfo' alias.
 
 -------------------------------------------------------------------------------
-[osh-20130331] (latest):
+[osh-20130331]:
 *sh.[ch]:
 	* Removed the deprecated $n and $s parameters.
 	  Now, the user can `set' and `unset' n and s as shell variables.
