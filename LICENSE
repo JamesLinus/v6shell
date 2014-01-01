@@ -2,7 +2,7 @@
 Osh is hereby distributed under the following license:
 
 /*-
- * Copyright (c) 2003-2013
+ * Copyright (c) 2003-2014
  *	Jeffrey Allen Neitzel <jan (at) v6shell (dot) org>.
  *	All rights reserved.
  *
@@ -270,6 +270,6 @@ The original license follows:
 .\"	@(#)strtol.3	8.1 (Berkeley) 6/4/93
 ===
 
-Jeffrey Allen Neitzel						2013/11/09
+Jeffrey Allen Neitzel						2014/01/01
 
 @(#)$Id$

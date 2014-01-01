@@ -2,7 +2,7 @@
  * fd2.c - redirect from/to file descriptor 2
  */
 /*-
- * Copyright (c) 2005-2013
+ * Copyright (c) 2005-2014
  *	Jeffrey Allen Neitzel <jan (at) v6shell (dot) org>.
  *	All rights reserved.
  *
