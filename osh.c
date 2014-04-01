@@ -2498,6 +2498,7 @@ set_ss_flags(int sig, action_type act)
 static void
 do_source(char **av)
 {
+	static const char *sargv2p;
 	const char *sname;
 	char *const *sdolv;
 	int nfd, sfd, sdolc;
@@ -2524,8 +2525,11 @@ do_source(char **av)
 	(void)fcntl(sfd, F_SETFD, FD_CLOEXEC);
 	(void)close(nfd);
 
-	if (!SHTYPE(ST_SOURCE))
+	if (!SHTYPE(ST_SOURCE)) {
 		shtype |= ST_SOURCE;
+		sargv2p = argv2p;
+		argv2p  = NULL;
+	}
 
 	/* Save and initialize any positional parameters. */
 	sname = name, sdolv = dolv, sdolc = dolc;
@@ -2552,6 +2556,8 @@ do_source(char **av)
 				error2(ESTATUS, av[0], av[1], strerror(errno));
 			(void)close(SAVFD0);
 			shtype &= ~ST_SOURCE;
+			argv2p  = sargv2p;
+			sargv2p = NULL;
 			if (!SHTYPE(ST_RCFILE))
 				err(0, NULL);
 			return;
@@ -2568,8 +2574,11 @@ do_source(char **av)
 	}
 	(void)close(sfd);
 
-	if (cnt == 0)
+	if (cnt == 0) {
 		shtype &= ~ST_SOURCE;
+		argv2p  = sargv2p;
+		sargv2p = NULL;
+	}
 }
 
 /*
