@@ -10,6 +10,19 @@ Makefile.config:
 	  the 12th birthday of osh.  Twelve years ago today,
 	  Gunnar Ritter released osh as osh-020214.
 
+osh.c:
+	* Enable `.' and `source' special built-in command execution
+	  to succeed when the user invokes the shell as `osh -c string'.
+	  EG:
+
+		% osh -c '. file [arg1 ...]' [arg1 ...]
+
+	  or:
+
+		% osh -c 'source file [arg1 ...]' [arg1 ...]
+
+	  .
+
 -------------------------------------------------------------------------------
 [osh-20131109] (latest):
 osh.1:
@@ -1834,6 +1847,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2014/02/14
+Jeffrey Allen Neitzel						2014/04/02
 
 @(#)$Id$
