@@ -6,9 +6,7 @@ Thompson shell are marked w/ a `C:' in the details below.
 	* Work In Progress ( see http://v6shell.org/src/current/ )
 
 Makefile.config:
-	* Updated OSH_DATE to February 14, 2014 to celebrate
-	  the 12th birthday of osh.  Twelve years ago today,
-	  Gunnar Ritter released osh as osh-020214.
+	* Added comment to celebrate 12 years of osh via osh-current.
 
 osh.c:
 	* Enable `.' and `source' special built-in command execution
@@ -1847,6 +1845,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2014/04/02
+Jeffrey Allen Neitzel						2014/04/08
 
 @(#)$Id$
