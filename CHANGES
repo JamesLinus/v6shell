@@ -11,6 +11,9 @@ Makefile:
 Makefile.config:
 	* Added comment to celebrate 12 years of osh via osh-current.
 
+osh.1:
+	* Added missing (+) to version in Special commands.
+
 osh.c:
 	* Enable `.' and `source' special built-in command execution
 	  to succeed when the user invokes the shell as `osh -c string'.
