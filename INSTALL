@@ -60,14 +60,22 @@ passing the desired variable=value pair(s) on the command line.
 			manual pages, and other files to final targets.
 
 Mac OS X only:
-The following configuration variable specifies the desired target
+The following configuration variables specify the desired target
 architecture(s) for compiling universal binaries and/or 64-bit
 binaries and/or 32-bit binaries for Mac OS X running on Intel
 and PowerPC Macs.
 
-	MOXARCH		Unset by default.  Possible value(s) may include
-			one or more of the following on supported systems:
-			-arch x86_64, -arch ppc64, -arch i386, -arch ppc.
+	OSXCFLAGS	Unset by default.
+
+	OSXLDFLAGS	Unset by default.
+
+			Possible value(s) for OSXCFLAGS and OSXLDFLAGS may
+			include one or more of the following on supported
+			systems:
+
+				-arch x86_64, -arch ppc64, -arch i386, -arch ppc
+
+			...
 			See also EXAMPLES.
 
 -------
@@ -133,8 +141,9 @@ The following compiles each program as a 2-way 64/32-bit universal
 binary for Mac OS X running on Intel Macs.  Then, it installs the
 entire osh package, including package documentation and examples,
 into the default location.
-
-	% make MOXARCH='-arch x86_64 -arch i386'
+ 
+	% make OSXCFLAGS='-arch x86_64 -arch i386' \
+	       OSXLDFLAGS='-arch x86_64 -arch i386'
 	# make install install-doc install-exp
 
 The following compiles and installs the entire osh package, including
@@ -150,6 +159,6 @@ OpenSolaris.
 	% gmake
 	# gmake INSTALL=/usr/bin/ginstall install install-doc install-exp
 
-Jeffrey Allen Neitzel						2012/07/01
+Jeffrey Allen Neitzel						2014/04/09
 
 @(#)$Id$

@@ -54,11 +54,12 @@ CFLAGS+=	-Os $(OPTIONS) $(WARNINGS)
 # !!! ================= Developer stuff below... ================= !!!
 
 #
-# Adjust CFLAGS and LDFLAGS for MOXARCH if needed.
+# Adjust CFLAGS for OSXCFLAGS and LDFLAGS for OSXLDFLAGS if needed.
 #
-MOXARCH?=
-CFLAGS+=	$(MOXARCH)
-LDFLAGS+=	$(MOXARCH)
+OSXCFLAGS?=
+CFLAGS+=	$(OSXCFLAGS)
+OSXLDFLAGS?=
+LDFLAGS+=	$(OSXLDFLAGS)
 
 #
 # Include osh date and version from Makefile.config .
