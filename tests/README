@@ -9,7 +9,9 @@ SYNOPSIS
 	../osh run.osh [-newlog] osh sh6
 
 DESCRIPTION
-	...
+	The -newlog option causes run.osh to generate new test logs
+	for the osh and sh6 regression test suite.  Otherwise, it
+	simply runs the regression test suite with osh and sh6.
 
 EXIT STATUS
 	The run.osh script exits with a zero status (true) when
@@ -23,6 +25,6 @@ you to contact me via email.  Thanks & Enjoy!
 
 Jeffrey Allen Neitzel
 <jan (at) v6shell (dot) org>
-http://v6shell.org/regression_tests				2013/01/13
+http://v6shell.org/regression_tests				2014/04/10
 
 @(#)$Id$
