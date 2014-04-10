@@ -5,6 +5,8 @@ Thompson shell are marked w/ a `C:' in the details below.
 [osh-current] (development):
 	* Work In Progress ( see http://v6shell.org/src/current/ )
 
+-------------------------------------------------------------------------------
+[osh-20140410] (latest):
 Makefile:
 	* Changed MOXARCH to OSXCFLAGS & OSXLDFLAGS to play better w/ MacPorts.
 
@@ -28,7 +30,7 @@ osh.c:
 	  .
 
 -------------------------------------------------------------------------------
-[osh-20131109] (latest):
+[osh-20131109]:
 osh.1:
 	* Changed `LICENSE' to LICENSE to match the other manual pages.
 
