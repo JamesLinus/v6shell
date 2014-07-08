@@ -13,6 +13,7 @@
 DESTDIR?=
 PREFIX?=	/usr/local
 BINDIR?=	$(PREFIX)/bin
+LIBEXECDIR?=	$(PREFIX)/libexec/$(OSH_VERSION)
 DOCDIR?=	$(PREFIX)/share/doc/$(OSH_VERSION)
 EXPDIR?=	$(DOCDIR)/examples
 MANDIR?=	$(PREFIX)/share/man/man1
@@ -68,23 +69,23 @@ LDFLAGS+=	$(OSXLDFLAGS)
 include	./Makefile.config
 
 OSH=	osh
-SH6=	sh6 glob6
+SH6=	sh6 glob
 UBIN=	fd2 goto if
 GHEAD=	config.h defs.h
 ERRSRC=	err.h err.c
 PEXSRC=	pexec.h pexec.c
 SIGSRC=	sasignal.h sasignal.c
 INTSRC=	strtoint.h strtoint.c
-OBJ=	err.o fd2.o glob6.o goto.o if.o osh.o pexec.o sasignal.o sh6.o strtoint.o util.o v.o
+OBJ=	err.o fd2.o glob.o goto.o if.o osh.o pexec.o sasignal.o sh6.o strtoint.o util.o v.o
 OSHMAN=	osh.1.out
-SH6MAN=	sh6.1.out glob6.1.out
+SH6MAN=	sh6.1.out glob.1.out
 UMAN=	fd2.1.out goto.1.out if.1.out
 MANALL=	$(OSHMAN) $(SH6MAN) $(UMAN)
 SEDSUB=	-e 's|@OSH_DATE@|$(OSH_DATE)|' \
 	-e 's|@OSH_VERSION@|$(OSH_VERSION)|' \
 	-e 's|@SYSCONFDIR@|$(SYSCONFDIR)|'
 
-DEFS=	-DOSH_VERSION='"$(OSH_VERSION)"' -DSYSCONFDIR='"$(SYSCONFDIR)"'
+DEFS=	-DOSH_VERSION='"$(OSH_VERSION)"' -DLIBEXECDIR='"$(LIBEXECDIR)"' -DSYSCONFDIR='"$(SYSCONFDIR)"'
 
 .SUFFIXES: .1 .1.out .c .o
 
@@ -113,7 +114,7 @@ osh: sh.h v.c osh.c util.c $(GHEAD) $(ERRSRC) $(PEXSRC) $(SIGSRC) $(INTSRC)
 sh6: sh.h v.c sh6.c $(GHEAD) $(ERRSRC) $(PEXSRC) $(SIGSRC)
 	@$(MAKE) $@bin
 
-glob6: v.c glob6.c $(GHEAD) $(ERRSRC) $(PEXSRC)
+glob: v.c glob.c $(GHEAD) $(ERRSRC) $(PEXSRC)
 	@$(MAKE) $@bin
 
 if: v.c if.c $(GHEAD) $(ERRSRC) $(PEXSRC) $(SIGSRC) $(INTSRC)
@@ -125,16 +126,16 @@ goto: v.c goto.c $(GHEAD) $(ERRSRC)
 fd2: v.c fd2.c $(GHEAD) $(ERRSRC) $(PEXSRC)
 	@$(MAKE) $@bin
 
-$(OBJ)                                                         : $(GHEAD)
-fd2.o glob6.o goto.o if.o osh.o pexec.o sh6.o util.o strtoint.o: err.h
-fd2.o glob6.o if.o osh.o sh6.o util.o                          : pexec.h
-if.o osh.o sh6.o                                               : sasignal.h
-if.o osh.o util.o                                              : strtoint.h
-osh.o sh6.o util.o                                             : sh.h
-err.o                                                          : $(ERRSRC)
-pexec.o                                                        : $(PEXSRC)
-sasignal.o                                                     : $(SIGSRC)
-strtoint.o                                                     : $(INTSRC)
+$(OBJ)                                                        : $(GHEAD)
+fd2.o glob.o goto.o if.o osh.o pexec.o sh6.o util.o strtoint.o: err.h
+fd2.o glob.o if.o osh.o sh6.o util.o                          : pexec.h
+if.o osh.o sh6.o                                              : sasignal.h
+if.o osh.o util.o                                             : strtoint.h
+osh.o sh6.o util.o                                            : sh.h
+err.o                                                         : $(ERRSRC)
+pexec.o                                                       : $(PEXSRC)
+sasignal.o                                                    : $(SIGSRC)
+strtoint.o                                                    : $(INTSRC)
 
 config.h: Makefile Makefile.config mkconfig
 	$(SHELL) ./mkconfig
@@ -145,8 +146,8 @@ oshbin: v.o osh.o err.o util.o pexec.o sasignal.o strtoint.o
 sh6bin: v.o sh6.o err.o pexec.o sasignal.o
 	$(CC) $(LDFLAGS) -o sh6 v.o sh6.o err.o pexec.o sasignal.o $(LIBS)
 
-glob6bin: v.o glob6.o err.o pexec.o
-	$(CC) $(LDFLAGS) -o glob6 v.o glob6.o err.o pexec.o $(LIBS)
+globbin: v.o glob.o err.o pexec.o
+	$(CC) $(LDFLAGS) -o glob v.o glob.o err.o pexec.o $(LIBS)
 
 ifbin: v.o if.o err.o pexec.o sasignal.o strtoint.o
 	$(CC) $(LDFLAGS) -o if v.o if.o err.o pexec.o sasignal.o strtoint.o $(LIBS)
@@ -169,6 +170,7 @@ check-newlog: all
 # Install targets
 #
 DESTBINDIR=	$(DESTDIR)$(BINDIR)
+DESTLIBEXECDIR=	$(DESTDIR)$(LIBEXECDIR)
 DESTDOCDIR=	$(DESTDIR)$(DOCDIR)
 DESTEXPDIR=	$(DESTDIR)$(EXPDIR)
 DESTMANDIR=	$(DESTDIR)$(MANDIR)
@@ -181,27 +183,28 @@ install-sh6all: sh6all install-sh6 install-utils
 install-utils: install-ubin install-uman
 
 install-osh: $(OSH) $(OSHMAN) install-dest
-	$(INSTALL) -c -s $(BINGRP) $(BINMODE) osh         $(DESTBINDIR)
-	$(INSTALL) -c    $(MANGRP) $(MANMODE) osh.1.out   $(DESTMANDIR)/osh.1
+	$(INSTALL) -c -s $(BINGRP) $(BINMODE) osh        $(DESTBINDIR)
+	$(INSTALL) -c    $(MANGRP) $(MANMODE) osh.1.out  $(DESTMANDIR)/osh.1
 
 install-sh6: $(SH6) $(SH6MAN) install-dest
-	$(INSTALL) -c -s $(BINGRP) $(BINMODE) sh6         $(DESTBINDIR)
-	$(INSTALL) -c    $(MANGRP) $(MANMODE) sh6.1.out   $(DESTMANDIR)/sh6.1
-	$(INSTALL) -c -s $(BINGRP) $(BINMODE) glob6       $(DESTBINDIR)
-	$(INSTALL) -c    $(MANGRP) $(MANMODE) glob6.1.out $(DESTMANDIR)/glob6.1
+	$(INSTALL) -c -s $(BINGRP) $(BINMODE) sh6        $(DESTBINDIR)
+	$(INSTALL) -c    $(MANGRP) $(MANMODE) sh6.1.out  $(DESTMANDIR)/sh6.1
+	$(INSTALL) -c -s $(BINGRP) $(BINMODE) glob       $(DESTLIBEXECDIR)
+	$(INSTALL) -c    $(MANGRP) $(MANMODE) glob.1.out $(DESTMANDIR)/glob.1
 
 install-ubin: $(UBIN) install-dest
-	$(INSTALL) -c -s $(BINGRP) $(BINMODE) fd2         $(DESTBINDIR)
-	$(INSTALL) -c -s $(BINGRP) $(BINMODE) goto        $(DESTBINDIR)
-	$(INSTALL) -c -s $(BINGRP) $(BINMODE) if          $(DESTBINDIR)
+	$(INSTALL) -c -s $(BINGRP) $(BINMODE) fd2        $(DESTLIBEXECDIR)
+	$(INSTALL) -c -s $(BINGRP) $(BINMODE) goto       $(DESTLIBEXECDIR)
+	$(INSTALL) -c -s $(BINGRP) $(BINMODE) if         $(DESTLIBEXECDIR)
 
 install-uman: $(UMAN) install-dest
-	$(INSTALL) -c    $(MANGRP) $(MANMODE) fd2.1.out   $(DESTMANDIR)/fd2.1
-	$(INSTALL) -c    $(MANGRP) $(MANMODE) goto.1.out  $(DESTMANDIR)/goto.1
-	$(INSTALL) -c    $(MANGRP) $(MANMODE) if.1.out    $(DESTMANDIR)/if.1
+	$(INSTALL) -c    $(MANGRP) $(MANMODE) fd2.1.out  $(DESTMANDIR)/fd2.1
+	$(INSTALL) -c    $(MANGRP) $(MANMODE) goto.1.out $(DESTMANDIR)/goto.1
+	$(INSTALL) -c    $(MANGRP) $(MANMODE) if.1.out   $(DESTMANDIR)/if.1
 
 install-dest:
 	test -d $(DESTBINDIR) || { umask 0022 && mkdir -p $(DESTBINDIR) ; }
+	test -d $(DESTLIBEXECDIR) || { umask 0022 && mkdir -p $(DESTLIBEXECDIR) ; }
 	test -d $(DESTMANDIR) || { umask 0022 && mkdir -p $(DESTMANDIR) ; }
 
 install-doc:
