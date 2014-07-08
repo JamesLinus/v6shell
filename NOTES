@@ -38,10 +38,12 @@ external utility.
 
 For sh6(1), the Thompson-shell port's binary executable has been
 renamed from `sh' to `sh6' to avoid name conflict and confusion
-with the system shell, sh(1), on modern UNIX systems.  Similarly,
-the `glob' utility has been renamed to `glob6' and is installed
-into the same directory as the shell, /usr/local/bin by default,
-rather than being installed into the /etc directory.
+with the system shell, sh(1), on modern UNIX systems.  The `glob'
+utility is installed into a subdirectory of /usr/local/libexec by
+default, rather than being installed into the /etc directory.  The
+`goto' and `if' utilities, along with `fd2', are installed into
+the previously mentioned subdirectory of /usr/local/libexec by
+default to avoid conflict and confusion on modern UNIX systems.
 
 Additionally, see the glob6(1), goto(1), and if(1) manual pages for
 full details regarding the ports of the above-mentioned utilities.
@@ -154,6 +156,6 @@ Further details regarding the substantial differences:
 3) The original implementation of the shell does shell accounting
    in order to record command execution data; this port does not.
 
-Jeffrey Allen Neitzel						2014/04/10
+Jeffrey Allen Neitzel						2014/07/08
 
 @(#)$Id$
