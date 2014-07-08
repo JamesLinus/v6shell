@@ -60,15 +60,8 @@ if $# = 3 -a X$1 = X-newlog -a X$2 = Xosh -a X$3 = Xsh6 goto NewLog
 if ! -x ../$1 if { fd2 -e echo $1: Missing or not executable } \
 	if { exit } if A = B
 if X$1 = Xosh goto Jump
-	if ! -x ../glob6 if { fd2 -e echo glob6: Missing or not executable } \
-		if { exit } if A = B
-	if ! -x ../if if { fd2 -e echo if: Missing or not executable } \
-		if { exit } if A = B
-	if ! -x ../goto if { fd2 -e echo goto: Missing or not executable } \
-		if { exit } if A = B
-	if ! -x ../fd2 if { fd2 -e echo fd2: Missing or not executable } \
-		if { exit } if A = B
-	: which sh6 glob6 if goto fd2
+	if ! { fd2 -- $1 -c 'echo R*' >/dev/null } if { fd2 -e echo "Error - Please do a `make install' for $1 binary tests." } if { exit } if A = B
+	: which sh6
 	goto Run
 : Jump
 	: which osh
