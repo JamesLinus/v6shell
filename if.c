@@ -301,6 +301,9 @@ static void
 doex(bool forked)
 {
 	char **xap, **xav;
+	int i;
+	const char **tav;
+	const char *cmd;
 
 	if (ap < 2 || ap > ac)	/* should never (but can) be true */
 		err(FC_ERR, FMT2S, getmyname(), ERR_AVIINVAL);
@@ -330,7 +333,25 @@ doex(bool forked)
 		EXIT(SH_TRUE);
 	}
 
-	(void)err_pexec(xav[0], xav);
+	cmd = xav[0];
+	if (equal(cmd, "fd2") || equal(cmd, "goto") || equal(cmd, "if")) {
+		for (i = 0; xav[i] != NULL; i++)
+			;	/* nothing */
+		if ((tav = malloc((i + 1) * sizeof(char *))) == NULL) {
+			err(FC_ERR, FMT2S, getmyname(), ERR_NOMEM);
+			/*NOTREACHED*/
+		}
+		if (equal(cmd, "fd2"))
+			tav[0] = FD2_PATH;
+		else if (equal(cmd, "goto"))
+			tav[0] = GOTO_PATH;
+		else
+			tav[0] = IF_PATH;
+		cmd = tav[0];
+		(void)memcpy(&tav[1], &xav[1], i * sizeof(char *));
+		(void)err_pexec(cmd, (char *const *)tav);
+	} else
+		(void)err_pexec(cmd, xav);
 }
 
 /*

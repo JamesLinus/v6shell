@@ -796,7 +796,7 @@ execute(struct tnode *t, int *pin, int *pout)
 	enum tnflags f;
 	pid_t cpid;
 	int i, pfd[2];
-	const char **gav;
+	const char **tav;
 	const char *cmd, *p;
 
 	if (t == NULL)
@@ -994,19 +994,34 @@ execute(struct tnode *t, int *pin, int *pout)
 			fd_print(FD2, "       : (i + 1) == %2d;\n", (i + 1));
 #endif
 #endif
-			gav = xmalloc((i + 2) * sizeof(char *));
-			gav[0] = "glob6";
-			cmd = gav[0];
-			(void)memcpy(&gav[1], t->nav, (i + 1) * sizeof(char *));
+			tav = xmalloc((i + 2) * sizeof(char *));
+			tav[0] = GLOB_PATH;
+			cmd = tav[0];
+			(void)memcpy(&tav[1], t->nav, (i + 1) * sizeof(char *));
 #ifdef	DEBUG
 #ifdef	DEBUG_GLOB
-			for (i = 0; gav[i] != NULL; i++)
-				fd_print(FD2, "       : gav[%2d] == %s;\n",
-				    i, gav[i]);
-			fd_print(FD2, "       : gav[%2d] == NULL;\n", i);
+			for (i = 0; tav[i] != NULL; i++)
+				fd_print(FD2, "       : tav[%2d] == %s;\n",
+				    i, tav[i]);
+			fd_print(FD2, "       : tav[%2d] == NULL;\n", i);
 #endif
 #endif
-			(void)err_pexec(cmd, (char *const *)gav);
+			(void)err_pexec(cmd, (char *const *)tav);
+		} else if (EQUAL(cmd, "fd2") || EQUAL(cmd, "goto") ||
+		    EQUAL(cmd, "if")) {
+			vscan(t->nav, &trim);
+			for (i = 0; t->nav[i] != NULL; i++)
+				;	/* nothing */
+			tav = xmalloc((i + 1) * sizeof(char *));
+			if (EQUAL(cmd, "fd2"))
+				tav[0] = FD2_PATH;
+			else if (EQUAL(cmd, "goto"))
+				tav[0] = GOTO_PATH;
+			else
+				tav[0] = IF_PATH;
+			cmd = tav[0];
+			(void)memcpy(&tav[1], &t->nav[1], i * sizeof(char *));
+			(void)err_pexec(cmd, (char *const *)tav);
 		} else {
 			vscan(t->nav, &trim);
 			cmd = t->nav[0];

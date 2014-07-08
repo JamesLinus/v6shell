@@ -217,7 +217,7 @@ err_pexec(const char *file, char *const *argv)
 	f = (file == NULL) ? "(null)" : file;
 	n = getmyname();
 
-	if (EQUAL(n, "glob6")) {
+	if (EQUAL(n, "glob")) {
 		if (errno == ENOEXEC)
 			err(SH_ERR, FMT1S, ERR_NOSHELL);
 		if (errno == E2BIG)

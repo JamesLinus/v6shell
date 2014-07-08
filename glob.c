@@ -1,5 +1,5 @@
 /*
- * glob6.c - a port of the Sixth Edition (V6) UNIX global command
+ * glob.c - a port of the Sixth Edition (V6) UNIX global command
  */
 /*-
  * Copyright (c) 2004-2014
@@ -88,19 +88,22 @@ static	DIR		*gopendir(const char *);
 
 /*
  * NAME
- *	glob6 - global command (file name generation)
+ *	glob - global command (file name generation)
  *
  * SYNOPSIS
- *	glob6 command [arg ...]
+ *	glob command [arg ...]
  *
  * DESCRIPTION
- *	See glob6(1) the manual page for full details.
+ *	See glob(1) the manual page for full details.
  */
 int
 main(int argc, char **argv)
 {
 	const char **gav;	/* points to generated argument vector */
 	int pmc = 0;		/* pattern-match count                 */
+	int i;
+	const char **tav;
+	const char *cmd;
 
 	setmyerrexit(&ut_errexit);
 	setmyname(argv[0]);
@@ -132,7 +135,26 @@ main(int argc, char **argv)
 		/*NOTREACHED*/
 	}
 
-	(void)err_pexec(gav[0], (char *const *)gav);
+	cmd = gav[0];
+	if (EQUAL(cmd, "fd2") || EQUAL(cmd, "goto") || EQUAL(cmd, "if")) {
+		for (i = 0; gav[i] != NULL; i++)
+			;	/* nothing */
+		if ((tav = malloc((i + 1) * sizeof(char *))) == NULL) {
+			err(SH_ERR, FMT1S, ERR_NOMEM);
+			/*NOTREACHED*/
+		}
+		if (EQUAL(cmd, "fd2"))
+			tav[0] = FD2_PATH;
+		else if (EQUAL(cmd, "goto"))
+			tav[0] = GOTO_PATH;
+		else
+			tav[0] = IF_PATH;
+		cmd = tav[0];
+		(void)memcpy(&tav[1], &gav[1], i * sizeof(char *));
+		(void)err_pexec(cmd, (char *const *)tav);
+	} else
+		(void)err_pexec(cmd, (char *const *)gav);
+
 	/*NOTREACHED*/
 	return SH_ERR;
 }

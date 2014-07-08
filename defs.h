@@ -115,6 +115,17 @@
 #define	IS_DIGIT(d, c)	((d) >= 0 && (d) <= 9 && "0123456789"[(d) % 10] == (c))
 
 /*
+ * sh6(1) does not search for glob, fd2, goto, or if via PATH.
+ * It expects to find these utilities in LIBEXECDIR which is set
+ * at build time, defaulting to $(PREFIX)/libexec/$(OSH_VERSION).
+ * The glob(1), fd2(1), and if(1) utilities expect the same.
+ */
+#define	GLOB_PATH	LIBEXECDIR "/glob"
+#define	FD2_PATH	LIBEXECDIR "/fd2"
+#define	GOTO_PATH	LIBEXECDIR "/goto"
+#define	IF_PATH		LIBEXECDIR "/if"
+
+/*
  * special character literals
  */
 #define	BANG		'!'

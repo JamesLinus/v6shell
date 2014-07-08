@@ -56,6 +56,9 @@ main(int argc, char **argv)
 	bool eopt;
 	int efd, fd, nfd, ofd, opt;
 	char *file;
+	int i;
+	const char **tav;
+	const char *cmd;
 
 	setmyerrexit(&ut_errexit);
 	setmyname(argv[0]);
@@ -111,7 +114,26 @@ main(int argc, char **argv)
 	/*
 	 * Try to execute the specified command.
 	 */
-	(void)err_pexec(argv[0], argv);
+	cmd = argv[0];
+	if (EQUAL(cmd, "fd2") || EQUAL(cmd, "goto") || EQUAL(cmd, "if")) {
+		for (i = 0; argv[i] != NULL; i++)
+			;	/* nothing */
+		if ((tav = malloc((i + 1) * sizeof(char *))) == NULL) {
+			err(FC_ERR, FMT2S, getmyname(), ERR_NOMEM);
+			/*NOTREACHED*/
+		}
+		if (EQUAL(cmd, "fd2"))
+			tav[0] = FD2_PATH;
+		else if (EQUAL(cmd, "goto"))
+			tav[0] = GOTO_PATH;
+		else
+			tav[0] = IF_PATH;
+		cmd = tav[0];
+		(void)memcpy(&tav[1], &argv[1], i * sizeof(char *));
+		(void)err_pexec(cmd, (char *const *)tav);
+	} else
+		(void)err_pexec(cmd, argv);
+
 	/*NOTREACHED*/
 	return FC_ERR;
 }
