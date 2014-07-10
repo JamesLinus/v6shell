@@ -120,10 +120,10 @@
  * at build time, defaulting to $(PREFIX)/libexec/$(OSH_VERSION).
  * The glob(1), fd2(1), and if(1) utilities expect the same.
  */
-#define	GLOB_PATH	LIBEXECDIR "/glob"
-#define	FD2_PATH	LIBEXECDIR "/fd2"
-#define	GOTO_PATH	LIBEXECDIR "/goto"
-#define	IF_PATH		LIBEXECDIR "/if"
+#define	GLOB_PATH	LIBEXECDIR/**/"/glob"
+#define	FD2_PATH	LIBEXECDIR/**/"/fd2"
+#define	GOTO_PATH	LIBEXECDIR/**/"/goto"
+#define	IF_PATH		LIBEXECDIR/**/"/if"
 
 /*
  * special character literals
