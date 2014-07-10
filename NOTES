@@ -48,6 +48,14 @@ default to avoid conflict and confusion on modern UNIX systems.
 Additionally, see the glob6(1), goto(1), and if(1) manual pages for
 full details regarding the ports of the above-mentioned utilities.
 
+--------------------------------------------
+sh6(1), osh(1), and shells(5) (/etc/shells):
+
+Since sh6(1) does not read any startup files, it should not be added
+to the shell database (see shells(5)) unless the system administrator
+is willing to deal with this fact.  However, osh(1) should be added to
+/etc/shells since it is a login shell.
+
 -------------------------------
 Compatibility notes for osh(1):
 
@@ -156,6 +164,6 @@ Further details regarding the substantial differences:
 3) The original implementation of the shell does shell accounting
    in order to record command execution data; this port does not.
 
-Jeffrey Allen Neitzel						2014/07/08
+Jeffrey Allen Neitzel						2014/07/10
 
 @(#)$Id$
