@@ -163,6 +163,7 @@ fd2bin: v.o fd2.o err.o pexec.o
 #
 check: all
 	@( trap '' INT QUIT && cd tests && ../osh run.osh osh sh6 )
+
 check-newlog: all
 	@( trap '' INT QUIT && cd tests && ../osh run.osh -newlog osh sh6 )
 
@@ -186,13 +187,13 @@ install-osh: $(OSH) $(OSHMAN) install-dest
 	$(INSTALL) -c -s $(BINGRP) $(BINMODE) osh        $(DESTBINDIR)
 	$(INSTALL) -c    $(MANGRP) $(MANMODE) osh.1.out  $(DESTMANDIR)/osh.1
 
-install-sh6: $(SH6) $(SH6MAN) install-dest
+install-sh6: $(SH6) $(SH6MAN) install-dest install-destlibexec
 	$(INSTALL) -c -s $(BINGRP) $(BINMODE) sh6        $(DESTBINDIR)
 	$(INSTALL) -c    $(MANGRP) $(MANMODE) sh6.1.out  $(DESTMANDIR)/sh6.1
 	$(INSTALL) -c -s $(BINGRP) $(BINMODE) glob       $(DESTLIBEXECDIR)
 	$(INSTALL) -c    $(MANGRP) $(MANMODE) glob.1.out $(DESTMANDIR)/glob.1
 
-install-ubin: $(UBIN) install-dest
+install-ubin: $(UBIN) install-dest install-destlibexec
 	$(INSTALL) -c -s $(BINGRP) $(BINMODE) fd2        $(DESTLIBEXECDIR)
 	$(INSTALL) -c -s $(BINGRP) $(BINMODE) goto       $(DESTLIBEXECDIR)
 	$(INSTALL) -c -s $(BINGRP) $(BINMODE) if         $(DESTLIBEXECDIR)
@@ -204,8 +205,10 @@ install-uman: $(UMAN) install-dest
 
 install-dest:
 	test -d $(DESTBINDIR) || { umask 0022 && mkdir -p $(DESTBINDIR) ; }
-	test -d $(DESTLIBEXECDIR) || { umask 0022 && mkdir -p $(DESTLIBEXECDIR) ; }
 	test -d $(DESTMANDIR) || { umask 0022 && mkdir -p $(DESTMANDIR) ; }
+
+install-destlibexec:
+	test -d $(DESTLIBEXECDIR) || { umask 0022 && mkdir -p $(DESTLIBEXECDIR) ; }
 
 install-doc:
 	test -d $(DESTDOCDIR) || { umask 0022 && mkdir -p $(DESTDOCDIR) ; }
