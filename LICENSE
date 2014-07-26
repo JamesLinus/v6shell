@@ -30,7 +30,7 @@ Osh is hereby distributed under the following license:
 
 ==================================================================
 Additionally, the original license for osh.1, osh.c, sh6.1, sh6.c,
-glob6.1, glob6.c, if.1, if.c, goto.1, goto.c, and util.c follows:
+glob.1, glob.c, if.1, if.c, goto.1, goto.c, and util.c follows:
 
 /*-
  * Copyright (C) Caldera International Inc.  2001-2002.  All rights reserved.
@@ -144,8 +144,8 @@ of the OpenBSD project.  The original license follows:
 .\"	@(#)test.1	8.1 (Berkeley) 5/31/93
 ===
 
-============================================================
-Additionally, fd2.1, glob6.1, if.1, osh.1, and sh6.1 include
+===========================================================
+Additionally, fd2.1, glob.1, if.1, osh.1, and sh6.1 include
 public domain content derived from /usr/src/bin/ksh/sh.1 of
 the OpenBSD project that describes the environment variable
 EXECSHELL.  The original license follows:
@@ -270,6 +270,6 @@ The original license follows:
 .\"	@(#)strtol.3	8.1 (Berkeley) 6/4/93
 ===
 
-Jeffrey Allen Neitzel						2014/04/10
+Jeffrey Allen Neitzel						2014/07/26
 
 @(#)$Id$

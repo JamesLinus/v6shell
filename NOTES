@@ -45,7 +45,7 @@ default, rather than being installed into the /etc directory.  The
 the previously mentioned subdirectory of /usr/local/libexec by
 default to avoid conflict and confusion on modern UNIX systems.
 
-Additionally, see the glob6(1), goto(1), and if(1) manual pages for
+Additionally, see the glob(1), goto(1), and if(1) manual pages for
 full details regarding the ports of the above-mentioned utilities.
 
 --------------------------------------------
@@ -164,6 +164,6 @@ Further details regarding the substantial differences:
 3) The original implementation of the shell does shell accounting
    in order to record command execution data; this port does not.
 
-Jeffrey Allen Neitzel						2014/07/10
+Jeffrey Allen Neitzel						2014/07/26
 
 @(#)$Id$

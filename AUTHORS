@@ -15,7 +15,7 @@ Definitions:
 	osh - enhanced port of the Sixth Edition (V6) UNIX Thompson shell
 
 	sh6 - port of the Sixth Edition (V6) UNIX Thompson shell
-		(sh6 references implicitly include glob6)
+		(sh6 references implicitly include glob(6))
 ===
 
 Notice that I have released three different implementations of
@@ -80,6 +80,6 @@ would exist today.
 
 See the DEDICATIONS file for further info.
 
-Jeffrey Allen Neitzel						2014/04/10
+Jeffrey Allen Neitzel						2014/07/26
 
 @(#)$Id$

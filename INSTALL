@@ -87,7 +87,7 @@ The following targets are available.
 
 	oshall		Compiles osh and generates manual pages.
 
-	sh6all		Compiles sh6, glob6, if, goto, fd2 and
+	sh6all		Compiles sh6, glob, if, goto, fd2 and
 			generates manual pages.
 
 	check		Runs the regression test suite with osh and sh6.
@@ -121,7 +121,7 @@ to /opt/local/etc.
 	% make PREFIX=/opt/local oshall
 	# make PREFIX=/opt/local install-oshall install-doc install-exp
 
-The following compiles sh6, glob6, if, goto, and fd2 for /usr/pkg.
+The following compiles sh6, glob, if, goto, and fd2 for /usr/pkg.
 Then, it installs these binaries into /usr/pkg/bin, manual pages
 into /usr/pkg/share/man/man1, and package documentation into
 /usr/pkg/share/doc/$(OSH_VERSION).
@@ -159,6 +159,6 @@ OpenSolaris.
 	% gmake
 	# gmake INSTALL=/usr/bin/ginstall install install-doc install-exp
 
-Jeffrey Allen Neitzel						2014/04/09
+Jeffrey Allen Neitzel						2014/07/26
 
 @(#)$Id$
