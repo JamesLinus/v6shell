@@ -1001,8 +1001,7 @@ execute(struct tnode *t, int *pin, int *pout)
 #endif
 #endif
 			(void)err_pexec(cmd, (char *const *)tav);
-		} else if (EQUAL(cmd, "fd2") || EQUAL(cmd, "goto") ||
-		    EQUAL(cmd, "if")) {
+		} else if (IS_LIBEXEC(EQUAL)) {
 			vscan(t->nav, &trim);
 			for (i = 0; t->nav[i] != NULL; i++)
 				;	/* nothing */

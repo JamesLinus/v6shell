@@ -113,6 +113,7 @@
 
 #define	EQUAL(a, b)	(*(a) == *(b) && strcmp((a), (b)) == 0)
 #define	IS_DIGIT(d, c)	((d) >= 0 && (d) <= 9 && "0123456789"[(d) % 10] == (c))
+#define	IS_LIBEXEC(e)	(e(cmd, "fd2") || e(cmd, "goto") || e(cmd, "if"))
 
 /*
  * sh6(1) does not search for glob, fd2, goto, or if via PATH.

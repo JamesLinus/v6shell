@@ -115,7 +115,7 @@ main(int argc, char **argv)
 	 * Try to execute the specified command.
 	 */
 	cmd = argv[0];
-	if (EQUAL(cmd, "fd2") || EQUAL(cmd, "goto") || EQUAL(cmd, "if")) {
+	if (IS_LIBEXEC(EQUAL)) {
 		for (i = 0; argv[i] != NULL; i++)
 			;	/* nothing */
 		if ((tav = malloc((i + 1) * sizeof(char *))) == NULL) {

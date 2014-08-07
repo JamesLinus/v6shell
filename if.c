@@ -334,7 +334,7 @@ doex(bool forked)
 	}
 
 	cmd = xav[0];
-	if (equal(cmd, "fd2") || equal(cmd, "goto") || equal(cmd, "if")) {
+	if (IS_LIBEXEC(equal)) {
 		for (i = 0; xav[i] != NULL; i++)
 			;	/* nothing */
 		if ((tav = malloc((i + 1) * sizeof(char *))) == NULL) {
