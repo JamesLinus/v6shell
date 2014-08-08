@@ -28,11 +28,17 @@ passing the desired variable=value pair(s) on the command line.
 			binary packages if needed.
 
 	PREFIX		Defaults to /usr/local.  This is the target
-			directory where BINDIR, DOCDIR, MANDIR, and
-			SYSCONFDIR are located by default.
+			directory where BINDIR, LIBEXECDIR, DOCDIR,
+			MANDIR, and SYSCONFDIR are located by default.
 
-	BINDIR		Defaults to $(PREFIX)/bin.  This is the target
-			directory where the binaries are installed.
+	BINDIR		Defaults to $(PREFIX)/bin.
+			This is the target directory where
+			the osh and sh6 binaries are installed.
+
+	LIBEXECDIR	Defaults to $(PREFIX)/libexec/$(OSH_VERSION).
+			This is the target directory where the sh6 external
+			utility binaries (glob, if, goto, fd2) are installed
+			and where sh6 expects to find them.
 
 	DOCDIR		Defaults to $(PREFIX)/share/doc/$(OSH_VERSION).
 			This is the target directory for the [ACDILNPR]*
@@ -46,9 +52,9 @@ passing the desired variable=value pair(s) on the command line.
 			installed.
 
 	SYSCONFDIR	Defaults to $(PREFIX)/etc.  This is the target
-			directory where the shell shall search for its
-			system-wide rc (init and logout) files if such
-			files are available on the system.  See also:
+			directory where osh searches for its system-wide
+			rc (init and logout) files if such files are
+			available on the system.  See also:
 
 				http://v6shell.org/rc_files
 
@@ -159,6 +165,6 @@ OpenSolaris.
 	% gmake
 	# gmake INSTALL=/usr/bin/ginstall install install-doc install-exp
 
-Jeffrey Allen Neitzel						2014/07/26
+Jeffrey Allen Neitzel						2014/08/08
 
 @(#)$Id$
