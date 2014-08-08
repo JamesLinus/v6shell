@@ -1855,6 +1855,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2014/07/12
+Jeffrey Allen Neitzel						2014/08/08
 
 @(#)$Id$
