@@ -5,10 +5,12 @@ Thompson shell are marked w/ a `C:' in the details below.
 [osh-current] (development):
 	* Work In Progress ( see http://v6shell.org/src/current/ )
 
+-------------------------------------------------------------------------------
+[osh-20140820-beta1] (latest):
 	* See CHANGES6 .
 
 -------------------------------------------------------------------------------
-[osh-20140410] (latest):
+[osh-20140410]:
 Makefile:
 	* Changed MOXARCH to OSXCFLAGS & OSXLDFLAGS to play better w/ MacPorts.
 
@@ -1855,6 +1857,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2014/08/08
+Jeffrey Allen Neitzel						2014/08/13
 
 @(#)$Id$

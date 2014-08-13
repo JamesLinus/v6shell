@@ -6,15 +6,19 @@ command in porting them to run on modern UNIX systems.
 [osh-current] (development):
 	* Work In Progress ( see http://v6shell.org/src/current/ )
 
+-------------------------------------------------------------------------------
+[osh-20140820-beta1] (latest):
 Makefile:
 	* Added LIBEXECDIR, and changed glob6 to glob .
 
-	* Updated so libexec dir & utils only install for sh6 .
+	* Updated so libexec directory & utilities only install for sh6 .
 
-INSTALL NOTES:
+	* Added README.libexec; install it into LIBEXECDIR as README .
+
+INSTALL, NOTES:
 	* Updated as needed to document changes.
 
-defs.h fd2.c glob.c if.c sh6.c:
+defs.h, fd2.c, glob.c, if.c, sh6.c:
 	* Changed how sh6 finds its external utilities (glob, fd2, goto, if)
 	  and how its external utilities that invoke external utilities
 	  (glob, fd2, if) find fd2, goto, and if.  NOTE: goto is a special
@@ -26,7 +30,7 @@ glob.[1c]:
 	* Moved / renamed glob6.[1c] to glob.[1c] .
 
 -------------------------------------------------------------------------------
-[osh-20140410] (latest):
+[osh-20140410]:
 	* No changes.
 
 -------------------------------------------------------------------------------
@@ -468,6 +472,6 @@ glob.c:
     Date: May 14, 1975
     From: Sixth Edition UNIX /usr/source/s1/glob.c
 
-Jeffrey Allen Neitzel						2014/08/12
+Jeffrey Allen Neitzel						2014/08/13
 
 @(#)$Id$
