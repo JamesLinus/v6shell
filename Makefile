@@ -209,6 +209,7 @@ install-dest:
 
 install-destlibexec:
 	test -d $(DESTLIBEXECDIR) || { umask 0022 && mkdir -p $(DESTLIBEXECDIR) ; }
+	$(INSTALL) -c $(MANGRP) $(MANMODE) README.libexec $(DESTLIBEXECDIR)/README
 
 install-doc:
 	test -d $(DESTDOCDIR) || { umask 0022 && mkdir -p $(DESTDOCDIR) ; }
