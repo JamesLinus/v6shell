@@ -28,6 +28,8 @@ if $# != 1 -o X$1 = X\
 	false
 if -e $1'' -o -h $1''\
 	if { exit } fd2 -e echo FILEPREP: $1: File exists ; false
+if ! { fd2 which which >/dev/null }\
+	if { exit } fd2 -e echo $0: which: Not found ; false
 if { fd2 which . >/dev/null }\
 	if { exit } fd2 -e echo $0: which: Invalid results ; false
 if ! { which chmod cp head mkdir pwd rm strings tee tr >/dev/null }\
