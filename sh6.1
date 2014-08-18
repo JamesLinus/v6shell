@@ -208,6 +208,13 @@ Otherwise,
 the shell treats it as an external command,
 which is located as follows.
 .PP
+(+) Unlike the original shell,
+\fBsh6\fR expects to find its external utilities
+(\fBglob\fR, \fBif\fR, \fBgoto\fR, and \fBfd2\fR) in the
+\fI@LIBEXECDIR@\fR directory.
+Notice that it requires these external utilities
+for full functionality.
+.PP
 (+) If the command name contains no `/' characters,
 the sequence of directories in the environment variable PATH
 is searched for the first occurrence
