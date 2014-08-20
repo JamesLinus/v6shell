@@ -7,7 +7,7 @@ command in porting them to run on modern UNIX systems.
 	* Work In Progress ( see http://v6shell.org/src/current/ )
 
 -------------------------------------------------------------------------------
-[osh-20140820-beta1] (latest):
+[osh-20140820] (latest):
 Makefile:
 	* Added LIBEXECDIR, and changed glob6 to glob .
 
@@ -475,6 +475,6 @@ glob.c:
     Date: May 14, 1975
     From: Sixth Edition UNIX /usr/source/s1/glob.c
 
-Jeffrey Allen Neitzel						2014/08/19
+Jeffrey Allen Neitzel						2014/08/20
 
 @(#)$Id$
