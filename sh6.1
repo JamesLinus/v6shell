@@ -205,17 +205,16 @@ the shell executes it (see
 .I "Special\ commands"
 below).
 Otherwise,
-the shell treats it as an external command,
+the shell treats it as an external utility or command,
 which is located as follows.
 .PP
-(+) Unlike the original shell,
-\fBsh6\fR expects to find its external utilities
-(\fBglob\fR, \fBif\fR, \fBgoto\fR, and \fBfd2\fR) in the
-\fI@LIBEXECDIR@\fR directory.
-Notice that it requires these external utilities
-for full functionality.
+(+) Notice that \fBsh6\fR expects to find its external
+utilities (\fBglob\fR, \fBif\fR, \fBgoto\fR, and \fBfd2\fR)
+in the \fI@LIBEXECDIR@\fR directory,
+not by searching the environment variable PATH.
 .PP
-(+) If the command name contains no `/' characters,
+(+) Otherwise,
+if the command name contains no `/' characters,
 the sequence of directories in the environment variable PATH
 is searched for the first occurrence
 of an executable file by that name,

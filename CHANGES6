@@ -26,6 +26,9 @@ defs.h, fd2.c, glob.c, if.c, sh6.c:
 	  searched.  LIBEXECDIR is used instead.  See INSTALL, NOTES,
 	  and defs.h for further info.
 
+sh6.1:
+	* Added info about LIBEXECDIR to the sh6 manual page.
+
 glob.[1c]:
 	* Moved / renamed glob6.[1c] to glob.[1c] .
 
@@ -472,6 +475,6 @@ glob.c:
     Date: May 14, 1975
     From: Sixth Edition UNIX /usr/source/s1/glob.c
 
-Jeffrey Allen Neitzel						2014/08/13
+Jeffrey Allen Neitzel						2014/08/19
 
 @(#)$Id$
