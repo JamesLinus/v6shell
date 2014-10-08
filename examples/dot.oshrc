@@ -93,7 +93,7 @@ if $? = 0 goto Continue
 	alias	opwd	'cd -;pwd'
 	alias	path	'echo $p;:'
 	alias	pparm	'echo $0: $#: $*;:'
-	alias	sh6i	'sh6 -c xtitle;sh6;xtitle;:'
+	alias	sh6i	'trap "" 2 3 15;sh6 -c xtitle;(trap - 2 3 15;sh6);xtitle;:'
 	alias	s	'echo $?;:'
 	alias	status	's'
 	alias	v	'echo $v;:'
