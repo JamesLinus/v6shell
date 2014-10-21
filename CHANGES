@@ -5,6 +5,14 @@ Thompson shell are marked w/ a `C:' in the details below.
 [osh-current] (development):
 	* Work In Progress ( see http://v6shell.org/src/current/ )
 
+README:
+	* Added OS X 10.10 (aka Yosemite) to supported systems.
+
+examples/dot.oshrc:
+	* Updated the sh6i alias to make it trap and untrap the 1 (HUP),
+	  2  (INT), 3 (QUIT), 13 (PIPE), 14 (ALRM), 15 (TERM), 18 (TSTP),
+	  21 (TTIN), and 22 (TTOU) signals accordingly for better behavior.
+
 -------------------------------------------------------------------------------
 [osh-20140820] (latest):
 	* See CHANGES6 .
@@ -1857,6 +1865,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2014/08/20
+Jeffrey Allen Neitzel						2014/10/21
 
 @(#)$Id$
