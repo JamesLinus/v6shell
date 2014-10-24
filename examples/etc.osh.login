@@ -12,7 +12,7 @@ trap '' 18 21 22 ;       : " Ignore job-control signals: TSTP, TTIN, TTOU "
 :
 : " Set a default PATH and umask for all users. "
 :
-setenv	PATH	/opt/local/bin:/usr/local/bin:/bin:/usr/bin:/usr/X11/bin
+setenv	PATH	/opt/local/bin:/usr/local/bin:/bin:/usr/bin:/opt/X11/bin
 umask	0022
 
 : fd2 -e echo "debug: Executing `@SYSCONFDIR@/osh.login' now..."

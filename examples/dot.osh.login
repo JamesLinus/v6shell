@@ -14,13 +14,13 @@ if X$u != Xroot goto Continue
 	: " Give the superuser a different default PATH. "
 	:
 	setenv	PATH	/opt/local/bin:/usr/local/bin
-	setenv	PATH	$p:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11/bin
+	setenv	PATH	$p:/bin:/sbin:/usr/bin:/usr/sbin:/opt/X11/bin
 	: fallthrough
 
 : Continue - " Continue as normal. "
 
 	setenv	MANPATH	\
-		/opt/local/share/man:/usr/local/man:/usr/share/man:/usr/X11/share/man
+		/opt/local/share/man:/usr/local/man:/usr/share/man:/opt/X11/share/man
 	setenv	PATH		/usr/local/v6bin:$h/v6bin:$p:/usr/games
 	setenv	COMMAND_MODE	unix2003
 	setenv	EXECSHELL	@EXECSHELL@
