@@ -6,7 +6,7 @@ Thompson shell are marked w/ a `C:' in the details below.
 	* Work In Progress ( see http://v6shell.org/src/current/ )
 
 README:
-	* Added OS X 10.10 (aka Yosemite) to supported systems.
+	* Added OS X 10.10 (Yosemite) to supported systems.
 
 	* Added Debian 7.7 (wheezy) to supported systems.
 
