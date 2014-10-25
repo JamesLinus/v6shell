@@ -1,4 +1,4 @@
-Welcome to Osh (V6Shell) - osh-20141024 - 2014, the Year of Love <3 !
+Welcome to Osh (V6Shell) - osh-current - 2014, the Year of Love <3 !
 
 The osh package provides two ports of the original /bin/sh from
 Sixth Edition (V6) UNIX (circa 1975).
@@ -57,6 +57,6 @@ you to contact me via email.  Thanks & Enjoy!
 
 Jeffrey Allen Neitzel
 <jan (at) v6shell (dot) org>
-http://v6shell.org/						2014/10/24
+http://v6shell.org/						2014/10/25
 
 @(#)$Id$
