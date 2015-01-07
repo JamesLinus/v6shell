@@ -310,7 +310,7 @@ static	void		execute2(struct tnode *,
 				 /*@null@*/ int *, /*@null@*/ int *);
 static	void		do_chdir(char **);
 static	void		do_trap(char **, enum tnflags);
-static	void		set_ss_flags(int, action_type);
+static	void		set_ss_flags(long, action_type);
 static	void		do_source(char **);
 static	int		source_open(const char *, const char *);
 static	void		pwait(pid_t);
@@ -2357,7 +2357,8 @@ do_trap(char **av, enum tnflags f)
 {
 	struct sigaction act, oact;
 	sigset_t new_mask, old_mask;
-	int i, sigerr, signo;
+	long signo;
+	int i, sigerr;
 	static bool ignlst[NSIG], gotlst;
 
 	/* Temporarily block all signals in this function. */
@@ -2403,7 +2404,7 @@ do_trap(char **av, enum tnflags f)
 			}
 
 			/* Do nothing if no signal changes are needed. */
-			if (sigaction(signo, NULL, &oact) < 0 ||
+			if (sigaction((int)signo, NULL, &oact) < 0 ||
 			    (act.sa_handler  == SIG_DFL &&
 			     oact.sa_handler == SIG_DFL))
 				continue;
@@ -2419,8 +2420,8 @@ do_trap(char **av, enum tnflags f)
 			if (is_login&&signo==SIGHUP&&act.sa_handler==SIG_DFL) {
 				if (oact.sa_handler == sighup)
 					continue;
-				if (sasignal(signo, sighup) == SIG_ERR) {
-					sigerr = signo;
+				if (sasignal((int)signo, sighup) == SIG_ERR) {
+					sigerr = (int)signo;
 					goto sigdone;
 				}
 				continue;
@@ -2432,7 +2433,7 @@ do_trap(char **av, enum tnflags f)
 			 */
 			if (signo == SIGKILL ||
 			    signo == SIGSTOP || signo == SIGCHLD ||
-			    sigaction(signo, &act, NULL) < 0)
+			    sigaction((int)signo, &act, NULL) < 0)
 				continue;
 
 			set_ss_flags(signo, act.sa_handler);
@@ -2468,7 +2469,7 @@ sigdone:
  * Set global sig_state flags according to signal sig and action act.
  */
 static void
-set_ss_flags(int sig, action_type act)
+set_ss_flags(long sig, action_type act)
 {
 
 	if (act == SIG_IGN) {

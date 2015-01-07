@@ -439,8 +439,8 @@ e3(void)
 {
 	bool re;
 	pid_t cpid, tpid;
+	long ai, ci;
 	int cstat, d;
-	int ai, ci;
 	char *a, *b, *c;
 
 	if ((a = nxtarg(RETERR)) == NULL)

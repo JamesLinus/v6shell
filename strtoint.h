@@ -34,34 +34,35 @@
 
 /*
  * NAME
- *	strtoint - convert a string value into an int integer value
+ *	strtoint - convert a string value into a long integer value
  *
  * SYNOPSIS
  *	#include "strtoint.h"
  *
  *	bool
- *	strtoint(const char *string, int *integer);
+ *	strtoint(const char *string, long *integer);
  *
  * DESCRIPTION
  *	The strtoint() function converts the specified string into a
- *	decimal integer value of type int.  It assigns the converted
- *	value to the storage pointed to by the specified integer.
+ *	decimal integer value of type long.  It assigns the converted
+ *	value to the storage pointed to by the specified long integer.
  *
  * RETURN VALUES
- *	On success, strtoint() returns true with the converted int
- *	integer value assigned to the storage pointed to by integer.
- *	On error, it returns false with 0 assigned to the storage
- *	pointed to by integer and sets errno according to the error.
+ *	On success, strtoint() returns true with the converted long
+ *	integer value assigned to the storage pointed to by the long
+ *	integer.  On error, it returns false with 0 assigned to the
+ *	storage pointed to by the long integer and sets errno
+ *	according to the error.
  *
  * ERRORS
  *	EINVAL	The specified string is NULL, empty,
  *		or cannot be converted by strtol(3).
  *
- *	EINVAL	The specified integer is NULL.
+ *	EINVAL	The specified long integer is NULL.
  *
  *	ERANGE	The specified string is out of range.
  */
 
-bool	strtoint(/*@null@*/ const char *, /*@null@*/ /*@out@*/ int *);
+bool	strtoint(/*@null@*/ const char *, /*@null@*/ /*@out@*/ long *);
 
 #endif	/* !STRTOINT_H */
