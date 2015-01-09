@@ -83,7 +83,7 @@
 #define	ERR_NOTDIGIT	"not a digit"
 #define	ERR_NOTFOUND	"not found"
 #define	ERR_INTEGER	"integer expected"
-#define	ERR_NOTINTEGER	"not an integer"
+#define	ERR_BADINTEGER	"bad integer"
 #define	ERR_OPERATOR	"operator expected"
 #define	ERR_RANGE	"out of range"
 #define	ERR_SYNTAX	"syntax error"

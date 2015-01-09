@@ -53,7 +53,7 @@ strtoint(const char *s, long *l)
 	    *lbad != EOS) {
 		errno = EINVAL;
 		if (EQUAL(n, "if"))
-			fd_print(FD2, FMT3S, n, s, ERR_NOTINTEGER);
+			fd_print(FD2, FMT3S, n, s, ERR_BADINTEGER);
 		*l = 0;
 		return false;
 	}
