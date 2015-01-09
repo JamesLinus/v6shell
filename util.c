@@ -536,22 +536,21 @@ e3(void)
 	    equal(b, "-ge") || equal(b, "-lt") || equal(b, "-le")) {
 		if ((c = nxtarg(RETERR)) == NULL)
 			err(FC_ERR, FMT3S, getmyname(), b, ERR_INTEGER);
-		if (!strtoint(a, &ai))
+		if (strtoint(a, &ai) && strtoint(c, &ci)) {
+			if (equal(b, "-eq"))
+				return ai == ci;
+			if (equal(b, "-ne"))
+				return ai != ci;
+			if (equal(b, "-gt"))
+				return ai >  ci;
+			if (equal(b, "-ge"))
+				return ai >= ci;
+			if (equal(b, "-lt"))
+				return ai <  ci;
+			if (equal(b, "-le"))
+				return ai <= ci;
+		} else
 			err(FC_ERR, NULL);
-		if (!strtoint(c, &ci))
-			err(FC_ERR, NULL);
-		if (equal(b, "-eq"))
-			return ai == ci;
-		if (equal(b, "-ne"))
-			return ai != ci;
-		if (equal(b, "-gt"))
-			return ai >  ci;
-		if (equal(b, "-ge"))
-			return ai >= ci;
-		if (equal(b, "-lt"))
-			return ai <  ci;
-		if (equal(b, "-le"))
-			return ai <= ci;
 	}
 	err(FC_ERR, FMT3S, getmyname(), b, ERR_OPUNKNOWN);
 	/*NOTREACHED*/
