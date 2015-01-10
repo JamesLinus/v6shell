@@ -510,7 +510,7 @@ e3(void)
 			if (IS_DIGIT(d, *b))
 				return isatty(d) != 0;
 		}
-		err(FC_ERR, FMT3S, getmyname(), b, ERR_NOTDIGIT);
+		err(FC_ERR, FMT3S, getmyname(), b, ERR_BADDIGIT);
 	}
 
 	/*
