@@ -982,6 +982,9 @@ execute(struct tnode *t, int *pin, int *pout)
 			execute(t1, NULL, NULL);
 			_exit(status);
 		}
+		if (t->nav == NULL || t->nav[0] == NULL)
+			err(FC_ERR, FMT1S, "execute: Invalid command");
+		cmd = t->nav[0];
 		glob_flag = false;
 		vscan(t->nav, &tglob);
 		if (glob_flag) {
