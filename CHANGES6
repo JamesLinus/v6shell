@@ -6,11 +6,13 @@ command in porting them to run on modern UNIX systems.
 [osh-current] (development):
 	* Work In Progress ( see http://v6shell.org/src/current/ )
 
+-------------------------------------------------------------------------------
+[osh-20150115] (latest):
 sh6.c:
 	* Silenced a GCC warning (-Wmaybe-uninitialized) in execute().
 
 -------------------------------------------------------------------------------
-[osh-20141024] (latest):
+[osh-20141024]:
 	* No changes.
 
 -------------------------------------------------------------------------------
@@ -482,6 +484,6 @@ glob.c:
     Date: May 14, 1975
     From: Sixth Edition UNIX /usr/source/s1/glob.c
 
-Jeffrey Allen Neitzel						2015/01/14
+Jeffrey Allen Neitzel						2015/01/15
 
 @(#)$Id$

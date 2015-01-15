@@ -5,6 +5,8 @@ Thompson shell are marked w/ a `C:' in the details below.
 [osh-current] (development):
 	* Work In Progress ( see http://v6shell.org/src/current/ )
 
+-------------------------------------------------------------------------------
+[osh-20150115] (latest):
 if.c, osh.c, strtoint.[hc], util.c:
 	* Changed the strtoint() function to convert string into a
 	  long instead of an int, and ensured that numbers which might
@@ -14,7 +16,7 @@ if.c, osh.c, strtoint.[hc], util.c:
 	  are always false, resulting in an error.
 
 if.c, util.c:
-	* Changed how the built-in & external if commands call
+	* Changed how the built-in & external if(1) commands call
 	  the strtoint() function.
 
 err.h, strtoint.c:
@@ -23,14 +25,14 @@ err.h, strtoint.c:
 
 err.h, if.c, util.c:
 	* Changed the "not a digit" diagnostic for the built-in & external
-	  if commands to "bad digit".
+	  if(1) commands to "bad digit".
 
 err.h:
 	* Changed the order of the definitions for diagnostics to make finding
 	  the "... expected" ones for if(1) a bit easier.
 
 -------------------------------------------------------------------------------
-[osh-20141024] (latest):
+[osh-20141024]:
 README:
 	* Added OS X 10.10 (Yosemite) to supported systems.
 
@@ -1896,6 +1898,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2015/01/13
+Jeffrey Allen Neitzel						2015/01/15
 
 @(#)$Id$
