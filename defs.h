@@ -1,5 +1,6 @@
 /*
- * osh - an enhanced port of the Sixth Edition (V6) UNIX Thompson shell
+ * osh - an   enhanced port of the Sixth Edition (V6) UNIX Thompson shell
+ * sh6 - an unenhanced port of the Sixth Edition (V6) UNIX Thompson shell
  */
 /*-
  * Copyright (c) 2004-2015
