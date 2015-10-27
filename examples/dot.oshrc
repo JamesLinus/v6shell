@@ -77,7 +77,7 @@ if $? = 0 goto Continue
 	alias	sysinfo	"echo -n '==== ';uname -n|tr -d \\n;echo ' ====';echo;uname -srm;echo;now;echo;uptime;:"
 	uname -s | grep '^Darwin$' >/dev/null
 	if $? -ne 0 goto Uname-S-NotDarwin
-		alias	l	'leaks $$;:'
+		alias	l	'fd2 -f/dev/null leaks $$;:'
 		: " If Darwin, reset sysinfo alias (w/ system_profiler). "
 		alias	sysinfo	"echo -n '==== ';uname -n|tr -d \\n;echo ' ====';echo;uname -srm;system_profiler SPSoftwareDataType|grep 'System Version:'|sed 's/^.*: //';echo;now;echo;uptime;:"
 		: fallthrough
