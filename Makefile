@@ -40,9 +40,7 @@ SHELL=		/bin/sh
 #CPPFLAGS=
 OPTIONS=	-std=c99 -pedantic
 #OPTIONS+=	-fstack-protector
-WARNINGS=	-Wall -W
-# NOTE: It seems that -Wno-unused-result first appeared in gcc-4.4.0 .
-#WARNINGS=	-Wno-unused-result
+WARNINGS=	-Wall -Wextra
 #WARNINGS+=	-Wstack-protector
 #WARNINGS+=	-Wshorten-64-to-32
 #CFLAGS+=	-g
