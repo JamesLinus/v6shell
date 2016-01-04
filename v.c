@@ -2,7 +2,7 @@
  * v.c - osh package version and copyright notices
  */
 /*-
- * Copyright (c) 2008-2015
+ * Copyright (c) 2008-2016
  *	Jeffrey Allen Neitzel <jan (at) v6shell (dot) org>.
  *	All rights reserved.
  *
@@ -45,7 +45,7 @@
 /*@unused@*/
 static const char *const vcid[] OSH_ATTR = {
 	"\100(#)\044Id: " OSH_VERSION " (" OSH_UNAME_SRM ") \044",
-	"\100(#)\044Id: Copyright (c) 2003-2015 Jeffrey Allen Neitzel. \044",
+	"\100(#)\044Id: Copyright (c) 2003-2016 Jeffrey Allen Neitzel. \044",
 	"\100(#)\044Id: Copyright (c) 2001-2002 Caldera International Inc. \044",
 	"\100(#)\044Id: Copyright (c) 1985, 1989, 1991, 1993 The Regents of the University of California. \044"
 };
