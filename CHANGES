@@ -6,7 +6,25 @@ Thompson shell are marked w/ a `C:' in the details below.
 	* Work In Progress ( see http://v6shell.org/src/current/ )
 
 -------------------------------------------------------------------------------
-[osh-20150115] (latest):
+[osh-20160108] (latest):
+DEDICATIONS:
+	* Updated the URL for dmr's home page at Bell Labs.
+
+README:
+	* Updated supported systems to include FreeBSD 10.2,
+	  Mac OS X 10.11 (El Capitan), NetBSD 7.0, OpenBSD 5.[78],
+	  and Debian 8.2 (jessie).
+
+Makefile:
+	* Changed `-W' to `-Wextra' (same warning, newer name).  From gcc(1) -
+	  This option used to be called -W.  The older name is still supported,
+	  but the newer name is more descriptive.
+
+examples/dot.oshrc:
+	* Redirected diagnostics from leaks(1) (Mac OS X) to /dev/null.
+
+-------------------------------------------------------------------------------
+[osh-20150115]:
 if.c, osh.c, strtoint.[hc], util.c:
 	* Changed the strtoint() function to convert string into a
 	  long instead of an int, and ensured that numbers which might
@@ -1898,6 +1916,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2015/01/15
+Jeffrey Allen Neitzel						2016/01/06
 
 @(#)$Id$
