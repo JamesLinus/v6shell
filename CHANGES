@@ -7,9 +7,6 @@ Thompson shell are marked w/ a `C:' in the details below.
 
 -------------------------------------------------------------------------------
 [osh-20160108] (latest):
-DEDICATIONS:
-	* Updated the URL for dmr's home page at Bell Labs.
-
 README:
 	* Updated supported systems to include FreeBSD 10.2,
 	  Mac OS X 10.11 (El Capitan), NetBSD 7.0, OpenBSD 5.[78],
@@ -19,6 +16,13 @@ Makefile:
 	* Changed `-W' to `-Wextra' (same warning, newer name).  From gcc(1) -
 	  This option used to be called -W.  The older name is still supported,
 	  but the newer name is more descriptive.
+
+DEDICATIONS:
+	* Updated the URL for dmr's home page at Bell Labs.
+
+*.h:
+	* Added a sh6-related comment to the top of the header files
+	  since they are used by sh6 and its external utilities.
 
 examples/dot.oshrc:
 	* Redirected diagnostics from leaks(1) (Mac OS X) to /dev/null.
@@ -1916,6 +1920,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2016/01/06
+Jeffrey Allen Neitzel						2016/01/07
 
 @(#)$Id$
