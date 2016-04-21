@@ -7,7 +7,11 @@ command in porting them to run on modern UNIX systems.
 	* Work In Progress ( see http://v6shell.org/src/current/ )
 
 -------------------------------------------------------------------------------
-[osh-20160108] (latest):
+[osh-4.2.0] (latest):
+	* No changes.
+
+-------------------------------------------------------------------------------
+[osh-20160108]:
 	* No changes.
 
 -------------------------------------------------------------------------------
@@ -488,6 +492,6 @@ glob.c:
     Date: May 14, 1975
     From: Sixth Edition UNIX /usr/source/s1/glob.c
 
-Jeffrey Allen Neitzel						2016/01/07
+Jeffrey Allen Neitzel						2016/04/20
 
 @(#)$Id$

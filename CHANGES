@@ -6,7 +6,19 @@ Thompson shell are marked w/ a `C:' in the details below.
 	* Work In Progress ( see http://v6shell.org/src/current/ )
 
 -------------------------------------------------------------------------------
-[osh-20160108] (latest):
+[osh-4.2.0] (latest):
+README:
+	* Updated supported systems for OpenBSD 5.9 and Debian 8.4 (jessie).
+
+Makefile.config:
+	* As noted below: Where osh-20150115 was osh-4.0.0 in spirit and
+	  osh-20160108 was osh-4.1.0 in spirit, osh-4.2.0 could be osh-20160420
+	  in reverse spirit if you like.  Now though: Version numbers for osh
+	  releases use a major.minor.patch, non-date-based form, instead of a
+	  YYYYMMDD, date-based one.  See the Makefile.config file for details.
+
+-------------------------------------------------------------------------------
+[osh-20160108 || osh-4.1.0]:
 README:
 	* Updated supported systems to include FreeBSD 10.2,
 	  Mac OS X 10.11 (El Capitan), NetBSD 7.0, OpenBSD 5.[78],
@@ -28,7 +40,7 @@ examples/dot.oshrc:
 	* Redirected diagnostics from leaks(1) (Mac OS X) to /dev/null.
 
 -------------------------------------------------------------------------------
-[osh-20150115]:
+[osh-20150115 || osh-4.0.0]:
 if.c, osh.c, strtoint.[hc], util.c:
 	* Changed the strtoint() function to convert string into a
 	  long instead of an int, and ensured that numbers which might
@@ -1920,6 +1932,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2016/01/07
+Jeffrey Allen Neitzel						2016/04/20
 
 @(#)$Id$
