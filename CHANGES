@@ -14,8 +14,8 @@ Makefile.config:
 	* As noted below: Where osh-20150115 was osh-4.0.0 in spirit and
 	  osh-20160108 was osh-4.1.0 in spirit, osh-4.2.0 could be osh-20160420
 	  in reverse spirit if you like.  Now though: Version numbers for osh
-	  releases use a major.minor.patch, non-date-based form, instead of a
-	  YYYYMMDD, date-based one.  See the Makefile.config file for details.
+	  releases use a major.minor.patch, non-date-based format, instead of
+	  a YYYYMMDD, date-based one.  See Makefile.config for details.
 
 -------------------------------------------------------------------------------
 [osh-20160108 || osh-4.1.0]:
@@ -1932,6 +1932,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2016/04/20
+Jeffrey Allen Neitzel						2016/05/12
 
 @(#)$Id$

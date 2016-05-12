@@ -65,13 +65,28 @@ each one are described below.
 	Primary objective was compatibility.
 ===
 
-===================================
-[osh-20100430 through osh-current]:
+====================================
+[osh-20100430 through osh-20141024]:
 	The third implementation continues with primary objectives
 	of compatibility and long-term stability.  Consequently,
 	all new features (if/when added) must work in concert
 	with primary objectives.  Otherwise, they will not
 	be added.
+===
+
+===================================
+[osh-20150115 through osh-current]:
+	The fourth implementation continues with primary objectives
+	of compatibility and long-term stability.  It is not a new
+	implementation per se, but a shift of version-number
+	perspective or a bit like shifting gears from third
+	to fourth if you will.
+
+	So then, where osh-20150115 was osh-4.0.0 in spirit and osh-20160108
+	was osh-4.1.0 in spirit, osh-4.2.0 could have been osh-20160420 in
+	reverse spirit if you like.  Now though, version numbers for osh
+	releases use a major.minor.patch, non-date-based format, instead
+	of a YYYYMMDD, date-based one.  See Makefile.config for details.
 ===
 
 I wish to thank the original authors very much for their efforts.
@@ -80,6 +95,6 @@ would exist today.
 
 See the DEDICATIONS file for further info.
 
-Jeffrey Allen Neitzel						2015/01/15
+Jeffrey Allen Neitzel						2016/05/12
 
 @(#)$Id$
