@@ -30,8 +30,7 @@ if X$u != Xroot goto continue
 
 setenv	MAIL	/var/mail/$u
 setenv	CTTY	$t
-uname -s | grep '^Linux$' >/dev/null
-if $? -ne 0 stty status '^T' <-
+stty status '^T' <-
 
 if X$h = X -o ! -d $h'' goto finish
 if ! { mkdir $h/.osh.setenv.$$ } goto finish
