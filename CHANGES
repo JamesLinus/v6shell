@@ -5,14 +5,14 @@ Thompson shell are marked w/ a `C:' in the details below.
 [osh-current] (development):
 	* Work In Progress ( see http://v6shell.org/src/current/ )
 
+-------------------------------------------------------------------------------
+[osh-4.2.1] (latest):
 	* New files: examples/OpenBSD/(README|osh.login|osh.logout|osh.oshrc)
 
 	* Added some fourth implementation information to AUTHORS.
 
-	* Notice that this will become osh-4.2.1 when it's ready.
-
 -------------------------------------------------------------------------------
-[osh-4.2.0] (latest):
+[osh-4.2.0]:
 README:
 	* Updated supported systems for OpenBSD 5.9 and Debian 8.4 (jessie).
 
