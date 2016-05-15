@@ -5,6 +5,12 @@ Thompson shell are marked w/ a `C:' in the details below.
 [osh-current] (development):
 	* Work In Progress ( see http://v6shell.org/src/current/ )
 
+	* New files: examples/OpenBSD/etc/(osh.login|osh.logout|osh.oshrc)
+
+	* Added some fourth implementation information to AUTHORS.
+
+	* Notice that this will become osh-4.2.1 when it's ready.
+
 -------------------------------------------------------------------------------
 [osh-4.2.0] (latest):
 README:
@@ -1932,6 +1938,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2016/05/12
+Jeffrey Allen Neitzel						2016/05/15
 
 @(#)$Id$
