@@ -1,0 +1,8 @@
+These files (osh.login, osh.logout, osh.oshrc) were originally written
+for OpenBSD, but they should work just fine on NetBSD and FreeBSD.  In
+any case, the assumption here is that SYSCONFDIR=/etc, the default for
+shells/osh in OpenBSD Ports.  Adjust as required for your needs.
+
+Jeffrey Allen Neitzel						2016/05/15
+
+@(#)$Id$

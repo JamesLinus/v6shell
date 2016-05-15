@@ -5,7 +5,7 @@ Thompson shell are marked w/ a `C:' in the details below.
 [osh-current] (development):
 	* Work In Progress ( see http://v6shell.org/src/current/ )
 
-	* New files: examples/OpenBSD/etc/(osh.login|osh.logout|osh.oshrc)
+	* New files: examples/OpenBSD/(README|osh.login|osh.logout|osh.oshrc)
 
 	* Added some fourth implementation information to AUTHORS.
 
