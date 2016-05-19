@@ -9,6 +9,8 @@
 trap '' 1 2 3 13 14 15 ; : " Ignore HUP, INT, QUIT, PIPE, ALRM, and TERM. "
 trap '' 18 21 22 ;       : " Ignore job-control signals: TSTP, TTIN, TTOU "
 
+: fd2 -e echo "debug: Executing `/etc/osh.login' now..."
+
 :
 : " Set a default umask and PATH for all (root & !root) users. "
 :
@@ -25,8 +27,6 @@ if X$u != Xroot goto continue
 		setenv	 PATH	$p:/usr/local/bin:/usr/local/sbin:/usr/games
 		: setenv PATH	$p:. ; : " Current directory? Not recommended. "
 : NotRootJump
-
-: fd2 -e echo "debug: Executing `/etc/osh.login' now..."
 
 setenv	MAIL	/var/mail/$u
 setenv	CTTY	$t

@@ -9,13 +9,13 @@
 trap '' 1 2 3 13 14 15 ; : " Ignore HUP, INT, QUIT, PIPE, ALRM, and TERM. "
 trap '' 18 21 22 ;       : " Ignore job-control signals: TSTP, TTIN, TTOU "
 
+: fd2 -e echo "debug: Executing `@SYSCONFDIR@/osh.login' now..."
+
 :
 : " Set a default PATH and umask for all users. "
 :
 setenv	PATH	/opt/local/bin:/usr/local/bin:/bin:/usr/bin:/opt/X11/bin
 umask	0022
-
-: fd2 -e echo "debug: Executing `@SYSCONFDIR@/osh.login' now..."
 
 setenv	MAIL	/var/mail/$u
 setenv	CTTY	$t
