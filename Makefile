@@ -160,11 +160,21 @@ fd2bin: v.o fd2.o err.o pexec.o
 #
 # Test targets
 #
-check: all
-	@( trap '' INT QUIT && cd tests && ../osh run.osh osh sh6 )
+# NOTE: $(.CURDIR) for BSD make || $(CURDIR) for GNU make
+#
+check-pre: $(OSH) clean-sh6
+	@if test X$(.CURDIR) != X ; then $(MAKE) LIBEXECDIR=$(.CURDIR) sh6all ; else $(MAKE) LIBEXECDIR=$(CURDIR) sh6all ; fi >/dev/null 2>&1
 
-check-newlog: all
+check: check-pre
+	@( trap '' INT QUIT && cd tests && ../osh run.osh osh sh6 )
+	@$(MAKE) check-post
+
+check-newlog: check-pre
 	@( trap '' INT QUIT && cd tests && ../osh run.osh -newlog osh sh6 )
+	@$(MAKE) check-post
+
+check-post: $(OSH) clean-sh6
+	@$(MAKE) sh6all >/dev/null 2>&1
 
 #
 # Install targets
@@ -221,12 +231,14 @@ install-exp:
 #
 # Cleanup targets
 #
+clean-sh6: clean-obj
+	@rm -f $(SH6) $(UBIN)
 clean-man:
-	rm -f $(MANALL)
+	@rm -f $(MANALL)
 clean-obj:
-	rm -f $(OBJ)
-clean: clean-man clean-obj
-	rm -f $(OSH) $(SH6) $(UBIN) config.h
+	@rm -f $(OBJ)
+clean: clean-sh6 clean-man clean-obj
+	@rm -f $(OSH) config.h
 
 #
 # Release target

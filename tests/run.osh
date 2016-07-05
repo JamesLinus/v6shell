@@ -60,7 +60,6 @@ if $# = 3 -a X$1 = X-newlog -a X$2 = Xosh -a X$3 = Xsh6 goto NewLog
 if ! -x ../$1 if { fd2 -e echo $1: Missing or not executable } \
 	if { exit } if A = B
 if X$1 = Xosh goto Jump
-	if ! { fd2 -- $1 -c 'echo R*' >/dev/null } if { fd2 -e echo "Error - Please do a `make install' before `make check' to pass $1 binary tests." } if { exit } if A = B
 	: which sh6
 	goto Run
 : Jump
