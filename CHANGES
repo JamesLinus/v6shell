@@ -5,6 +5,15 @@ Thompson shell are marked w/ a `C:' in the details below.
 [osh-current] (development):
 	* Work In Progress ( see http://v6shell.org/src/current/ )
 
+README:
+	* Updated supported systems: Debian 8.5 (jessie), (Net|Open)BSD, OS X.
+
+Makefile:
+	* Removed "share/" from the default MANDIR.
+
+Makefile, tests/run.osh:
+	* Fixed `make check' so it doesn't require doing `make install' first.
+
 -------------------------------------------------------------------------------
 [osh-4.2.1] (latest):
 	* New files: examples/OpenBSD/(README|osh.login|osh.logout|osh.oshrc)
@@ -1938,6 +1947,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2016/05/15
+Jeffrey Allen Neitzel						2016/08/03
 
 @(#)$Id$
