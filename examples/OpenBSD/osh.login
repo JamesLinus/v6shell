@@ -15,35 +15,58 @@ trap '' 18 21 22 ;       : " Ignore job-control signals: TSTP, TTIN, TTOU "
 : " Set a default umask and PATH for all (root & !root) users. "
 :
 umask 0022
-if X$u != Xroot goto continue
+if X$u != Xroot goto Continue
 	setenv	PATH	/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin
 	setenv	PATH	$p:/usr/local/sbin:/usr/local/bin
 	goto NotRootJump
-: continue
-	if X$h = X -o ! -d $h'' goto jump
+
+: Continue
+	: " Only add $h/bin if it exists as a searchable directory. "
+	if ! \( X$h != X -a -d $h'' -a -d $h/bin -a -x $h/bin \) goto jump
 		setenv	PATH	$h/bin
 	: jump
 		setenv	 PATH	$p:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin
 		setenv	 PATH	$p:/usr/local/bin:/usr/local/sbin:/usr/games
 		: setenv PATH	$p:. ; : " Current directory? Not recommended. "
+
 : NotRootJump
+	setenv MAIL /var/mail/$u
+	stty status '^T' <-
+	: fallthrough
 
-setenv	MAIL	/var/mail/$u
-setenv	CTTY	$t
-stty status '^T' <-
+if X$h = X -o ! -d $h'' goto Finish
+set D $h/.osh.tmp.$$
+if ! { mkdir $D } goto Finish
 
-if X$h = X -o ! -d $h'' goto finish
-if ! { mkdir $h/.osh.setenv.$$ } goto finish
+	:
+	: " Set $T and/or CTTY as needed. "
+	:
+	set S 0
+	printenv CTTY | wc -l | tr -d ' ' | grep '^1$' >/dev/null
+	if $? -ne 0 goto NoCttyJump
+		( \
+		   echo -n 'set T "' ; printenv CTTY | tr -d '\n' ; echo '"' \
+		) >$D/TisCTTY
+		source $D/TisCTTY
+		set S 1
+		rm $D/TisCTTY
+		: fallthrough
+	: NoCttyJump
+		if $S -eq 1 goto TisCTTY
+			setenv CTTY $t
+			set    T    $t
+		: TisCTTY
+	unset S
 
 	:
 	: " Use the output from `uname -n' to `setenv HOST value'. "
-	: " Notice that doing so requires using a temporary file.  "
 	:
-	uname -n | sed 's,\([^.]*\).*,setenv HOST \1,' >$h/.osh.setenv.$$/HOST
-	source $h/.osh.setenv.$$/HOST
-	rm -r $h/.osh.setenv.$$
+	uname -n | sed 's,\([^.]*\).*,setenv HOST \1,' >$D/HOST
+	source $D/HOST
+	rm -r $D
 	: fallthrough
 
-: finish
+: Finish
 
+unset D
 trap - 1 2 3 13 14 15 ; : " Reset the ignored, non-job-control signals. "
