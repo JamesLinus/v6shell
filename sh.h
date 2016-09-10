@@ -127,6 +127,8 @@ struct tnode {
 extern	uid_t	sheuid;	/* effective shell user ID */
 
 enum sbikey	cmd_lookup(const char *);
+/*@maynotreturn@*/ /*@null@*/
+char		*atrim(/*@returned@*/ UChar *);
 
 /* util.c */
 /*@maynotreturn@*/

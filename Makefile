@@ -71,10 +71,11 @@ SH6=	sh6 glob
 UBIN=	fd2 goto if
 GHEAD=	config.h defs.h
 ERRSRC=	err.h err.c
+LIBSRC=	lib.h lib.c
 PEXSRC=	pexec.h pexec.c
 SIGSRC=	sasignal.h sasignal.c
 INTSRC=	strtoint.h strtoint.c
-OBJ=	err.o fd2.o glob.o goto.o if.o osh.o pexec.o sasignal.o sh6.o strtoint.o util.o v.o
+OBJ=	err.o fd2.o glob.o goto.o if.o lib.o osh.o pexec.o sasignal.o sh6.o strtoint.o util.o v.o
 OSHMAN=	osh.1.out
 SH6MAN=	sh6.1.out glob.1.out
 UMAN=	fd2.1.out goto.1.out if.1.out
@@ -107,7 +108,7 @@ utils: $(UBIN) $(UMAN)
 
 man: $(MANALL)
 
-osh: sh.h v.c osh.c util.c $(GHEAD) $(ERRSRC) $(PEXSRC) $(SIGSRC) $(INTSRC)
+osh: sh.h v.c osh.c util.c $(GHEAD) $(ERRSRC) $(LIBSRC) $(PEXSRC) $(SIGSRC) $(INTSRC)
 	@$(MAKE) $@bin
 
 sh6: sh.h v.c sh6.c $(GHEAD) $(ERRSRC) $(PEXSRC) $(SIGSRC)
@@ -125,22 +126,23 @@ goto: v.c goto.c $(GHEAD) $(ERRSRC)
 fd2: v.c fd2.c $(GHEAD) $(ERRSRC) $(PEXSRC)
 	@$(MAKE) $@bin
 
-$(OBJ)                                                        : $(GHEAD)
-fd2.o glob.o goto.o if.o osh.o pexec.o sh6.o util.o strtoint.o: err.h
-fd2.o glob.o if.o osh.o sh6.o util.o                          : pexec.h
-if.o osh.o sh6.o                                              : sasignal.h
-if.o osh.o util.o                                             : strtoint.h
-osh.o sh6.o util.o                                            : sh.h
-err.o                                                         : $(ERRSRC)
-pexec.o                                                       : $(PEXSRC)
-sasignal.o                                                    : $(SIGSRC)
-strtoint.o                                                    : $(INTSRC)
+$(OBJ)                                                              : $(GHEAD)
+fd2.o glob.o goto.o if.o lib.o osh.o pexec.o sh6.o util.o strtoint.o: err.h
+fd2.o glob.o if.o osh.o sh6.o util.o                                : pexec.h
+if.o osh.o sh6.o                                                    : sasignal.h
+if.o osh.o util.o                                                   : strtoint.h
+osh.o sh6.o util.o                                                  : sh.h
+err.o                                                               : $(ERRSRC)
+lib.o                                                               : $(LIBSRC)
+pexec.o                                                             : $(PEXSRC)
+sasignal.o                                                          : $(SIGSRC)
+strtoint.o                                                          : $(INTSRC)
 
 config.h: Makefile Makefile.config mkconfig
 	$(SHELL) ./mkconfig
 
-oshbin: v.o osh.o err.o util.o pexec.o sasignal.o strtoint.o
-	$(CC) $(LDFLAGS) -o osh v.o osh.o err.o util.o pexec.o sasignal.o strtoint.o $(LIBS)
+oshbin: v.o osh.o err.o lib.o util.o pexec.o sasignal.o strtoint.o
+	$(CC) $(LDFLAGS) -o osh v.o osh.o err.o lib.o util.o pexec.o sasignal.o strtoint.o $(LIBS)
 
 sh6bin: v.o sh6.o err.o pexec.o sasignal.o
 	$(CC) $(LDFLAGS) -o sh6 v.o sh6.o err.o pexec.o sasignal.o $(LIBS)

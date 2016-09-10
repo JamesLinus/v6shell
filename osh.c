@@ -70,10 +70,11 @@
 #define	OSH_SHELL
 
 #include "defs.h"
+#include "sh.h"
 #include "err.h"
+#include "lib.h"
 #include "pexec.h"
 #include "sasignal.h"
-#include "sh.h"
 #include "strtoint.h"
 
 #ifdef	__GNUC__
@@ -134,7 +135,6 @@
 #define	HALT		true
 #define	PROMPT		((shtype & ST_MASK) == ST_INTERACTIVE)
 #define	SHTYPE(f)	((shtype & (f)) != 0)
-#define	DO_TRIM(k)	((k) != SBI_CD && (k) != SBI_CHDIR)
 
 /*
  * shell type flags
@@ -151,9 +151,10 @@ enum stflags {
 /*
  * **** Global Variables ****
  */
-const char	*name;	/* $0 - shell command name */
-bool		no_lnum;/* no line number flag     */
-uid_t		sheuid;	/* effective shell user ID */
+const char	*name;		/* $0 - shell command name  */
+bool		is_noexec;	/* not executable file flag */
+bool		no_lnum;	/* no line number flag      */
+uid_t		sheuid;		/* effective shell user ID  */
 
 /*
  * shell sbi command structure array
@@ -225,7 +226,6 @@ static	bool		error_source;	/* error flag for `source' command  */
 static	int		hwfd = -1;	/* history write file descriptor    */
 static	bool		is_first;	/* first line flag                  */
 static	bool		is_login;	/* login shell flag                 */
-static	bool		is_noexec;	/* not executable file flag         */
 static	bool		is_verbose;	/* verbose flag for `-v' option     */
 static	char		line[LINEMAX];	/* command-line buffer              */
 static	char		aline[LINEMAX];	/* alias-line buffer                */
@@ -265,9 +265,6 @@ static	char		*user;		/* $u - effective user name         */
  */
 static	void		cmd_loop(bool);
 static	void		cmd_verbose(void);
-static	void		error(int, /*@null@*/ const char *);
-static	void		error1(int, /*@null@*/ const char *, /*@null@*/ const char *);
-static	void		error2(int, /*@null@*/ const char *, /*@null@*/ const char *, /*@null@*/ const char *);
 static	int		rpx_line(void);
 /*@null@*/
 static	const char	**rp_alias(const char *);
@@ -332,22 +329,8 @@ static	void		hist_write(bool);
 static	void		hist_open(void);
 static	void		fd_free(void);
 static	bool		fd_type(int, mode_t);
-/*@maynotreturn@*/ /*@null@*/
-static	char		*atrim(/*@returned@*/ UChar *);
-/*@maynotreturn@*/ /*@null@*/
-static	char		*gtrim(/*@returned@*/ UChar *);
-/*@null@*/
-static	char		*gchar(/*@returned@*/ const char *);
-static	void		vfree(/*@null@*/ char **);
-static	void		xfree(/*@null@*/ /*@only@*/ void *);
-/*@maynotreturn@*/ /*@out@*/
-static	void		*xmalloc(size_t);
-/*@maynotreturn@*/
-static	void		*xrealloc(/*@only@*/ void *, size_t);
 /*@maynotreturn@*/
 static	char		*xstrdup(const char *);
-/*@maynotreturn@*/ /*@null@*/ /*@only@*/
-static	const char	**glob(enum sbikey, /*@only@*/ char **);
 
 /*
  * NAME
@@ -563,87 +546,6 @@ cmd_verbose(void)
 	for (vp = word; **vp != EOL; vp++)
 		fd_print(FD2, "%s%s", *vp, (**(vp + 1) != EOL) ? " " : "");
 	fd_print(FD2, FMT1S, "");
-}
-
-/*
- * Print diagnostic w/ $0, line number, and so forth if possible.
- */
-static void
-error(int s, const char *m)
-{
-	long ln;
-
-	if (m == NULL) {
-		err(ESTATUS, FMT3S, getmyname(), "error", strerror(EINVAL));
-		/*NOTREACHED*/
-	}
-
-	ln = (is_noexec || no_lnum) ? -1 : get_lnum();
-	if (name != NULL) {
-		if (ln != -1)
-			err(s, FMT3LS, getmyname(), name, ln, m);
-		else
-			err(s, FMT3S, getmyname(), name, m);
-	} else {
-		if (ln != -1)
-			err(s, FMT2LS, getmyname(), ln, m);
-		else
-			err(s, FMT2S, getmyname(), m);
-	}
-}
-
-/*
- * Print diagnostic w/ $0, line number, and so forth if possible.
- */
-static void
-error1(int s, const char *f, const char *m)
-{
-	long ln;
-
-	if (f == NULL || m == NULL) {
-		err(ESTATUS, FMT3S, getmyname(), "error1", strerror(EINVAL));
-		/*NOTREACHED*/
-	}
-
-	ln = (is_noexec || no_lnum) ? -1 : get_lnum();
-	if (name != NULL) {
-		if (ln != -1)
-			err(s, FMT4LS, getmyname(), name, ln, f, m);
-		else
-			err(s, FMT4S, getmyname(), name, f, m);
-	} else {
-		if (ln != -1)
-			err(s, FMT3LFS, getmyname(), ln, f, m);
-		else
-			err(s, FMT3S, getmyname(), f, m);
-	}
-}
-
-/*
- * Print diagnostic w/ $0, line number, and so forth if possible.
- */
-static void
-error2(int s, const char *c, const char *a, const char *m)
-{
-	long ln;
-
-	if (c == NULL || a == NULL || m == NULL) {
-		err(ESTATUS, FMT3S, getmyname(), "error2", strerror(EINVAL));
-		/*NOTREACHED*/
-	}
-
-	ln = (is_noexec || no_lnum) ? -1 : get_lnum();
-	if (name != NULL) {
-		if (ln != -1)
-			err(s, FMT5LS, getmyname(), name, ln, c, a, m);
-		else
-			err(s, FMT5S, getmyname(), name, c, a, m);
-	} else {
-		if (ln != -1)
-			err(s, FMT4LFS, getmyname(), ln, c, a, m);
-		else
-			err(s, FMT4S, getmyname(), c, a, m);
-	}
 }
 
 /*
@@ -3179,7 +3081,7 @@ fd_type(int fd, mode_t type)
  * pointed to by ap, make copy of, and return pointer to it.
  * This function never returns on error.
  */
-static char *
+char *
 atrim(UChar *ap)
 {
 	size_t siz;
@@ -3239,182 +3141,6 @@ aterr:
 }
 
 /*
- * Prepare possible glob() pattern pointed to by ap.
- *
- *	1) Remove (trim) any unquoted quote characters;
- *	2) Escape (w/ backslash `\') any previously quoted
- *	   glob or quote characters as needed;
- *	3) Reallocate memory for (if needed), make copy of,
- *	   and return pointer to new glob() pattern, nap.
- *
- * This function returns NULL on error.
- */
-static char *
-gtrim(UChar *ap)
-{
-	size_t siz;
-	UChar *a, *b, *nap;
-	UChar buf[PATHMAX], c;
-	bool d;
-
-	*buf = UCHAR(EOS);
-	for (a = ap, b = buf; b < &buf[PATHMAX]; a++, b++) {
-		switch (*a) {
-		case EOS:
-			*b = UCHAR(EOS);
-			siz = (b - buf) + 1;
-			nap = ap;
-			if (siz > strlen((const char *)ap) + 1) {
-				xfree(nap);
-				nap = xmalloc(siz);
-			}
-			(void)memcpy(nap, buf, siz);
-			return (char *)nap;
-		case DQUOT:
-		case SQUOT:
-			c = *a++;
-			d = (c == DQUOT) ? true : false;
-			while (*a != c && b < &buf[PATHMAX]) {
-				switch (*a) {
-				case EOS:
-					goto gterr;
-				case BQUOT:
-					if (d && *(a + 1) == DOLLAR)
-						a++;
-					/*FALLTHROUGH*/
-				case ASTERISK: case QUESTION:
-				case LBRACKET: case RBRACKET: case HYPHEN:
-				case DQUOT:    case SQUOT:
-					*b = UCHAR(BQUOT);
-					if (++b >= &buf[PATHMAX])
-						goto gterr;
-					break;
-				}
-				*b++ = *a++;
-			}
-			b--;
-			continue;
-		case BQUOT:
-			switch (*++a) {
-			case EOS:
-				a--, b--;
-				continue;
-			case ASTERISK: case QUESTION:
-			case LBRACKET: case RBRACKET: case HYPHEN:
-			case DQUOT:    case SQUOT:    case BQUOT:
-				*b = UCHAR(BQUOT);
-				if (++b >= &buf[PATHMAX])
-					goto gterr;
-				break;
-			}
-			break;
-		}
-		*b = *a;
-	}
-
-gterr:
-	error(-2, (gchar((const char *)ap) != NULL) ?
-	      ERR_PATTOOLONG : strerror(ENAMETOOLONG));
-	return NULL;
-}
-
-/*
- * Return pointer to first unquoted glob character (`*', `?', `[')
- * in argument pointed to by ap.  Otherwise, return NULL pointer
- * on error or if argument contains no glob characters.
- */
-static char *
-gchar(const char *ap)
-{
-	char c;
-	const char *a;
-
-	for (a = ap; *a != EOS; a++)
-		switch (*a) {
-		case DQUOT:
-		case SQUOT:
-			for (c = *a++; *a != c; a++)
-				if (*a == EOS)
-					return NULL;
-			continue;
-		case BQUOT:
-			if (*++a == EOS)
-				return NULL;
-			continue;
-		case ASTERISK:
-		case QUESTION:
-		case LBRACKET:
-			return (char *)a;
-		}
-	return NULL;
-}
-
-/*
- * Deallocate the argument vector pointed to by vp.
- */
-static void
-vfree(char **vp)
-{
-	char **p;
-
-	if (vp != NULL) {
-		for (p = vp; *p != NULL; p++) {
-			free(*p);
-			*p = NULL;
-		}
-		free(vp);
-		vp = NULL;
-	}
-}
-
-/*
- * Deallocate the memory allocation pointed to by p.
- */
-static void
-xfree(void *p)
-{
-
-	if (p != NULL) {
-		free(p);
-		p = NULL;
-	}
-}
-
-/*
- * Allocate memory, and check for error.
- * Return a pointer to the allocated space on success.
- * Do not return on ENOMEM error.
- */
-static void *
-xmalloc(size_t s)
-{
-	void *mp;
-
-	if ((mp = malloc(s)) == NULL) {
-		error(ESTATUS, ERR_NOMEM);
-		/*NOTREACHED*/
-	}
-	return mp;
-}
-
-/*
- * Reallocate memory, and check for error.
- * Return a pointer to the reallocated space on success.
- * Do not return on ENOMEM error.
- */
-static void *
-xrealloc(void *p, size_t s)
-{
-	void *rp;
-
-	if ((rp = realloc(p, s)) == NULL) {
-		error(ESTATUS, ERR_NOMEM);
-		/*NOTREACHED*/
-	}
-	return rp;
-}
-
-/*
  * Allocate memory for a copy of the string src, and copy it to dst.
  * Return a pointer to dst on success.
  * Do not return on ENOMEM error.
@@ -3429,336 +3155,4 @@ xstrdup(const char *src)
 	dst = xmalloc(siz);
 	(void)memcpy(dst, src, siz);
 	return dst;
-}
-
-static	const char	**gavp;	/* points to current gav position     */
-static	const char	**gave;	/* points to current gav end          */
-static	unsigned	gavmult;/* GAVNEW reallocation multiplier     */
-static	size_t		gavtot;	/* total bytes used for all arguments */
-
-static	const char	**gnew(/*@only@*/ const char **);
-/*@null@*/
-static	char		*gcat(/*@null@*/ const char *,
-			      /*@null@*/ const char *, bool);
-static	const char	**glob1(enum sbikey, /*@only@*/ const char **,
-				char *, int *, bool *);
-static	bool		glob2(const UChar *, const UChar *);
-static	void		gsort(const char **);
-/*@null@*/
-static	DIR		*gopendir(/*@out@*/ char *, const char *);
-
-/*
- * Attempt to generate file-name arguments which match the given
- * pattern arguments in av.  Return pointer to newly allocated
- * argument vector, gav, on success.  Return NULL on error.
- */
-static const char **
-glob(enum sbikey key, char **av)
-{
-	char *tpap;		/* temporary pattern argument pointer  */
-	char **oav;		/* points to original argument vector  */
-	const char **gav;	/* points to generated argument vector */
-	int pmc = 0;		/* pattern match count                 */
-	bool gerr = false;	/* glob error flag                     */
-
-	gavmult = 1;
-	gavtot  = 0;
-
-	oav  = av;
-	gav  = xmalloc(GAVNEW * sizeof(char *));
-	*gav = NULL;
-	gavp = gav;
-	gave = &gav[GAVNEW - 1];
-	while (*av != NULL) {
-		if ((tpap = gtrim(UCPTR(*av))) == NULL) {
-			*gavp = NULL;
-			gerr  = true;
-			break;
-		}
-		*av = tpap;/* for successful vfree(oav); */
-		gav = glob1(key, gav, tpap, &pmc, &gerr);
-		if (gerr)
-			break;
-		av++;
-	}
-	gavp = NULL;
-
-	if (pmc == 0 && !gerr) {
-		error(-2, ERR_NOMATCH);
-		gerr = true;
-	}
-	if (gerr) {
-		vfree((char **)gav);
-		gav = NULL;
-	}
-	vfree(oav);
-	oav = NULL;
-	return gav;
-}
-
-static const char **
-gnew(const char **gav)
-{
-	size_t siz;
-	ptrdiff_t gidx;
-
-	if (gavp == gave) {
-		gavmult *= GAVMULT;
-#ifdef	DEBUG
-#ifdef	DEBUG_GLOB
-		fd_print(FD2, "gnew: gavmult == %u;\n", gavmult);
-#endif
-#endif
-		gidx = (ptrdiff_t)(gavp - gav);
-		siz  = (size_t)((gidx + (GAVNEW * gavmult)) * sizeof(char *));
-#ifdef	DEBUG
-#ifdef	DEBUG_GLOB
-		fd_print(FD2, "    : (GAVNEW * gavmult) == %u, siz == %zu;\n",
-		    (GAVNEW * gavmult), siz);
-#endif
-#endif
-		gav  = xrealloc(gav, siz);
-		gavp = gav + gidx;
-		gave = &gav[gidx + (GAVNEW * gavmult) - 1];
-	}
-	return gav;
-}
-
-static char *
-gcat(const char *src1, const char *src2, bool slash)
-{
-	size_t siz;
-	char *b, buf[PATHMAX], c, *dst;
-	const char *s;
-
-	if (src1 == NULL || src2 == NULL) {
-		/* never true, but appease splint(1) */
-		error(-2, "gcat: Invalid argument");
-		return NULL;
-	}
-
-	*buf = EOS;
-	b = buf;
-	s = src1;
-	while ((c = *s++) != EOS) {
-		if (b >= &buf[PATHMAX - 1]) {
-			error(-2, strerror(ENAMETOOLONG));
-			return NULL;
-		}
-		*b++ = c;
-	}
-	if (slash)
-		*b++ = SLASH;
-	s = src2;
-	do {
-		if (b >= &buf[PATHMAX]) {
-			error(-2, strerror(ENAMETOOLONG));
-			return NULL;
-		}
-		*b++ = c = *s++;
-	} while (c != EOS);
-	b--;
-
-	siz = (b - buf) + 1;
-	gavtot += siz;
-	if (gavtot > GAVMAX) {
-		error(-2, ERR_E2BIG);
-		return NULL;
-	}
-#ifdef	DEBUG
-#ifdef	DEBUG_GLOB
-	fd_print(FD2, "gcat: siz == %zu, (%p < %p) == %s;\n",
-	    siz, b, &buf[PATHMAX], (b < &buf[PATHMAX]) ? "true" : "false");
-	fd_print(FD2, "    : strlen(buf) == %zu;\n", strlen(buf));
-#endif
-#endif
-	dst = xmalloc(siz);
-
-	(void)memcpy(dst, buf, siz);
-	return dst;
-}
-
-static const char **
-glob1(enum sbikey key, const char **gav, char *as, int *pmc, bool *gerr)
-{
-	DIR *dirp;
-	struct dirent *entry;
-	ptrdiff_t gidx;
-	bool slash;
-	char dirbuf[PATHMAX], *p, *ps;
-	const char *ds;
-
-	ds = as;
-	slash = false;
-	if ((ps = gchar(as)) == NULL) {
-		gav = gnew(gav);
-		if (DO_TRIM(key))
-			(void)atrim(UCPTR(as));
-		if ((p = gcat(as, "", slash)) == NULL) {
-			*gavp = NULL;
-			*gerr = true;
-			return gav;
-		}
-		*gavp++ = p;
-		*gavp = NULL;
-		return gav;
-	}
-	for (;;) {
-		if (ps == ds) {
-			ds = "";
-			break;
-		}
-		if (*--ps == SLASH) {
-			*ps = EOS;
-			if (ds == ps)
-				ds = "/";
-			else
-				slash = true;
-			ps++;
-			break;
-		}
-	}
-	if ((dirp = gopendir(dirbuf, *ds != EOS ? ds : ".")) == NULL) {
-		error(-2, ERR_NODIR);
-		*gavp = NULL;
-		*gerr = true;
-		return gav;
-	}
-	if (*ds != EOS)
-		ds = dirbuf;
-	gidx = (ptrdiff_t)(gavp - gav);
-	while ((entry = readdir(dirp)) != NULL) {
-		if (entry->d_name[0] == DOT && *ps != DOT)
-			continue;
-		if (glob2(UCPTR(entry->d_name), UCPTR(ps))) {
-			gav = gnew(gav);
-			if ((p = gcat(ds, entry->d_name, slash)) == NULL) {
-				(void)closedir(dirp);
-				*gavp = NULL;
-				*gerr = true;
-				return gav;
-			}
-			*gavp++ = p;
-			(*pmc)++;
-		}
-	}
-	(void)closedir(dirp);
-	gsort(gav + gidx);
-	*gavp = NULL;
-	*gerr = false;
-	return gav;
-}
-
-static bool
-glob2(const UChar *ename, const UChar *pattern)
-{
-	int cok, rok;		/* `[...]' - cok (class), rok (range) */
-	UChar c, ec, pc;
-	const UChar *e, *n, *p;
-
-	e = ename;
-	p = pattern;
-
-	ec = *e++;
-	switch (pc = *p++) {
-	case EOS:
-		return ec == EOS;
-
-	case ASTERISK:
-		/*
-		 * Ignore all but the last `*' in a group of consecutive
-		 * `*' characters to avoid unnecessary glob2() recursion.
-		 */
-		while (*p++ == ASTERISK)
-			;	/* nothing */
-		if (*--p == EOS)
-			return true;
-		e--;
-		while (*e != EOS)
-			if (glob2(e++, p))
-				return true;
-		break;
-
-	case QUESTION:
-		if (ec != EOS)
-			return glob2(e, p);
-		break;
-
-	case LBRACKET:
-		if (*p == EOS)
-			break;
-		for (c = UCHAR(EOS), cok = rok = 0, n = p + 1; ; ) {
-			pc = *p++;
-			if (pc == RBRACKET && p > n) {
-				if (cok > 0 || rok > 0)
-					return glob2(e, p);
-				break;
-			}
-			if (*p == EOS)
-				break;
-			if (pc == HYPHEN && c != EOS && *p != RBRACKET) {
-				if ((pc = *p++) == BQUOT)
-					pc = *p++;
-				if (*p == EOS)
-					break;
-				if (c <= ec && ec <= pc)
-					rok++;
-				else if (c == ec)
-					cok--;
-				c = UCHAR(EOS);
-			} else {
-				if (pc == BQUOT) {
-					pc = *p++;
-					if (*p == EOS)
-						break;
-				}
-				c = pc;
-				if (ec == c)
-					cok++;
-			}
-		}
-		break;
-
-	case BQUOT:
-		if (*p != EOS)
-			pc = *p++;
-		/*FALLTHROUGH*/
-
-	default:
-		if (pc == ec)
-			return glob2(e, p);
-	}
-	return false;
-}
-
-static void
-gsort(const char **ogavp)
-{
-	const char **p1, **p2, *sap;
-
-	p1 = ogavp;
-	while (gavp - p1 > 1) {
-		p2 = p1;
-		while (++p2 < gavp)
-			if (strcmp(*p1, *p2) > 0) {
-				sap = *p1;
-				*p1 = *p2;
-				*p2 = sap;
-			}
-		p1++;
-	}
-}
-
-static DIR *
-gopendir(char *buf, const char *dname)
-{
-	char *b;
-	const char *d;
-
-	for (*buf = EOS, b = buf, d = dname; b < &buf[PATHMAX]; b++, d++)
-		if ((*b = *d) == EOS) {
-			(void)atrim(UCPTR(buf));
-			break;
-		}
-	return (b >= &buf[PATHMAX]) ? NULL : opendir(buf);
 }
