@@ -47,8 +47,8 @@ passing the desired variable=value pair(s) on the command line.
 	EXPDIR		Defaults to $(DOCDIR)/examples.  This is the
 			target directory for the examples/* files.
 
-	MANDIR		Defaults to $(PREFIX)/share/man/man1.  This is
-			the target directory where the manual pages are
+	MANDIR		Defaults to $(PREFIX)/man/man1.  This is the
+			target directory where the manual pages are
 			installed.
 
 	SYSCONFDIR	Defaults to $(PREFIX)/etc.  This is the target
@@ -165,6 +165,6 @@ OpenSolaris.
 	% gmake
 	# gmake INSTALL=/usr/bin/ginstall install install-doc install-exp
 
-Jeffrey Allen Neitzel						2015/01/15
+Jeffrey Allen Neitzel						2016/09/10
 
 @(#)$Id$
