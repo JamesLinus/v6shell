@@ -147,7 +147,7 @@ The shell behaves as an interactive shell
 by reading and executing commands from the
 appropriate rc files if possible
 (see
-.I "Startup and shutdown"
+.I "Startup\ and\ shutdown"
 below)
 before prompting the user, reading, and
 executing command lines from the standard input.
@@ -160,7 +160,7 @@ The shell behaves as a login shell
 by reading and executing commands from the
 appropriate rc files if possible
 (see
-.I "Startup and shutdown"
+.I "Startup\ and\ shutdown"
 below)
 before prompting the user, reading, and
 executing command lines from the standard input.
@@ -188,7 +188,7 @@ The specified
 and any arguments
 are treated as positional parameters
 (see
-.I "Parameter substitution"
+.I "Parameter\ substitution"
 below)
 during execution of the command file.
 .PP
@@ -207,7 +207,7 @@ before reading each command line from the terminal.
 it reads and executes commands
 from the appropriate rc files if possible
 (see
-.I "Startup and shutdown"
+.I "Startup\ and\ shutdown"
 below)
 before reading and executing command lines
 from the terminal.
@@ -259,9 +259,9 @@ is a:
 .RE
 .PP
 See
-.I "Parameter substitution"
+.I "Parameter\ substitution"
 and
-.I "Variable substitution"
+.I "Variable\ substitution"
 below.
 Finally,
 a
@@ -275,7 +275,7 @@ is any one of the following:
 .RE
 .PP
 See
-.I "File name generation"
+.I "File\ name\ generation"
 below.
 .SS Commands
 Each command is a sequence of non-blank command arguments,
@@ -345,7 +345,7 @@ so that it may be used if necessary for a subsequent
 .IR kill (1).
 .PP
 A list contained within parentheses such as
-.BI ( \ list \ )
+.BI ( " list " )
 is executed in a subshell and may appear
 in place of a simple command as a filter.
 .PP
@@ -751,7 +751,7 @@ Three examples of variable usage follow:
 .PP
 As with parameters
 (see
-.I "Parameter substitution"
+.I "Parameter\ substitution"
 above),
 all substitution on a command line is performed
 .I before
@@ -903,7 +903,7 @@ in sequence upon logout.
 These two rc logout files may be used if necessary
 for cleanup upon termination of a login session by
 an EOT (see
-.I "End of file"
+.I "End\ of\ file"
 below)
 or a SIGHUP signal (see
 .I "Signals"
@@ -1231,7 +1231,7 @@ Notice that the file does not need to be executable.
 The file and any arguments
 are treated as positional parameters
 (see
-.I "Parameter substitution"
+.I "Parameter\ substitution"
 above)
 during execution of the file.
 The source command may be nested.

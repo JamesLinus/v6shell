@@ -131,67 +131,67 @@ given arguments to obtain its exit status.
 A zero status is \fItrue\fR;
 a non-zero status is \fIfalse\fR.
 .TP
-.BI \-d \ file
+.BI \-d " file"
 True if \fIfile\fR exists and is a directory.
 .TP
-.BI \-e \ file
+.BI \-e " file"
 True if \fIfile\fR exists.
 .TP
-.BI \-f \ file
+.BI \-f " file"
 True if \fIfile\fR exists and is a regular file.
 .TP
-.BI \-h \ file
+.BI \-h " file"
 True if \fIfile\fR exists and is a symbolic link.
 .TP
-.BI \-r \ file
+.BI \-r " file"
 True if \fIfile\fR exists and is readable.
 .TP
-.BI \-s \ file
+.BI \-s " file"
 True if \fIfile\fR exists and has a size greater than zero bytes.
 .TP
-.BI \-t \ fildes
+.BI \-t " fildes"
 True if the file whose file descriptor number is
 .I fildes
 is open and associated with a terminal device.
 .I Fildes
 must be a decimal digit (0 \- 9).
 .TP
-.BI \-w \ file
+.BI \-w " file"
 True if \fIfile\fR exists and is writable.
 .TP
-.BI \-x \ file
+.BI \-x " file"
 True if \fIfile\fR exists and is executable,
 or if \fIfile\fR is a searchable directory.
 .TP
-.IB file1 \ \-ef \ file2
+.IB file1 \ \-ef " file2"
 True if \fIfile1\fR and \fIfile2\fR both exist and refer
 to the same file (same device, same inode).
 .TP
-.IB file1 \ \-nt \ file2
+.IB file1 \ \-nt " file2"
 True if \fIfile1\fR and \fIfile2\fR both exist
 and last data-modification time of \fIfile1\fR
 is newer than that of \fIfile2\fR.
 .TP
-.IB file1 \ \-ot \ file2
+.IB file1 \ \-ot " file2"
 True if \fIfile1\fR and \fIfile2\fR both exist
 and last data-modification time of \fIfile1\fR
 is older than that of \fIfile2\fR.
 .TP
-.IB s1 \ = \ s2
+.IB s1 \ = " s2"
 True if the strings
 .I s1
 and
 .I s2
 are equal.
 .TP
-.IB s1 \ != \ s2
+.IB s1 \ != " s2"
 True if the strings
 .I s1
 and
 .I s2
 are not equal.
 .TP
-.IB s1 \ < \ s2
+.IB s1 \ < " s2"
 True if the string
 .I s1
 comes before
@@ -200,49 +200,47 @@ according to their ASCII character values.
 .\" according to the ASCII values
 .\" of their characters.
 .TP
-.IB s1 \ > \ s2
+.IB s1 \ > " s2"
 True if the string
 .I s1
 comes after
 .I s2
 according to their ASCII character values.
-.\" according to the ASCII values
-.\" of their characters.
 .TP
-.IB n1 \ \-eq \ n2
+.IB n1 \ \-eq " n2"
 True if the integers
 .I n1
 and
 .I n2
 are algebraically equal.
 .TP
-.IB n1 \ \-ne \ n2
+.IB n1 \ \-ne " n2"
 True if the integers
 .I n1
 and
 .I n2
 are not algebraically equal.
 .TP
-.IB n1 \ \-gt \ n2
+.IB n1 \ \-gt " n2"
 True if the integer
 .I n1
 is algebraically greater than the integer
 .IR n2 .
 .TP
-.IB n1 \ \-ge \ n2
+.IB n1 \ \-ge " n2"
 True if the integer
 .I n1
 is algebraically greater than
 or equal to the integer
 .IR n2 .
 .TP
-.IB n1 \ \-lt \ n2
+.IB n1 \ \-lt " n2"
 True if the integer
 .I n1
 is algebraically less than the integer
 .IR n2 .
 .TP
-.IB n1 \ \-le \ n2
+.IB n1 \ \-le " n2"
 True if the integer
 .I n1
 is algebraically less than
@@ -252,22 +250,22 @@ or equal to the integer
 These primaries may also be combined
 with the following operators:
 .TP 10
-.BI ! \ expression
+.BI ! " expression"
 unary
 .I negation
 operator
 .TP
-.IB expression1 \ \-a \ expression2
+.IB expression1 \ \-a " expression2"
 binary
 .I and
 operator
 .TP
-.IB expression1 \ \-o \ expression2
+.IB expression1 \ \-o " expression2"
 binary
 .I or
 operator
 .TP
-.BI ( \ expression \ )
+.BI ( " expression " )
 parentheses for grouping
 .PP
 .B \-a
