@@ -67,10 +67,10 @@
 #define	SH6_SHELL
 
 #include "defs.h"
+#include "sh.h"
 #include "err.h"
 #include "pexec.h"
 #include "sasignal.h"
-#include "sh.h"
 
 /*
  * **** Global Variables ****

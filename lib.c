@@ -1,5 +1,5 @@
 /*
- * lib.c - library routines for osh
+ * lib.c - osh library routines
  */
 /*-
  * Copyright (c) 2004-2016
