@@ -1003,22 +1003,22 @@ Taking the following command line
 and history entry for example:
 .PP
 .nf
-	% history -n 3126
+	% history -n 6171
 	Number	Command Line
 	------	------------
-	3126		uname -s | \\
-			if { fd2 -ef/dev/null egrep '(Darwin|Linux|NetBSD)' } \\
-			echo 'Running on GNU/Linux, Mac OS X, or NetBSD.'
+	6171		uname -s | if { fd2 -ef/dev/null \\
+			egrep '(Darwin|Linux|[FNO][a-z]{2,3}BSD)' } \\
+			echo 'OS == GNU/Linux || (Mac) OS X || (Free|Net|Open)BSD'
 .fi
 .PP
 and then doing a:
 .PP
 .nf
-	% sed -n 3126p <$h/.osh.history | osh
-	Running on GNU/Linux, Mac OS X, or NetBSD.
+	% sed -n 6171p <$h/.osh.history | osh
+	OS == GNU/Linux || (Mac) OS X || (Free|Net|Open)BSD
 .fi
 .PP
-causes sed to output the 3126th command line from
+causes sed to output the 6171st command line from
 the history file via pipe for repetition as a
 command substitution by osh.
 .SS Aliases (+)
