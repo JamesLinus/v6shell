@@ -16,33 +16,33 @@ templates, modified, and/or installed for personal or general use.
 
 -------
 INSTALL:
-1) Run FILEPREP script to prepare rc files for installation.
 
-	usage: osh FILEPREP /path/to/nonexistent_directory
+1) Modify the etc.* and dot.* files to taste.
 
-2) cd or chdir to specified directory.
+2) The etc.* files assume that SYSCONFDIR=/etc, the default for
+   shells/osh in OpenBSD Ports.
 
-3) Modify *osh* files to taste (e.g., change PATH, etc).
+3) The dot.* files are user rc files for user HOME ($h) directories,
+   and also for /etc/skel depending on sysadmin desires / needs.
 
-4) Copy *osh* files to destinations noted in fileprep.log .
+4) Copy the etc.* and dot.* files to the destinations noted above.
 
 ...
-Depending on system configuration, you may need to become superuser
-in order to successfully install system-wide rc files.
+Depending on system configuration, you may need to become the
+superuser in order to successfully install system-wide rc files.
 
 -------
 I install and use variations of these files on several different
-systems.  This includes GNU/Linux, Mac OS X, NetBSD, OpenBSD, and
-OpenSolaris.  On GNU/Linux systems, you may wish to refer to the
-manual pages for the utilities invoked in these files as there might
-be incompatibilities that I have not encountered.  For example,
-this is true for stty(1).
+systems.  This includes GNU/Linux, (Mac) OS X, NetBSD, and OpenBSD.
+On GNU/Linux systems, you should refer to the manual pages for the
+utilities invoked in these files as there may be incompatibilities
+that I have not encountered.  For example, this is true for stty(1).
 
 If you have any comments or questions about this software, I encourage
 you to contact me via email.  Thanks & Enjoy!
 
 Jeffrey Allen Neitzel
 <jan (at) v6shell (dot) org>
-http://v6shell.org/rc_files					2016/01/07
+http://v6shell.org/rc_files					2016/11/16
 
 @(#)$Id$
