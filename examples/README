@@ -17,19 +17,21 @@ templates, modified, and/or installed for personal or general use.
 -------
 INSTALL:
 
-1) Modify the etc.* and dot.* files to taste.
-
-2) The etc.* files assume that SYSCONFDIR=/etc, the default for
+1) The etc.* files assume that SYSCONFDIR=/etc, the default for
    shells/osh in OpenBSD Ports.
 
-3) The dot.* files are user rc files for user HOME ($h) directories,
+2) The dot.* files are user rc files for user HOME ($h) directories,
    and also for /etc/skel depending on sysadmin desires / needs.
 
-4) Copy the etc.* and dot.* files to the destinations noted above.
+3) So, modify the etc.* and dot.* files to taste.
+
+4) Then, copy them to the destinations noted above
+   (changing user / group / mode as needed).
 
 ...
-Depending on system configuration, you may need to become the
-superuser in order to successfully install system-wide rc files.
+Not to state the obvious, but..  Depending on system configuration,
+you may need to become the superuser in order to successfully install
+system-wide rc files! ;^)
 
 -------
 I install and use variations of these files on several different
@@ -43,6 +45,6 @@ you to contact me via email.  Thanks & Enjoy!
 
 Jeffrey Allen Neitzel
 <jan (at) v6shell (dot) org>
-http://v6shell.org/rc_files					2016/11/16
+http://v6shell.org/rc_files					2016/11/18
 
 @(#)$Id$
