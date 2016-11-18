@@ -17,8 +17,8 @@ templates, modified, and/or installed for personal or general use.
 -------
 INSTALL:
 
-1) The etc.* files assume that SYSCONFDIR=/etc, the default for
-   shells/osh in OpenBSD Ports.
+1) The etc.* files are system-wide rc files, assuming SYSCONFDIR=/etc,
+   the default for shells/osh in OpenBSD Ports.
 
 2) The dot.* files are user rc files for user HOME ($h) directories,
    and also for /etc/skel depending on sysadmin desires / needs.
