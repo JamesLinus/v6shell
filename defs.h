@@ -118,14 +118,14 @@
 
 /*
  * sh6(1) does not search for glob, fd2, goto, or if via PATH.
- * It expects to find these utilities in LIBEXECDIR which is set
- * at build time, defaulting to $(PREFIX)/libexec/$(OSH_VERSION).
+ * It expects to find these utilities in LIBEXECDIRSH6 which is set
+ * at build time, defaulting to $(PREFIX)/libexec/$(OSH_VERSION)/sh6.
  * The glob(1), fd2(1), and if(1) utilities expect the same.
  */
-#define	GLOB_PATH	LIBEXECDIR/**/"/glob"
-#define	FD2_PATH	LIBEXECDIR/**/"/fd2"
-#define	GOTO_PATH	LIBEXECDIR/**/"/goto"
-#define	IF_PATH		LIBEXECDIR/**/"/if"
+#define	GLOB_PATH	LIBEXECDIRSH6/**/"/glob"
+#define	FD2_PATH	LIBEXECDIRSH6/**/"/fd2"
+#define	GOTO_PATH	LIBEXECDIRSH6/**/"/goto"
+#define	IF_PATH		LIBEXECDIRSH6/**/"/if"
 
 /*
  * special character literals

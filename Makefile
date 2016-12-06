@@ -14,6 +14,8 @@ DESTDIR?=
 PREFIX?=	/usr/local
 BINDIR?=	$(PREFIX)/bin
 LIBEXECDIR?=	$(PREFIX)/libexec/$(OSH_VERSION)
+LIBEXECDIROSH?=	$(PREFIX)/libexec/$(OSH_VERSION)/osh
+LIBEXECDIRSH6?=	$(PREFIX)/libexec/$(OSH_VERSION)/sh6
 DOCDIR?=	$(PREFIX)/share/doc/$(OSH_VERSION)
 EXPDIR?=	$(DOCDIR)/examples
 MANDIR?=	$(PREFIX)/man/man1
@@ -82,10 +84,10 @@ UMAN=	fd2.1.out goto.1.out if.1.out
 MANALL=	$(OSHMAN) $(SH6MAN) $(UMAN)
 SEDSUB=	-e 's|@OSH_DATE@|$(OSH_DATE)|' \
 	-e 's|@OSH_VERSION@|$(OSH_VERSION)|' \
-	-e 's|@LIBEXECDIR@|$(LIBEXECDIR)|' \
+	-e 's|@LIBEXECDIRSH6@|$(LIBEXECDIRSH6)|' \
 	-e 's|@SYSCONFDIR@|$(SYSCONFDIR)|'
 
-DEFS=	-DOSH_VERSION='"$(OSH_VERSION)"' -DLIBEXECDIR='"$(LIBEXECDIR)"' -DSYSCONFDIR='"$(SYSCONFDIR)"'
+DEFS=	-DOSH_VERSION='"$(OSH_VERSION)"' -DLIBEXECDIRSH6='"$(LIBEXECDIRSH6)"' -DSYSCONFDIR='"$(SYSCONFDIR)"'
 
 .SUFFIXES: .1 .1.out .c .o
 
@@ -165,7 +167,7 @@ fd2bin: v.o fd2.o err.o pexec.o
 # NOTE: $(.CURDIR) for BSD make || $(CURDIR) for GNU make
 #
 check-pre: $(OSH) clean-sh6
-	@if test X$(.CURDIR) != X ; then $(MAKE) LIBEXECDIR=$(.CURDIR) sh6all ; else $(MAKE) LIBEXECDIR=$(CURDIR) sh6all ; fi >/dev/null 2>&1
+	@if test X$(.CURDIR) != X ; then $(MAKE) LIBEXECDIRSH6=$(.CURDIR) sh6all ; else $(MAKE) LIBEXECDIRSH6=$(CURDIR) sh6all ; fi >/dev/null 2>&1
 
 check: check-pre
 	@( trap '' INT QUIT && cd tests && ../osh run.osh osh sh6 )
@@ -181,11 +183,13 @@ check-post: $(OSH) clean-sh6
 #
 # Install targets
 #
-DESTBINDIR=	$(DESTDIR)$(BINDIR)
-DESTLIBEXECDIR=	$(DESTDIR)$(LIBEXECDIR)
-DESTDOCDIR=	$(DESTDIR)$(DOCDIR)
-DESTEXPDIR=	$(DESTDIR)$(EXPDIR)
-DESTMANDIR=	$(DESTDIR)$(MANDIR)
+DESTBINDIR=		$(DESTDIR)$(BINDIR)
+DESTLIBEXECDIR=		$(DESTDIR)$(LIBEXECDIR)
+DESTLIBEXECDIROSH=	$(DESTDIR)$(LIBEXECDIROSH)
+DESTLIBEXECDIRSH6=	$(DESTDIR)$(LIBEXECDIRSH6)
+DESTDOCDIR=		$(DESTDIR)$(DOCDIR)
+DESTEXPDIR=		$(DESTDIR)$(EXPDIR)
+DESTMANDIR=		$(DESTDIR)$(MANDIR)
 install: install-oshall install-sh6all
 
 install-oshall: oshall install-osh install-uman
@@ -201,13 +205,13 @@ install-osh: $(OSH) $(OSHMAN) install-dest
 install-sh6: $(SH6) $(SH6MAN) install-dest install-destlibexec
 	$(INSTALL) -c -s $(BINGRP) $(BINMODE) sh6        $(DESTBINDIR)
 	$(INSTALL) -c    $(MANGRP) $(MANMODE) sh6.1.out  $(DESTMANDIR)/sh6.1
-	$(INSTALL) -c -s $(BINGRP) $(BINMODE) glob       $(DESTLIBEXECDIR)
+	$(INSTALL) -c -s $(BINGRP) $(BINMODE) glob       $(DESTLIBEXECDIRSH6)
 	$(INSTALL) -c    $(MANGRP) $(MANMODE) glob.1.out $(DESTMANDIR)/glob.1
 
 install-ubin: $(UBIN) install-dest install-destlibexec
-	$(INSTALL) -c -s $(BINGRP) $(BINMODE) fd2        $(DESTLIBEXECDIR)
-	$(INSTALL) -c -s $(BINGRP) $(BINMODE) goto       $(DESTLIBEXECDIR)
-	$(INSTALL) -c -s $(BINGRP) $(BINMODE) if         $(DESTLIBEXECDIR)
+	$(INSTALL) -c -s $(BINGRP) $(BINMODE) fd2        $(DESTLIBEXECDIRSH6)
+	$(INSTALL) -c -s $(BINGRP) $(BINMODE) goto       $(DESTLIBEXECDIRSH6)
+	$(INSTALL) -c -s $(BINGRP) $(BINMODE) if         $(DESTLIBEXECDIRSH6)
 
 install-uman: $(UMAN) install-dest
 	$(INSTALL) -c    $(MANGRP) $(MANMODE) fd2.1.out  $(DESTMANDIR)/fd2.1
@@ -221,6 +225,12 @@ install-dest:
 install-destlibexec:
 	test -d $(DESTLIBEXECDIR) || { umask 0022 && mkdir -p $(DESTLIBEXECDIR) ; }
 	$(INSTALL) -c $(MANGRP) $(MANMODE) README.libexec $(DESTLIBEXECDIR)/README
+	test -d $(DESTLIBEXECDIROSH) || { umask 0022 && mkdir -p $(DESTLIBEXECDIROSH) ; }
+	$(INSTALL) -c $(MANGRP) $(MANMODE) README.libexec.osh $(DESTLIBEXECDIROSH)/README
+	$(INSTALL) -c $(BINGRP) $(BINMODE) history      $(DESTLIBEXECDIROSH)
+	$(INSTALL) -c $(MANGRP) $(MANMODE) history.help $(DESTLIBEXECDIROSH)
+	test -d $(DESTLIBEXECDIRSH6) || { umask 0022 && mkdir -p $(DESTLIBEXECDIRSH6) ; }
+	$(INSTALL) -c $(MANGRP) $(MANMODE) README.libexec.sh6 $(DESTLIBEXECDIRSH6)/README
 
 install-doc:
 	test -d $(DESTDOCDIR) || { umask 0022 && mkdir -p    $(DESTDOCDIR) ; }

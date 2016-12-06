@@ -1,0 +1,12 @@
+See ../README (and below) for more info.
+This directory contains the following osh(1) support scripts & files:
+
+	* history - manage/print/search user's $h/.osh.history file
+
+	* history.help - history help
+
+Jeffrey Allen Neitzel
+<jan (at) v6shell (dot) org>
+http://v6shell.org/						2016/12/06
+
+@(#)$Id$

@@ -1,16 +1,12 @@
-This directory is installed as part of the osh package.
-It contains the following sh6(1) external utilities:
+Part of the osh-current package.
+It contains the following directories:
 
-	fd2(1)  - redirect from/to file descriptor 2
+	* osh - osh(1) support scripts & files
 
-	glob(1) - global command (file name generation)
-
-	goto(1) - transfer command
-
-	if(1)   - conditional command
+	* sh6 - sh6(1) external utilities
 
 Jeffrey Allen Neitzel
 <jan (at) v6shell (dot) org>
-http://v6shell.org/						2016/01/07
+http://v6shell.org/						2016/12/06
 
 @(#)$Id$

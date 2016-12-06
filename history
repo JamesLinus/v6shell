@@ -1,0 +1,76 @@
+#!/usr/bin/env osh
+:
+: osh - " Force sh(1), csh(1), and other shells to exit w/ error! " <'' ;;;
+:
+: "  @(#)$Id$  "
+:
+: "  The author of this file, J.A. Neitzel <jan (at) v6shell (dot) org>,  "
+: "  hereby grants it to the public domain.                               "
+:
+
+trap '' 13 ; umask 77
+
+set	H	$h/.osh.history
+set	N	history
+: set
+alias	fd2ncat	"fd2 -f /dev/null awk '{ print NR "\"\\t\"" \$0 }'"
+alias	ncat	"awk '{ print NR "\"\\t\"" \$0 }'"
+: alias
+
+: >>$0'' <'' ; : >>$1'' <'' ; : >>$2'' <''
+if ! { expr //$0 : '.*/\(.*\)' = $N >/dev/null } kill -9 $$
+if \( \
+	$# = 0 -o X$1 = X-l -o X$1 = X-n -o X$1 = X-p \
+   \) -a ! \( \
+	-f $H -a -r $H -a -w $H \
+   \) if { exit } fd2 -e echo "$N: $H: cannot open" ; false
+
+if $# = 0 goto -a
+if \( \( X$1 = X-c -o X$1 = X-l -o X$1 = X-r \) -a $# = 1 \) -o \
+   \( \( X$1 = X-n -o X$1 = X-p              \) -a $# = 2 -a X$2 != X \) goto $1
+if X$1 = X-h -a $# = 1 goto $1
+if { exit } fd2 -e \
+echo "usage: $N [-c | -h | -l | -n number1[,number2] | -p pattern | -r]" ; false
+
+: -a
+	wc -l <$h/.osh.history | tr -d ' \t' | \
+		sed 's,.*,expr & \\>= 1 >/dev/null,' | osh
+	if $? != 0 if { exit } false
+	echo 'Number	Command Line' ; echo '------	------------'
+	fd2ncat <$H ; exit
+
+: -c
+	( : ) >$h/.osh.history ; exit
+
+: -h
+	fd2 -e echo "$N: Formatting history help..."
+	if ! { printenv PAGER } goto more-s >/dev/null
+	printenv PAGER | wc -c | tr -d ' \t' | grep '^1$' >/dev/null
+	if $? = 0 goto more-s
+		printenv PAGER | sed 's,.*,exec & '$0'.help,' | osh ; exit
+	: more-s
+		more -s $0.help ; exit
+
+: -l
+	wc -l <$h/.osh.history | tr -d ' \t' | \
+		sed 's,.*,expr & \\>= 11 >/dev/null,' | osh
+	if $? != 0 if { exit } false
+	echo 'Number	Command Line' ; echo '------	------------'
+	ncat <$H | tail -11 | head -10 ; exit
+
+: -n
+	fd2ncat <$H | fd2 -f /dev/null -- sed -n $2p | \
+		wc -l | tr -d ' \t' | grep '^0$' >/dev/null
+	if $? = 0 if { exit } false
+	echo 'Number	Command Line' ; echo '------	------------'
+	ncat <$H | sed -n $2p ; exit
+
+: -p
+	ncat <$H | egrep -- $2 | grep -v 'history -p'  | \
+		wc -l | tr -d ' \t' | grep '^0$' >/dev/null
+	if $? = 0 if { exit } false
+	echo 'Number	Command Line' ; echo '------	------------'
+	ncat <$H | egrep -- $2 | grep -v 'history -p' ; exit
+
+: -r
+	rm -f $h/.osh.history

@@ -1,0 +1,48 @@
+HISTORY(1)                  General Commands                  HISTORY(1)
+
+NAME
+	history - manage/print/search user's $h/.osh.history file
+
+SYNOPSIS
+	history [-c | -h | -l | -n number1[,number2] | -p pattern | -r]
+
+DESCRIPTION
+	History is a command that can manage, print, and search
+	user's osh history file.  If no options are specified,
+	history prints all history entries found in user's osh
+	history file to the standard output.
+
+	The options are as follows:
+
+	-c	Clears (empties) an existing history file, or creates
+		a new (empty) history file.
+
+	-h	Prints this history help message/synopsis.
+
+	-l	Prints the last 10 history entries.
+
+	-n number1[,number2]
+		Prints the history entry specified by number1 or
+		those entries from number1 to number2, inclusive.
+
+	-p pattern
+		Searches for and prints the history entries that
+		contain matches for the specified pattern.
+
+	-r	Removes an existing history file (if any).
+
+EXIT STATUS
+	The history command exits with a zero status (true) on
+	success or with a non-zero status (false) on error.
+
+ENVIRONMENT
+	PAGER	If set to a non-empty string, the value of this
+		variable is used as the program to paginate the
+		history -h output.  Otherwise, more(1) is used.
+
+SEE ALSO
+	osh(1)
+
+	Osh home page: http://v6shell.org/
+
+osh-current                 December 6, 2016                  HISTORY(1)
