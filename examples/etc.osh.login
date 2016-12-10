@@ -15,22 +15,18 @@ trap '' 18 21 22 ;       : " Ignore job-control signals: TSTP, TTIN, TTOU "
 : " Set a default umask and PATH for all (root & !root) users. "
 :
 umask 0022
-if X$u != Xroot goto Continue
+if X$u != Xroot goto NotRoot
 	setenv	PATH	/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin
 	setenv	PATH	$p:/usr/local/sbin:/usr/local/bin
-	goto NotRootJump
+	goto Continue
+
+: NotRoot
+	setenv	 PATH	/bin:/usr/bin:/sbin:/usr/sbin:/usr/X11R6/bin
+	setenv	 PATH	$p:/usr/local/bin:/usr/local/sbin:/usr/games
+	: setenv PATH	$p:. ; : " Current directory? Not recommended. "
+	: fallthrough
 
 : Continue
-	: " Only add $h/bin if it exists as a searchable directory. "
-	if ! \( X$h != X -a -d $h'' -a -d $h/bin -a -x $h/bin \) goto jump
-		setenv	PATH	$h/bin
-		: fallthrough
-	: jump
-		setenv	 PATH	$p:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin
-		setenv	 PATH	$p:/usr/local/bin:/usr/local/sbin:/usr/games
-		: setenv PATH	$p:. ; : " Current directory? Not recommended. "
-
-: NotRootJump
 	setenv MAIL /var/mail/$u
 	stty status '^T' <-
 	: fallthrough
@@ -44,7 +40,7 @@ if ! { mkdir $D } goto Finish
 	:
 	set S 0
 	printenv CTTY | wc -l | tr -d ' ' | grep '^1$' >/dev/null
-	if $? -ne 0 goto NoCttyJump
+	if $? -ne 0 goto NoCtty
 		( \
 		   echo -n 'set T "' ; printenv CTTY | tr -d '\n' ; echo '"' \
 		) >$D/TisCTTY
@@ -52,11 +48,12 @@ if ! { mkdir $D } goto Finish
 		set S 1
 		rm $D/TisCTTY
 		: fallthrough
-	: NoCttyJump
+	: NoCtty
 		if $S -eq 1 goto TisCTTY
 			setenv CTTY $t
 			set    T    $t
 		: TisCTTY
+			: fallthrough
 	unset S
 
 	:

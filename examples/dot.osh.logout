@@ -11,19 +11,6 @@ trap '' 2 3
 : fd2 -e echo "debug: Executing `"$h/.osh.logout"' now..."
 
 :
-: " Check for ssh-agent started by $$, and kill it before logout. "
-:
-if ! -e $h/.osh-ssh-agent -o ! { printenv IS_OSH_SSH_AGENT } goto OshDir >/dev/null
-
-	sed -n 1p <$h/.osh-ssh-agent | grep $$ >/dev/null
-	if $? != 0 goto OshDir
-		echo 'unsetenv IS_OSH_SSH_AGENT;' >$h/.osh-ssh-agent
-		ssh-agent -c -k | head -2        >>$h/.osh-ssh-agent
-		source $h/.osh-ssh-agent ; rm -f $h/.osh-ssh-agent
-
-	: fallthrough
-
-:
 : " Check for OSHDIR ($d), and remove it before logout. "
 :
 : OshDir
@@ -45,4 +32,4 @@ if X$d = X -o ! -d $d'' goto Logout
 		if { rm -f osh-logout-$$ } if { exit } sleep 5
 
 	rm -f osh-logout-$$ ; unsetenv TTY ; chdir -
-	clear <- ; trap - 2 3 ; exec osh -login <-
+	clear <- ; trap - 2 3 ; exec osh -l <-

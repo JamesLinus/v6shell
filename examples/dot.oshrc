@@ -8,49 +8,42 @@
 
 : fd2 -e echo "debug: Executing `"$h/.oshrc"' now..."
 
-printenv TERM >/dev/null
-if $? = 0 goto TermIsSet
+:
+: " Make getopt(3) in the fd2 utility behave the same on  "
+: " GNU/Linux systems as it does on *BSD & other systems. "
+:
+: setenv	POSIXLY_CORRECT	''
 
-	setenv	TERM	vt100
-	: fallthrough
+setenv	EDITOR		/usr/local/bin/vim
+setenv	VISUAL		/usr/local/bin/vim
+setenv	PAGER		'less -is'
+setenv	LESS		-M
+setenv	EXECSHELL	/usr/local/bin/osh
+setenv	LC_ALL		C
 
-: TermIsSet
-printenv TTY | grep \^$t\$ >/dev/null
-if $? = 0 goto Continue
-
-	setenv	TTY	$t
+: " env | grep '^TERM=' | fd2 -e cat "
+printenv TERM | grep '^vt220$' >/dev/null
+if $? -eq 0 goto Continue
 
 	printenv TERM | grep '^vt100$' >/dev/null
 	if $? = 0 goto Continue
-	printenv TERM | grep '^rxvt$' >/dev/null
-	if $? = 0 goto C
 
-		:
-		: " The terminal I normally use is rxvt-unicode (urxvt),  "
-		: " but I also use others on occasion.  Normally, they're "
-		: " UTF-8 capable, but that's not always true.            "
-		:
-		setenv	LC_ALL		en_US.UTF-8
-		setenv	LESSCHARSET	utf-8
-		printf	"%b"		'\033]701;en_US.UTF-8\007' >/dev/tty
-		goto Continue
-
-	: C - " Default to the C locale for rxvt. "
-
-		setenv	LC_ALL	C
-		: fallthrough
+	:
+	: " The terminal I normally use is rxvt-unicode (urxvt),  "
+	: " but I also use others on occasion.  Normally, they're "
+	: " UTF-8 capable, but that's not always true.            "
+	:
+	setenv	LC_ALL		en_US.UTF-8
+	setenv	LESSCHARSET	utf-8
+	printf	"%b"		'\033]701;en_US.UTF-8\007' >/dev/tty
+	: fallthrough
 
 : Continue - " Continue as normal. "
 
-	:
-	: " Set terminal options and window title if possible. "
-	:
-	uname -s | grep '^Linux$' >/dev/null
-	if $? -eq 0 goto Uname-S-Linux
-		( stty altwerase imaxbel -oxtabs ; stty status '^T' ) <-
-		: fallthrough
-	: Uname-S-Linux
-		xtitle
+	source	SetTandCTTY
+	setenv	TTY	$t
+	( stty altwerase imaxbel -oxtabs ; stty status '^T' ) <-
+	xtitle
 
 	:
 	: " Set some useful aliases.                           "
@@ -68,38 +61,41 @@ if $? = 0 goto Continue
 	: " alias arguments into a no-op.                      "
 	:
 	alias	aliases	'(alias;:)'
-	alias	aman	'setenv LC_ALL C;setenv LESSCHARSET ascii;man'
-	alias	anroff	'setenv LC_ALL C;setenv LESSCHARSET ascii;nroff -mandoc -Tascii'
 	alias	glob	'echo'
+	alias	h	history
 	alias	hcount	"setenv LC_ALL C;awk '{print \$1;}'<$h/.osh.history|sort|uniq -c|sort -k1 -rn|head -25;:"
 	alias	isset	'set'
-	: " Set sysinfo alias (w/o system_profiler). "
-	alias	sysinfo	"echo -n '==== ';uname -n|tr -d \\n;echo ' ====';echo;uname -srm;echo;now;echo;uptime;:"
-	uname -s | grep '^Darwin$' >/dev/null
-	if $? -ne 0 goto Uname-S-NotDarwin
-		alias	l	'fd2 -f/dev/null leaks $$;:'
-		: " If Darwin, reset sysinfo alias (w/ system_profiler). "
-		alias	sysinfo	"echo -n '==== ';uname -n|tr -d \\n;echo ' ====';echo;uname -srm;system_profiler SPSoftwareDataType|grep 'System Version:'|sed 's/^.*: //';echo;now;echo;uptime;:"
-		: fallthrough
-	: Uname-S-NotDarwin
 	alias	lf	'ls -F'
 	alias	li	'ls -i'
 	alias	ll	'ls -AlF'
 	alias	loadavg	"uname -n|sed 's/\([^.]*\).*/\1/'|tr -d \\n;echo -n ': ';uptime|sed 's/^.*user[s,][ ,] *//';:"
+	alias	lynx	'setenv LC_ALL C;exec lynx'
 	alias	manpath	'echo $m;:'
-	alias	n	'echo "日本語 Nihongo";:'
+	printenv TERM | grep '^vt220$' >/dev/null
+	if $? -eq 0 goto IsVT220
+		alias	n	'echo "日本語 Nihongo";:'
+		alias	nihongo	'source nihongo'
+		: fallthrough
+	: IsVT220
 	alias	now	"date '+%A, %Y-%m-%d, %T %Z';:"
 	alias	ocpwd	'cd -;pwd;cd -;pwd'
 	alias	opwd	'cd -;pwd'
 	alias	path	'echo $p;:'
 	alias	pparm	'echo $0: $#: $*;:'
+	alias	psmem	'ps -Ovsz,rss -m'
+	alias	sensors	'sysctl hw.sensors;:'
 	alias	sh6i	'trap "" 1 2 3 13 14 15 18 21 22;sh6 -c xtitle;(trap - 1 2 3 13 14 15;sh6);xtitle;:'
 	alias	s	'echo $?;:'
 	alias	status	's'
+	alias	sysinfo	"echo -n '==== ';uname -n|tr -d \\n;echo ' ====';echo;uname -srm;echo;now;echo;uptime;:"
+	alias	topc	'top -C;:'
+	alias	unl	'uptime;now;loadavg;:'
 	alias	v	'echo $v;:'
 	alias	v1	'version'
 	( alias logout ) | wc -c | tr -d ' \t' | grep '^0$' >/dev/null
 	if $? != 0 goto Jump
 		alias	logout	'fd2 -e echo "Not an osh login shell - Type an EOT (^D) instead";false'
+		alias	rmod	'if X$d != X -a -d "$d" -a ! -h "$d" rm -rf "$d";:'
+		: fallthrough
 	: Jump
 		: nothing
