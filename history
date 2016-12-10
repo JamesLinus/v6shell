@@ -33,14 +33,14 @@ if { exit } fd2 -e \
 echo "usage: $N [-c | -h | -l | -n number1[,number2] | -p pattern | -r]" ; false
 
 : -a
-	wc -l <$h/.osh.history | tr -d ' \t' | \
+	wc -l <$H | tr -d ' \t' | \
 		sed 's,.*,expr & \\>= 1 >/dev/null,' | osh
 	if $? != 0 if { exit } false
 	echo 'Number	Command Line' ; echo '------	------------'
 	fd2ncat <$H ; exit
 
 : -c
-	( : ) >$h/.osh.history ; exit
+	( : ) >$H ; exit
 
 : -h
 	fd2 -e echo "$N: Formatting history help..."
@@ -52,7 +52,7 @@ echo "usage: $N [-c | -h | -l | -n number1[,number2] | -p pattern | -r]" ; false
 		more -s $0.help ; exit
 
 : -l
-	wc -l <$h/.osh.history | tr -d ' \t' | \
+	wc -l <$H | tr -d ' \t' | \
 		sed 's,.*,expr & \\>= 11 >/dev/null,' | osh
 	if $? != 0 if { exit } false
 	echo 'Number	Command Line' ; echo '------	------------'
@@ -73,4 +73,4 @@ echo "usage: $N [-c | -h | -l | -n number1[,number2] | -p pattern | -r]" ; false
 	ncat <$H | egrep -- $2 | grep -v 'history -p' ; exit
 
 : -r
-	rm -f $h/.osh.history
+	rm -f $H
