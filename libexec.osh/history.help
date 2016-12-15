@@ -7,10 +7,10 @@ SYNOPSIS
 	history [-c | -h | -l | -n number1[,number2] | -p pattern | -r]
 
 DESCRIPTION
-	History is a command that can manage, print, and search
-	user's osh history file.  If no options are specified,
-	history prints all history entries found in user's osh
-	history file to the standard output.
+	History is a command to manage, print, and search the user's
+	$h/.osh.history file.  If no options are specified, history
+	prints all history entries from the user's osh history file
+	to the standard output.
 
 	The options are as follows:
 
@@ -45,4 +45,4 @@ SEE ALSO
 
 	Osh home page: http://v6shell.org/
 
-osh-current                 December 6, 2016                  HISTORY(1)
+osh-current                 December 15, 2016                 HISTORY(1)

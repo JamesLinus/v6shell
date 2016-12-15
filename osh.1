@@ -944,7 +944,7 @@ The
 special command
 always causes the shell to terminate if it occurs
 in any rc file.
-.SS History file (+)
+.SS History (+)
 If the shell is invoked as an interactive shell,
 it tries to open the
 .I $h/.osh.history
@@ -958,17 +958,17 @@ Otherwise,
 it will not do so.
 .PP
 An interactive shell reads each command line from
-its terminal and writes the words of each one to
-the history file as a history entry after performing
+its terminal and appends the words of each one to
+the history file as a line after performing
 parameter substitution and word splitting.
 .PP
 The shell does not read the history file or have any features
 that allow the user to make direct use of the saved history.
 Such features are available via standard external commands
 and also via the
-.I history
-command file that is available in the v6scripts collection.
-See http://v6shell.org/v6scripts/history.osh for full details.
+.B history
+command found in the \fI@LIBEXECDIROSH@\fR directory.
+Execute `history \-h' to read its documentation.
 .PP
 Notice that the shell never creates or removes the
 .I $h/.osh.history
@@ -981,7 +981,7 @@ For example:
 .fi
 .PP
 causes
-.I history
+.B history
 to remove the existing history file (if any),
 to create a new (empty) one, and causes
 the current shell to replace itself with
@@ -1170,6 +1170,13 @@ of the current command file.
 See the
 .IR goto (1)
 manual page for full details.
+.TP
+\fBhistory\fR [\fB\-c\fR | \fB\-h\fR | \fB\-l\fR | \fB\-n\fR \fInumber1\fR[\fI,number2\fR] | \fB\-p\fR \fIpattern\fR | \fB\-r\fR] (+)
+Manages, prints, and searches the user's \fI$h/.osh.history\fR file.
+If no options are specified,
+the history command prints all history entries from
+the user's osh history file to the standard output.
+Execute `history \-h' to read its documentation.
 .TP
 \fBif\fR [\fIexpression\fR [\fIcommand\fR [\fIarg ...\fR]]] (+)
 Evaluates
