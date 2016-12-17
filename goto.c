@@ -67,7 +67,7 @@
 #include "defs.h"
 #include "err.h"
 
-#ifndef	CONFIG_SUNOS
+#if !defined(CONFIG_UBUNTU16) || !defined(CONFIG_SUNOS)
 static	off_t	offset;
 #endif
 
@@ -103,7 +103,7 @@ main(int argc, char **argv)
 
 	while (getlabel(label, *argv[1] & 0377, siz))
 		if (strcmp(label, argv[1]) == 0) {
-#ifndef	CONFIG_SUNOS
+#if !defined(CONFIG_UBUNTU16) || !defined(CONFIG_SUNOS)
 			(void)lseek(FD0, offset, SEEK_SET);
 #endif
 			return SH_TRUE;
@@ -179,7 +179,7 @@ getlabel(char *buf, int fc, size_t siz)
 static int
 xgetc(void)
 {
-#ifndef	CONFIG_SUNOS
+#if !defined(CONFIG_UBUNTU16) || !defined(CONFIG_SUNOS)
 	int nc;
 
 	offset++;

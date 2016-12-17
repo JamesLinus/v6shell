@@ -97,6 +97,12 @@ case "$UNAME_S" in
 		>>$CONFIG_H
 	;;
 Linux)
+	# Check if building on Ubuntu 16.xx.
+	egrep '^(DISTRIB_ID=Ubuntu|DISTRIB_RELEASE=16.(04|10))$' /etc/lsb-release 2>/dev/null | wc -l | tr -d ' ' | grep '^2$' >/dev/null
+	if test $? -eq 0 ; then
+		# Ubuntu 16.xx
+		( echo '#define	CONFIG_UBUNTU16' ; echo ) >>$CONFIG_H
+	fi
 	echo '#define	_XOPEN_SOURCE	600L'  >>$CONFIG_H
 	echo '#define	_BSD_SOURCE'           >>$CONFIG_H
 	echo '#define	_DEFAULT_SOURCE'       >>$CONFIG_H
