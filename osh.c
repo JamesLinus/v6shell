@@ -185,6 +185,7 @@ static	const struct sbicmd {
 	{ "unalias",	SBI_UNALIAS  },
 	{ "unset",	SBI_UNSET    },
 	{ "unsetenv",	SBI_UNSETENV },
+	{ "verbose",	SBI_VERBOSE  },
 	{ "version",	SBI_VERSION  },
 	{ "wait",	SBI_WAIT     }
 };
@@ -226,7 +227,7 @@ static	bool		error_source;	/* error flag for `source' command  */
 static	int		hwfd = -1;	/* history write file descriptor    */
 static	bool		is_first;	/* first line flag                  */
 static	bool		is_login;	/* login shell flag                 */
-static	bool		is_verbose;	/* verbose flag for `-v' option     */
+static	bool		is_verbose;	/* verbose command-line flag for -v */
 static	char		line[LINEMAX];	/* command-line buffer              */
 static	char		aline[LINEMAX];	/* alias-line buffer                */
 static	char		*linep;		/* [a]line pointer                  */
@@ -2060,6 +2061,33 @@ execute1(struct tnode *t)
 			status = SH_TRUE;
 			return;
 
+		}
+		emsg = ERR_ARGCOUNT;
+		break;
+
+	case SBI_VERBOSE:
+		/*
+		 * Set the global is_verbose command-line flag to true,
+		 * false, or print its current value.
+		 *
+		 * usage: verbose [true | false]
+		 */
+		if (t->nav[1] != NULL && t->nav[2] == NULL) {
+			if (EQUAL(t->nav[1], "true")) {
+				is_verbose = true;
+				status = SH_TRUE;
+			} else if (EQUAL(t->nav[1], "false")) {
+				is_verbose = false;
+				status = SH_FALSE;
+			} else {
+				emsg = VERBOSE_USAGE;
+				break;
+			}
+			return;
+		} else if (t->nav[1] == NULL) {
+			fd_print(FD1, "%s\n", is_verbose ? "true" : "false");
+			status = is_verbose ? SH_TRUE : SH_FALSE;
+			return;
 		}
 		emsg = ERR_ARGCOUNT;
 		break;
