@@ -199,11 +199,11 @@ install-sh6all: sh6all install-sh6 install-utils
 
 install-utils: install-ubin install-uman
 
-install-osh: $(OSH) $(OSHMAN) install-dest
+install-osh: $(OSH) $(OSHMAN) install-dest install-destlibexecosh
 	$(INSTALL) -c -s $(BINGRP) $(BINMODE) osh        $(DESTBINDIR)
 	$(INSTALL) -c    $(MANGRP) $(MANMODE) osh.1.out  $(DESTMANDIR)/osh.1
 
-install-sh6: $(SH6) $(SH6MAN) install-dest install-destlibexec
+install-sh6: $(SH6) $(SH6MAN) install-dest install-destlibexecsh6
 	$(INSTALL) -c -s $(BINGRP) $(BINMODE) sh6        $(DESTBINDIR)
 	$(INSTALL) -c    $(MANGRP) $(MANMODE) sh6.1.out  $(DESTMANDIR)/sh6.1
 	$(INSTALL) -c -s $(BINGRP) $(BINMODE) glob       $(DESTLIBEXECDIRSH6)
@@ -226,10 +226,16 @@ install-dest:
 install-destlibexec:
 	test -d $(DESTLIBEXECDIR) || { umask 0022 && mkdir -p $(DESTLIBEXECDIR) ; }
 	$(INSTALL) -c $(MANGRP) $(MANMODE) README.libexec $(DESTLIBEXECDIR)/README
+
+install-destlibexecosh: install-destlibexec
 	test -d $(DESTLIBEXECDIROSH) || { umask 0022 && mkdir -p $(DESTLIBEXECDIROSH) ; }
 	$(INSTALL) -c $(MANGRP) $(MANMODE) libexec.osh/README $(DESTLIBEXECDIROSH)
+	$(INSTALL) -c $(MANGRP) $(MANMODE) libexec.osh/SetTandCTTY $(DESTLIBEXECDIROSH)
 	$(INSTALL) -c $(BINGRP) $(BINMODE) libexec.osh/history $(DESTLIBEXECDIROSH)
 	$(INSTALL) -c $(MANGRP) $(MANMODE) libexec.osh/history.help $(DESTLIBEXECDIROSH)
+	$(INSTALL) -c $(BINGRP) $(BINMODE) libexec.osh/oshdir $(DESTLIBEXECDIROSH)
+
+install-destlibexecsh6: install-destlibexec
 	test -d $(DESTLIBEXECDIRSH6) || { umask 0022 && mkdir -p $(DESTLIBEXECDIRSH6) ; }
 	$(INSTALL) -c $(MANGRP) $(MANMODE) README.libexec.sh6 $(DESTLIBEXECDIRSH6)/README
 
