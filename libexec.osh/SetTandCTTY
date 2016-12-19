@@ -1,0 +1,42 @@
+: osh - " Force sh(1), csh(1), and other shells to exit w/ error! " <'' ;;;
+:
+: "  @(#)$Id$  "
+:
+: "  The author of this file, J.A. Neitzel <jan (at) v6shell (dot) org>,  "
+: "  hereby grants it to the public domain.                               "
+:
+
+:
+: "  Set $T and/or setenv CTTY as needed.  "
+:
+: "  usage: source [/path/to/]SetTandCTTY  "
+:
+
+: " Ensure we have a usable OSHDIR ($d). "
+fd2 -ef/dev/null oshdir
+if $? -eq 0 goto Continue
+	source oshdir $$
+	if $? -eq 0 goto Continue
+		fd2 -e echo "$0: Error!" ; false ; exit
+	: fallthrough
+
+: Continue
+	set S 0
+	printenv CTTY | wc -l | tr -d ' ' | grep '^1$' >/dev/null
+	if $? -ne 0 goto NoCtty
+		( \
+		   echo -n 'set T "' ; printenv CTTY | tr -d '\n' ; echo '"' \
+		) >$d/TisCTTY
+		source $d/TisCTTY
+		set S 1
+		rm $d/TisCTTY
+		: fallthrough
+	: NoCtty
+		if $S -eq 1 goto TisCTTY
+			setenv CTTY $t
+			set    T    $t
+		: TisCTTY
+			: fallthrough
+	unset S
+
+: Done - " zero status (true) "

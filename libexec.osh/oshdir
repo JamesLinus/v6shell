@@ -1,0 +1,46 @@
+#!/usr/bin/env osh
+:
+: osh - " Force sh(1), csh(1), and other shells to exit w/ error! " <'' ;;;
+:
+: "  @(#)$Id$  "
+:
+: "  The author of this file, J.A. Neitzel <jan (at) v6shell (dot) org>,  "
+: "  hereby grants it to the public domain.                               "
+:
+
+:
+: "  Make or check/remake OSHDIR ($d) in the environment.  "
+:
+: "  usage: source [/path/to/]oshdir $$ (to make)  "
+: "     or:                                        "
+: "  usage: oshdir (to check)                      "
+:
+
+set N oshdir
+
+: " Check for correct usage. "
+: >>$0'' <'' ; : >>$1'' <'' ; : >>$$'' <''
+if ! { expr //$0 : '.*/\(.*\)' = $N >/dev/null } kill -9 $$
+if $# = 1 -a X$1 = X$$ goto Make
+if $# = 0 -a X$d = X \
+	if { exit }  \
+	fd2 -e echo "$N: OSHDIR not set - do source [/path/to/]$N \$\$" ; false
+if $# = 0 goto Check
+
+	fd2 -e echo "usage: source [/path/to/]$N"' $$ (to make)'
+	fd2 -e echo '   or:'
+	fd2 -e echo "usage: $N "'(to check)' ; unset N ; false ; exit
+
+: Make
+if X$d != X goto Check
+
+	if ! { mkdir -m 0700 /tmp/osh-$u-$$ } if { exit } false
+	setenv OSHDIR /tmp/osh-$u-$$
+	: fallthrough
+
+: Check - " And remake the directory if it does not exist. "
+
+	if ! -e $d -a ! -h $d if ! { mkdir -m 0700 $d } if { exit } false
+	if ! -d $d -o   -h $d if   { exit } \
+			      fd2 -e echo "oshdir: $d: Not a directory" ; false
+	: zero status
