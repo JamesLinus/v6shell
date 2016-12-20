@@ -1278,6 +1278,18 @@ Removes the variable \fIname\fR from the current shell.
 \fBunsetenv\fR \fIname\fR (+)
 Removes the variable \fIname\fR from the environment.
 .TP
+\fBverbose\fR [\fItrue\fR | \fIfalse\fR] (+)
+Sets the
+.B \-v
+command-line option to true,
+false, or prints its current value.
+Its exit status reflects the shell's current verbosity state,
+0 (true) or 1 (false) or 2 (error).
+As expected,
+this is testable with the
+.B if
+command.
+.TP
 \fBversion\fR (+)
 Prints the version and the build system
 of the current shell.
