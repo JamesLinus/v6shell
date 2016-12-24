@@ -175,10 +175,10 @@ and exits.
 .TP
 .B \-v
 (+)
-The shell verbosely prints the words
-of each command line to the standard error
+The shell is verbose and prints words
+of each command line to standard error,
 after performing parameter substitution
-and word splitting,
+and word splitting
 but before executing the resulting command line.
 .PP
 The shell may also be invoked non-interactively
@@ -1279,12 +1279,15 @@ Removes the variable \fIname\fR from the current shell.
 Removes the variable \fIname\fR from the environment.
 .TP
 \fBverbose\fR [\fItrue\fR | \fIfalse\fR] (+)
-Sets the
-.B \-v
-command-line option to true,
-false, or prints its current value.
-Its exit status reflects the shell's current verbosity state,
-0 (true) or 1 (false) or 2 (error).
+Sets the shell's current verbosity state
+to
+.I true
+or
+.I false
+and
+prints its current value.
+Its exit status also indicates the current value
+of 0 for true or 1 for false, with 2 indicating error.
 As expected,
 this is testable with the
 .B if
