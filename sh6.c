@@ -72,6 +72,10 @@
 #include "pexec.h"
 #include "sasignal.h"
 
+#if defined(CONFIG_UBUNTU_16)
+#error "Ubuntu 16.(04|10): Not supported: see http://v6shell.org/blog/ubuntu-16/"
+#endif
+
 /*
  * **** Global Variables ****
  */
@@ -102,6 +106,11 @@ static	const char *const sigmsg[] = {
 static	char		apid[DOLMAX];	/* $$ - ASCII shell process ID      */
 /*@null@*/
 static	const char	*argv2p;	/* string for `-c' option           */
+#ifdef	DEBUG
+#ifdef	DEBUG_LSEEK
+static	bool		debug_lseek;	/* debug flag for sh6 & goto        */
+#endif
+#endif
 static	int		dolc;		/* $N dollar-argument count         */
 /*@null@*/
 static	const char	*dolp;		/* $N and $$ dollar-value pointer   */
@@ -109,6 +118,8 @@ static	char	*const	*dolv;		/* $N dollar-argument value array   */
 /*@null@*/ /*@observer@*/
 static	const char	*error_message;	/* error msg for read/parse errors  */
 static	bool		glob_flag;	/* glob flag for `*', `?', `['      */
+static	bool		is_first;	/* first line flag                  */
+static	bool		is_noexec;	/* not executable file flag         */
 static	char		line[LINEMAX];	/* command-line buffer              */
 static	char		*linep;		/* line pointer                     */
 static	int		nul_count;	/* `\0'-character count (per line)  */
@@ -243,6 +254,17 @@ rpx_line(void)
 	error_message = NULL;
 	nul_count = 0;
 	tree_count = 0;
+
+#ifdef	DEBUG
+#ifdef	DEBUG_LSEEK
+	if (debug_lseek) {
+		fd_print(FD2, "%s: current offset == %zd;\n",
+		    __func__, lseek(FD0, (off_t)0, SEEK_CUR));
+		debug_lseek = false;
+	}
+#endif
+#endif
+
 	do {
 		wp = linep;
 		get_word();
@@ -250,7 +272,10 @@ rpx_line(void)
 	*wordp = NULL;
 
 	if (error_message != NULL) {
-		err(SH_ERR, FMT1S, error_message);
+		if (is_noexec && name != NULL)
+			err(SH_ERR, FMT2S, name, error_message);
+		else
+			err(SH_ERR, FMT1S, error_message);
 		return;
 	}
 
@@ -359,7 +384,7 @@ static char
 xgetc(bool dolsub)
 {
 	int n;
-	char c;
+	char c = EOS;
 
 	if (peekc != EOS) {
 		c = peekc;
@@ -405,17 +430,25 @@ getd:
 			goto getd;
 		}
 	}
-	/* Ignore all EOS/NUL characters. */
+	/* Handle EOS/NUL characters as needed. */
 	if (c == EOS) do {
-		if (++nul_count >= LINEMAX) {
-			error_message = ERR_TMCHARS;
-			goto geterr;
+		if (prompt == NULL) {
+			if (is_first)
+				is_noexec = true;
+			if (is_first || ++nul_count >= LINEMAX) {
+				error_message = ERR_EXEC;
+				goto geterr;
+			}
 		}
 		c = readc();
 	} while (c == EOS);
+	if (c == EOL)
+		is_first = false;
 	return c;
 
 geterr:
+	if (c == EOL)
+		is_first = false;
 	return EOL;
 }
 
@@ -797,7 +830,8 @@ execute(struct tnode *t, int *pin, int *pout)
 	pid_t cpid;
 	int i, pfd[2];
 	const char **tav;
-	const char *cmd, *p;
+	const char *p;
+	const char *cmd = NULL;
 
 	if (t == NULL)
 		return;
@@ -905,6 +939,17 @@ execute(struct tnode *t, int *pin, int *pout)
 				fd_print(FD2, "%u\n", (unsigned)cpid);
 			if ((f & FAND) != 0)
 				return;
+#ifdef	DEBUG
+#ifdef	DEBUG_LSEEK
+			if (cmd != NULL && EQUAL(cmd, "goto")) {
+				fd_print(FD2,
+				    "%s : current offset == %zd, cpid == %u;\n",
+				    __func__, lseek(FD0, (off_t)0, SEEK_CUR),
+				    (unsigned)cpid);
+				debug_lseek = true;
+			}
+#endif
+#endif
 			if ((f & FPOUT) == 0)
 				pwait(cpid);
 			return;
@@ -1183,17 +1228,27 @@ sh_magic(void)
 {
 	struct stat sb;
 	size_t len;
+	int c;
 
+	is_first  = true;
+	is_noexec = false;
 	if (fstat(FD0, &sb) == -1 || !S_ISREG(sb.st_mode))
 		return;
 	if (lseek(FD0, (off_t)0, SEEK_CUR) == 0) {
 		if (readc() == HASH && readc() == BANG) {
-			for (len = 2; len < LINEMAX; len++)
-				if (readc() == EOL)
+			for (len = 2; len < LINEMAX; len++) {
+				if ((c = readc()) == EOS) {
+					is_noexec = true;
+					break;
+				}
+				if (c == EOL)
+					is_first = false;
+				if (c == EOL || c == EOF)
 					return;
-			err(SH_ERR, FMT1S, ERR_TMCHARS);
-		}
-		(void)lseek(FD0, (off_t)0, SEEK_SET);
+			}
+			err(SH_ERR, FMT2S, name, ERR_EXEC);
+		} else
+			(void)lseek(FD0, (off_t)0, SEEK_SET);
 	}
 }
 

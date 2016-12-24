@@ -67,7 +67,11 @@
 #include "defs.h"
 #include "err.h"
 
-#if !defined(CONFIG_UBUNTU16) || !defined(CONFIG_SUNOS)
+#if defined(CONFIG_UBUNTU_16)
+#error "Ubuntu 16.(04|10): Not supported: see http://v6shell.org/blog/ubuntu-16/"
+#endif
+
+#if !defined(CONFIG_SUNOS)
 static	off_t	offset;
 #endif
 
@@ -103,12 +107,25 @@ main(int argc, char **argv)
 
 	while (getlabel(label, *argv[1] & 0377, siz))
 		if (strcmp(label, argv[1]) == 0) {
-#if !defined(CONFIG_UBUNTU16) || !defined(CONFIG_SUNOS)
+#if !defined(CONFIG_SUNOS)
 			(void)lseek(FD0, offset, SEEK_SET);
+#endif
+#ifdef	DEBUG
+#ifdef	DEBUG_LSEEK
+			fd_print(FD2,
+			    "goto    : current offset == %zd,  pid == %d;\n",
+			    lseek(FD0, (off_t)0, SEEK_CUR), getmypid());
+#endif
 #endif
 			return SH_TRUE;
 		}
 
+#ifdef	DEBUG
+#ifdef	DEBUG_LSEEK
+	fd_print(FD2, "goto    : current offset == %zd,  pid == %d;\n",
+	    lseek(FD0, (off_t)0, SEEK_CUR), getmypid());
+#endif
+#endif
 	fd_print(FD2, FMT3S, getmyname(), argv[1], ERR_LABNOTFOUND);
 	return SH_FALSE;
 }
@@ -179,7 +196,7 @@ getlabel(char *buf, int fc, size_t siz)
 static int
 xgetc(void)
 {
-#if !defined(CONFIG_UBUNTU16) || !defined(CONFIG_SUNOS)
+#if !defined(CONFIG_SUNOS)
 	int nc;
 
 	offset++;

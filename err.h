@@ -127,6 +127,7 @@
 #undef	DEBUG_ALIAS
 #undef	DEBUG_GLOB
 #undef	DEBUG_LED
+#undef	DEBUG_LSEEK
 #undef	DEBUG_PROC
 
 /*@maynotreturn@*/
