@@ -17,10 +17,11 @@
 :
 
 set N oshdir
+set D /tmp/osh-$u-$$ ; : " preferred OSHDIR ($d) pathname "
 
 : " Check for correct usage. "
 : >>$0'' <'' ; : >>$1'' <'' ; : >>$$'' <''
-if ! { expr //$0 : '.*/\(.*\)' = $N >/dev/null } kill -9 $$
+: if ! { expr //$0 : '.*/\(.*\)' = $N >/dev/null } kill -9 $$
 if $# = 1 -a X$1 = X$$ goto Make
 if $# = 0 -a X$d = X \
 	if { exit }  \
@@ -29,17 +30,20 @@ if $# = 0 goto Check
 
 	fd2 -e echo "usage: source [/path/to/]$N"' $$ (to make)'
 	fd2 -e echo '   or:'
-	fd2 -e echo "usage: $N "'(to check)' ; unset N ; false ; exit
+	fd2 -e echo "usage: $N "'(to check)' ; unset N ; unset D ; false ; exit
 
 : Make
 if X$d != X goto Check
 
-	if ! { mkdir -m 0700 /tmp/osh-$u-$$ } if { exit } false
-	setenv OSHDIR /tmp/osh-$u-$$
+	unset N
+	if ! { mkdir -m 0700 $D } if { exit } false
+	setenv OSHDIR $D
+	unset D
 	: fallthrough
 
 : Check - " And remake the directory if it does not exist. "
 
+	unset N ; unset D
 	if ! -e $d -a ! -h $d if ! { mkdir -m 0700 $d } if { exit } false
 	if ! -d $d -o   -h $d if   { exit } \
 			      fd2 -e echo "oshdir: $d: Not a directory" ; false
