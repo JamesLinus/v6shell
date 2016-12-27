@@ -227,7 +227,7 @@ static	bool		error_source;	/* error flag for `source' command  */
 static	int		hwfd = -1;	/* history write file descriptor    */
 static	bool		is_first;	/* first line flag                  */
 static	bool		is_login;	/* login shell flag                 */
-static	bool		is_verbose;	/* verbose command-line flag for -v */
+static	bool		is_verbose;	/* verbose flag for `-v' & `verbose'*/
 static	char		line[LINEMAX];	/* command-line buffer              */
 static	char		aline[LINEMAX];	/* alias-line buffer                */
 static	char		*linep;		/* [a]line pointer                  */
@@ -2067,8 +2067,8 @@ execute1(struct tnode *t)
 
 	case SBI_VERBOSE:
 		/*
-		 * Set the global is_verbose command-line flag to true,
-		 * false, or print its current value.
+		 * Set the global is_verbose flag to true or false,
+		 * or print its current value.
 		 *
 		 * usage: verbose [true | false]
 		 */
