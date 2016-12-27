@@ -16,12 +16,12 @@
 : "  usage: oshdir (to check)                      "
 :
 
-set N oshdir
+: " Script initialization                                 "
 set D /tmp/osh-$u-$$ ; : " preferred OSHDIR ($d) pathname "
+set N oshdir         ; : " script name                    "
 
 : " Check for correct usage. "
 : >>$0'' <'' ; : >>$1'' <'' ; : >>$$'' <''
-: if ! { expr //$0 : '.*/\(.*\)' = $N >/dev/null } kill -9 $$
 if $# = 1 -a X$1 = X$$ goto Make
 if $# = 0 -a X$d = X \
 	if { exit }  \
