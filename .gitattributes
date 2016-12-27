@@ -2,5 +2,6 @@
 mkconfig ident
 *.[1ch] ident
 examples/*osh* -ident
+libexec.osh/* ident
 tests/[ist]* -ident
 tests/run* -ident
