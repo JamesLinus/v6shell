@@ -8,15 +8,17 @@
 : "  hereby grants it to the public domain.                               "
 :
 
-trap '' 13 ; umask 77
-
-set	H	$h/.osh.history
-set	N	history
+: " Script initialization "
+trap	''	13
+umask	77
+set	H	$h/.osh.history	; : " user's osh history file "
+set	N	history		; : " script name             "
 : set
 alias	fd2ncat	"fd2 -f /dev/null awk '{ print NR "\"\\t\"" \$0 }'"
 alias	ncat	"awk '{ print NR "\"\\t\"" \$0 }'"
 : alias
 
+: " Check for correct usage. "
 : >>$0'' <'' ; : >>$1'' <'' ; : >>$2'' <''
 if ! { expr //$0 : '.*/\(.*\)' = $N >/dev/null } kill -9 $$
 if \( \
@@ -24,7 +26,6 @@ if \( \
    \) -a ! \( \
 	-f $H -a -r $H -a -w $H \
    \) if { exit } fd2 -e echo "$N: $H: cannot open" ; false
-
 if $# = 0 goto -a
 if \( \( X$1 = X-c -o X$1 = X-l -o X$1 = X-r \) -a $# = 1 \) -o \
    \( \( X$1 = X-n -o X$1 = X-p              \) -a $# = 2 -a X$2 != X \) goto $1
@@ -43,7 +44,7 @@ echo "usage: $N [-c | -h | -l | -n number1[,number2] | -p pattern | -r]" ; false
 	( : ) >$H ; exit
 
 : -h
-	fd2 -e echo "$N: Formatting history help..."
+	fd2 -e echo "$N: Paging history help..."
 	if ! { printenv PAGER } goto more-s >/dev/null
 	printenv PAGER | wc -c | tr -d ' \t' | grep '^1$' >/dev/null
 	if $? = 0 goto more-s
