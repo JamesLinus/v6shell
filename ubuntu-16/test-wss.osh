@@ -1,0 +1,9 @@
+#!/usr/bin/env osh
+:
+: osh - w/ shell sequence
+:
+echo 1
+goto label
+echo 2
+: label
+echo 3

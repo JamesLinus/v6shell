@@ -1,0 +1,14 @@
+These 3 scripts allow comparison between osh & sh6 to see exactly
+where Ubuntu 16.xx fails.  Notice that osh (and its built-in goto)
+works fine on Ubuntu 16.xx, but sh6 (and its external goto) does
+not.  In short, Ubuntu 16.xx loses the correct offset set by goto
+(the child process) on the standard input for some reason.  Then,
+when control returns to sh6 (the parent process), it has the wrong
+offset and cannot succeed.  This originally pointed to a problem
+with fork(2) / lseek(2) / execve(2), but a comparison between
+osh & sh6 indicates that it's specifically a problem with the
+standard-input offset and the following transition:
+
+	child process <-> execve(2) <-> parent process
+
+.
