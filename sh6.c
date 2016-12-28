@@ -942,10 +942,8 @@ execute(struct tnode *t, int *pin, int *pout)
 #ifdef	DEBUG
 #ifdef	DEBUG_LSEEK
 			if (cmd != NULL && EQUAL(cmd, "goto")) {
-				fd_print(FD2,
-				    "%s : current offset == %zd, cpid == %u;\n",
-				    __func__, lseek(FD0, (off_t)0, SEEK_CUR),
-				    (unsigned)cpid);
+				fd_print(FD2, "%s : current offset == %zd;\n",
+				    __func__, lseek(FD0, (off_t)0, SEEK_CUR));
 				debug_lseek = true;
 			}
 #endif

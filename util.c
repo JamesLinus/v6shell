@@ -269,9 +269,21 @@ sbi_goto(int argc, char **argv)
 	while (getlabel(label, *argv[1] & 0377, siz))
 		if (strcmp(label, argv[1]) == 0) {
 			(void)lseek(FD0, offset, SEEK_SET);
+#ifdef	DEBUG
+#ifdef	DEBUG_LSEEK
+			fd_print(FD2, "goto    : current offset == %zd;\n",
+			    lseek(FD0, (off_t)0, SEEK_CUR));
+#endif
+#endif
 			return SH_TRUE;
 		}
 
+#ifdef	DEBUG
+#ifdef	DEBUG_LSEEK
+	fd_print(FD2, "goto    : current offset == %zd;\n",
+	    lseek(FD0, (off_t)0, SEEK_CUR));
+#endif
+#endif
 	fd_print(FD2, FMT3S, getmyname(), argv[1], ERR_LABNOTFOUND);
 	return SH_FALSE;
 }

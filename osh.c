@@ -214,6 +214,11 @@ static	const char *const sigmsg[] = {
 
 /*@null@*/
 static	const char	*argv2p;	/* string for `-c' option           */
+#ifdef	DEBUG
+#ifdef	DEBUG_LSEEK
+static	bool		debug_lseek;	/* debug flag for osh & goto        */
+#endif
+#endif
 static	int		dolac;		/* $* dollar-argument count         */
 static	char		dolbuf[DOLMAX];	/* dollar buffer for $$, $#, $?, $v */
 static	int		dolc;		/* $N dollar-argument count         */
@@ -566,6 +571,17 @@ rpx_line(void)
 	error_message = NULL;
 	nul_count = 0;
 	tree_count = 0;
+
+#ifdef	DEBUG
+#ifdef	DEBUG_LSEEK
+	if (debug_lseek) {
+		fd_print(FD2, "%s: current offset == %zd;\n",
+		    __func__, lseek(FD0, (off_t)0, SEEK_CUR));
+		debug_lseek = false;
+	}
+#endif
+#endif
+
 	do {
 		wp = linep;
 		if (get_word() == EOF)
@@ -1713,8 +1729,18 @@ execute(struct tnode *t, int *pin, int *pout)
 			t->nflags |= FNOFORK;
 			(void)sasignal(SIGCHLD, SIG_IGN);
 			break;
+#if defined(DEBUG) && defined(DEBUG_LSEEK)
+		case SBI_GOTO:
+			fd_print(FD2, "%s : current offset == %zd;\n",
+			    __func__, lseek(FD0, (off_t)0, SEEK_CUR));
+			debug_lseek = true;
+			break;
+		case SBI_FD2: case SBI_IF: case SBI_UNKNOWN:
+			break;
+#else
 		case SBI_FD2: case SBI_GOTO: case SBI_IF: case SBI_UNKNOWN:
 			break;
+#endif
 		default:
 			execute1(t);
 			return;

@@ -112,9 +112,8 @@ main(int argc, char **argv)
 #endif
 #ifdef	DEBUG
 #ifdef	DEBUG_LSEEK
-			fd_print(FD2,
-			    "goto    : current offset == %zd,  pid == %d;\n",
-			    lseek(FD0, (off_t)0, SEEK_CUR), getmypid());
+			fd_print(FD2, "goto    : current offset == %zd;\n",
+			    lseek(FD0, (off_t)0, SEEK_CUR));
 #endif
 #endif
 			return SH_TRUE;
@@ -122,8 +121,8 @@ main(int argc, char **argv)
 
 #ifdef	DEBUG
 #ifdef	DEBUG_LSEEK
-	fd_print(FD2, "goto    : current offset == %zd,  pid == %d;\n",
-	    lseek(FD0, (off_t)0, SEEK_CUR), getmypid());
+	fd_print(FD2, "goto    : current offset == %zd;\n",
+	    lseek(FD0, (off_t)0, SEEK_CUR));
 #endif
 #endif
 	fd_print(FD2, FMT3S, getmyname(), argv[1], ERR_LABNOTFOUND);
