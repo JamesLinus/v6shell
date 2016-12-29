@@ -1,0 +1,8 @@
+:
+: osh/sh6 - w/o shell sequence + w/ label not found error
+:
+echo 1
+goto 0x0_label_0x9
+echo 2
+: label
+echo 3

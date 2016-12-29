@@ -1,4 +1,4 @@
-These 3 scripts allow comparison between osh & sh6 to see exactly
+These 6 scripts allow comparison between osh & sh6 to see exactly
 where Ubuntu 16.xx fails.  Notice that osh (and its built-in goto)
 works fine on Ubuntu 16.xx, but sh6 (and its external goto) does
 not.  In short, Ubuntu 16.xx loses the correct offset set by goto
