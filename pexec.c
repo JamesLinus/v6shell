@@ -181,6 +181,7 @@ exec_pathname:
 			(void)memcpy(&esh_argv[2],&argv[1],cnt*sizeof(char *));
 			(void)execve(esh, (char *const *)esh_argv, environ);
 			free(esh_argv);
+			esh_argv = NULL;
 			errno = (errno == E2BIG) ? E2BIG : ENOEXEC;
 			/*FALLTHROUGH*/
 		default:
