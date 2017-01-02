@@ -1,0 +1,30 @@
+#!/usr/bin/env osh
+:
+: " Force sh(1), csh(1), and other shells to exit w/ error! " <'' ;;;
+:
+: osh - w/ shell sequence + sh6 external "goto" == 'goto' == goto
+:
+
+: >>$1'' <''
+if ! \( X$1 = X\"goto\" -o X$1 = X\'goto\' -o X$1 = Xgoto \) \
+	if { fd2 -e echo error } \
+		if { exit } false
+
+( \
+   echo -n 'if "' ; \
+   fd2 -f/dev/null which goto | tr -d '\n' ; \
+   echo -n '" = "' ; \
+   strings ../sh6 | grep goto | tr -d '\n' ; \
+   echo -n '" ' ; \
+   echo 'if { echo Notice below that \"goto\" == '"\'goto\' == goto. } exit" ; \
+   echo 'fd2 -e echo error ; false' \
+) >gigig-$$
+
+: fd2 -e cat ./gigig-$$ ; source ./gigig-$$ ; rm -f gigig-$$
+
+verbose true
+echo 1
+$1 label
+echo 2
+: label
+echo 3
