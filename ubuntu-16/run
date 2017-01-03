@@ -21,15 +21,12 @@ trap '' 1 2 3 13 15 ; : trap
 umask 22 ; : umask
 
 : >>$0'' <'' ; : >>$1'' <''
-: verbose true
 if X$u = Xroot if { fd2 -e echo "$0: Not recommended to run as superuser" } \
 	if { exit } false
 if X$0 != Xrun -a X$0 != X./run if { fd2 -e echo "$0: Wrong directory" } \
 	if { exit } false
 if ! \( $# -eq 0 -o \( $# -eq 1 -a X"$1" = X"-log" \) \) \
 	if { fd2 -e echo "usage: $0 [-log]" } if { exit } false
-: verbose false
-fd2 -e echo ---- \$# == $#\; \$1 == \"$1\"\; ----
 
 which osh >/dev/null
 if $? -ne 0 if { exit } false
@@ -38,7 +35,7 @@ if $? -ne 0 if { fd2 -e echo "$0: osh-current required" } if { exit } false
 
 set D "run-tmp-$$"
 if ! { mkdir "$D" } if { exit } false
-: fd2 -e echo "---- tmp dir == $D ----"
+: fd2 -e echo "==== tmp dir == $D ===="
 
 ( echo -n 'set R "' ; pwd | sed 's,/*$,, ; s,[^/]*$,, ; s,/*$,,' | tr -d '\n' ; echo '"' ) >$D/R
 source ./$D/R
@@ -55,60 +52,69 @@ if $? -eq 0 goto NoPathModNeeded
 if X$1 = X goto NoLogging
 	set L "run-log-$$"
 	if ! { mkdir "$L" } if { exit } false
-	fd2 -e echo "---- log dir == $L ----"
+	fd2 -e echo "==== log dir == $L ===="
 	fd2 -e echo
 : NoLogging
 
 echo 'set O "$R/osh"' >$D/O
 source ./$D/O
-: fd2 -e echo $O
-
 echo 'set S "$R/sh6"' >$D/S
 source ./$D/S
-: fd2 -e echo $S
-: fd2 -e echo
 
-: which osh
-: which sh6
-
+:
+: " Run ./test-woss(+lnferr) w/ EXECSHELL set to (osh|sh6) "
+:
 set E $e
-echo \$E == $E, \$e == $e
 setenv EXECSHELL $O
 echo EXECSHELL=$e
+fd2 -e echo ==== Run ./test-woss w/ EXECSHELL set to osh ====
 ./test-woss
-fd2 -e echo "status == $?;"
+fd2 -e echo "==== status == $?;"
+fd2 -e echo ==== ... ./test-woss+lnferr ... ====
 ./test-woss+lnferr
-fd2 -e echo "status == $?;"
+fd2 -e echo "==== status == $?;"
 fd2 -e echo
 setenv EXECSHELL $S
 echo EXECSHELL=$e
-./test-woss
-fd2 -e echo "status == $?;"
+fd2 -e echo ==== Run ./test-woss w/ EXECSHELL set to sh6 ====
+if { ./test-woss }
+fd2 -e echo "==== status == $?;"
+fd2 -e echo ==== ... ./test-woss+lnferr ... ====
 ./test-woss+lnferr
-fd2 -e echo "status == $?;"
+fd2 -e echo "==== status == $?; ===="
 setenv EXECSHELL $E
 echo EXECSHELL=$e
 fd2 -e echo
 
+:
+: " Run ./test-wss(+lnferr).(osh|sh6) w/ (osh|sh6) "
+:
+fd2 -e echo ==== Run ./test-wss.osh w/ osh ====
 ./test-wss.osh
-fd2 -e echo "status == $?;"
+fd2 -e echo "==== status == $?; ===="
+fd2 -e echo ==== ... ./test-wss+lnferr.osh ... ====
 ./test-wss+lnferr.osh
-fd2 -e echo "status == $?;"
+fd2 -e echo "==== status == $?; ===="
 fd2 -e echo
-./test-wss.sh6
-fd2 -e echo "status == $?;"
+fd2 -e echo ==== Run ./test-wss.sh6 w/ sh6 ====
+if { ./test-wss.sh6 }
+fd2 -e echo "==== status == $?; ===="
+fd2 -e echo ==== ... ./test-wss+lnferr.sh6 ... ====
 ./test-wss+lnferr.sh6
-fd2 -e echo "status == $?;"
+fd2 -e echo "==== status == $?; ===="
 fd2 -e echo
 
+:
+: " Run ./test-wss+sh6-ext-gigig.osh ('"goto"'|"'goto'"|goto) "
+:
+fd2 -e echo ==== Run ./test-wss+sh6-ext-gigig.osh '"goto"' ====
 if { ./test-wss+sh6-ext-gigig.osh '"goto"' }
-fd2 -e echo "status == $?;"
+fd2 -e echo "==== status == $?; ===="
+fd2 -e echo ==== Run ./test-wss+sh6-ext-gigig.osh "'goto'" ====
 if { ./test-wss+sh6-ext-gigig.osh "'goto'" }
-fd2 -e echo "status == $?;"
+fd2 -e echo "==== status == $?; ===="
+fd2 -e echo ==== Run ./test-wss+sh6-ext-gigig.osh goto ====
 if { ./test-wss+sh6-ext-gigig.osh goto }
-fd2 -e echo "status == $?;"
-
-: fd2 -e echo
-: set
+fd2 -e echo "==== status == $?; ===="
 
 rm -rf $D
