@@ -9,9 +9,6 @@
 :
 
 :
-: "  Exit w/ zero status (true) when all tests pass.       "
-: "  Exit w/ non-zero status (false) when any tests fail.  "
-:
 : "  usage: ./run [-log]  "
 :
 
@@ -62,58 +59,59 @@ echo 'set S "$R/sh6"' >$D/S
 source ./$D/S
 
 :
-: " Run ./test-woss(+lnferr) w/ EXECSHELL set to (osh|sh6) "
+: " ./test-woss(+lnferr) w/ EXECSHELL set to (osh|sh6) "
 :
-set E $e
-setenv EXECSHELL $O
-echo EXECSHELL=$e
-fd2 -e echo ==== Run ./test-woss w/ EXECSHELL set to osh ====
+set E "$e"
+setenv EXECSHELL "$O"
+fd2 -e echo "EXECSHELL=$e"
+fd2 -e echo '==== ./test-woss w/ EXECSHELL set to osh ===='
 ./test-woss
-fd2 -e echo "==== status == $?;"
-fd2 -e echo ==== ... ./test-woss+lnferr ... ====
-./test-woss+lnferr
-fd2 -e echo "==== status == $?;"
-fd2 -e echo
-setenv EXECSHELL $S
-echo EXECSHELL=$e
-fd2 -e echo ==== Run ./test-woss w/ EXECSHELL set to sh6 ====
-if { ./test-woss }
-fd2 -e echo "==== status == $?;"
-fd2 -e echo ==== ... ./test-woss+lnferr ... ====
+fd2 -e echo "==== status == $?; ===="
+fd2 -e echo '==== ./test-woss+lnferr ... ===='
 ./test-woss+lnferr
 fd2 -e echo "==== status == $?; ===="
-setenv EXECSHELL $E
-echo EXECSHELL=$e
+fd2 -e echo
+setenv EXECSHELL "$S"
+fd2 -e echo "EXECSHELL=$e"
+fd2 -e echo '==== ./test-woss w/ EXECSHELL set to sh6 ===='
+if { ./test-woss }
+fd2 -e echo "==== status == $?; ===="
+fd2 -e echo '==== ./test-woss+lnferr ... ===='
+./test-woss+lnferr
+fd2 -e echo "==== status == $?; ===="
+setenv EXECSHELL "$E"
+fd2 -e echo "EXECSHELL=$e"
 fd2 -e echo
 
 :
-: " Run ./test-wss(+lnferr).(osh|sh6) w/ (osh|sh6) "
+: " ./test-wss(+lnferr).(osh|sh6) w/ (osh|sh6) "
 :
-fd2 -e echo ==== Run ./test-wss.osh w/ osh ====
+fd2 -e echo '==== ./test-wss.osh w/ osh ===='
 ./test-wss.osh
 fd2 -e echo "==== status == $?; ===="
-fd2 -e echo ==== ... ./test-wss+lnferr.osh ... ====
+fd2 -e echo '==== ./test-wss+lnferr.osh ... ===='
 ./test-wss+lnferr.osh
 fd2 -e echo "==== status == $?; ===="
 fd2 -e echo
-fd2 -e echo ==== Run ./test-wss.sh6 w/ sh6 ====
+fd2 -e echo '==== ./test-wss.sh6 w/ sh6 ===='
+: if { ktrace -f test-wss.sh6+ktrace.out -i -tc ./test-wss.sh6 }
 if { ./test-wss.sh6 }
 fd2 -e echo "==== status == $?; ===="
-fd2 -e echo ==== ... ./test-wss+lnferr.sh6 ... ====
+fd2 -e echo '==== ./test-wss+lnferr.sh6 ... ===='
 ./test-wss+lnferr.sh6
 fd2 -e echo "==== status == $?; ===="
 fd2 -e echo
 
 :
-: " Run ./test-wss+sh6-ext-gigig.osh ('"goto"'|"'goto'"|goto) "
+: " ./test-wss+sh6-ext-gigig.osh ('"goto"'|"'goto'"|goto) "
 :
-fd2 -e echo ==== Run ./test-wss+sh6-ext-gigig.osh '"goto"' ====
+fd2 -e echo '==== ./test-wss+sh6-ext-gigig.osh ''"goto"'' ===='
 if { ./test-wss+sh6-ext-gigig.osh '"goto"' }
 fd2 -e echo "==== status == $?; ===="
-fd2 -e echo ==== Run ./test-wss+sh6-ext-gigig.osh "'goto'" ====
+fd2 -e echo '==== ./test-wss+sh6-ext-gigig.osh '"'goto'"' ===='
 if { ./test-wss+sh6-ext-gigig.osh "'goto'" }
 fd2 -e echo "==== status == $?; ===="
-fd2 -e echo ==== Run ./test-wss+sh6-ext-gigig.osh goto ====
+fd2 -e echo '==== ./test-wss+sh6-ext-gigig.osh goto ===='
 if { ./test-wss+sh6-ext-gigig.osh goto }
 fd2 -e echo "==== status == $?; ===="
 
