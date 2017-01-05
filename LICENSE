@@ -2,7 +2,7 @@
 Osh is hereby distributed under the following license:
 
 /*-
- * Copyright (c) 2003-2016
+ * Copyright (c) 2003-2017
  *	Jeffrey Allen Neitzel <jan (at) v6shell (dot) org>.
  *	All rights reserved.
  *
@@ -229,6 +229,6 @@ of the OpenBSD project.  The original license follows:
  */
 ===
 
-Jeffrey Allen Neitzel						2016/01/07
+Jeffrey Allen Neitzel						2017/01/05
 
 @(#)$Id$
