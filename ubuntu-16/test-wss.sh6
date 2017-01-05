@@ -3,7 +3,9 @@
 : sh6 - w/ shell sequence
 :
 echo 1
-goto label
+: goto label
+: ktrace -o test-wss.sh6got+ktrace.out goto label
+strace -o test-wss.sh6got+strace.out goto label
 echo 2
 : label
 echo 3

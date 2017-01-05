@@ -95,7 +95,8 @@ fd2 -e echo "==== status == $?; ===="
 fd2 -e echo
 fd2 -e echo '==== ./test-wss.sh6 w/ sh6 ===='
 : if { ktrace -f test-wss.sh6+ktrace.out -i -tc ./test-wss.sh6 }
-if { ./test-wss.sh6 }
+: if { ./test-wss.sh6 }
+if { strace -o test-wss.sh6+strace.out ./test-wss.sh6 }
 fd2 -e echo "==== status == $?; ===="
 fd2 -e echo '==== ./test-wss+lnferr.sh6 ... ===='
 ./test-wss+lnferr.sh6
