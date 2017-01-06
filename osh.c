@@ -2,7 +2,7 @@
  * osh.c - an enhanced port of the Sixth Edition (V6) UNIX Thompson shell
  */
 /*-
- * Copyright (c) 2004-2016
+ * Copyright (c) 2004-2017
  *	Jeffrey Allen Neitzel <jan (at) v6shell (dot) org>.
  *	All rights reserved.
  *
@@ -343,6 +343,7 @@ static	char		*xstrdup(const char *);
  *	osh - old shell (command interpreter)
  *
  * SYNOPSIS
+ *	osh -V
  *	osh [-v] [- | -c [string] | -i | -l | -t | file [arg1 ...]]
  *
  * DESCRIPTION
@@ -361,6 +362,12 @@ main(int argc, char **argv)
 	if (fd_type(FD0, FD_ISDIR))
 		goto done;
 
+	if (argc == 2 && *argv[1] == HYPHEN && argv[1][1] == 'V') {
+		version:
+		fd_print(FD1, "%s (%s)\n", OSH_VERSION, OSH_UNAME_SRM);
+		status = SH_TRUE;
+		goto done;
+	}
 	if (argc > 1 && *argv[1] == HYPHEN && argv[1][1] == 'v') {
 		is_verbose = true;
 		av0p = argv[0], argv = &argv[1], argv[0] = av0p;
@@ -394,6 +401,12 @@ main(int argc, char **argv)
 			} else if (argv[1][1] == 't') {
 				shtype  = ST_ONELINE;
 				no_lnum = true;
+			} else if (argv[1][1] == 'V') {
+				/*
+				 * Osh has no such thing as a usage error,
+				 * but this would be one.
+				 */
+				goto version;
 			}
 		} else {
 			shtype = ST_COMMANDFILE;

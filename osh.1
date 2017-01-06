@@ -101,6 +101,9 @@
 osh \- old shell (command interpreter)
 .SH SYNOPSIS
 .B osh
+.B \-V
+.br
+.B osh
 [\fB\-v\fR]
 [\fB\-\fR |
 \fB\-c\fR [\fIstring\fR] |
@@ -173,12 +176,17 @@ from the standard input,
 executes it,
 and exits.
 .TP
+.B \-V
+(+)
+The shell prints its version and build system
+to the standard output and exits.
+.TP
 .B \-v
 (+)
-The shell is verbose and prints words
-of each command line to standard error,
+The shell is verbose and prints the words
+of each command line to the standard error,
 after performing parameter substitution
-and word splitting
+and word splitting,
 but before executing the resulting command line.
 .PP
 The shell may also be invoked non-interactively
