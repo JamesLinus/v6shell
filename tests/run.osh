@@ -10,7 +10,7 @@
 : "  Exit w/ zero status (true) when all tests pass.       "
 : "  Exit w/ non-zero status (false) when any tests fail.  "
 :
-: "  usage: ../osh run.osh [-newlog] osh sh6  "
+: "  usage: ../osh run.osh [-newlog] {osh | sh6}  "
 :
 
 : >>$0'' <'' ; : >>$1'' <'' ; : >>$2'' <'' ; : >>$3'' <''
@@ -27,6 +27,8 @@ setenv PATH ..:./bin:$p ; : printenv PATH
 umask 22 ; : umask
 rm -f TestFailCount TestPassCount syntax_error
 ( : ) >TestFailCount ; ( : ) >TestPassCount
+
+set C $#
 
 if $# = 3 -a X$1 = X-newlog -a X$2 = Xosh -a X$3 = Xsh6 goto NewLog
 
@@ -60,15 +62,17 @@ if $# = 3 -a X$1 = X-newlog -a X$2 = Xosh -a X$3 = Xsh6 goto NewLog
 if ! -x ../$1 if { fd2 -e echo $1: Missing or not executable } \
 	if { exit } if A = B
 if X$1 = Xosh goto Jump
+	if \( $C -eq 2 -a $# -eq 2 \) -o \( $C -eq 1 -a $# -eq 1 \) \
+		fd2 -e -- now
 	: which sh6
 	goto Run
 : Jump
+	fd2 -e -- now
 	: which osh
 	: fallthrough
 
 : Run - " Run appropriate tests w/ $1 binary. "
 
-	if $# = 2 fd2 -e -- now
 	fd2 -e -- echo -n Testing $1 binary\ 
 	fd2 $1 test01 | diff -u test01_$1.log -
 	if $? != 0 if { fd2 -e echo $1: Test 1 Failed } echo >>TestFailCount

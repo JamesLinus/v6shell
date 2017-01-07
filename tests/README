@@ -6,7 +6,7 @@ NAME
 	run.osh - run regression test suite with osh and sh6
 
 SYNOPSIS
-	../osh run.osh [-newlog] osh sh6
+	../osh run.osh [-newlog] {osh | sh6}
 
 DESCRIPTION
 	The -newlog option causes run.osh to generate new test logs
@@ -25,6 +25,6 @@ you to contact me via email.  Thanks & Enjoy!
 
 Jeffrey Allen Neitzel
 <jan (at) v6shell (dot) org>
-http://v6shell.org/regression_tests				2016/01/07
+http://v6shell.org/regression_tests				2017/01/07
 
 @(#)$Id$
