@@ -2,10 +2,14 @@
 :
 : sh6 - w/ shell sequence
 :
+if ! \( X$1 = X -o X$1 = Xktrace -o X$1 = Xstrace \) \
+	if { fd2 -e echo usage: $0 '[ktrace | strace]' } if { exit } false
 echo 1
-: goto label
-: ktrace -o test-wss.sh6got+ktrace.out goto label
-strace -o test-wss.sh6got+strace.out goto label
+if X$1 = X goto label
+if X$1 = Xktrace \
+	ktrace -f test-wss.sh6got+ktrace.out -tc goto label
+if X$1 = Xstrace \
+	strace -o test-wss.sh6got+strace.out goto label
 echo 2
 : label
 echo 3

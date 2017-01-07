@@ -9,7 +9,7 @@
 :
 
 :
-: "  usage: ./run [-log]  "
+: "  usage: ./run [ktrace | strace]  "
 :
 
 unsetenv LANG ; setenv LC_ALL C ; setenv POSIXLY_CORRECT ''
@@ -22,8 +22,11 @@ if X$u = Xroot if { fd2 -e echo "$0: Not recommended to run as superuser" } \
 	if { exit } false
 if X$0 != Xrun -a X$0 != X./run if { fd2 -e echo "$0: Wrong directory" } \
 	if { exit } false
-if ! \( $# -eq 0 -o \( $# -eq 1 -a X"$1" = X"-log" \) \) \
-	if { fd2 -e echo "usage: $0 [-log]" } if { exit } false
+if ! \( $# -eq 0 -o \
+	\( $# -eq 1 -a \
+	   \( X"$1" = X"ktrace" -o X"$1" = X"strace" \) \
+	\) \
+      \) if { fd2 -e echo "usage: $0 [ktrace | strace]" } if { exit } false
 
 which osh >/dev/null
 if $? -ne 0 if { exit } false
@@ -45,13 +48,6 @@ if $? -eq 0 goto NoPathModNeeded
 	fd2 -e echo $p
 	: fallthrough
 : NoPathModNeeded
-
-if X$1 = X goto NoLogging
-	set L "run-log-$$"
-	if ! { mkdir "$L" } if { exit } false
-	fd2 -e echo "==== log dir == $L ===="
-	fd2 -e echo
-: NoLogging
 
 echo 'set O "$R/osh"' >$D/O
 source ./$D/O
@@ -94,10 +90,17 @@ fd2 -e echo '==== ./test-wss+lnferr.osh ... ===='
 fd2 -e echo "==== status == $?; ===="
 fd2 -e echo
 fd2 -e echo '==== ./test-wss.sh6 w/ sh6 ===='
-: if { ktrace -f test-wss.sh6+ktrace.out -i -tc ./test-wss.sh6 }
-: if { ./test-wss.sh6 }
-if { strace -o test-wss.sh6+strace.out ./test-wss.sh6 }
-fd2 -e echo "==== status == $?; ===="
+set A -1 ; set B -1 ; set C -1
+if $# -eq 0 if { ./test-wss.sh6 }
+set A $?
+if $# -eq 1 -a X"$1" = X"ktrace" \
+	if { ktrace -f test-wss.sh6+ktrace.out -i -tc ./test-wss.sh6 ktrace }
+set B $?
+if $# -eq 1 -a X"$1" = X"strace" \
+	if { strace -o test-wss.sh6+strace.out ./test-wss.sh6 strace }
+set C $?
+fd2 -e echo "==== status == $A, $B, $C; ===="
+unset A ; unset B ; unset C
 fd2 -e echo '==== ./test-wss+lnferr.sh6 ... ===='
 ./test-wss+lnferr.sh6
 fd2 -e echo "==== status == $?; ===="

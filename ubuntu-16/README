@@ -1,14 +1,48 @@
-These 6 scripts allow comparison between osh & sh6 to see exactly
-where Ubuntu 16.xx fails.  Notice that osh (and its built-in goto)
-works fine on Ubuntu 16.xx, but sh6 (and its external goto) does
-not.  In short, Ubuntu 16.xx loses the correct offset set by goto
-(the child process) on the standard input for some reason.  Then,
-when control returns to sh6 (the parent process), it has the wrong
-offset and cannot succeed.  This originally pointed to a problem
-with fork(2) / lseek(2) / execve(2), but a comparison between
-osh & sh6 indicates that it's specifically a problem with the
-standard-input offset and the following transition:
+These 8 scripts (see Manifest below) allow comparison between
+osh & sh6 to see exactly where Ubuntu 16.xx fails.  Notice that
+osh (and its built-in goto) works fine on Ubuntu 16.xx, but sh6
+(and its external goto) does not.  In short, Ubuntu 16.xx loses
+the correct offset set by goto (the child process) on the standard
+input for some reason.  Then, when control returns to sh6 (the parent
+process), it has the wrong offset and cannot succeed.  This originally
+pointed to a problem with fork(2) / lseek(2) / execve(2), but a
+comparison between osh & sh6 indicates that it's specifically a
+problem with the standard-input offset and the following transition:
 
 	child process <-> execve(2) <-> parent process
 
-.
+...
+Manifest:
+
+	* run				- control script
+	* test-woss
+	* test-woss+lnferr
+	* test-wss.osh
+	* test-wss+lnferr.osh
+	* test-wss.sh6			- [ktrace | strace]
+	* test-wss+lnferr.sh6
+	* test-wss+sh6-ext-gigig.osh
+
+...
+The test-wss+sh6-ext-gigig.osh script is particularly interesting
+because it illustrates the Ubuntu 16.xx execve(2) offset bug.
+
+	usage: ./run [ktrace | strace]
+
+Invoke ./run to run the tests.  If you get an error such as:
+
+	env: osh: No such file or directory
+
+or:
+
+	/usr/bin/env: 'osh': No such file or directory
+
+...
+when doing so..  Either osh isn't in a directory on your PATH, osh isn't
+installed on your machine, or you haven't built it yet.
+
+Jeffrey Allen Neitzel
+<jan (at) v6shell (dot) org>
+http://v6shell.org/blog/ubuntu-16/				2017/01/07
+
+@(#)$Id$
