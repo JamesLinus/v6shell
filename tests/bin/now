@@ -1,15 +1,13 @@
-#!/usr/bin/env sh6
-:
-: sh6 - " Force sh(1), csh(1), and other shells to exit w/ error! " <'' ;;;
-:
-: "  The author of this file, J.A. Neitzel <jan (at) v6shell (dot) org>,  "
-: "  hereby grants it to the public domain.                               "
-:
+#!/bin/sh -
+#
+# "  The author of this file, J.A. Neitzel <jan (at) v6shell (dot) org>,  "
+# "  hereby grants it to the public domain.                               "
+#
 
-:
-: "  Print the date and time in a nice ISO-like format.  "
-:
-: "  usage: now  "
-:
+#
+# "  Print the date and time in a nice ISO-like format.  "
+#
+# "  usage: now  "
+#
 
 date '+%A, %Y-%m-%d, %T %Z'
