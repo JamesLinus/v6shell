@@ -5,7 +5,7 @@
 : "  The author of this file, J.A. Neitzel <jan (at) v6shell (dot) org>,  "
 : "  hereby grants it to the public domain.                               "
 :
-: "  From:  http://v6shell.org/...  "
+: "  From:  http://v6shell.org/ubuntu-16/run  "
 :
 
 :
@@ -30,29 +30,33 @@ if ! \( $# -eq 0 -o \
 
 which osh >/dev/null
 if $? -ne 0 if { exit } false
-echo $v | grep '^osh-current$' >/dev/null
-if $? -ne 0 if { fd2 -e echo "$0: osh-current required" } if { exit } false
+echo $v | egrep '^(osh-current|osh-4.3.0-test1|osh-4.3.0)$' >/dev/null
+if $? -ne 0 \
+  if { fd2 -e echo "$0: osh-current, osh-4.3.0-test1, or osh-4.3.0 required" } \
+    if { exit } false
 
 set D "run-tmp-$$"
 if ! { mkdir "$D" } if { exit } false
 : fd2 -e echo "==== tmp dir == $D ===="
-
-( echo -n 'set R "' ; pwd | sed 's,/*$,, ; s,[^/]*$,, ; s,/*$,,' | tr -d '\n' ; echo '"' ) >$D/R
+: fd2 -e echo
+( \
+  echo -n 'set R "' ; \
+  pwd | sed 's,/*$,, ; s,[^/]*$,, ; s,/*$,,' | tr -d '\n' ; \
+  echo '"' \
+) >$D/R
 source ./$D/R
-: fd2 -e echo $R
-
 echo $p | grep "^$R:" >/dev/null
 if $? -eq 0 goto NoPathModNeeded
 	echo 'setenv PATH "$R:$p"' >$D/PATH
 	source ./$D/PATH
-	fd2 -e echo $p
+	: fd2 -e echo "PATH=$p"
+	: fd2 -e echo
 	: fallthrough
 : NoPathModNeeded
-
-echo 'set O "$R/osh"' >$D/O
-source ./$D/O
-echo 'set S "$R/sh6"' >$D/S
-source ./$D/S
+	echo 'set O "$R/osh"' >$D/O
+	source ./$D/O
+	echo 'set S "$R/sh6"' >$D/S
+	source ./$D/S
 
 :
 : " ./test-woss(+lnferr) w/ EXECSHELL set to (osh|sh6) "
@@ -66,7 +70,6 @@ fd2 -e echo "==== status == $?; ===="
 fd2 -e echo '==== ./test-woss+lnferr ... ===='
 ./test-woss+lnferr
 fd2 -e echo "==== status == $?; ===="
-fd2 -e echo
 setenv EXECSHELL "$S"
 fd2 -e echo "EXECSHELL=$e"
 fd2 -e echo '==== ./test-woss w/ EXECSHELL set to sh6 ===='
