@@ -102,9 +102,7 @@ Linux)
 	if test $? -eq 0 ; then
 		# Ubuntu 16.xx
 		( \
-			echo '/*' ; \
 			echo '#define	CONFIG_UBUNTU_16' ; \
-			echo ' */' ; \
 			echo \
 		) >>$CONFIG_H
 	fi
