@@ -1,0 +1,10 @@
+execve("/home/jan/src/osh-current/goto", ["goto", "label"], [/* 28 vars */]) = 0
+...
+getpid()                                = 10353
+ioctl(0, TCGETS, 0x7ffda82d74c0)        = -1 ENOTTY (Inappropriate ioctl for device)
+lseek(0, 0, SEEK_SET)                   = 0
+...
+lseek(0, 356, SEEK_SET)                 = 356
+lseek(0, -7, SEEK_CUR)                  = 349
+exit_group(0)                           = ?
++++ exited with 0 +++

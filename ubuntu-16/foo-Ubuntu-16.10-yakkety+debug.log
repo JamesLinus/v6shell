@@ -1,0 +1,8 @@
+1
+execute : current offset == 35;
+goto    : current offset == 68;
+rpx_line: current offset == 61;
+err_pexec: strerror(errno) == No such file or directory;
+be: not found
+sh_errexit: getmypid() == 20134, es == 127;
+sh_errexit: getmypid() == 20134, es == 127;
