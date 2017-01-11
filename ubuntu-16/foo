@@ -1,0 +1,6 @@
+#!/usr/bin/env sh6
+echo 1
+goto foo
+echo 2
+: foo - offset will be 68
+echo 3
