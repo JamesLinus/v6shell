@@ -35,7 +35,8 @@ if $? -ne 0 \
   if { fd2 -e echo "$0: osh-current, osh-4.3.0-test1, or osh-4.3.0 required" } \
     if { exit } false
 
-set D "run-tmp-$$"
+set o "out"       ;: "outdir for [ks]trace runs (preexisting)"
+set D "run-tmp-$$";: "tmpdir for this test run"
 if ! { mkdir "$D" } if { exit } false
 : fd2 -e echo "==== tmp dir == $D ===="
 : fd2 -e echo
@@ -97,10 +98,10 @@ set A -1 ; set B -1 ; set C -1
 if $# -eq 0 if { ./test-wss.sh6 }
 set A $?
 if $# -eq 1 -a X"$1" = X"ktrace" \
-	if { ktrace -f test-wss.sh6+ktrace.out -i -tc ./test-wss.sh6 ktrace }
+	if { ktrace -f $o/test-wss.sh6+ktrace.out -i -tc ./test-wss.sh6 ktrace }
 set B $?
 if $# -eq 1 -a X"$1" = X"strace" \
-	if { strace -o test-wss.sh6+strace.out ./test-wss.sh6 strace }
+	if { strace -o $o/test-wss.sh6+strace.out ./test-wss.sh6 strace }
 set C $?
 fd2 -e echo "==== status == $A, $B, $C; ===="
 unset A ; unset B ; unset C

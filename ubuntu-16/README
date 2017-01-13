@@ -23,6 +23,8 @@ Manifest:
 	* test-wss+lnferr.sh6
 	* test-wss+sh6-ext-gigig.osh
 	* foo
+	* log/				- logdir for test runs
+	* out/				- outdir for [ks]trace runs
 
 ...
 The test-wss+sh6-ext-gigig.osh script is particularly interesting
@@ -45,6 +47,6 @@ installed on your machine, or you haven't built it yet.
 Jeffrey Allen Neitzel
 <jan (at) v6shell (dot) org>
 http://v6shell.org/ubuntu-16
-http://v6shell.org/blog/ubuntu-16/				2017/01/11
+http://v6shell.org/blog/ubuntu-16/				2017/01/13
 
 @(#)$Id$
