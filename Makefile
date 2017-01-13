@@ -174,8 +174,12 @@ check: check-pre
 	@( trap '' INT QUIT && cd tests && ../osh run.osh osh sh6 )
 	@$(MAKE) check-post
 
+check-oshall: check-osh
+
 check-osh: $(OSH)
 	@( trap '' INT QUIT && cd tests && ../osh run.osh osh )
+
+check-sh6all: check-sh6
 
 check-sh6: check-pre
 	@( trap '' INT QUIT && cd tests && ../osh run.osh sh6 )
