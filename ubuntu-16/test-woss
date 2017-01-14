@@ -1,8 +1,0 @@
-:
-: osh/sh6 - w/o shell sequence
-:
-echo 1
-goto label
-echo 2
-: label
-echo 3
