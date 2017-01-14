@@ -42,7 +42,7 @@ strtoint(const char *s, long *l)
 	errno = 0;
 	if (s == NULL || l == NULL) {
 		errno = EINVAL;
-		fd_print(FD2, FMT3S, n, "strtoint", strerror(errno));
+		fd_print(FD2, FMT3S, n, __func__, strerror(errno));
 		if (l != NULL)
 			*l = 0;
 		return false;

@@ -1712,7 +1712,7 @@ execute(struct tnode *t, int *pin, int *pout)
 	case TCOMMAND:
 		if (t->nav == NULL || t->nav[0] == NULL) {
 			/* should never (but can) be true */
-			error(-1, "execute: Invalid command");
+			error1(-1, __func__, "Invalid command");
 			return;
 		}
 		if (vtglob(t->nav)) {
@@ -1779,7 +1779,7 @@ execute(struct tnode *t, int *pin, int *pout)
 			if ((f & FPOUT) == 0) {
 #ifdef	DEBUG
 #ifdef	DEBUG_PROC
-				fd_print(FD2, "execute: pwait(%d);\n", cpid);
+				fd_print(FD2,"%s: pwait(%d);\n",__func__,cpid);
 #endif
 #endif
 				pwait(cpid);
@@ -1807,7 +1807,7 @@ execute1(struct tnode *t)
 
 	if (t->nav == NULL || t->nav[0] == NULL) {
 		/* should never (but can) be true */
-		error(-1, "execute1: Invalid command");
+		error1(-1, __func__, "Invalid command");
 		return;
 	}
 	switch (t->nkey) {
@@ -2249,7 +2249,7 @@ execute2(struct tnode *t, int *pin, int *pout)
 	}
 	if (t->nav == NULL || t->nav[0] == NULL) {
 		/* should never (but can) be true */
-		error(FC_ERR, "execute2: Invalid command");
+		error1(FC_ERR, __func__, "Invalid command");
 		/*NOTREACHED*/
 	}
 	if (t->nkey == SBI_UNKNOWN)

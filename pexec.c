@@ -212,7 +212,7 @@ err_pexec(const char *file, char *const *argv)
 
 	(void)pexec(file, argv);
 #ifdef	DEBUG
-	fd_print(FD2, "err_pexec: strerror(errno) == %s;\n", strerror(errno));
+	fd_print(FD2,"%s: strerror(errno) == %s;\n", __func__, strerror(errno));
 #endif
 
 	f = (file == NULL) ? "(null)" : file;

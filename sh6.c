@@ -869,7 +869,7 @@ execute(struct tnode *t, int *pin, int *pout)
 	case TCOMMAND:
 		if (t->nav == NULL || t->nav[0] == NULL) {
 			/* should never (but can) be true */
-			err(SH_ERR, FMT1S, "execute: Invalid command");
+			err(SH_ERR, FMT2S, __func__, "Invalid command");
 			return;
 		}
 		cmd = t->nav[0];
@@ -1026,7 +1026,7 @@ execute(struct tnode *t, int *pin, int *pout)
 			_exit(status);
 		}
 		if (t->nav == NULL || t->nav[0] == NULL)
-			err(FC_ERR, FMT1S, "execute: Invalid command");
+			err(FC_ERR, FMT2S, __func__, "Invalid command");
 		cmd = t->nav[0];
 		glob_flag = false;
 		vscan(t->nav, &tglob);
@@ -1039,7 +1039,7 @@ execute(struct tnode *t, int *pin, int *pout)
 			(void)memcpy(&tav[1], t->nav, (i + 1) * sizeof(char *));
 #ifdef	DEBUG
 #ifdef	DEBUG_GLOB
-			fd_print(FD2, "execute: i == %d;\n", i);
+			fd_print(FD2, "%s: i == %d;\n", __func__, i);
 			for (i = 0; tav[i] != NULL; i++)
 				fd_print(FD2, "tav[%d]==%p==%p==%s;\n",
 				    i, &tav[i], tav[i], tav[i]);
@@ -1062,7 +1062,7 @@ execute(struct tnode *t, int *pin, int *pout)
 			(void)memcpy(&tav[1], &t->nav[1], i * sizeof(char *));
 #ifdef	DEBUG
 #ifdef	DEBUG_LED
-			fd_print(FD2, "execute: i == %d;\n", i);
+			fd_print(FD2, "%s: i == %d;\n", __func__, i);
 			for (i = 0; tav[i] != NULL; i++)
 				fd_print(FD2, "tav[%d]==%p==%p==%s;\n",
 				    i, &tav[i], tav[i], tav[i]);

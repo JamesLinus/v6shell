@@ -171,7 +171,7 @@ gnew(const char **gav)
 		mult *= GAVMULT;
 #ifdef	DEBUG
 #ifdef	DEBUG_GLOB
-		fd_print(FD2, "gnew: mult == %u;\n", mult);
+		fd_print(FD2, "%s: mult == %u;\n", __func__, mult);
 #endif
 #endif
 		gidx  = (ptrdiff_t)(gavp - gav);
@@ -227,7 +227,7 @@ gcat(const char *src1, const char *src2)
 		err(SH_ERR, FMT1S, ERR_E2BIG);
 #ifdef	DEBUG
 #ifdef	DEBUG_GLOB
-	fd_print(FD2, "gcat: siz == %zu, (%p < %p) == %s;\n",
+	fd_print(FD2, "%s: siz == %zu, (%p < %p) == %s;\n", __func__,
 	    siz, b, &buf[PATHMAX], (b < &buf[PATHMAX]) ? "true" : "false");
 	fd_print(FD2, "    : strlen(buf) == %zu;\n", strlen(buf));
 #endif

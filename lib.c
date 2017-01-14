@@ -101,7 +101,7 @@ error(int s, const char *m)
 	long ln;
 
 	if (m == NULL) {
-		err(ESTATUS, FMT3S, getmyname(), "error", strerror(EINVAL));
+		err(ESTATUS, FMT3S, getmyname(), __func__, strerror(EINVAL));
 		/*NOTREACHED*/
 	}
 
@@ -128,7 +128,7 @@ error1(int s, const char *f, const char *m)
 	long ln;
 
 	if (f == NULL || m == NULL) {
-		err(ESTATUS, FMT3S, getmyname(), "error1", strerror(EINVAL));
+		err(ESTATUS, FMT3S, getmyname(), __func__, strerror(EINVAL));
 		/*NOTREACHED*/
 	}
 
@@ -155,7 +155,7 @@ error2(int s, const char *c, const char *a, const char *m)
 	long ln;
 
 	if (c == NULL || a == NULL || m == NULL) {
-		err(ESTATUS, FMT3S, getmyname(), "error2", strerror(EINVAL));
+		err(ESTATUS, FMT3S, getmyname(), __func__, strerror(EINVAL));
 		/*NOTREACHED*/
 	}
 
@@ -408,7 +408,7 @@ gnew(const char **gav)
 		gavmult *= GAVMULT;
 #ifdef	DEBUG
 #ifdef	DEBUG_GLOB
-		fd_print(FD2, "gnew: gavmult == %u;\n", gavmult);
+		fd_print(FD2, "%s: gavmult == %u;\n", __func__, gavmult);
 #endif
 #endif
 		gidx = (ptrdiff_t)(gavp - gav);
@@ -435,7 +435,7 @@ gcat(const char *src1, const char *src2, bool slash)
 
 	if (src1 == NULL || src2 == NULL) {
 		/* never true, but appease splint(1) */
-		error(-2, "gcat: Invalid argument");
+		error1(-2, __func__, "Invalid argument");
 		return NULL;
 	}
 
@@ -469,7 +469,7 @@ gcat(const char *src1, const char *src2, bool slash)
 	}
 #ifdef	DEBUG
 #ifdef	DEBUG_GLOB
-	fd_print(FD2, "gcat: siz == %zu, (%p < %p) == %s;\n",
+	fd_print(FD2, "%s: siz == %zu, (%p < %p) == %s;\n", __func__,
 	    siz, b, &buf[PATHMAX], (b < &buf[PATHMAX]) ? "true" : "false");
 	fd_print(FD2, "    : strlen(buf) == %zu;\n", strlen(buf));
 #endif

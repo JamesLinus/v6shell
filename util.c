@@ -107,7 +107,7 @@ uexec(enum sbikey key, int ac, char **av)
 	case SBI_GOTO:	util = &sbi_goto;	break;
 	case SBI_IF:	util = &sbi_if;		break;
 	default:
-		err(FC_ERR, FMT2S, getmyname(), "uexec: Invalid utility");
+		err(FC_ERR, FMT3S, getmyname(), __func__, "Invalid utility");
 		/*NOTREACHED*/
 		return FC_ERR;
 	}
@@ -121,7 +121,7 @@ uexec(enum sbikey key, int ac, char **av)
 
 #ifdef	DEBUG
 #ifdef	DEBUG_PROC
-	if (cnt == 0) fd_print(FD2, "uexec: return %d;\n", s);
+	if (cnt == 0) fd_print(FD2, "%s: return %d;\n", __func__, s);
 #endif
 #endif
 
