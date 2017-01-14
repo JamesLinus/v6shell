@@ -30,9 +30,9 @@ if ! \( $# -eq 0 -o \
 
 which osh >/dev/null
 if $? -ne 0 if { exit } false
-echo $v | egrep '^(osh-current|osh-4.3.0-test1|osh-4.3.0)$' >/dev/null
+echo $v | egrep '^(osh-current|osh-4.3.0-test[12])$' >/dev/null
 if $? -ne 0 \
-  if { fd2 -e echo "$0: osh-current, osh-4.3.0-test1, or osh-4.3.0 required" } \
+  if { fd2 -e echo "$0: osh-current or osh-4.3.0-test[12] required" } \
     if { exit } false
 
 set o "out"       ;: "outdir for [ks]trace runs (preexisting)"
