@@ -106,11 +106,6 @@ static	const char *const sigmsg[] = {
 static	char		apid[DOLMAX];	/* $$ - ASCII shell process ID      */
 /*@null@*/
 static	const char	*argv2p;	/* string for `-c' option           */
-#ifdef	DEBUG
-#ifdef	DEBUG_LSEEK
-static	bool		debug_lseek;	/* debug flag for sh6 & goto        */
-#endif
-#endif
 static	int		dolc;		/* $N dollar-argument count         */
 /*@null@*/
 static	const char	*dolp;		/* $N and $$ dollar-value pointer   */
@@ -254,16 +249,6 @@ rpx_line(void)
 	error_message = NULL;
 	nul_count = 0;
 	tree_count = 0;
-
-#ifdef	DEBUG
-#ifdef	DEBUG_LSEEK
-	if (debug_lseek) {
-		fd_print(FD2, "%s: current offset == %zd;\n",
-		    __func__, lseek(FD0, (off_t)0, SEEK_CUR));
-		debug_lseek = false;
-	}
-#endif
-#endif
 
 	do {
 		wp = linep;
@@ -939,15 +924,6 @@ execute(struct tnode *t, int *pin, int *pout)
 				fd_print(FD2, "%u\n", (unsigned)cpid);
 			if ((f & FAND) != 0)
 				return;
-#ifdef	DEBUG
-#ifdef	DEBUG_LSEEK
-			if (cmd != NULL && EQUAL(cmd, "goto")) {
-				fd_print(FD2, "%s : current offset == %zd;\n",
-				    __func__, lseek(FD0, (off_t)0, SEEK_CUR));
-				debug_lseek = true;
-			}
-#endif
-#endif
 			if ((f & FPOUT) == 0)
 				pwait(cpid);
 			return;

@@ -110,21 +110,9 @@ main(int argc, char **argv)
 #if !defined(CONFIG_SUNOS)
 			(void)lseek(FD0, offset, SEEK_SET);
 #endif
-#ifdef	DEBUG
-#ifdef	DEBUG_LSEEK
-			fd_print(FD2, "goto    : current offset == %zd;\n",
-			    lseek(FD0, (off_t)0, SEEK_CUR));
-#endif
-#endif
 			return SH_TRUE;
 		}
 
-#ifdef	DEBUG
-#ifdef	DEBUG_LSEEK
-	fd_print(FD2, "goto    : current offset == %zd;\n",
-	    lseek(FD0, (off_t)0, SEEK_CUR));
-#endif
-#endif
 	fd_print(FD2, FMT3S, getmyname(), argv[1], ERR_LABNOTFOUND);
 	return SH_FALSE;
 }
