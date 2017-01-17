@@ -42,11 +42,11 @@ or:
 
 ...
 when doing so..  Either osh isn't in a directory on your PATH, osh isn't
-installed on your machine, or you haven't built it yet.
+installed on your machine, or you haven't built / compiled it yet.
 
 Jeffrey Allen Neitzel
 <jan (at) v6shell (dot) org>
 http://v6shell.org/ubuntu-16
-http://v6shell.org/blog/ubuntu-16/				2017/01/13
+http://v6shell.org/blog/ubuntu-16/				2017/01/17
 
 @(#)$Id$
