@@ -9,7 +9,7 @@ pointed to a problem with fork(2) / lseek(2) / execve(2), but a
 comparison between osh & sh6 indicates that it's specifically a
 problem with the standard-input offset and the following transition:
 
-	child process <-> execve(2) <-> parent process
+	child process (goto) <-> execve(2) <-> parent process (sh6)
 
 ...
 Manifest:
