@@ -67,8 +67,19 @@
 #include "defs.h"
 #include "err.h"
 
-#if defined(CONFIG_UBUNTU_16)
-#error "Ubuntu 16.(04|10): Not supported: see http://v6shell.org/blog/ubuntu-16/"
+#if 0
+# if defined(CONFIG_UBUNTU_16)
+#    error "Ubuntu 16.(04|10): Not supported: see http://v6shell.org/blog/ubuntu-16/"
+     /*
+      * Strictly speaking, goto works fine and sets the correct offset
+      * on the standard input on Ubuntu 16.(04|10).  After it returns
+      * though and sh6 tries to go on its merry way as it always has,
+      * we find that Ubuntu has lost the standard-input offset that
+      * sh6 needs.  Thus, sh6 fails miserably, and osh does too if
+      * invoking this external goto utility, on Ubuntu.  This is an
+      * Ubuntu 16.(04|10) problem, not a problem with sh6 or osh.
+      */
+# endif
 #endif
 
 #if !defined(CONFIG_SUNOS)
