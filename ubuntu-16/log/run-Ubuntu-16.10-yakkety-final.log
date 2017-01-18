@@ -1,0 +1,78 @@
+$ ./run > log/run-Ubuntu-16.10-yakkety-final.log 2>&1
+EXECSHELL=/home/jan/src/v6shell/osh
+==== ./test-woss w/ EXECSHELL set to osh ====
+1
+3
+==== status == 0; ====
+==== ./test-woss+lnferr ... ====
+1
+goto: 0x0_label_0x9: label not found
+==== status == 1; ====
+EXECSHELL=/home/jan/src/v6shell/sh6
+==== ./test-woss w/ EXECSHELL set to sh6 ====
+1
+3
+==== status == 0; ====
+==== ./test-woss+lnferr ... ====
+1
+goto: 0x0_label_0x9: label not found
+==== status == 1; ====
+EXECSHELL=
+
+==== ./test-wss.osh w/ osh ====
+1
+3
+==== status == 0; ====
+==== ./test-wss+lnferr.osh ... ====
+1
+goto: 0x0_label_0x9: label not found
+==== status == 1; ====
+
+==== ./test-wss.sh6 w/ sh6 ====
+1
+3
+==== status == 0, 1, 1; ====
+==== ./test-wss+lnferr.sh6 ... ====
+1
+goto: 0x0_label_0x9: label not found
+==== status == 1; ====
+
+==== ./test-wss+sh6-ext-gigig.osh "goto" ====
+error
+echo 1
+1
+"goto" label
+label
+osh: ./test-wss+sh6-ext-gigig.osh: 29: label: not found
+==== status == 1; ====
+==== ./test-wss+sh6-ext-gigig.osh 'goto' ====
+error
+echo 1
+1
+'goto' label
+label
+osh: ./test-wss+sh6-ext-gigig.osh: 29: label: not found
+==== status == 1; ====
+==== ./test-wss+sh6-ext-gigig.osh goto ====
+error
+echo 1
+1
+goto label
+echo 3
+3
+==== status == 0; ====
+$ which osh sh6 goto
+/home/jan/src/v6shell/osh
+/home/jan/src/v6shell/sh6
+/home/jan/src/v6shell/goto
+$ ll ../osh ../sh6 ../goto
+-rwxr-xr-x 1 jan jan 13888 Jan 16 00:59 ../goto*
+-rwxr-xr-x 1 jan jan 57552 Jan 16 00:59 ../osh*
+lrwxrwxrwx 1 jan jan     3 Jan 16 00:54 ../sh6 -> osh*
+$ osh -V
+osh-4.3.0-test2 (Linux 4.8.0-32-generic x86_64)
+$ cat /etc/lsb-release
+DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=16.10
+DISTRIB_CODENAME=yakkety
+DISTRIB_DESCRIPTION="Ubuntu 16.10"
