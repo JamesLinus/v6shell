@@ -338,7 +338,7 @@ static	char		*xstrdup(const char *);
  *	osh - old shell (command interpreter)
  *
  * SYNOPSIS
- *	osh -V
+ *	osh [-V | -VV]
  *	osh [-v] [- | -c [string] | -i | -l | -t | file [arg1 ...]]
  *
  * DESCRIPTION
@@ -359,8 +359,13 @@ main(int argc, char **argv)
 
 	if (argc == 2 && *argv[1] == HYPHEN && argv[1][1] == 'V') {
 		version:
-		fd_print(FD1, "%s (%s)\n", OSH_VERSION, OSH_UNAME_SRM);
 		status = SH_TRUE;
+		if (argv[1][2] == EOS)
+			fd_print(FD1, FMT1S, OSH_VERSION);
+		else if (argv[1][2] == 'V' && argv[1][3] == EOS)
+			fd_print(FD1, "%s (%s)\n", OSH_VERSION, OSH_UNAME_SRM);
+		else
+			status = SH_ERR;
 		goto done;
 	}
 	if (argc > 1 && *argv[1] == HYPHEN && argv[1][1] == 'v') {
@@ -2099,7 +2104,7 @@ execute1(struct tnode *t)
 			}
 			return;
 		} else if (t->nav[1] == NULL) {
-			fd_print(FD1, "%s\n", is_verbose ? "true" : "false");
+			fd_print(FD1, FMT1S, is_verbose ? "true" : "false");
 			status = is_verbose ? SH_TRUE : SH_FALSE;
 			return;
 		}
