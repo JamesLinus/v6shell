@@ -35,7 +35,7 @@ system-wide rc files! ;^)
 
 -------
 I install and use variations of these files on several different
-systems.  This includes GNU/Linux, (Mac) OS X, NetBSD, and OpenBSD.
+systems.  This includes OpenBSD, NetBSD, (Mac) OS X, and GNU/Linux.
 On GNU/Linux systems, you should refer to the manual pages for the
 utilities invoked in these files as there may be incompatibilities
 that I have not encountered.  For example, this is true for stty(1).
@@ -45,6 +45,6 @@ you to contact me via email.  Thanks & Enjoy!
 
 Jeffrey Allen Neitzel
 <jan (at) v6shell (dot) org>
-http://v6shell.org/rc_files					2016/11/18
+http://v6shell.org/rc_files					2017/01/21
 
 @(#)$Id$

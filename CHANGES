@@ -5,26 +5,63 @@ Thompson shell are marked w/ a `C:' in the details below.
 [osh-current] (development):
 	* Work In Progress ( see http://v6shell.org/src/current/ )
 
+-------------------------------------------------------------------------------
+[osh-4.3.0] (latest):
+	* Reorganized files: examples/*
+
 	* New files: lib.[hc] (osh library routines)
 
+	* New directory & files: libexec.osh/* (osh support scripts & files)
+
+	* Changed LIBEXECDIR layout to support both sh6 & osh.  The
+	  sh6(1) external utilities moved into a new sh6 subdirectory.  A new
+	  osh subdirectory exists for osh support scripts & files (see above);
+	  these files came (and will be removed) from the V6Scripts Collection.
+
+INSTALL:
+	* Synced with Makefile.
+
 README:
-	* Updated supported systems: Debian 8.6 (jessie), (Net|Open)BSD, OS X.
+	* Updated supported systems: Debian 8.7 (jessie), (Net|Open)BSD, OS X.
 
 Makefile:
 	* Removed "share/" from the default MANDIR.
 
+	* Added check-(osh|oshall) & check-(sh6|sh6all) targets for consistency.
+
 Makefile, tests/run.osh:
 	* Fixed `make check' so it doesn't require doing `make install' first.
+
+tests/bin/now:
+	* Changed this script from sh6 to sh so the regression tests
+	  can pass even if/when sh6 isn't installed on the system.
+
+mkconfig, sh6.c, goto.c:
+	* Disabled sh6 compilation on Ubuntu 16.(04|10).
+
+pexec.c:
+	* Set esh_argv to NULL after free(3) for consistency.
+
+osh.c, lib.[hc]:
+	* Moved osh library routines from osh.c to lib.[hc].
+
+osh.[1c]:
+	* Added Version [-V | -VV] command-line flags / options.
+
+	* Added & documented a new special built-in command, `verbose'.
+	  It works like / with the `-v' command-line flag / option,
+	  allowing the user to make osh verbose or not and to better
+	  control on-the-fly debugging.
+
+osh.1:
+	* Added & updated [Hh]istory* documentation as needed.
 
 *.1:
 	* Did some manual page cleanup.  Notice that these legacy manuals
 	  are written in man(7) format, not mdoc(7)..  Perhaps someday...
 
-osh.c, lib.[hc]:
-	* Moved osh library routines from osh.c to lib.[hc].
-
 -------------------------------------------------------------------------------
-[osh-4.2.1] (latest):
+[osh-4.2.1]:
 	* New files: examples/OpenBSD/(README|osh.login|osh.logout|osh.oshrc)
 
 	* Added some fourth implementation information to AUTHORS.
@@ -1956,6 +1993,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2016/10/20
+Jeffrey Allen Neitzel						2017/01/21
 
 @(#)$Id$

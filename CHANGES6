@@ -7,7 +7,23 @@ command in porting them to run on modern UNIX systems.
 	* Work In Progress ( see http://v6shell.org/src/current/ )
 
 -------------------------------------------------------------------------------
-[osh-4.2.1] (latest):
+[osh-4.3.0] (latest):
+	* Changed LIBEXECDIR layout to support both sh6 & osh.  The
+	  sh6(1) external utilities moved into a new sh6 subdirectory.  A
+	  new osh subdirectory exists for osh support scripts & files; these
+	  files came (and will be removed) from the V6Scripts Collection.
+
+mkconfig, sh6.c, goto.c:
+	* Disabled sh6 compilation on Ubuntu 16.(04|10).
+
+sh6.c:
+	* Updated sh_magic() & xgetc() to make it behave more like osh.
+	  This protects the user and her / his terminal from getting
+	  fouled up if/when accidentally trying to execute binary
+	  files as shell scripts / command files.
+
+-------------------------------------------------------------------------------
+[osh-4.2.1]:
 	* No changes.
 
 -------------------------------------------------------------------------------
@@ -496,6 +512,6 @@ glob.c:
     Date: May 14, 1975
     From: Sixth Edition UNIX /usr/source/s1/glob.c
 
-Jeffrey Allen Neitzel						2016/05/15
+Jeffrey Allen Neitzel						2017/01/21
 
 @(#)$Id$

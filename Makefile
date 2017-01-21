@@ -16,8 +16,8 @@ BINDIR?=	$(PREFIX)/bin
 LIBEXECDIR?=	$(PREFIX)/libexec/$(OSH_VERSION)
 LIBEXECDIROSH?=	$(PREFIX)/libexec/$(OSH_VERSION)/osh
 LIBEXECDIRSH6?=	$(PREFIX)/libexec/$(OSH_VERSION)/sh6
-DOCDIR?=	$(PREFIX)/share/doc/$(OSH_VERSION)
-EXPDIR?=	$(DOCDIR)/examples
+DOCDIR?=	$(PREFIX)/share/doc/osh
+EXPDIR?=	$(PREFIX)/share/examples/osh
 MANDIR?=	$(PREFIX)/man/man1
 SYSCONFDIR?=	$(PREFIX)/etc
 #BINGRP=		-g bin
@@ -44,7 +44,6 @@ OPTIONS=	-std=c99 -pedantic
 #OPTIONS+=	-fstack-protector
 WARNINGS=	-Wall -Wextra
 #WARNINGS+=	-Wstack-protector
-#WARNINGS+=	-Wshorten-64-to-32
 #CFLAGS+=	-g
 CFLAGS+=	-Os $(OPTIONS) $(WARNINGS)
 #LDFLAGS+=	-static
@@ -175,12 +174,10 @@ check: check-pre
 	@$(MAKE) check-post
 
 check-oshall: check-osh
-
 check-osh: $(OSH)
 	@( trap '' INT QUIT && cd tests && ../osh run.osh osh )
 
 check-sh6all: check-sh6
-
 check-sh6: check-pre
 	@( trap '' INT QUIT && cd tests && ../osh run.osh sh6 )
 	@$(MAKE) check-post
@@ -269,10 +266,3 @@ clean-obj:
 	@rm -f $(OBJ)
 clean: clean-sh6 clean-man clean-obj
 	@rm -f $(OSH) config.h
-
-#
-# Release target
-#
-release: clean
-	rm -rf .release
-	oshrelease .release $(OSH_VERSION)
