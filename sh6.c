@@ -73,7 +73,7 @@
 #include "sasignal.h"
 
 #if defined(CONFIG_UBUNTU_16)
-#   error "Ubuntu 16.(04|10): Not supported: see http://v6shell.org/blog/ubuntu-16/"
+#   error "Ubuntu 16.(04|10): Not supported: see http://blog.v6shell.org/ubuntu-16/"
 #endif
 
 /*
