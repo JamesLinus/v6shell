@@ -186,7 +186,6 @@ static	const struct sbicmd {
 	{ "unset",	SBI_UNSET    },
 	{ "unsetenv",	SBI_UNSETENV },
 	{ "verbose",	SBI_VERBOSE  },
-	{ "version",	SBI_VERSION  },
 	{ "wait",	SBI_WAIT     }
 };
 #define	NSBICMD		((int)(sizeof(sbi) / sizeof(sbi[0])))
@@ -401,13 +400,8 @@ main(int argc, char **argv)
 			} else if (argv[1][1] == 't') {
 				shtype  = ST_ONELINE;
 				no_lnum = true;
-			} else if (argv[1][1] == 'V') {
-				/*
-				 * Osh has no such thing as a usage error,
-				 * but this would be one.
-				 */
+			} else if (argv[1][1] == 'V')
 				goto version;
-			}
 		} else {
 			shtype = ST_COMMANDFILE;
 			(void)close(FD0);
@@ -2110,17 +2104,6 @@ execute1(struct tnode *t)
 		}
 		emsg = ERR_ARGCOUNT;
 		break;
-
-	case SBI_VERSION:
-		/*
-		 * Print version and build system of current shell.
-		 * This information comes from $v (OSH_VERSION) and
-		 * from build-time output of `uname -srm' (see uname(1)
-		 * and OSH_UNAME_SRM in "config.h").
-		 */
-		fd_print(FD1, "%s (%s)\n", OSH_VERSION, OSH_UNAME_SRM);
-		status = SH_TRUE;
-		return;
 
 	case SBI_WAIT:
 		/*
