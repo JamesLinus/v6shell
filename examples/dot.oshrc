@@ -90,8 +90,8 @@ if $? -eq 0 goto Continue
 	alias	sysinfo	"echo -n '==== ';uname -n|tr -d \\n;echo ' ====';echo;uname -srm;echo;now;echo;uptime;:"
 	alias	topc	'top -C;:'
 	alias	unl	'uptime;now;loadavg;:'
-	alias	v	'echo $v;:'
-	alias	v1	'version'
+	alias	V	'osh -V ;:'
+	alias	VV	'osh -VV;:'
 	( alias logout ) | wc -c | tr -d ' \t' | grep '^0$' >/dev/null
 	if $? != 0 goto Jump
 		alias	logout	'fd2 -e echo "Not an osh login shell - Type an EOT (^D) instead";false'
