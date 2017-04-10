@@ -5,6 +5,9 @@ Thompson shell are marked w/ a `C:' in the details below.
 [osh-current] (development):
 	* Work In Progress ( see http://v6shell.org/src/current/ )
 
+	* Removed the `version' special built-in command; it is redundant
+	  after adding `osh -VV' in osh-4.3.0.
+
 -------------------------------------------------------------------------------
 [osh-4.3.0] (latest):
 	* Reorganized files: examples/*
@@ -1993,6 +1996,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2017/01/21
+Jeffrey Allen Neitzel						2017/04/10
 
 @(#)$Id$
