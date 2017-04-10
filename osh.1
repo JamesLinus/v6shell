@@ -176,15 +176,6 @@ from the standard input,
 executes it,
 and exits.
 .TP
-.B \-V
-(+)
-The shell prints its version to the standard output and exits.
-.TP
-.B \-VV
-(+)
-The shell prints its version and build system
-to the standard output and exits.
-.TP
 .B \-v
 (+)
 The shell is verbose and prints the words
@@ -192,6 +183,18 @@ of each command line to the standard error,
 after performing parameter substitution
 and word splitting,
 but before executing the resulting command line.
+.TP
+.B \-V
+(+)
+The shell prints its version from \fB$\fR\fIv\fR to
+the standard output and exits.
+.TP
+.B \-VV
+(+)
+The shell prints its version from \fB$\fR\fIv\fR, and
+build-time system information from `uname\ \-srm' (see
+.IR uname (1)),
+to the standard output and exits.
 .PP
 The shell may also be invoked non-interactively
 to read, interpret, and execute a command file.
@@ -645,13 +648,6 @@ given by `id\ \-un'.
 \fB$\fR\fIv\fR (*)
 The version of the current shell represented
 as a one-word, read-only string.
-The
-.B version
-special command is another option (see
-.B version
-in
-.I "Special\ commands"
-below).
 .PP
 All substitution on a command line is performed
 .I before
@@ -1303,14 +1299,6 @@ of 0 for true or 1 for false, with 2 indicating error.
 This may be tested with the
 .B if
 command.
-.TP
-\fBversion\fR (+)
-Prints the version and the build system
-of the current shell.
-This information comes from \fB$\fR\fIv\fR
-and from the build-time output
-of `uname\ \-srm' (see
-.IR uname (1)).
 .TP
 .B wait
 Waits for all asynchronous processes to terminate,
