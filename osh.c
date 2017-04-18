@@ -264,6 +264,8 @@ static	char		*user;		/* $u - effective user name         */
  * **** Function Prototypes ****
  */
 static	void		cmd_loop(bool);
+/*@noreturn@*/
+static	void		usage(void);
 static	void		cmd_verbose(void);
 static	int		rpx_line(void);
 /*@null@*/
@@ -357,14 +359,13 @@ main(int argc, char **argv)
 		goto done;
 
 	if (argc == 2 && *argv[1] == HYPHEN && argv[1][1] == 'V') {
-		version:
 		status = SH_TRUE;
 		if (argv[1][2] == EOS)
 			fd_print(FD1, FMT1S, OSH_VERSION);
 		else if (argv[1][2] == 'V' && argv[1][3] == EOS)
 			fd_print(FD1, "%s (%s)\n", OSH_VERSION, OSH_UNAME_SRM);
 		else
-			status = SH_ERR;
+			usage();
 		goto done;
 	}
 	if (argc > 1 && *argv[1] == HYPHEN && argv[1][1] == 'v') {
@@ -401,7 +402,8 @@ main(int argc, char **argv)
 				shtype  = ST_ONELINE;
 				no_lnum = true;
 			} else if (argv[1][1] == 'V')
-				goto version;
+				usage();
+			/* All other conceivable options are perfectly valid. */
 		} else {
 			shtype = ST_COMMANDFILE;
 			(void)close(FD0);
@@ -492,6 +494,34 @@ done:
 	(void)varfree(0);
 	(void)afree(NULL);
 	return status;
+}
+
+/*
+ * Print a helpful usage error upon invalid shell invocation,
+ * and set the global status to SH_ERR.
+ *
+ * NOTE: A "usage error" here means an invalid argv[1] option used
+ *	 (alone or combined with other shell options and arguments)
+ *	 upon shell invocation.  Both the original sh(1) and sh6(1)
+ *	 give no usage errors upon shell invocation, but we must be
+ *	 careful.  Otherwise, we might make osh(1) incompatible with
+ *	 perfectly odd, yet valid, Thompson shell usage.  Thus, we
+ *	 cannot use a strict approach.  Only a minimal approach will
+ *	 do the job for the `-V' and `-VV' options in this case.
+ */
+static void
+usage(void)
+{
+	const char *n;
+
+	/* Free everything that we know we allocated. */
+	xfree(tty);
+	tty = NULL;
+	xfree(user);
+	user = NULL;
+
+	n = getmyname();
+	err(SH_ERR, OSH_USAGE, n, n);
 }
 
 /*
