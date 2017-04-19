@@ -65,6 +65,7 @@ if $? -eq 0 goto Continue
 	alias	h	history
 	alias	hcount	"setenv LC_ALL C;awk '{print \$1;}'<$h/.osh.history|sort|uniq -c|sort -k1 -rn|head -25;:"
 	alias	isset	'set'
+	alias	jobs	'fd2 -e echo "osh: not a job-control shell";false'
 	alias	lf	'ls -F'
 	alias	li	'ls -i'
 	alias	ll	'ls -AlF'
