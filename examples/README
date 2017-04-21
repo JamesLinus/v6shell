@@ -9,7 +9,7 @@ shell script, aka command file, that the shell treats specially.
 
 For full details about how osh handles rc files, please refer to
 the "Startup and shutdown" subsection of osh(1) manual page @
-http://v6shell.org/man/osh.1.html#StartupAndShutdown .
+https://v6shell.org/man/osh.1.html#StartupAndShutdown .
 
 This collection of osh(1) rc files may be studied as is, used as
 templates, modified, and/or installed for personal or general use.
@@ -45,6 +45,6 @@ you to contact me via email.  Thanks & Enjoy!
 
 Jeffrey Allen Neitzel
 <jan (at) v6shell (dot) org>
-http://v6shell.org/rc_files					2017/01/21
+https://v6shell.org/rc_files					2017/04/21
 
 @(#)$Id$

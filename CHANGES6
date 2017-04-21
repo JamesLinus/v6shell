@@ -4,10 +4,18 @@ command in porting them to run on modern UNIX systems.
 
 -------------------------------------------------------------------------------
 [osh-current] (development):
-	* Work In Progress ( see http://v6shell.org/src/current/ )
+	* Work In Progress ( see https://v6shell.org/src/current/ )
 
 -------------------------------------------------------------------------------
-[osh-4.3.0] (latest):
+[osh-4.3.1] (latest):
+[fgis]*.1:
+	* s/General Commands/General Commands Manual/
+
+fd2.c, glob.c, goto.c, if.c, sh6.c:
+	* No code changes.
+
+-------------------------------------------------------------------------------
+[osh-4.3.0]:
 	* Changed LIBEXECDIR layout to support both sh6 & osh.  The
 	  sh6(1) external utilities moved into a new sh6 subdirectory.  A
 	  new osh subdirectory exists for osh support scripts & files; these
@@ -512,6 +520,6 @@ glob.c:
     Date: May 14, 1975
     From: Sixth Edition UNIX /usr/source/s1/glob.c
 
-Jeffrey Allen Neitzel						2017/01/21
+Jeffrey Allen Neitzel						2017/04/21
 
 @(#)$Id$

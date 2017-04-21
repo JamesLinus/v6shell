@@ -69,7 +69,7 @@
 
 #if 0
 # if defined(CONFIG_UBUNTU_16)
-#    error "Ubuntu 16.(04|10): Not supported: see http://blog.v6shell.org/ubuntu-16/"
+#    error "Ubuntu 16.(04|10): Not supported: see https://blog.v6shell.org/ubuntu-16/"
      /*
       * Strictly speaking, goto works fine and sets the correct offset
       * on the standard input on Ubuntu 16.(04|10).  After it returns

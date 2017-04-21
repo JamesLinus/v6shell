@@ -3,13 +3,44 @@ Thompson shell are marked w/ a `C:' in the details below.
 
 -------------------------------------------------------------------------------
 [osh-current] (development):
-	* Work In Progress ( see http://v6shell.org/src/current/ )
+	* Work In Progress ( see https://v6shell.org/src/current/ )
 
+-------------------------------------------------------------------------------
+[osh-4.3.1] (latest):
+	* Changed http:// to https:// where appropriate, as v6shell.org
+	  is now served via HTTPS (SSL/TLS) thanks to Let's Encrypt.
+
+osh.c, sh.h:
 	* Removed the `version' special built-in command; it is redundant
 	  after adding `osh -VV' in osh-4.3.0.
 
+osh.c, err.h:
+	* Added an osh usage error for the `-V' and `-VV' options.
+	  The text of the error message is identical to the SYNOPSIS
+	  both in the osh(1) manual and in the osh.c main() comment.
+
+err.c:
+	* Increased the length of FMTMAX to allow for OSH_USAGE.
+
+osh.1:
+	* Removed documentation for the `version' special built-in command.
+
+	* Improved the descriptions for the `-V' and `-VV' options,
+	  and moved them both to the end of the option list.
+
+*.1, libexec.osh/history.help:
+	* s/General Commands/General Commands Manual/
+
+examples/etc.osh.oshrc:
+	* Updated for osh-4.3.1.
+
+examples/dot.oshrc:
+	* Removed the v and v1 aliases, and replaced them with V and VV.
+
+	* Added a jobs alias to remind us that osh is not a job-control shell.
+
 -------------------------------------------------------------------------------
-[osh-4.3.0] (latest):
+[osh-4.3.0]:
 	* Reorganized files: examples/*
 
 	* New files: lib.[hc] (osh library routines)
@@ -1996,6 +2027,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2017/04/10
+Jeffrey Allen Neitzel						2017/04/21
 
 @(#)$Id$

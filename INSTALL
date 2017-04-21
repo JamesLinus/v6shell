@@ -64,7 +64,7 @@ passing the desired variable=value pair(s) on the command line.
 			rc (init and logout) files if such files are
 			available on the system.  See also:
 
-				http://v6shell.org/rc_files
+				https://v6shell.org/rc_files
 
 			...
 			for example rc files.
@@ -167,6 +167,6 @@ OpenSolaris.  NOTE: I have no idea if this still works or not.
 	% gmake
 	# gmake INSTALL=/usr/bin/ginstall install install-doc install-exp
 
-Jeffrey Allen Neitzel						2017/01/21
+Jeffrey Allen Neitzel						2017/04/21
 
 @(#)$Id$

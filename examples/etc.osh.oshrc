@@ -3,7 +3,7 @@
 : "  The author of this file, J.A. Neitzel <jan (at) v6shell (dot) org>,  "
 : "  hereby grants it to the public domain.                               "
 :
-: "  From:  http://v6shell.org/rc_files  "
+: "  From:  https://v6shell.org/rc_files  "
 :
 
 trap '' 1 2 3 13 14 15 ; : " Ignore HUP, INT, QUIT, PIPE, ALRM, and TERM. "
