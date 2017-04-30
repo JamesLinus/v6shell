@@ -41,7 +41,7 @@ SHELL=		/bin/sh
 #
 #CPPFLAGS=
 OPTIONS=	-std=c99 -pedantic
-#OPTIONS+=	-fstack-protector
+#OPTIONS+=	-fstack-protector-strong
 WARNINGS=	-Wall -Wextra
 #WARNINGS+=	-Wstack-protector
 #CFLAGS+=	-g
