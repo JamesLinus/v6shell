@@ -5,6 +5,11 @@ Thompson shell are marked w/ a `C:' in the details below.
 [osh-current] (development):
 	* Work In Progress ( see https://v6shell.org/src/current/ )
 
+Makefile:
+	* Removed the -Os optimization flag.  This should allow shells/osh
+	  in OpenBSD Ports to not need a patch in order to compile with the
+	  -O2 flag by default.
+
 -------------------------------------------------------------------------------
 [osh-4.3.1] (latest):
 	* Changed http:// to https:// where appropriate, as v6shell.org
@@ -2027,6 +2032,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2017/04/21
+Jeffrey Allen Neitzel						2017/04/30
 
 @(#)$Id$

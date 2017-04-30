@@ -45,7 +45,7 @@ OPTIONS=	-std=c99 -pedantic
 WARNINGS=	-Wall -Wextra
 #WARNINGS+=	-Wstack-protector
 #CFLAGS+=	-g
-CFLAGS+=	-Os $(OPTIONS) $(WARNINGS)
+CFLAGS+=	$(OPTIONS) $(WARNINGS)
 #LDFLAGS+=	-static
 
 #
