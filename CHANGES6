@@ -7,7 +7,11 @@ command in porting them to run on modern UNIX systems.
 	* Work In Progress ( see https://v6shell.org/src/current/ )
 
 -------------------------------------------------------------------------------
-[osh-4.3.1] (latest):
+[osh-4.3.2] (latest):
+	* No changes.
+
+-------------------------------------------------------------------------------
+[osh-4.3.1]:
 [fgis]*.1:
 	* s/General Commands/General Commands Manual/
 
@@ -520,6 +524,6 @@ glob.c:
     Date: May 14, 1975
     From: Sixth Edition UNIX /usr/source/s1/glob.c
 
-Jeffrey Allen Neitzel						2017/04/21
+Jeffrey Allen Neitzel						2017/05/01
 
 @(#)$Id$

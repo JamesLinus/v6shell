@@ -5,13 +5,25 @@ Thompson shell are marked w/ a `C:' in the details below.
 [osh-current] (development):
 	* Work In Progress ( see https://v6shell.org/src/current/ )
 
+-------------------------------------------------------------------------------
+[osh-4.3.2] (latest):
 Makefile:
 	* Removed the -Os optimization flag.  This should allow shells/osh
 	  in OpenBSD Ports to not need a patch in order to compile with the
 	  -O2 flag by default.
 
+	* Changed -fstack-protector to -fstack-protector-strong.  This option
+	  was always commented out as it, -fstack-protector, has been enabled
+	  by default in OpenBSD's gcc for ages.  With OpenBSD's newly imported
+	  clang, version 4.0.0 (tags/RELEASE_400/final) (based on LLVM 4.0.0),
+	  the equivalent of -fstack-protector-strong is enabled by default.
+	  This option is still commented out by default; it can cause problem
+	  elsewhere (e.g., cc: error: unrecognized command line option).
+	  Elsewhere, meaning not OpenBSD, the reference operating system
+	  for this project.
+
 -------------------------------------------------------------------------------
-[osh-4.3.1] (latest):
+[osh-4.3.1]:
 	* Changed http:// to https:// where appropriate, as v6shell.org
 	  is now served via HTTPS (SSL/TLS) thanks to Let's Encrypt.
 
@@ -2032,6 +2044,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2017/04/30
+Jeffrey Allen Neitzel						2017/05/01
 
 @(#)$Id$

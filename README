@@ -1,4 +1,4 @@
-Welcome to Osh (V6Shell) - osh-4.3.1 !
+Welcome to Osh (V6Shell) - osh-4.3.2 !
 
 The osh package provides two ports of the original /bin/sh from
 Sixth Edition (V6) UNIX (circa 1975).
@@ -57,6 +57,6 @@ you to contact me via email.  Thanks & Enjoy!
 
 Jeffrey Allen Neitzel
 <jan (at) v6shell (dot) org>
-https://v6shell.org/						2017/04/21
+https://v6shell.org/						2017/05/01
 
 @(#)$Id$
