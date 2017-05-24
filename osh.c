@@ -102,7 +102,10 @@
 #define	DO_DOT_LOGIN		3
 #define	FILE_DOT_LOGIN		".osh.login"
 #define	DO_DOT_OSHRC		4
-#define	FILE_DOT_OSHRC		".oshrc"
+/*
+ * Notice that FILE_DOT_OSHRC is now defined with a value of
+ * ".etshrc" or ".oshrc" via mkconfig.
+ */
 #define	DO_INIT_DONE		5
 #define	DO_SYSTEM_LOGOUT	1
 #define	PATH_SYSTEM_LOGOUT	SYSCONFDIR/**/"/osh.logout"

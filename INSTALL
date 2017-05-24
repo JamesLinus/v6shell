@@ -9,6 +9,7 @@ If the defaults described below match your desires and/or the
 requirements of your system, you can build and install the entire
 osh package by doing the following.
 
+	% ./configure
 	% make
 	# make install
 
@@ -167,6 +168,6 @@ OpenSolaris.  NOTE: I have no idea if this still works or not.
 	% gmake
 	# gmake INSTALL=/usr/bin/ginstall install install-doc install-exp
 
-Jeffrey Allen Neitzel						2017/04/21
+Jeffrey Allen Neitzel						2017/05/21
 
 @(#)$Id$

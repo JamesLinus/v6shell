@@ -2,9 +2,8 @@
 #
 # @(#)$Id$
 #
-# Write out an appropriate "config.h" file.
-# This script is invoked automatically from the Makefile.
-# Thus, the user does not need to run it manually.
+# Create appropriate "config.h" and "mkconfig.tmp" files.
+# ./configure runs this script on behalf of the user.
 #
 # Exit w/ a status of 0 on success.
 # Exit w/ a status of 1 on error.
@@ -57,10 +56,81 @@ definePathnameConstant()
 	echo "$def"
 }
 
+#
+# Define the FILE_DOT_OSHRC macro, and return true (0) or false (1).
+#
+defineFileDotOshrc()
+{
+
+	if test X"$1" = Xetsh ; then
+		etsh=true
+	else
+		etsh=false
+	fi
+
+	if $etsh || test \
+	   -x '/usr/pkg/bin/omake' -o \
+	   -x '/usr/local/bin/omake' -o \
+	   -x '/usr/bin/omake' ; then
+		# install osh as etsh by default in this case.
+		etsh=true
+		 def='#define	FILE_DOT_OSHRC	".etshrc"'
+	else
+		# omake was not found; assume there is no conflict.
+		etsh=false
+		 def='#define	FILE_DOT_OSHRC	".oshrc"'
+	fi
+	echo "defineFileDotOshrc : $etsh;" >&2
+	echo "$def"
+	if $etsh ; then status=0 ; else status=1 ; fi
+	return $status
+}
+
+#
+# Define the OBN, SBN, and related macros.
+#
+defineBinNameMacros()
+{
+	in_obn="$1"
+	in_sbn="$2"
+
+	echo "defineBinNameMacros: $#;" >&2
+	echo "                   : $1;" >&2
+	echo "                   : $2;" >&2
+
+	if test X"$1" = Xetsh ; then
+		defineFileDotOshrc "etsh"
+	else
+		defineFileDotOshrc
+	fi
+	test $? -eq 0 && etsh=true || etsh=false
+	echo "etsh=$etsh;" >&2
+
+	# 1) obn / sbn - all characters to lower-case equivalent
+	obn="`echo $in_obn | awk '{ printf("%s\n", tolower($1)); }'`"
+	sbn="`echo $in_sbn | awk '{ printf("%s\n", tolower($1)); }'`"
+	# 2) obn1 / sbn1 - capitalize - 1st character to upper-case equivalent
+	obn1="`echo $obn | awk '{ ac = split($1, c, ""); for (i = 1; i <= ac; i++) { if (c[i] ~ /[0-9a-z]/ && i == 1) printf("%c", toupper(c[i])); else printf("%c", c[i]); }; printf("\n"); }'`"
+	sbn1="`echo $sbn | awk '{ ac = split($1, c, ""); for (i = 1; i <= ac; i++) { if (c[i] ~ /[0-9a-z]/ && i == 1) printf("%c", toupper(c[i])); else printf("%c", c[i]); }; printf("\n"); }'`"
+	# 3) obnc / sbnc - all characters to upper-case equivalent
+	obnc="`echo $obn | awk '{ printf("%s\n", toupper($1)); }'`"
+	sbnc="`echo $sbn | awk '{ printf("%s\n", toupper($1)); }'`"
+
+	# This is ugly.
+	if $etsh || test X"$1" = Xetsh ; then
+		# And SBN?
+		echo 'OBN=etsh\nOBN1=Etsh\nOBNC=ETSH\nSBN=tsh\nSBN1=Tsh\nSBNC=TSH' >mkconfig.tmp
+	elif test $# -eq 2 -a X"$1" != X -a X"$2" != X ; then
+		echo "OBN=$obn\nOBN1=$obn1\nOBNC=$obnc\nSBN=$sbn\nSBN1=$sbn1\nSBNC=$sbnc" >mkconfig.tmp
+	else
+		echo 'OBN=osh\nOBN1=Osh\nOBNC=OSH\nSBN=sh6\nSBN1=Sh6\nSBNC=SH6' >mkconfig.tmp
+	fi
+}
+
 UNAME_S="`uname -s`"
 UNAME_SRM="`uname -srm`"
 PROGNAME="`basename $0`"
-if test $# -ne 0 ; then echo 'usage: $(SHELL) ./'"$PROGNAME" >&2 ; exit 1 ; fi
+if test $# -ne 0 -a $# -ne 1 -a $# -ne 2 ; then echo 'usage: $(SHELL) ./'"$PROGNAME" >&2 ; exit 1 ; fi
 if test X"$UNAME_S" = X -o X"$UNAME_SRM" = X ; then
 	echo "$PROGNAME: Fatal uname(1) error" >&2 ; exit 1
 fi
@@ -87,6 +157,7 @@ cat <<EOI >$CONFIG_H
 
 `definePathnameConstant PATH_LOGIN  login`
 `definePathnameConstant PATH_NEWGRP newgrp`
+`defineBinNameMacros "$1" "$2"`
 #define	OSH_UNAME_SRM	"$UNAME_SRM"
 
 EOI

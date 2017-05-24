@@ -96,14 +96,15 @@
 .\"		- /usr/src/bin/ksh/sh.1
 .\"			$OpenBSD: sh.1,v 1.91 2011/09/03 22:59:08 jmc Exp $
 .\"
-.TH OSH 1 "@OSH_DATE@" "@OSH_VERSION@" "General Commands Manual"
+.TH @OBNC@ 1 "@OSH_DATE@" "@OSH_VERSION@" "General Commands Manual"
 .SH NAME
-osh \- old shell (command interpreter)
+.\" @OBN@ \- old shell (command interpreter)
+@OBN@ \- enhanced Thompson shell (command interpreter)
 .SH SYNOPSIS
-.B osh
+.B @OBN@
 [\fB\-V\fR | \fB\-VV\fR]
 .br
-.B osh
+.B @OBN@
 [\fB\-v\fR]
 [\fB\-\fR |
 \fB\-c\fR [\fIstring\fR] |
@@ -112,7 +113,7 @@ osh \- old shell (command interpreter)
 \fB\-t\fR |
 \fIfile\fR [\fIarg1 ...\fR]]
 .SH DESCRIPTION
-.B Osh
+.B @OBN1@
 is an enhanced,
 backward-compatible port of the
 standard command interpreter from Sixth Edition UNIX.
@@ -120,7 +121,7 @@ It may be used either as an interactive shell
 or as a non-interactive shell.
 Throughout this manual,
 `(+)' indicates those cases where
-.B osh
+.B @OBN@
 is known to differ from the original
 .IR sh (1),
 as it appeared in Sixth Edition UNIX.
@@ -538,7 +539,7 @@ which are not otherwise available.
 Such a shell may be invoked as follows:
 .PP
 .nf
-	\fBosh\fR [\fB\-v\fR] \fIname\fR [\fIarg1 ...\fR]
+	\fB@OBN@\fR [\fB\-v\fR] \fIname\fR [\fIarg1 ...\fR]
 .fi
 .PP
 If the first character of
@@ -672,8 +673,8 @@ in a command line by the invoked shell.
 Take the following two shell invocations for example:
 .PP
 .nf
-	% osh \-c '$1' 'echo Hello World! >/dev/null'
-	% osh \-c '$1' 'echo Hello World! \\>/dev/null'
+	% @OBN@ \-c '$1' 'echo Hello World! >/dev/null'
+	% @OBN@ \-c '$1' 'echo Hello World! \\>/dev/null'
 	Hello World! >/dev/null
 .fi
 .PP
@@ -872,14 +873,14 @@ each pattern argument failing to match
 any files is removed from the argument list.
 .SS Startup and shutdown (+)
 If the first character of the argv[0] used to
-invoke an interactive shell is `\-' (e.g.,\ \-osh),
+invoke an interactive shell is `\-' (e.g.,\ \-@OBN@),
 it is a login shell and tries to read and execute commands
 from the following four rc init files in sequence:
 .IR @SYSCONFDIR@/osh.login ,
 .IR @SYSCONFDIR@/osh.oshrc ,
 .IR $h/.osh.login ,
 and
-.IR $h/.oshrc .
+.IR $h/.@OBN@rc .
 The same is true when the shell is invoked with the
 .B \-l
 option,
@@ -891,7 +892,7 @@ it tries to read and execute commands
 from the following two rc init files in sequence:
 .I @SYSCONFDIR@/osh.oshrc
 and
-.IR $h/.oshrc .
+.IR $h/.@OBN@rc .
 The same is true when the shell is invoked with the
 .B \-i
 option,
@@ -985,7 +986,7 @@ It always leaves these actions to the user.
 For example:
 .PP
 .nf
-	% history -r ; history -c ; exec osh -l
+	% history -r ; history -c ; exec @OBN@ -l
 .fi
 .PP
 causes
@@ -1006,7 +1007,7 @@ the user can use the history file to repeat
 any command line as a command substitution with
 .IR sed (1)
 and
-.BR osh .
+.BR @OBN@ .
 Taking the following command line
 and history entry for example:
 .PP
@@ -1022,13 +1023,13 @@ and history entry for example:
 and then doing a:
 .PP
 .nf
-	% sed -n 6171p <$h/.osh.history | osh
+	% sed -n 6171p <$h/.osh.history | @OBN@
 	OS == GNU/Linux || (Mac) OS X || (Free|Net|Open)BSD
 .fi
 .PP
 causes sed to output the 6171st command line from
 the history file via pipe for repetition as a
-command substitution by osh.
+command substitution by @OBN@.
 .SS Aliases (+)
 The shell can interpret command aliases set by the user.
 A user may cause the shell to set, print, and unset
@@ -1183,7 +1184,7 @@ manual page for full details.
 Manages, prints, and searches the user's \fI$h/.osh.history\fR file.
 If no options are specified,
 the history command prints all history entries from
-the user's osh history file to the standard output.
+the user's @OBN@ history file to the standard output.
 Execute `history \-h' to read its documentation.
 .TP
 \fBif\fR [\fIexpression\fR [\fIcommand\fR [\fIarg ...\fR]]] (+)
@@ -1458,7 +1459,7 @@ user history file for \fIall\fR interactive shells
 .IR $h/.osh.login \ (+)
 user rc init file for login shells
 .TP
-.IR $h/.oshrc \ (+)
+.IR $h/.@OBN@rc \ (+)
 user rc init file for \fIall\fR interactive shells
 .TP
 .IR @SYSCONFDIR@/osh.logout \ (+)
@@ -1483,7 +1484,7 @@ sh6(1),
 stty(1),
 uname(1)
 .PP
-Osh home page:
+@OBN1@ home page:
 https://v6shell.org/
 .PP
 `The UNIX Time-Sharing System' (CACM, July, 1974):
@@ -1504,7 +1505,7 @@ In addition,
 he is the principal developer and maintainer of
 this enhanced version of the shell,
 which is hereby made available as
-.IR osh (1).
+.IR @OBN@ (1).
 .SH HISTORY
 A
 .B sh
@@ -1522,13 +1523,13 @@ it was replaced by the Bourne shell.
 However,
 the Thompson shell
 was still distributed with the system as
-.B osh
+.B @OBN@
 because of known portability problems
 with the Bourne shell's memory management
 in Seventh Edition UNIX.
 .SH LICENSE
 See either the LICENSE file which is distributed with
-.B osh
+.B @OBN@
 or
 https://v6shell.org/license/
 for full details.
@@ -1559,9 +1560,9 @@ Thus,
 the following shell invocations are all perfectly valid:
 .PP
 .nf
-	osh \-cats_are_nice!!! ': "Good kitty =)"'
-	osh \-tabbies_are_too!
-	osh \-s
+	@OBN@ \-cats_are_nice!!! ': "Good kitty =)"'
+	@OBN@ \-tabbies_are_too!
+	@OBN@ \-s
 .fi
 .PP
 The first two cases correspond to the
@@ -1595,7 +1596,7 @@ This is
 a bug.
 It is a fact of how the shell works.
 Thus,
-.B osh
+.B @OBN@
 does not support set-ID execution.
 .SH BUGS
 The shell makes no attempt to recover from

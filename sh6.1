@@ -62,24 +62,25 @@
 .\"		- /usr/src/bin/ksh/sh.1
 .\"			$OpenBSD: sh.1,v 1.91 2011/09/03 22:59:08 jmc Exp $
 .\"
-.TH SH6 1 "@OSH_DATE@" "@OSH_VERSION@" "General Commands Manual"
+.TH @SBNC@ 1 "@OSH_DATE@" "@OSH_VERSION@" "General Commands Manual"
 .SH NAME
-sh6 \- shell (command interpreter)
+.\" @SBN@ \- shell (command interpreter)
+@SBN@ \- Thompson shell (command interpreter)
 .SH SYNOPSIS
-.B sh6
+.B @SBN@
 [\fB\-\fR |
 \fB\-c\fR [\fIstring\fR] |
 \fB\-t\fR |
 \fIfile\fR [\fIarg1 ...\fR]]
 .SH DESCRIPTION
-.B Sh6
+.B @SBN1@
 is a port of the
 standard command interpreter from Sixth Edition UNIX.
 It may be used either as an interactive shell
 or as a non-interactive shell.
 Throughout this manual,
 `(+)' indicates those cases where
-.B sh6
+.B @SBN@
 is known to differ from the original
 .IR sh (1),
 as it appeared in Sixth Edition UNIX.
@@ -208,7 +209,7 @@ Otherwise,
 the shell treats it as an external utility or command,
 which is located as follows.
 .PP
-(+) \fBSh6\fR expects to find its external utilities
+(+) \fB@SBN@\fR expects to find its external utilities
 (\fBglob\fR, \fBif\fR, \fBgoto\fR, and \fBfd2\fR)
 in the \fI@LIBEXECDIRSH6@\fR directory,
 not by searching the environment variable PATH.
@@ -413,7 +414,7 @@ A non-interactive shell may be invoked
 as follows:
 .PP
 .nf
-	\fBsh6\fR \fIname\fR [\fIarg1 ...\fR]
+	\fB@SBN@\fR \fIname\fR [\fIarg1 ...\fR]
 .fi
 .PP
 If the first character of
@@ -493,8 +494,8 @@ in a command line by the invoked shell.
 Take the following two shell invocations for example:
 .PP
 .nf
-	% sh6 \-c '$1' 'echo Hello World! >/dev/null'
-	% sh6 \-c '$1' 'echo Hello World! \\>/dev/null'
+	% @SBN@ \-c '$1' 'echo Hello World! >/dev/null'
+	% @SBN@ \-c '$1' 'echo Hello World! \\>/dev/null'
 	Hello World! >/dev/null
 .fi
 .PP
@@ -752,10 +753,10 @@ if(1),
 kill(1),
 login(1),
 newgrp(1),
-osh(1),
+@OBN@(1),
 stty(1)
 .PP
-Osh home page:
+@OBN1@ home page:
 https://v6shell.org/
 .PP
 `The UNIX Time-Sharing System' (CACM, July, 1974):
@@ -771,7 +772,7 @@ Sixth Edition UNIX /usr/source/s2/sh.c,
 which was principally written by Ken Thompson of Bell Labs.
 Jeffrey Allen Neitzel initially ported it in January 2004
 and currently maintains it as
-.IR sh6 (1).
+.IR @SBN@ (1).
 .SH HISTORY
 A
 .B sh
@@ -789,13 +790,13 @@ it was replaced by the Bourne shell.
 However,
 the Thompson shell
 was still distributed with the system as
-.B osh
+.B @OBN@
 because of known portability problems
 with the Bourne shell's memory management
 in Seventh Edition UNIX.
 .SH LICENSE
 See either the LICENSE file which is distributed with
-.B osh
+.B @OBN@
 or
 https://v6shell.org/license/
 for full details.
@@ -812,7 +813,7 @@ Copyright (c) 1985, 1989, 1991, 1993
 .fi
 .SH NOTES
 Since
-.B sh6
+.B @SBN@
 does not read any startup files,
 it should not be added to the shell database
 (see
@@ -820,14 +821,14 @@ it should not be added to the shell database
 unless the system administrator is willing
 to deal with this fact.
 .PP
-.B Sh6
+.B @SBN1@
 has no facilities for setting, unsetting, or otherwise
 manipulating environment variables within the shell.
 This must be accomplished by using other tools such as
 .IR env (1).
 .PP
 Like the original,
-.B sh6
+.B @SBN@
 is not 8-bit clean as it uses the high-order bit
 of characters for quoting.
 Thus,
@@ -842,9 +843,9 @@ Thus,
 the following shell invocations are perfectly valid:
 .PP
 .nf
-	sh6 \-cats_are_nice!!! ': "Good kitty =)"'
-	sh6 \-tabbies_are_too!
-	sh6 \-s
+	@SBN@ \-cats_are_nice!!! ': "Good kitty =)"'
+	@SBN@ \-tabbies_are_too!
+	@SBN@ \-s
 .fi
 .PP
 The first two cases correspond to the
@@ -878,7 +879,7 @@ This is
 a bug.
 It is a fact of how the shell works.
 Thus,
-.B sh6
+.B @SBN@
 does not support set-ID execution.
 .SH BUGS
 The shell makes no attempt to recover from

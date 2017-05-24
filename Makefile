@@ -66,6 +66,7 @@ LDFLAGS+=	$(OSXLDFLAGS)
 # Include osh date and version from Makefile.config .
 #
 include	./Makefile.config
+include	./mkconfig.tmp
 
 OSH=	osh
 SH6=	sh6 glob
@@ -85,6 +86,8 @@ SEDSUB=	-e 's|@OSH_DATE@|$(OSH_DATE)|' \
 	-e 's|@OSH_VERSION@|$(OSH_VERSION)|' \
 	-e 's|@LIBEXECDIROSH@|$(LIBEXECDIROSH)|' \
 	-e 's|@LIBEXECDIRSH6@|$(LIBEXECDIRSH6)|' \
+	-e 's|@OBN@|$(OBN)|' -e 's|@OBN1@|$(OBN1)|' -e 's|@OBNC@|$(OBNC)|' \
+	-e 's|@SBN@|$(SBN)|' -e 's|@SBN1@|$(SBN1)|' -e 's|@SBNC@|$(SBNC)|' \
 	-e 's|@SYSCONFDIR@|$(SYSCONFDIR)|'
 
 DEFS=	-DOSH_VERSION='"$(OSH_VERSION)"' -DLIBEXECDIROSH='"$(LIBEXECDIROSH)"' -DLIBEXECDIRSH6='"$(LIBEXECDIRSH6)"' -DSYSCONFDIR='"$(SYSCONFDIR)"'
@@ -140,8 +143,8 @@ pexec.o                                                             : $(PEXSRC)
 sasignal.o                                                          : $(SIGSRC)
 strtoint.o                                                          : $(INTSRC)
 
-config.h: Makefile Makefile.config mkconfig
-	$(SHELL) ./mkconfig
+config.h: Makefile Makefile.config configure mkconfig mkconfig.tmp
+	@if test ! -e config.h ; then echo 'Please run ./configure first.' >&2 ; exit 1 ; fi
 
 oshbin: v.o osh.o err.o lib.o util.o pexec.o sasignal.o strtoint.o
 	$(CC) $(LDFLAGS) -o osh v.o osh.o err.o lib.o util.o pexec.o sasignal.o strtoint.o $(LIBS)
@@ -208,12 +211,12 @@ install-sh6all: sh6all install-sh6 install-utils
 install-utils: install-ubin install-uman
 
 install-osh: $(OSH) $(OSHMAN) install-dest install-destlibexecosh
-	$(INSTALL) -c -s $(BINGRP) $(BINMODE) osh        $(DESTBINDIR)
-	$(INSTALL) -c    $(MANGRP) $(MANMODE) osh.1.out  $(DESTMANDIR)/osh.1
+	$(INSTALL) -c -s $(BINGRP) $(BINMODE) osh        $(DESTBINDIR)/$(OBN)
+	$(INSTALL) -c    $(MANGRP) $(MANMODE) osh.1.out  $(DESTMANDIR)/$(OBN).1
 
 install-sh6: $(SH6) $(SH6MAN) install-dest install-destlibexecsh6
-	$(INSTALL) -c -s $(BINGRP) $(BINMODE) sh6        $(DESTBINDIR)
-	$(INSTALL) -c    $(MANGRP) $(MANMODE) sh6.1.out  $(DESTMANDIR)/sh6.1
+	$(INSTALL) -c -s $(BINGRP) $(BINMODE) sh6        $(DESTBINDIR)/$(SBN)
+	$(INSTALL) -c    $(MANGRP) $(MANMODE) sh6.1.out  $(DESTMANDIR)/$(SBN).1
 	$(INSTALL) -c -s $(BINGRP) $(BINMODE) glob       $(DESTLIBEXECDIRSH6)
 	$(INSTALL) -c    $(MANGRP) $(MANMODE) glob.1.out $(DESTMANDIR)/glob.1
 
@@ -265,4 +268,5 @@ clean-man:
 clean-obj:
 	@rm -f $(OBJ)
 clean: clean-sh6 clean-man clean-obj
-	@rm -f $(OSH) config.h
+	@rm -f $(OSH) mkconfig.tmp config.h
+	@touch mkconfig.tmp
