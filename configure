@@ -1,0 +1,36 @@
+#!/bin/sh -
+#
+# @(#)$Id$
+#
+# Create an empty "mkconfig.tmp" file, and run ./mkconfig.
+# The user must run this ./configure script manually.
+#
+# Exit w/ a status of 0 on success.
+# Exit w/ a status of 1 on error.
+# --
+# Jeffrey Allen Neitzel
+#
+
+#
+# usage: ./configure [obn sbn]
+#
+# where: obn == osh_binary_name (e.g., osh)
+#	 sbn == sh6_binary_name (e.g., sh6)
+#
+
+trap '' HUP INT QUIT TERM
+
+tmp=mkconfig.tmp
+touch $tmp || exit 1
+
+shell=/bin/sh
+if test $# -eq 2 -a X"$1" != X -a X"$2" != X ; then
+	$shell ./mkconfig "$1" "$2" ; status=$?
+elif test $# -eq 1 -a X"$1" = Xetsh ; then
+	$shell ./mkconfig "etsh" "sh6" ; status=$?
+else
+	# Otherwise, default to osh & sh6.
+	$shell ./mkconfig "osh" "sh6" ; status=$?
+fi
+echo "status == $status;" >&2
+exit $status
