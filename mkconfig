@@ -61,8 +61,9 @@ definePathnameConstant()
 #
 defineFileDotOshrc()
 {
+	in_obn="$1"
 
-	if test X"$1" = Xetsh ; then
+	if test X"$in_obn" != X ; then
 		etsh=true
 	else
 		etsh=false
@@ -72,15 +73,18 @@ defineFileDotOshrc()
 	   -x '/usr/pkg/bin/omake' -o \
 	   -x '/usr/local/bin/omake' -o \
 	   -x '/usr/bin/omake' ; then
-		# install osh as etsh by default in this case.
+		#def='#define	FILE_DOT_OSHRC	".etshrc"'
+		# install osh as etsh or whatever was specified in this case.
 		etsh=true
-		 def='#define	FILE_DOT_OSHRC	".etshrc"'
+		rc_name=".${in_obn}rc"
+		 def="#define	FILE_DOT_OSHRC	\"$rc_name\""
 	else
 		# omake was not found; assume there is no conflict.
 		etsh=false
+		rc_name=".oshrc"
 		 def='#define	FILE_DOT_OSHRC	".oshrc"'
 	fi
-	echo "defineFileDotOshrc : $etsh;" >&2
+	#echo "defineFileDotOshrc: $rc_name;" >&2
 	echo "$def"
 	if $etsh ; then status=0 ; else status=1 ; fi
 	return $status
@@ -94,17 +98,12 @@ defineBinNameMacros()
 	in_obn="$1"
 	in_sbn="$2"
 
-	echo "defineBinNameMacros: $#;" >&2
-	echo "                   : $1;" >&2
-	echo "                   : $2;" >&2
-
-	if test X"$1" = Xetsh ; then
-		defineFileDotOshrc "etsh"
+	if test X"$in_obn" != X ; then
+		defineFileDotOshrc "$in_obn"
 	else
 		defineFileDotOshrc
 	fi
 	test $? -eq 0 && etsh=true || etsh=false
-	echo "etsh=$etsh;" >&2
 
 	# 1) obn / sbn - all characters to lower-case equivalent
 	obn="`echo $in_obn | awk '{ printf("%s\n", tolower($1)); }'`"
@@ -116,14 +115,10 @@ defineBinNameMacros()
 	obnc="`echo $obn | awk '{ printf("%s\n", toupper($1)); }'`"
 	sbnc="`echo $sbn | awk '{ printf("%s\n", toupper($1)); }'`"
 
-	# This is ugly.
-	if $etsh || test X"$1" = Xetsh ; then
-		# And SBN?
-		echo 'OBN=etsh\nOBN1=Etsh\nOBNC=ETSH\nSBN=tsh\nSBN1=Tsh\nSBNC=TSH' >mkconfig.tmp
-	elif test $# -eq 2 -a X"$1" != X -a X"$2" != X ; then
+	if test $# -eq 2 -a X"$1" != X -a X"$2" != X ; then
 		echo "OBN=$obn\nOBN1=$obn1\nOBNC=$obnc\nSBN=$sbn\nSBN1=$sbn1\nSBNC=$sbnc" >mkconfig.tmp
 	else
-		echo 'OBN=osh\nOBN1=Osh\nOBNC=OSH\nSBN=sh6\nSBN1=Sh6\nSBNC=SH6' >mkconfig.tmp
+		echo 'OBN=etsh\nOBN1=Etsh\nOBNC=ETSH\nSBN=tsh\nSBN1=Tsh\nSBNC=TSH' >mkconfig.tmp
 	fi
 }
 
@@ -146,7 +141,7 @@ cat <<EOI >$CONFIG_H
  * the osh package on a given system.  The systems where these feature
  * test macros are known to be needed are defined in the mkconfig script.
  *
- * This includes only Linux and SunOS (Solaris/OpenSolaris)
+ * This includes only Linux and SunOS (Solaris/OpenIndiana)
  * at the present time.
  *
  *	Configured for: $UNAME_SRM

@@ -1,4 +1,4 @@
-Welcome to Osh (V6Shell) - osh-4.3.2 !
+Welcome to Osh (V6Shell) - osh-current !
 
 The osh package provides two ports of the original /bin/sh from
 Sixth Edition (V6) UNIX (circa 1975).
@@ -36,8 +36,7 @@ following systems:
 	(Mac) OS X	10.[4-9], 10.10, 10.11
 	NetBSD		2.1, 3.1.1, 4.0, 4.0.1, 5.[01], 6.1, 7.0
 	OpenBSD		4.[1-7], 5.[0-9], 6.0, 6.1
-	OpenSolaris	2008.05, 2008.11, 2009.06 (See last example
-			in EXAMPLES section of INSTALL file.)
+	OpenIndiana	(need to check if it works here or not)
 	GNU/Linux	CentOS 6.2, Debian 8.7 (jessie), Linpus,
 			Slackware 13.0, Ubuntu 14.04 LTS
 
@@ -57,6 +56,6 @@ you to contact me via email.  Thanks & Enjoy!
 
 Jeffrey Allen Neitzel
 <jan (at) v6shell (dot) org>
-https://v6shell.org/						2017/05/01
+https://v6shell.org/						2017/05/25
 
 @(#)$Id$

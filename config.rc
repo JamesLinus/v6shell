@@ -1,0 +1,20 @@
+#
+# @(#)$Id$
+#
+# Please specify your preferred default binary names for
+# osh (osh_binary_name) and sh6 (sh6_binary_name) below.
+#
+
+#
+# current recommendation
+#
+osh_binary_name='etsh'
+sh6_binary_name='tsh'
+
+# alternate recommendation
+#osh_binary_name='tsh'
+#sh6_binary_name='tsh6'
+
+# original (conflicts w/ omake)
+#osh_binary_name='osh'
+#sh6_binary_name='sh6'

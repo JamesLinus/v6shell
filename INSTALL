@@ -14,6 +14,8 @@ osh package by doing the following.
 	# make install
 
 ...
+NOTE: configure is new.  You can do `./configure -h' for help.
+
 Otherwise, continue reading for full build and install details.
 See the EXAMPLES section at the end of this file for additional
 help if needed.
@@ -155,9 +157,10 @@ into the default locations.
 	       OSXLDFLAGS='-arch x86_64 -arch i386'
 	# make install install-doc install-exp
 
-The following compiles and installs the entire osh package, including
-package documentation and examples, into the default locations on
-OpenSolaris.  NOTE: I have no idea if this still works or not.
+The following used to compile and install the entire osh package,
+including package documentation and examples, into the default
+locations on OpenSolaris.  NOTE: I need to check if it works on
+OpenIndiana or not.
 
 	% uname -srvm
 	SunOS 5.11 snv_111b i86pc
@@ -168,6 +171,6 @@ OpenSolaris.  NOTE: I have no idea if this still works or not.
 	% gmake
 	# gmake INSTALL=/usr/bin/ginstall install install-doc install-exp
 
-Jeffrey Allen Neitzel						2017/05/21
+Jeffrey Allen Neitzel						2017/05/25
 
 @(#)$Id$
