@@ -1,4 +1,5 @@
 [A-Z]* ident
+config* ident
 mkconfig ident
 *.[1ch] ident
 examples/*osh* -ident
