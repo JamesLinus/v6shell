@@ -116,9 +116,9 @@ defineBinNameMacros()
 	sbnc="`echo $sbn | awk '{ printf("%s\n", toupper($1)); }'`"
 
 	if test $# -eq 2 -a X"$1" != X -a X"$2" != X ; then
-		echo "OBN=$obn\nOBN1=$obn1\nOBNC=$obnc\nSBN=$sbn\nSBN1=$sbn1\nSBNC=$sbnc" >mkconfig.tmp
+		echo "OBN=$obn OBN1=$obn1 OBNC=$obnc SBN=$sbn SBN1=$sbn1 SBNC=$sbnc" | tr ' ' '\n' >mkconfig.tmp
 	else
-		echo 'OBN=etsh\nOBN1=Etsh\nOBNC=ETSH\nSBN=tsh\nSBN1=Tsh\nSBNC=TSH' >mkconfig.tmp
+		echo 'OBN=etsh OBN1=Etsh OBNC=ETSH SBN=tsh SBN1=Tsh SBNC=TSH' | tr ' ' '\n' >mkconfig.tmp
 	fi
 }
 
