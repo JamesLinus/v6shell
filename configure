@@ -12,7 +12,7 @@
 #
 
 #
-# usage: ./configure [osh_binary_name sh6_binary_name]
+# usage: ./configure [-h | osh_binary_name sh6_binary_name]
 #
 # In the case of `./configure', it defaults to:
 #
@@ -30,8 +30,8 @@ touch $tmp || exit 1
 
 shell=/bin/sh
 
-if test X"$1" = X-h -o X"$1" = X--help ; then
-	echo "usage: $0 [osh_binary_name sh6_binary_name]" >&2
+if test X"$0" != X./configure -o X"$1" = X-h ; then
+	echo "usage: ./configure [-h | osh_binary_name sh6_binary_name]" >&2
 	echo >&2
 	echo "In the case of \`./configure', it defaults to:" >&2
 	echo >&2

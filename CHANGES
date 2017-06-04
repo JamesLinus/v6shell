@@ -5,9 +5,11 @@ Thompson shell are marked w/ a `C:' in the details below.
 [osh-current] (development):
 	* Work In Progress ( see https://v6shell.org/src/current/ )
 
+-------------------------------------------------------------------------------
+[osh-4.4.0] (latest):
 	* New files: config.rc, configure, and mkconfig.tmp
 
-	  These files help work around a name conflict that need not exist.
+	  These help work around a binary name conflict that need not exist.
 
 	  It was a conflict between the osh and .oshrc files, found in the
 	  Osh Project [1], and files with the same names, found in the OMake
@@ -15,12 +17,36 @@ Thompson shell are marked w/ a `C:' in the details below.
 	  to etsh (enhanced Thompson shell) and .etshrc I did.  The benefit
 	  is that omake and osh can now be installed side by side on the
 	  same machine without conflict.
-    
+
+	  etsh and .etshrc are simply the new defaults going forward; you can
+	  always change config.rc or do `./configure osh sh6' if you prefer to
+	  install osh and sh6 with their original names.
+
 	  1. https://v6shell.org/
 	  2.  http://omake.metaprl.org/
 
+Makefile.config:
+	* Bumped minor from 3 to 4 due to adding a ./configure step to the
+	  build and install instructions.
+
+Makefile:
+	* Included macros from mkconfig.tmp to change the osh and sh6
+	  binary names and to generate the manual pages as needed for
+	  build and install.
+
+mkconfig, osh.c:
+	* The FILE_DOT_OSHRC macro is now defined via mkconfig and found
+	  in config.h, not osh.c, after configure is run.
+
+*.1:
+	* Changed osh and sh6 references to match their binary names
+	  set in *.1.out by configure.
+
+examples/etc.osh.oshrc:
+	* Added comments for clarity, and improved PATH handling.
+
 -------------------------------------------------------------------------------
-[osh-4.3.2] (latest):
+[osh-4.3.2]:
 Makefile:
 	* Removed the -Os optimization flag.  This should allow shells/osh
 	  in OpenBSD Ports to not need a patch in order to compile with the
@@ -2058,6 +2084,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2017/05/25
+Jeffrey Allen Neitzel						2017/06/04
 
 @(#)$Id$

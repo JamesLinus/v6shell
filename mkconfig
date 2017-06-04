@@ -73,17 +73,17 @@ defineFileDotOshrc()
 	   -x '/usr/pkg/bin/omake' -o \
 	   -x '/usr/local/bin/omake' -o \
 	   -x '/usr/bin/omake' ; then
-		#def='#define	FILE_DOT_OSHRC	".etshrc"'
 		# install osh as etsh or whatever was specified in this case.
 		etsh=true
 		rc_name=".${in_obn}rc"
-		 def="#define	FILE_DOT_OSHRC	\"$rc_name\""
+		def="#define	FILE_DOT_OSHRC	\"$rc_name\""
 	else
 		# omake was not found; assume there is no conflict.
 		etsh=false
 		rc_name=".oshrc"
-		 def='#define	FILE_DOT_OSHRC	".oshrc"'
+		def='#define	FILE_DOT_OSHRC	".oshrc"'
 	fi
+
 	#echo "defineFileDotOshrc: $rc_name;" >&2
 	echo "$def"
 	if $etsh ; then status=0 ; else status=1 ; fi

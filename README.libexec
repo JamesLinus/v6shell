@@ -1,4 +1,4 @@
-Part of the osh-current package.
+Part of the osh-4.4.0 package.
 It contains the following directories:
 
 	* osh - osh(1) support scripts & files
@@ -7,6 +7,6 @@ It contains the following directories:
 
 Jeffrey Allen Neitzel
 <jan (at) v6shell (dot) org>
-https://v6shell.org/						2017/05/25
+https://v6shell.org/						2017/06/03
 
 @(#)$Id$

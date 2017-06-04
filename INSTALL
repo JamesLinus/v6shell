@@ -6,8 +6,8 @@ SYNOPSIS
 	make [variable=value ...] [target ...]
 
 If the defaults described below match your desires and/or the
-requirements of your system, you can build and install the entire
-osh package by doing the following.
+requirements of your system, you can build and install the osh
+package (binaries and manual pages) by doing the following.
 
 	% ./configure
 	% make
@@ -76,7 +76,7 @@ passing the desired variable=value pair(s) on the command line.
 			utility is used to copy the resulting binaries,
 			manual pages, and other files to final targets.
 
-Mac OS X only:
+(Mac) OS X only:
 The following configuration variables specify the desired target
 architecture(s) for compiling universal binaries and/or 64-bit
 binaries and/or 32-bit binaries for Mac OS X running on Intel
@@ -171,6 +171,6 @@ OpenIndiana or not.
 	% gmake
 	# gmake INSTALL=/usr/bin/ginstall install install-doc install-exp
 
-Jeffrey Allen Neitzel						2017/05/25
+Jeffrey Allen Neitzel						2017/06/03
 
 @(#)$Id$

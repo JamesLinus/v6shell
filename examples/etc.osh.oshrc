@@ -25,6 +25,15 @@ if $? -eq 1 goto TermIsSet1
 	: fallthrough
 : TermIsSet1
 
+: " ==== Begin PATH ==== "
+
+unset X
+set   X /usr/local ; : " This is the PREFIX where shell is installed. "
+
+: " The following sets up the user's PATH, searching for and adding - "
+: "	$X/libexec/$v/osh, /usr/local/v6bin, and $h/bin               "
+: " - only once, if at all.  $v == shell version; $h == HOME or ~.    "
+
 unset S    ; unset P    ; unset D
 unset C    ; unset B    ; unset A
 set   A '' ; set   B '' ; set C ''
@@ -57,10 +66,10 @@ if ! \( -d $D -a -x $D \) goto Jump1
 	: fallthrough
 
 :
-: " Add /usr/local/libexec/osh-4.3.2/osh if it exists as a    "
-: " searchable directory.  Otherwise, print an error message. "
+: " Add $X/libexec/$v/osh if it exists as a searchable directory. "
+: " Otherwise, print an error message.                            "
 :
-set D /usr/local/libexec/osh-4.3.2/osh
+set D $X/libexec/$v/osh
 echo $P | grep $D: >/dev/null
 if $? -eq 0 goto Jump2
 if ! \( -d $D -a -x $D \) goto LibexecError
@@ -71,23 +80,24 @@ if ! \( -d $D -a -x $D \) goto LibexecError
 : LibexecError - " In short, this means the installed osh package is broken. "
 	fd2 -e echo "$F: $D: not found as a searchable directory"
 	: fallthrough
-: Continue
+
+: Continue - " ==== PATH - The following can turn into a big no-op. ==== "
 
 set S ''
 if X$A = X goto NoA
-	set S $A
+	set S $A:
 	: fallthrough
 : NoA
 if X$B = X goto NoB
-	set S $S:$B
+	set S $S$B:
 	: fallthrough
 : NoB
 if X$C = X goto NoC
-	set S $S:$C
+	set S $S$C:
 	: fallthrough
 : NoC
 if X$S = X goto NoS
-	set P $S:$p
+	set P $S$p
 	: fallthrough
 : NoS
 
@@ -96,6 +106,9 @@ setenv PATH $P
 
 unset A ; unset B ; unset C
 unset D ; unset P ; unset S
+unset X
+
+: " ==== End PATH ==== "
 
 unset F
 

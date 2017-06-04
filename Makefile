@@ -63,10 +63,11 @@ OSXLDFLAGS?=
 LDFLAGS+=	$(OSXLDFLAGS)
 
 #
-# Include osh date and version from Makefile.config .
-#
+# Include OSH_DATE and OSH_VERSION macros.
 include	./Makefile.config
+# Include osh and sh6 binary name macros.
 include	./mkconfig.tmp
+#
 
 OSH=	osh
 SH6=	sh6 glob
@@ -163,6 +164,8 @@ gotobin: v.o goto.o err.o
 
 fd2bin: v.o fd2.o err.o pexec.o
 	$(CC) $(LDFLAGS) -o fd2 v.o fd2.o err.o pexec.o $(LIBS)
+
+$(MANALL): config.h
 
 #
 # Test targets

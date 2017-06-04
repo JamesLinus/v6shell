@@ -6,12 +6,12 @@
 #
 
 #
-# current recommendation
+# current default
 #
 osh_binary_name='etsh'
 sh6_binary_name='tsh'
 
-# alternate recommendation
+# alternate
 #osh_binary_name='tsh'
 #sh6_binary_name='tsh6'
 
