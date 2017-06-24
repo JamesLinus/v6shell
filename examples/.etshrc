@@ -1,4 +1,4 @@
-: $h/.oshrc - " Modify to taste. "
+: $h/.etshrc - " Modify to taste. "
 :
 : "  The author of this file, J.A. Neitzel <jan (at) v6shell (dot) org>,  "
 : "  hereby grants it to the public domain.                               "
@@ -6,7 +6,7 @@
 : "  From:  https://v6shell.org/rc_files  "
 :
 
-: fd2 -e echo "debug: Executing `"$h/.oshrc"' now..."
+: fd2 -e echo "debug: Executing `"$h/.etshrc"' now..."
 
 :
 : " Make getopt(3) in the fd2 utility behave the same on  "
@@ -18,7 +18,7 @@ setenv	EDITOR		/usr/local/bin/vim
 setenv	VISUAL		/usr/local/bin/vim
 setenv	PAGER		'less -is'
 setenv	LESS		-M
-setenv	EXECSHELL	/usr/local/bin/osh
+setenv	EXECSHELL	/usr/local/bin/etsh
 setenv	LC_ALL		C
 
 : " env | grep '^TERM=' | fd2 -e cat "
@@ -63,9 +63,9 @@ if $? -eq 0 goto Continue
 	alias	aliases	'(alias;:)'
 	alias	glob	'echo'
 	alias	h	history
-	alias	hcount	"setenv LC_ALL C;awk '{print \$1;}'<$h/.osh.history|sort|uniq -c|sort -k1 -rn|head -25;:"
+	alias	hcount	"setenv LC_ALL C;awk '{print \$1;}'<$h/.etsh.history|sort|uniq -c|sort -k1 -rn|head -25;:"
 	alias	isset	'set'
-	alias	jobs	'fd2 -e echo "osh: not a job-control shell";false'
+	alias	jobs	'fd2 -e echo "etsh: not a job-control shell";false'
 	alias	lf	'ls -F'
 	alias	li	'ls -i'
 	alias	ll	'ls -AlF'
@@ -91,11 +91,11 @@ if $? -eq 0 goto Continue
 	alias	sysinfo	"echo -n '==== ';uname -n|tr -d \\n;echo ' ====';echo;uname -srm;echo;now;echo;uptime;:"
 	alias	topc	'top -C;:'
 	alias	unl	'uptime;now;loadavg;:'
-	alias	V	'osh -V ;:'
-	alias	VV	'osh -VV;:'
+	alias	V	'etsh -V ;:'
+	alias	VV	'etsh -VV;:'
 	( alias logout ) | wc -c | tr -d ' \t' | grep '^0$' >/dev/null
 	if $? != 0 goto Jump
-		alias	logout	'fd2 -e echo "Not an osh login shell - Type an EOT (^D) instead";false'
+		alias	logout	'fd2 -e echo "Not an etsh login shell - Type an EOT (^D) instead";false'
 		alias	rmod	'if X$d != X -a -d "$d" -a ! -h "$d" rm -rf "$d";:'
 		: fallthrough
 	: Jump

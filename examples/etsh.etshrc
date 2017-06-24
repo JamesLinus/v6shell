@@ -1,4 +1,4 @@
-: /etc/osh.oshrc - " Modify to taste. "
+: /etc/etsh.etshrc - " Modify to taste. "
 :
 : "  The author of this file, J.A. Neitzel <jan (at) v6shell (dot) org>,  "
 : "  hereby grants it to the public domain.                               "
@@ -9,7 +9,7 @@
 trap '' 1 2 3 13 14 15 ; : " Ignore HUP, INT, QUIT, PIPE, ALRM, and TERM. "
 trap '' 18 21 22 ;       : " Ignore job-control signals: TSTP, TTIN, TTOU "
 
-set F /etc/osh.oshrc
+set F /etc/etsh.etshrc
 
 : fd2 -e echo "debug: Executing `$F' now..."
 
@@ -31,7 +31,7 @@ unset X
 set   X /usr/local ; : " This is the PREFIX where shell is installed. "
 
 : " The following sets up the user's PATH, searching for and adding - "
-: "	$X/libexec/$v/osh, /usr/local/v6bin, and $h/bin               "
+: "	$X/libexec/$v/etsh, /usr/local/v6bin, and $h/bin              "
 : " - only once, if at all.  $v == shell version; $h == HOME or ~.    "
 
 unset S    ; unset P    ; unset D
@@ -66,10 +66,10 @@ if ! \( -d $D -a -x $D \) goto Jump1
 	: fallthrough
 
 :
-: " Add $X/libexec/$v/osh if it exists as a searchable directory. "
-: " Otherwise, print an error message.                            "
+: " Add $X/libexec/$v/etsh if it exists as a searchable directory. "
+: " Otherwise, print an error message.                             "
 :
-set D $X/libexec/$v/osh
+set D $X/libexec/$v/etsh
 echo $P | grep $D: >/dev/null
 if $? -eq 0 goto Jump2
 if ! \( -d $D -a -x $D \) goto LibexecError
@@ -77,7 +77,7 @@ if ! \( -d $D -a -x $D \) goto LibexecError
 	: fallthrough
 : Jump2
 	goto Continue
-: LibexecError - " In short, this means the installed osh package is broken. "
+: LibexecError - " In short, this means the installed etsh package is broken. "
 	fd2 -e echo "$F: $D: not found as a searchable directory"
 	: fallthrough
 

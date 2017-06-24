@@ -1,0 +1,18 @@
+See ../README (and below) for more info.
+This directory contains the following etsh(1) support scripts & files:
+
+	* SetTandCTTY  - set $T and/or setenv CTTY as needed
+
+	* SetV         - set $V to the output from etsh -VV
+
+	* etshdir      - make/check/remake ETSHDIR ($d) in the environment
+
+	* history      - manage/print/search user's $h/.etsh.history file
+
+	* history.help - history help (what would otherwise be a manual)
+
+Jeffrey Allen Neitzel
+<jan (at) v6shell (dot) org>
+https://v6shell.org/						2017/06/23
+
+@(#)$Id$

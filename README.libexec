@@ -1,12 +1,12 @@
-Part of the osh-4.4.0 package.
+Part of the osh-4.5.0 package.
 It contains the following directories:
 
-	* osh - osh(1) support scripts & files
+	* etsh - etsh(1) support scripts & files
 
-	* sh6 - sh6(1) external utilities
+	* tsh  - tsh(1) external utilities
 
 Jeffrey Allen Neitzel
 <jan (at) v6shell (dot) org>
-https://v6shell.org/						2017/06/03
+https://v6shell.org/						2017/06/23
 
 @(#)$Id$

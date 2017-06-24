@@ -1,4 +1,4 @@
-: /etc/osh.login - " Modify to taste. "
+: /etc/etsh.login - " Modify to taste. "
 :
 : "  The author of this file, J.A. Neitzel <jan (at) v6shell (dot) org>,  "
 : "  hereby grants it to the public domain.                               "
@@ -9,7 +9,7 @@
 trap '' 1 2 3 13 14 15 ; : " Ignore HUP, INT, QUIT, PIPE, ALRM, and TERM. "
 trap '' 18 21 22 ;       : " Ignore job-control signals: TSTP, TTIN, TTOU "
 
-: fd2 -e echo "debug: Executing `/etc/osh.login' now..."
+: fd2 -e echo "debug: Executing `/etc/etsh.login' now..."
 
 :
 : " Set a default umask and PATH for all (root & !root) users. "
@@ -32,7 +32,7 @@ if X$u != Xroot goto NotRoot
 	: fallthrough
 
 if X$h = X -o ! -d $h'' goto Finish
-set D $h/.osh.tmp.$$
+set D $h/.etsh.tmp.$$
 if ! { mkdir $D } goto Finish
 
 	:

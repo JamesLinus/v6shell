@@ -1,4 +1,4 @@
-: /etc/osh.logout - " Modify to taste. "
+: /etc/etsh.logout - " Modify to taste. "
 :
 : "  The author of this file, J.A. Neitzel <jan (at) v6shell (dot) org>,  "
 : "  hereby grants it to the public domain.                               "
@@ -9,7 +9,7 @@
 trap '' 1 2 3 13 14 15 ; : " Ignore HUP, INT, QUIT, PIPE, ALRM, and TERM. "
 trap '' 18 21 22 ;       : " Ignore job-control signals: TSTP, TTIN, TTOU "
 
-: fd2 -e echo "debug: Executing `/etc/osh.logout' now..."
+: fd2 -e echo "debug: Executing `/etc/etsh.logout' now..."
 
 : Insert useful logout routines here.
 

@@ -1,4 +1,4 @@
-: osh - " Force sh(1), csh(1), and other shells to exit w/ error! " <'' ;;;
+: etsh - " Force sh(1), csh(1), and other shells to exit w/ error! " <'' ;;;
 :
 : "  @(#)$Id$  "
 :
@@ -12,10 +12,10 @@
 : "  usage: source [/path/to/]SetTandCTTY  "
 :
 
-: " Ensure we have a usable OSHDIR ($d). "
-fd2 -ef/dev/null oshdir
+: " Ensure we have a usable ETSHDIR ($d). "
+fd2 -ef/dev/null etshdir
 if $? -eq 0 goto Continue
-	source oshdir $$
+	source etshdir $$
 	if $? -eq 0 goto Continue
 		fd2 -e echo "$0: Error!" ; false ; exit
 	: fallthrough

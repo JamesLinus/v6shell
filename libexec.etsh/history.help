@@ -1,15 +1,15 @@
 HISTORY(1)              General Commands Manual               HISTORY(1)
 
 NAME
-	history - manage/print/search user's $h/.osh.history file
+	history - manage/print/search user's $h/.etsh.history file
 
 SYNOPSIS
 	history [-c | -h | -l | -n number1[,number2] | -p pattern | -r]
 
 DESCRIPTION
 	History is a command to manage, print, and search the user's
-	$h/.osh.history file.  If no options are specified, history
-	prints all history entries from the user's osh history file
+	$h/.etsh.history file.  If no options are specified, history
+	prints all history entries from the user's etsh history file
 	to the standard output.
 
 	The options are as follows:
@@ -41,8 +41,8 @@ ENVIRONMENT
 		history -h output.  Otherwise, more(1) is used.
 
 SEE ALSO
-	osh(1)
+	etsh(1)
 
-	Osh home page: https://v6shell.org/
+	Etsh home page: https://v6shell.org/
 
-osh-4.4.0                    June 4, 2017                     HISTORY(1)
+etsh-4.5.0                   June 23, 2017                    HISTORY(1)

@@ -1,8 +1,8 @@
-#!/usr/bin/env osh
+#!/usr/bin/env etsh
 :
-: osh - " Force sh(1), csh(1), and other shells to exit w/ error! " <'' ;;;
+: etsh - " Force sh(1), csh(1), and other shells to exit w/ error! " <'' ;;;
 :
-: "  @(#)$Id$  "
+: "  @(#)$Id: 7bcb90c5cba02b3ee4b611fa0244cc4a23f671d6 $  "
 :
 : "  The author of this file, J.A. Neitzel <jan (at) v6shell (dot) org>,  "
 : "  hereby grants it to the public domain.                               "
@@ -11,8 +11,8 @@
 : " Script initialization "
 trap	''	13
 umask	77
-set	H	$h/.osh.history	; : " user's osh history file "
-set	N	history		; : " script name             "
+set	H	$h/.etsh.history; : " user's etsh history file "
+set	N	history		; : " script name              "
 : set
 alias	fd2ncat	"fd2 -f /dev/null awk '{ print NR "\"\\t\"" \$0 }'"
 alias	ncat	"awk '{ print NR "\"\\t\"" \$0 }'"
@@ -35,7 +35,7 @@ echo "usage: $N [-c | -h | -l | -n number1[,number2] | -p pattern | -r]" ; false
 
 : -a
 	wc -l <$H | tr -d ' \t' | \
-		sed 's,.*,expr & \\>= 1 >/dev/null,' | osh
+		sed 's,.*,expr & \\>= 1 >/dev/null,' | etsh
 	if $? != 0 if { exit } false
 	echo 'Number	Command Line' ; echo '------	------------'
 	fd2ncat <$H ; exit
@@ -48,13 +48,13 @@ echo "usage: $N [-c | -h | -l | -n number1[,number2] | -p pattern | -r]" ; false
 	if ! { printenv PAGER } goto more-s >/dev/null
 	printenv PAGER | wc -c | tr -d ' \t' | grep '^1$' >/dev/null
 	if $? = 0 goto more-s
-		printenv PAGER | sed 's,.*,exec & '$0'.help,' | osh ; exit
+		printenv PAGER | sed 's,.*,exec & '$0'.help,' | etsh ; exit
 	: more-s
 		more -s $0.help ; exit
 
 : -l
 	wc -l <$H | tr -d ' \t' | \
-		sed 's,.*,expr & \\>= 11 >/dev/null,' | osh
+		sed 's,.*,expr & \\>= 11 >/dev/null,' | etsh
 	if $? != 0 if { exit } false
 	echo 'Number	Command Line' ; echo '------	------------'
 	ncat <$H | tail -11 | head -10 ; exit

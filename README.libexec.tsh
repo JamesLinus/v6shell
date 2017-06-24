@@ -1,5 +1,5 @@
 See ../README (and below) for more info & the relevant manual(1)s
-for full details.  This directory contains the following sh6(1)
+for full details.  This directory contains the following tsh(1)
 external utilities:
 
 	* fd2  - redirect from/to file descriptor 2
@@ -12,6 +12,6 @@ external utilities:
 
 Jeffrey Allen Neitzel
 <jan (at) v6shell (dot) org>
-https://v6shell.org/						2017/04/21
+https://v6shell.org/						2017/06/23
 
 @(#)$Id$

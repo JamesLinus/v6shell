@@ -1,31 +1,31 @@
-#!/usr/bin/env osh
+#!/usr/bin/env etsh
 :
-: osh - " Force sh(1), csh(1), and other shells to exit w/ error! " <'' ;;;
+: etsh - " Force sh(1), csh(1), and other shells to exit w/ error! " <'' ;;;
 :
-: "  @(#)$Id$  "
+: "  @(#)$Id: cf6654529d0117975a68cde6fcf81517e19f4cf6 $  "
 :
 : "  The author of this file, J.A. Neitzel <jan (at) v6shell (dot) org>,  "
 : "  hereby grants it to the public domain.                               "
 :
 
 :
-: "  Make or check/remake OSHDIR ($d) in the environment.  "
+: "  Make or check/remake ETSHDIR ($d) in the environment.  "
 :
-: "  usage: source [/path/to/]oshdir $$ (to make)  "
-: "     or:                                        "
-: "  usage: oshdir (to check)                      "
+: "  usage: source [/path/to/]etshdir $$ (to make)  "
+: "     or:                                         "
+: "  usage: etshdir (to check)                      "
 :
 
-: " Script initialization                                 "
-set D /tmp/osh-$u-$$ ; : " preferred OSHDIR ($d) pathname "
-set N oshdir         ; : " script name                    "
+: " Script initialization                                   "
+set D /tmp/etsh-$u-$$ ; : " preferred ETSHDIR ($d) pathname "
+set N etshdir         ; : " script name                     "
 
 : " Check for correct usage. "
 : >>$0'' <'' ; : >>$1'' <'' ; : >>$$'' <''
 if $# = 1 -a X$1 = X$$ goto Make
 if $# = 0 -a X$d = X \
 	if { exit }  \
-	fd2 -e echo "$N: OSHDIR not set - do source [/path/to/]$N \$\$" ; false
+	fd2 -e echo "$N: ETSHDIR not set - do source [/path/to/]$N \$\$" ; false
 if $# = 0 goto Check
 
 	fd2 -e echo "usage: source [/path/to/]$N"' $$ (to make)'
@@ -37,7 +37,7 @@ if X$d != X goto Check
 
 	unset N
 	if ! { mkdir -m 0700 $D } if { exit } false
-	setenv OSHDIR $D
+	setenv ETSHDIR $D
 	unset D
 	: fallthrough
 
@@ -46,5 +46,5 @@ if X$d != X goto Check
 	unset N ; unset D
 	if ! -e $d -a ! -h $d if ! { mkdir -m 0700 $d } if { exit } false
 	if ! -d $d -o   -h $d if   { exit } \
-			      fd2 -e echo "oshdir: $d: Not a directory" ; false
+			      fd2 -e echo "etshdir: $d: Not a directory" ; false
 	: zero status

@@ -1,0 +1,35 @@
+: $h/.etsh.logout - " Modify to taste. "
+:
+: "  The author of this file, J.A. Neitzel <jan (at) v6shell (dot) org>,  "
+: "  hereby grants it to the public domain.                               "
+:
+: "  From:  https://v6shell.org/rc_files  "
+:
+
+trap '' 2 3
+
+: fd2 -e echo "debug: Executing `"$h/.etsh.logout"' now..."
+
+:
+: " Check for ETSHDIR ($d), and remove it before logout. "
+:
+: EtshDir
+if X$d = X -o ! -d $d'' goto Logout
+
+	chdir ; rm -r $d ; chdir -
+	: fallthrough
+
+: Logout - " Log out or start new login shell according to user response. "
+
+	chdir ; fd2 -e echo
+	fd2 -e echo -n 'Do you want to log out now? ([y]/n) '
+	head -1 <- | tr -d ' \t' >etsh-logout-$$
+
+	if ! -s etsh-logout-$$ -o \
+		{ egrep '^$|^[Yy][A-Za-z]*$' etsh-logout-$$ >/dev/null } \
+			if { rm -f etsh-logout-$$ } exit
+	if ! { which etsh >/dev/null } \
+		if { rm -f etsh-logout-$$ } if { exit } sleep 5
+
+	rm -f etsh-logout-$$ ; unsetenv TTY ; chdir -
+	clear <- ; trap - 2 3 ; exec etsh -l <-
