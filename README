@@ -1,14 +1,14 @@
-Welcome to Osh (V6Shell) - osh-4.4.0 !
+Welcome to Etsh (V6Shell) - etsh-4.5.0 !
 
-The osh package provides two ports of the original /bin/sh from
+The etsh package provides two ports of the original /bin/sh from
 Sixth Edition (V6) UNIX (circa 1975).
 
-Osh(1) is an enhanced, backward-compatible port of the Sixth Edition
-Thompson shell.  Sh6(1) is an unenhanced port of the shell, and
-glob(1) is a port of its global command.  Together, sh6 and glob
+Etsh(1) is an enhanced, backward-compatible port of the Sixth Edition
+Thompson shell.  Tsh(1) is an unenhanced port of the shell, and
+glob(1) is a port of its global command.  Together, tsh and glob
 provide a user interface which is backward compatible with that
 provided by the Sixth Edition Thompson shell and global command,
-but without the obvious enhancements found in osh.
+but without the obvious enhancements found in etsh.
 
 The original Thompson shell was principally written by Ken Thompson
 of Bell Labs.
@@ -25,7 +25,7 @@ Notice that this package also includes the following shell utilities:
 See the INSTALL file for build and install instructions.
 
 -------
-The osh package should build successfully on any POSIX-compliant
+The etsh package should build successfully on any POSIX-compliant
 UNIX system.  It has been reported to build successfully on the
 following systems:
 
@@ -40,12 +40,12 @@ following systems:
 	GNU/Linux	CentOS 6.2, Debian 8.7 (jessie), Linpus,
 			Slackware 13.0, Ubuntu 14.04 LTS
 
-If your system is not reported above, simply try to build the osh
+If your system is not reported above, simply try to build the etsh
 package to see if it works or not.  In either case, please report
 the results to the developer if possible.  The resulting "config.h"
 file and the compiler name/version is most helpful.
 
-Please send osh bug reports to <bugs (at) v6shell (dot) org>.  Before
+Please send etsh bug reports to <bugs (at) v6shell (dot) org>.  Before
 reporting a bug, please try to reproduce it with the latest version
 of the code.  With bug reports, please try to ensure that enough
 information to reproduce the problem is enclosed.  Also, if a known
@@ -56,6 +56,6 @@ you to contact me via email.  Thanks & Enjoy!
 
 Jeffrey Allen Neitzel
 <jan (at) v6shell (dot) org>
-https://v6shell.org/						2017/06/04
+https://v6shell.org/						2017/06/23
 
 @(#)$Id$

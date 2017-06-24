@@ -26,8 +26,8 @@
 .\"	@(#)$Id$
 .\"
 .\"	Derived from:
-.\"		- Sixth Edition UNIX	/usr/man/man1/sh.1
-.\"		- Sixth Edition UNIX	/usr/man/man8/glob.8
+.\"		- Sixth Edition (V6) UNIX	/usr/man/man1/sh.1
+.\"		- Sixth Edition (V6) UNIX	/usr/man/man8/glob.8
 .\"
 .\" Copyright (C) Caldera International Inc.  2001-2002.  All rights reserved.
 .\"
@@ -72,7 +72,7 @@ glob \- global command (file name generation)
 \fIcommand\fR [\fIarg ...\fR]
 .SH DESCRIPTION
 .B Glob
-is a port of the global command from Sixth Edition UNIX.
+is a port of the global command from Sixth Edition (V6) UNIX.
 It is passed an argument list by
 .IR @SBN@ (1)
 which contains one or more unquoted
@@ -146,7 +146,7 @@ the exit status is that
 of the executed command.
 .SH ENVIRONMENT
 Notice that the concept of `user environment'
-was not defined in Sixth Edition UNIX.
+was not defined in Sixth Edition (V6) UNIX.
 Thus,
 use of the following environment variables
 by this port of the global command
@@ -166,13 +166,13 @@ the value of this variable is taken as the
 sequence of directories which is used to
 search for the specified command.
 Notice that the
-global command from Sixth Edition UNIX
+global command from Sixth Edition (V6) UNIX
 always used the equivalent of `.:/bin:/usr/bin',
 not PATH.
 .SH "SEE ALSO"
 @SBN@(1)
 .PP
-Osh home page:
+Etsh home page:
 https://v6shell.org/
 .SH HISTORY
 A

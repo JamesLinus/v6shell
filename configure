@@ -21,16 +21,16 @@
 #
 
 trap '' HUP INT QUIT TERM
-
+shell=/bin/sh
 tmp=mkconfig.tmp
-
-touch $tmp || exit 1
-
+touch $tmp    || exit 1
 . ./config.rc || exit 1
 
-shell=/bin/sh
-
-if test X"$0" != X./configure -o X"$1" = X-h ; then
+if test \
+    X"$0" != X./configure -o \
+    \( $# -eq 1 -a X"$1" = X-h \) -o \
+    \( $# -eq 2 -a \( X"$1" = X-h -o X"$2" = X-h \) \) -o \
+    \( $# -ne 2 -a $# -ne 0 \) ; then
 	echo "usage: ./configure [-h | osh_binary_name sh6_binary_name]" >&2
 	echo >&2
 	echo "In the case of \`./configure', it defaults to:" >&2

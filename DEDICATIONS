@@ -3,15 +3,16 @@ to the individuals at Bell Labs who started the UNIX ball rolling
 in 1969.
 
 Due to the untimely passing of Dennis M. Ritchie (dmr), I hereby
-dedicate osh-20111027 (and all future osh releases) in his memory.
+dedicate osh-20111027 (and all future osh / etsh releases) in
+his memory.
 
-	* Dennis Ritchie Home Page - http://www.bell-labs.com/usr/dmr/www/
+	* Dennis Ritchie Home Page - https://www.bell-labs.com/usr/dmr/www/
 
 	* Rob Pike's Google+ post sharing news of dmr's passing -
 	  https://plus.google.com/u/0/101960720994009339267/posts/ENuEDDYfvKP
 
 See the AUTHORS file for further info about origins of this software.
 
-Jeffrey Allen Neitzel						2017/01/21
+Jeffrey Allen Neitzel						2017/06/23
 
 @(#)$Id$

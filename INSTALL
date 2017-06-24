@@ -1,4 +1,4 @@
-Build and install instructions for osh!
+Build and install instructions for etsh!
 
 --------
 SYNOPSIS
@@ -6,7 +6,7 @@ SYNOPSIS
 	make [variable=value ...] [target ...]
 
 If the defaults described below match your desires and/or the
-requirements of your system, you can build and install the osh
+requirements of your system, you can build and install the etsh
 package (binaries and manual pages) by doing the following.
 
 	% ./configure
@@ -14,7 +14,7 @@ package (binaries and manual pages) by doing the following.
 	# make install
 
 ...
-NOTE: configure is new.  You can do `./configure -h' for help.
+NOTE: You can do `./configure -h' for help.
 
 Otherwise, continue reading for full build and install details.
 See the EXAMPLES section at the end of this file for additional
@@ -171,6 +171,6 @@ OpenIndiana or not.
 	% gmake
 	# gmake INSTALL=/usr/bin/ginstall install install-doc install-exp
 
-Jeffrey Allen Neitzel						2017/06/03
+Jeffrey Allen Neitzel						2017/06/23
 
 @(#)$Id$

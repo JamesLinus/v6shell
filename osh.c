@@ -92,31 +92,16 @@
 #define	SAVFD0		13	/* used in do_source()                */
 
 /*
- * These are the rc (init and logout) files used by osh.
- * The `FILE_DOT_*' files are in user's HOME directory.
+ * For the rc (init and logout) files used by osh.
  */
 #define	DO_SYSTEM_LOGIN		1
-#define	PATH_SYSTEM_LOGIN	SYSCONFDIR/**/"/osh.login"
 #define	DO_SYSTEM_OSHRC		2
-#define	PATH_SYSTEM_OSHRC	SYSCONFDIR/**/"/osh.oshrc"
 #define	DO_DOT_LOGIN		3
-#define	FILE_DOT_LOGIN		".osh.login"
 #define	DO_DOT_OSHRC		4
-/*
- * Notice that FILE_DOT_OSHRC is now defined with a value of
- * ".etshrc" or ".oshrc" via mkconfig.
- */
 #define	DO_INIT_DONE		5
 #define	DO_SYSTEM_LOGOUT	1
-#define	PATH_SYSTEM_LOGOUT	SYSCONFDIR/**/"/osh.logout"
 #define	DO_DOT_LOGOUT		2
-#define	FILE_DOT_LOGOUT		".osh.logout"
 #define	DO_LOGOUT_DONE		3
-
-/*
- * This is the history file (in user's HOME directory) used by osh.
- */
-#define	FILE_DOT_HISTORY	".osh.history"
 
 /*
  * These are the symbolic names for the types checked by fd_type().

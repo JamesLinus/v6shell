@@ -1,5 +1,5 @@
-======================================================
-Osh is hereby distributed under the following license:
+=======================================================
+Etsh is hereby distributed under the following license:
 
 /*-
  * Copyright (c) 2003-2017
@@ -229,6 +229,6 @@ of the OpenBSD project.  The original license follows:
  */
 ===
 
-Jeffrey Allen Neitzel						2017/06/04
+Jeffrey Allen Neitzel						2017/06/23
 
 @(#)$Id$

@@ -1,4 +1,4 @@
-# Makefile for osh
+# Makefile for etsh
 #
 # @(#)$Id$
 #
@@ -14,10 +14,10 @@ DESTDIR?=
 PREFIX?=	/usr/local
 BINDIR?=	$(PREFIX)/bin
 LIBEXECDIR?=	$(PREFIX)/libexec/$(OSH_VERSION)
-LIBEXECDIROSH?=	$(PREFIX)/libexec/$(OSH_VERSION)/osh
-LIBEXECDIRSH6?=	$(PREFIX)/libexec/$(OSH_VERSION)/sh6
-DOCDIR?=	$(PREFIX)/share/doc/osh
-EXPDIR?=	$(PREFIX)/share/examples/osh
+LIBEXECDIROSH?=	$(PREFIX)/libexec/$(OSH_VERSION)/etsh
+LIBEXECDIRSH6?=	$(PREFIX)/libexec/$(OSH_VERSION)/tsh
+DOCDIR?=	$(PREFIX)/share/doc/etsh
+EXPDIR?=	$(PREFIX)/share/examples/etsh
 MANDIR?=	$(PREFIX)/man/man1
 SYSCONFDIR?=	$(PREFIX)/etc
 #BINGRP=		-g bin
@@ -87,11 +87,11 @@ SEDSUB=	-e 's|@OSH_DATE@|$(OSH_DATE)|' \
 	-e 's|@OSH_VERSION@|$(OSH_VERSION)|' \
 	-e 's|@LIBEXECDIROSH@|$(LIBEXECDIROSH)|' \
 	-e 's|@LIBEXECDIRSH6@|$(LIBEXECDIRSH6)|' \
-	-e 's|@OBN@|$(OBN)|' -e 's|@OBN1@|$(OBN1)|' -e 's|@OBNC@|$(OBNC)|' \
+	-e 's|@OBN@|$(OBN)|g' -e 's|@OBN1@|$(OBN1)|' -e 's|@OBNC@|$(OBNC)|' \
 	-e 's|@SBN@|$(SBN)|' -e 's|@SBN1@|$(SBN1)|' -e 's|@SBNC@|$(SBNC)|' \
 	-e 's|@SYSCONFDIR@|$(SYSCONFDIR)|'
 
-DEFS=	-DOSH_VERSION='"$(OSH_VERSION)"' -DLIBEXECDIROSH='"$(LIBEXECDIROSH)"' -DLIBEXECDIRSH6='"$(LIBEXECDIRSH6)"' -DSYSCONFDIR='"$(SYSCONFDIR)"'
+DEFS=	-DOSH_VERSION='"$(OSH_VERSION)"' -DLIBEXECDIROSH='"$(LIBEXECDIROSH)"' -DLIBEXECDIRSH6='"$(LIBEXECDIRSH6)"' -DSYSCONFDIR='"$(SYSCONFDIR)"' -DSH6_BINARY_NAME='"$(SBN)"'
 
 .SUFFIXES: .1 .1.out .c .o
 
@@ -243,15 +243,16 @@ install-destlibexec:
 
 install-destlibexecosh: install-destlibexec
 	test -d $(DESTLIBEXECDIROSH) || { umask 0022 && mkdir -p $(DESTLIBEXECDIROSH) ; }
-	$(INSTALL) -c $(MANGRP) $(MANMODE) libexec.osh/README $(DESTLIBEXECDIROSH)
-	$(INSTALL) -c $(MANGRP) $(MANMODE) libexec.osh/SetTandCTTY $(DESTLIBEXECDIROSH)
-	$(INSTALL) -c $(BINGRP) $(BINMODE) libexec.osh/history $(DESTLIBEXECDIROSH)
-	$(INSTALL) -c $(MANGRP) $(MANMODE) libexec.osh/history.help $(DESTLIBEXECDIROSH)
-	$(INSTALL) -c $(BINGRP) $(BINMODE) libexec.osh/oshdir $(DESTLIBEXECDIROSH)
+	$(INSTALL) -c $(MANGRP) $(MANMODE) libexec.etsh/README $(DESTLIBEXECDIROSH)
+	$(INSTALL) -c $(MANGRP) $(MANMODE) libexec.etsh/SetTandCTTY $(DESTLIBEXECDIROSH)
+	$(INSTALL) -c $(MANGRP) $(MANMODE) libexec.etsh/SetV $(DESTLIBEXECDIROSH)
+	$(INSTALL) -c $(BINGRP) $(BINMODE) libexec.etsh/etshdir $(DESTLIBEXECDIROSH)
+	$(INSTALL) -c $(BINGRP) $(BINMODE) libexec.etsh/history $(DESTLIBEXECDIROSH)
+	$(INSTALL) -c $(MANGRP) $(MANMODE) libexec.etsh/history.help $(DESTLIBEXECDIROSH)
 
 install-destlibexecsh6: install-destlibexec
 	test -d $(DESTLIBEXECDIRSH6) || { umask 0022 && mkdir -p $(DESTLIBEXECDIRSH6) ; }
-	$(INSTALL) -c $(MANGRP) $(MANMODE) README.libexec.sh6 $(DESTLIBEXECDIRSH6)/README
+	$(INSTALL) -c $(MANGRP) $(MANMODE) README.libexec.tsh $(DESTLIBEXECDIRSH6)/README
 
 install-doc:
 	test -d $(DESTDOCDIR) || { umask 0022 && mkdir -p    $(DESTDOCDIR) ; }
@@ -259,7 +260,7 @@ install-doc:
 
 install-exp:
 	test -d $(DESTEXPDIR) || { umask 0022 && mkdir -p $(DESTEXPDIR) ; }
-	$(INSTALL) -c    $(MANGRP) $(MANMODE) examples/*  $(DESTEXPDIR)
+	$(INSTALL) -c    $(MANGRP) $(MANMODE) examples/.etsh* examples/* $(DESTEXPDIR)
 
 #
 # Cleanup targets

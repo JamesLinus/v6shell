@@ -6,19 +6,21 @@ M. D. McIlroy, J. F. Ossanna, and quite likely others as well.
 Jeffrey Allen Neitzel is the principal developer and maintainer of
 the enhanced, backward-compatible port of the Sixth Edition (V6)
 UNIX Thompson shell (and all other software) released as part of
-the osh project.
+the etsh project.
 
 ============
 Definitions:
 	compatibility - backward compatibility
 
 	osh - enhanced port of the Sixth Edition (V6) UNIX Thompson shell
+		(etsh is the new default binary name for osh)
 
 	sh6 - port of the Sixth Edition (V6) UNIX Thompson shell
-		(sh6 references implicitly include glob(6))
+		(tsh is the new default binary name for sh6)
+			(sh6 references implicitly include glob(6))
 ===
 
-Notice that I have released three different implementations of
+Notice that I have released five different implementations of
 osh(1) since July 2003.  The origin and primary objectives of
 each one are described below.
 
@@ -74,8 +76,8 @@ each one are described below.
 	be added.
 ===
 
-===================================
-[osh-20150115 through osh-current]:
+=================================
+[osh-20150115 through osh-4.3.2]:
 	The fourth implementation continues with primary objectives
 	of compatibility and long-term stability.  It is not a new
 	implementation per se, but a shift of version-number
@@ -89,12 +91,22 @@ each one are described below.
 	of a YYYYMMDD, date-based one.  See Makefile.config for details.
 ===
 
+==================================
+[etsh-4.4.0 through etsh-current]:
+	The fifth implementation continues with primary objectives
+	of compatibility and long-term stability.  It simply contains
+	some changes to help work around a binary name conflict that
+	need not exist.
+
+	See CHANGES and CHANGES6 for details.
+===
+
 I wish to thank the original authors very much for their efforts.
 Without their previous work, none of this software or documentation
 would exist today.
 
 See the DEDICATIONS file for further info.
 
-Jeffrey Allen Neitzel						2017/01/21
+Jeffrey Allen Neitzel						2017/06/23
 
 @(#)$Id$

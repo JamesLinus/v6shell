@@ -57,9 +57,9 @@ definePathnameConstant()
 }
 
 #
-# Define the FILE_DOT_OSHRC macro, and return true (0) or false (1).
+# Define the SYS & DOT file macros for osh, and return true (0) or false (1).
 #
-defineFileDotOshrc()
+defineSysAndDotFiles()
 {
 	in_obn="$1"
 
@@ -75,17 +75,25 @@ defineFileDotOshrc()
 	   -x '/usr/bin/omake' ; then
 		# install osh as etsh or whatever was specified in this case.
 		etsh=true
-		rc_name=".${in_obn}rc"
-		def="#define	FILE_DOT_OSHRC	\"$rc_name\""
+		echo '#define	PATH_SYSTEM_LOGIN	SYSCONFDIR/**/"'"/${in_obn}.login"'"'
+		echo '#define	PATH_SYSTEM_OSHRC	SYSCONFDIR/**/"'"/${in_obn}.${in_obn}rc"'"'
+		echo '#define	FILE_DOT_LOGIN		"'".${in_obn}.login"'"'
+		echo '#define	FILE_DOT_OSHRC		"'".${in_obn}rc"'"'
+		echo '#define	PATH_SYSTEM_LOGOUT	SYSCONFDIR/**/"'"/${in_obn}.logout"'"'
+		echo '#define	FILE_DOT_LOGOUT		"'".${in_obn}.logout"'"'
+		echo '#define	FILE_DOT_HISTORY	"'".${in_obn}.history"'"'
 	else
 		# omake was not found; assume there is no conflict.
 		etsh=false
-		rc_name=".oshrc"
-		def='#define	FILE_DOT_OSHRC	".oshrc"'
+		echo '#define	PATH_SYSTEM_LOGIN	SYSCONFDIR/**/"/osh.login"'
+		echo '#define	PATH_SYSTEM_OSHRC	SYSCONFDIR/**/"/osh.oshrc"'
+		echo '#define	FILE_DOT_LOGIN		".osh.login"'
+		echo '#define	FILE_DOT_OSHRC		".oshrc"'
+		echo '#define	PATH_SYSTEM_LOGOUT	SYSCONFDIR/**/"/osh.logout"'
+		echo '#define	FILE_DOT_LOGOUT		".osh.logout"'
+		echo '#define	FILE_DOT_HISTORY	".osh.history"'
 	fi
 
-	#echo "defineFileDotOshrc: $rc_name;" >&2
-	echo "$def"
 	if $etsh ; then status=0 ; else status=1 ; fi
 	return $status
 }
@@ -99,9 +107,9 @@ defineBinNameMacros()
 	in_sbn="$2"
 
 	if test X"$in_obn" != X ; then
-		defineFileDotOshrc "$in_obn"
+		defineSysAndDotFiles "$in_obn"
 	else
-		defineFileDotOshrc
+		defineSysAndDotFiles
 	fi
 	test $? -eq 0 && etsh=true || etsh=false
 
@@ -118,7 +126,11 @@ defineBinNameMacros()
 	if test $# -eq 2 -a X"$1" != X -a X"$2" != X ; then
 		echo "OBN=$obn OBN1=$obn1 OBNC=$obnc SBN=$sbn SBN1=$sbn1 SBNC=$sbnc" | tr ' ' '\n' >mkconfig.tmp
 	else
-		echo 'OBN=etsh OBN1=Etsh OBNC=ETSH SBN=tsh SBN1=Tsh SBNC=TSH' | tr ' ' '\n' >mkconfig.tmp
+		if $etsh ; then
+			echo 'OBN=etsh OBN1=Etsh OBNC=ETSH SBN=tsh SBN1=Tsh SBNC=TSH' | tr ' ' '\n' >mkconfig.tmp
+		else
+			echo 'OBN=osh OBN1=Osh OBNC=OSH SBN=sh6 SBN1=Sh6 SBNC=SH6' | tr ' ' '\n' >mkconfig.tmp
+		fi
 	fi
 }
 

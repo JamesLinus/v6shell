@@ -6,14 +6,10 @@
 #
 
 #
-# current default
+# default
 #
 osh_binary_name='etsh'
 sh6_binary_name='tsh'
-
-# alternate
-#osh_binary_name='tsh'
-#sh6_binary_name='tsh6'
 
 # original (conflicts w/ omake)
 #osh_binary_name='osh'

@@ -25,7 +25,7 @@
 .\"
 .\"	@(#)$Id$
 .\"
-.\"	Derived from: Sixth Edition UNIX /usr/man/man1/sh.1
+.\"	Derived from: Sixth Edition (V6) UNIX /usr/man/man1/sh.1
 .\"
 .\" Copyright (C) Caldera International Inc.  2001-2002.  All rights reserved.
 .\"
@@ -116,7 +116,7 @@
 .B @OBN1@
 is an enhanced,
 backward-compatible port of the
-standard command interpreter from Sixth Edition UNIX.
+standard command interpreter from Sixth Edition (V6) UNIX.
 It may be used either as an interactive shell
 or as a non-interactive shell.
 Throughout this manual,
@@ -124,7 +124,7 @@ Throughout this manual,
 .B @OBN@
 is known to differ from the original
 .IR sh (1),
-as it appeared in Sixth Edition UNIX.
+as it appeared in Sixth Edition (V6) UNIX.
 .PP
 The options are as follows:
 .TP
@@ -617,7 +617,7 @@ The exit status of the last sequential command from the
 command line.
 .TP
 \fB$\fR\fId\fR
-The value of the environment variable OSHDIR.
+The value of the environment variable @OBNC@DIR.
 .TP
 \fB$\fR\fIe\fR
 The value of the environment variable EXECSHELL.
@@ -876,9 +876,9 @@ If the first character of the argv[0] used to
 invoke an interactive shell is `\-' (e.g.,\ \-@OBN@),
 it is a login shell and tries to read and execute commands
 from the following four rc init files in sequence:
-.IR @SYSCONFDIR@/osh.login ,
-.IR @SYSCONFDIR@/osh.oshrc ,
-.IR $h/.osh.login ,
+.IR @SYSCONFDIR@/@OBN@.login ,
+.IR @SYSCONFDIR@/@OBN@.@OBN@rc ,
+.IR $h/.@OBN@.login ,
 and
 .IR $h/.@OBN@rc .
 The same is true when the shell is invoked with the
@@ -890,7 +890,7 @@ In the case where an interactive shell is not
 a login shell according to its argv[0],
 it tries to read and execute commands
 from the following two rc init files in sequence:
-.I @SYSCONFDIR@/osh.oshrc
+.I @SYSCONFDIR@/@OBN@.@OBN@rc
 and
 .IR $h/.@OBN@rc .
 The same is true when the shell is invoked with the
@@ -905,9 +905,9 @@ command lines from the standard input as usual.
 .PP
 If the shell is invoked as a login shell,
 it tries to read and execute commands from
-.I @SYSCONFDIR@/osh.logout
+.I @SYSCONFDIR@/@OBN@.logout
 and
-.I $h/.osh.logout
+.I $h/.@OBN@.logout
 in sequence upon logout.
 These two rc logout files may be used if necessary
 for cleanup upon termination of a login session by
@@ -943,10 +943,10 @@ special command to ignore these
 and other signals in some cases.
 For example,
 this is particularly true for
-.IR @SYSCONFDIR@/osh.login ,
-.IR @SYSCONFDIR@/osh.oshrc ,
+.IR @SYSCONFDIR@/@OBN@.login ,
+.IR @SYSCONFDIR@/@OBN@.@OBN@rc ,
 and
-.IR @SYSCONFDIR@/osh.logout .
+.IR @SYSCONFDIR@/@OBN@.logout .
 .PP
 The
 .B exit
@@ -956,7 +956,7 @@ in any rc file.
 .SS History (+)
 If the shell is invoked as an interactive shell,
 it tries to open the
-.I $h/.osh.history
+.I $h/.@OBN@.history
 file to save the user's command-line history.
 Notice that the history file must already exist
 as a writable,
@@ -980,7 +980,7 @@ command found in the \fI@LIBEXECDIROSH@\fR directory.
 Execute `history \-h' to read its documentation.
 .PP
 Notice that the shell never creates or removes the
-.I $h/.osh.history
+.I $h/.@OBN@.history
 file.
 It always leaves these actions to the user.
 For example:
@@ -1023,7 +1023,7 @@ and history entry for example:
 and then doing a:
 .PP
 .nf
-	% sed -n 6171p <$h/.osh.history | @OBN@
+	% sed -n 6171p <$h/.@OBN@.history | @OBN@
 	OS == GNU/Linux || (Mac) OS X || (Free|Net|Open)BSD
 .fi
 .PP
@@ -1181,7 +1181,7 @@ See the
 manual page for full details.
 .TP
 \fBhistory\fR [\fB\-c\fR | \fB\-h\fR | \fB\-l\fR | \fB\-n\fR \fInumber1\fR[\fI,number2\fR] | \fB\-p\fR \fIpattern\fR | \fB\-r\fR] (+)
-Manages, prints, and searches the user's \fI$h/.osh.history\fR file.
+Manages, prints, and searches the user's \fI$h/.@OBN@.history\fR file.
 If no options are specified,
 the history command prints all history entries from
 the user's @OBN@ history file to the standard output.
@@ -1387,10 +1387,18 @@ An external command was not found.
 An external command was terminated by a signal.
 .SH "ENVIRONMENT (+)"
 Notice that the concept of `user environment'
-was not defined in Sixth Edition UNIX.
+was not defined in Sixth Edition (V6) UNIX.
 Thus,
 use of the following environment variables
 by this port of the shell is an enhancement:
+.TP
+.B @OBNC@DIR
+If set to a non-empty string,
+the value of this variable is taken as the
+path name of a directory which may be used
+for temporary files.
+Its value is available to the shell via
+the \fB$\fR\fId\fR special parameter.
 .TP
 .B EXECSHELL
 If set to a non-empty string,
@@ -1421,14 +1429,6 @@ to search for manual page files.
 Its value is available to the shell via
 the \fB$\fR\fIm\fR special parameter.
 .TP
-.B OSHDIR
-If set to a non-empty string,
-the value of this variable is taken as the
-path name of a directory which may be used
-for temporary files.
-Its value is available to the shell via
-the \fB$\fR\fId\fR special parameter.
-.TP
 .B PATH
 If set to a non-empty string,
 the value of this variable is taken as the
@@ -1439,7 +1439,7 @@ and for files to be executed by the
 special command.
 Its value is available to the shell via
 the \fB$\fR\fIp\fR special parameter.
-Notice that the Sixth Edition UNIX
+Notice that the Sixth Edition (V6) UNIX
 shell always used the equivalent of `.:/bin:/usr/bin',
 not PATH.
 .SH FILES
@@ -1447,25 +1447,25 @@ not PATH.
 .I /dev/null
 default source of input for asynchronous processes
 .TP
-.IR @SYSCONFDIR@/osh.login \ (+)
+.IR @SYSCONFDIR@/@OBN@.login \ (+)
 system-wide rc init file for login shells
 .TP
-.IR @SYSCONFDIR@/osh.oshrc \ (+)
+.IR @SYSCONFDIR@/@OBN@.@OBN@rc \ (+)
 system-wide rc init file for \fIall\fR interactive shells
 .TP
-.IR $h/.osh.history \ (+)
+.IR $h/.@OBN@.history \ (+)
 user history file for \fIall\fR interactive shells
 .TP
-.IR $h/.osh.login \ (+)
+.IR $h/.@OBN@.login \ (+)
 user rc init file for login shells
 .TP
 .IR $h/.@OBN@rc \ (+)
 user rc init file for \fIall\fR interactive shells
 .TP
-.IR @SYSCONFDIR@/osh.logout \ (+)
+.IR @SYSCONFDIR@/@OBN@.logout \ (+)
 system-wide rc logout file for login shells
 .TP
-.IR $h/.osh.logout \ (+)
+.IR $h/.@OBN@.logout \ (+)
 user rc logout file for login shells
 .SH "SEE ALSO"
 awk(1),
@@ -1496,7 +1496,7 @@ https://v6shell.org/
 gives the theory of operation of both the system and the shell.
 .SH AUTHORS
 This enhanced port of the Thompson shell is derived from
-Sixth Edition UNIX /usr/source/s2/sh.c,
+Sixth Edition (V6) UNIX /usr/source/s2/sh.c,
 which was principally written by Ken Thompson of Bell Labs.
 Jeffrey Allen Neitzel initially ported it in January 2004
 and currently maintains it as
@@ -1516,9 +1516,9 @@ in First Edition UNIX.
 .PP
 The Thompson shell
 was used as the standard command interpreter
-through Sixth Edition UNIX.
+through Sixth Edition (V6) UNIX.
 Then,
-in the Seventh Edition,
+in the Seventh Edition (V7),
 it was replaced by the Bourne shell.
 However,
 the Thompson shell
@@ -1526,7 +1526,7 @@ was still distributed with the system as
 .B osh
 because of known portability problems
 with the Bourne shell's memory management
-in Seventh Edition UNIX.
+in Seventh Edition (V7) UNIX.
 .SH LICENSE
 See either the LICENSE file which is distributed with
 .B @OBN@

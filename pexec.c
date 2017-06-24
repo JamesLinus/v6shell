@@ -224,7 +224,7 @@ err_pexec(const char *file, char *const *argv)
 		if (errno == E2BIG)
 			err(SH_ERR, FMT1S, ERR_E2BIG);
 		err(SH_ERR, FMT1S, ERR_GNOTFOUND);
-	} else if (EQUAL(n, "sh6")) {
+	} else if (EQUAL(n, SH6_BINARY_NAME)) {
 		if (errno == ENOEXEC)
 			err(125, FMT1S, ERR_NOSHELL);
 		if (errno == E2BIG)
