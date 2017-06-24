@@ -7,7 +7,11 @@ command in porting them to run on modern UNIX systems.
 	* Work In Progress ( see https://v6shell.org/src/current/ )
 
 -------------------------------------------------------------------------------
-[osh-4.4.0] (latest):
+[etsh-4.5.0] (latest):
+	* See CHANGES.
+
+-------------------------------------------------------------------------------
+[osh-4.4.0]:
 [fgis]*.1:
 	* Changed osh and sh6 references to match their binary names
 	  set in *.1.out by configure.
@@ -533,6 +537,6 @@ glob.c:
     Date: May 14, 1975
     From: Sixth Edition UNIX /usr/source/s1/glob.c
 
-Jeffrey Allen Neitzel						2017/06/04
+Jeffrey Allen Neitzel						2017/06/23
 
 @(#)$Id$
