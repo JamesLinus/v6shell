@@ -948,7 +948,7 @@ get_dolp(int c)
 		v = (r < 0 || r >= (int)sizeof(dolbuf)) ? NULL : dolbuf;
 		break;
 	case 'd':
-		if ((v = getenv("OSHDIR")) == NULL)
+		if ((v = getenv("ETSHDIR")) == NULL)
 			v = dolbuf;
 		break;
 	case 'e':
