@@ -3,11 +3,15 @@ code for the Sixth Edition (V6) UNIX Thompson shell and global
 command in porting them to run on modern UNIX systems.
 
 -------------------------------------------------------------------------------
-[osh-current] (development):
+[etsh-current] (development):
 	* Work In Progress ( see https://v6shell.org/src/current/ )
 
 -------------------------------------------------------------------------------
-[etsh-4.5.0] (latest):
+[etsh-4.5.1] (latest):
+	* No changes.
+
+-------------------------------------------------------------------------------
+[etsh-4.5.0]:
 	* See CHANGES.
 
 -------------------------------------------------------------------------------
@@ -537,6 +541,6 @@ glob.c:
     Date: May 14, 1975
     From: Sixth Edition UNIX /usr/source/s1/glob.c
 
-Jeffrey Allen Neitzel						2017/06/23
+Jeffrey Allen Neitzel						2017/06/25
 
 @(#)$Id$

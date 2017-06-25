@@ -2,11 +2,18 @@ Changes that improve compatibility w/ the Sixth Edition (V6) UNIX
 Thompson shell are marked w/ a `C:' in the details below.
 
 -------------------------------------------------------------------------------
-[osh-current] (development):
+[etsh-current] (development):
 	* Work In Progress ( see https://v6shell.org/src/current/ )
 
 -------------------------------------------------------------------------------
-[etsh-4.5.0] (latest):
+[etsh-4.5.1] (latest):
+osh.c:
+	* Changed OSHDIR to ETSHDIR.  ETSHDIR was documented in osh.1,
+	  but I forgot to change the code.  This resulted in a broken /
+	  nonfunctional etshdir script.
+
+-------------------------------------------------------------------------------
+[etsh-4.5.0]:
 	* Building on the changes found in osh-4.4.0 (see below),
 	  all changes in the tree transition this project from using
 	  osh and sh6 to using etsh and tsh for the default binary names
@@ -2093,6 +2100,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2017/06/23
+Jeffrey Allen Neitzel						2017/06/25
 
 @(#)$Id$
