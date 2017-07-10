@@ -5,6 +5,11 @@ Thompson shell are marked w/ a `C:' in the details below.
 [etsh-current] (development):
 	* Work In Progress ( see https://v6shell.org/src/current/ )
 
+if.1, util.c:
+	* Added two new primaries, -n to test for non-zero length string &
+	  -z to test for zero length string, like the same primaries found
+	  in test(1).
+
 -------------------------------------------------------------------------------
 [etsh-4.5.1] (latest):
 osh.c:
@@ -2100,6 +2105,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2017/06/25
+Jeffrey Allen Neitzel						2017/07/10
 
 @(#)$Id$

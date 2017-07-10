@@ -6,6 +6,11 @@ command in porting them to run on modern UNIX systems.
 [etsh-current] (development):
 	* Work In Progress ( see https://v6shell.org/src/current/ )
 
+if.1, if.c:
+	* Added two new primaries, -n to test for non-zero length string &
+	  -z to test for zero length string, like the same primaries found
+	  in test(1).
+
 -------------------------------------------------------------------------------
 [etsh-4.5.1] (latest):
 	* No changes.
@@ -541,6 +546,6 @@ glob.c:
     Date: May 14, 1975
     From: Sixth Edition UNIX /usr/source/s1/glob.c
 
-Jeffrey Allen Neitzel						2017/06/25
+Jeffrey Allen Neitzel						2017/07/10
 
 @(#)$Id$
