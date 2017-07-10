@@ -143,6 +143,9 @@ True if \fIfile\fR exists and is a regular file.
 .BI \-h " file"
 True if \fIfile\fR exists and is a symbolic link.
 .TP
+.BI \-n " string"
+True if the length of \fIstring\fR is non-zero.
+.TP
 .BI \-r " file"
 True if \fIfile\fR exists and is readable.
 .TP
@@ -162,6 +165,9 @@ True if \fIfile\fR exists and is writable.
 .BI \-x " file"
 True if \fIfile\fR exists and is executable,
 or if \fIfile\fR is a searchable directory.
+.TP
+.BI \-z " string"
+True if the length of \fIstring\fR is zero.
 .TP
 .IB file1 \ \-ef " file2"
 True if \fIfile1\fR and \fIfile2\fR both exist and refer
@@ -197,8 +203,6 @@ True if the string
 comes before
 .I s2
 according to their ASCII character values.
-.\" according to the ASCII values
-.\" of their characters.
 .TP
 .IB s1 \ > " s2"
 True if the string
@@ -357,9 +361,11 @@ does not support the
 .BR \-e ,
 .BR \-f ,
 .BR \-h ,
+.BR \-n ,
 .BR \-s ,
 .BR \-t ,
 .BR \-x ,
+.BR \-z ,
 .BR \-ef ,
 .BR \-nt ,
 .BR \-ot ,

@@ -252,6 +252,22 @@ e3(void)
 		err(FC_ERR, FMT3S, getmyname(), b, ERR_BADDIGIT);
 	}
 
+	/* This is the same as "$1" != "", for example, in the shell... */
+	if (equal(a, "-n"))
+		return strlen(nxtarg(!RETERR)) != 0;
+
+	/*
+	 * And this is the same as "$1" = "", for example.  However, it
+	 * is difficult to use in tsh / sh6 due to the need for quotes;
+	 * $1 must be unquoted for substitution to occur.  "$1" & '$1'
+	 * are string literals otherwise.  So...  Difficult to use??
+	 * Yes, but not impossible if you know your shell voodoo! ;^)
+	 *
+	 * See scratch/ifzyon for an illustration if you like.
+	 */
+	if (equal(a, "-z"))
+		return strlen(nxtarg(!RETERR)) == 0;
+
 	/*
 	 * binary comparisons
 	 */

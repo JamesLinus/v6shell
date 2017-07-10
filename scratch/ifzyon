@@ -1,0 +1,50 @@
+#!/usr/bin/env tsh
+:
+: tsh - " Force sh(1), csh(1), and other shells to exit w/ error! " <'' ;;;
+:
+: "  @(#)$Id$  "
+:
+: "  The author of this file, J.A. Neitzel <jan (at) v6shell (dot) org>,  "
+: "  hereby grants it to the public domain.                               "
+:
+
+:
+: "  This tsh script (aka command file) illustrates shell voodoo! =^)  "
+:
+: "  Do `if -z string' & `if -n string', where string is specified  "
+: "  by $1.  As noted by the usage message below though, string is  "
+: "  in fact optional (for this script, but not for if(1)).         "
+:
+: "  usage: ifzyon [string]  "
+:
+
+: >>$0'' <'' ; : >>$1'' <''
+
+if ! { mkdir -m 0700 /tmp/ifzyon-$$ } if { exit } false
+
+( : ) > /tmp/ifzyon-$$/expr
+( \
+  echo echo -n \''The specified string "'$1'" is '\' ; \
+  echo -n expr '"//'$1'" : '\''//.*'\'' - 2 | ' ; \
+  echo tr -d '\\n' ; \
+  echo echo '\ character\(s\) in length.' \
+) >> /tmp/ifzyon-$$/expr
+: fd2 -e cat /tmp/ifzyon-$$/expr
+tsh /tmp/ifzyon-$$/expr
+echo
+
+( : ) > /tmp/ifzyon-$$/run
+( \
+  echo -n if -z ; \
+  echo -n \ \"$1\" ; \
+  echo    \ echo '\	'-z: The length of '\"'$1'\"' is zero. \
+) >> /tmp/ifzyon-$$/run
+( \
+  echo -n if -n ; \
+  echo -n \ \"$1\" ; \
+  echo    \ echo '\	'-n: The length of '\"'$1'\"' is non-zero. \
+) >> /tmp/ifzyon-$$/run
+
+: fd2 -e cat /tmp/ifzyon-$$/run
+< /tmp/ifzyon-$$/run ( rm -r /tmp/ifzyon-$$ ; tsh - )
+: zero status

@@ -513,6 +513,14 @@ e3(void)
 		err(FC_ERR, FMT3S, getmyname(), b, ERR_BADDIGIT);
 	}
 
+	/* This is the same as "$1" != "", for example, in the shell... */
+	if (equal(a, "-n"))
+		return strlen(nxtarg(!RETERR)) != 0;
+
+	/* And this is the same as "$1" = "", for example. */
+	if (equal(a, "-z"))
+		return strlen(nxtarg(!RETERR)) == 0;
+
 	/*
 	 * binary comparisons
 	 */
