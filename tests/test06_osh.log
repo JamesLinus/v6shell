@@ -16,7 +16,7 @@ TestFailCount
 TestPassCount
 bin
 input
-run.osh
+run
 syntax.list
 syntax_error.in
 test01

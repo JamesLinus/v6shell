@@ -176,20 +176,20 @@ check-pre: $(OSH) clean-sh6
 	@if test X$(.CURDIR) != X ; then $(MAKE) LIBEXECDIRSH6=$(.CURDIR) sh6all ; else $(MAKE) LIBEXECDIRSH6=$(CURDIR) sh6all ; fi >/dev/null 2>&1
 
 check: check-pre
-	@( trap '' INT QUIT && cd tests && ../osh run.osh osh sh6 )
+	@( trap '' INT QUIT && cd tests && ../osh run osh sh6 )
 	@$(MAKE) check-post
 
 check-oshall: check-osh
 check-osh: $(OSH)
-	@( trap '' INT QUIT && cd tests && ../osh run.osh osh )
+	@( trap '' INT QUIT && cd tests && ../osh run osh )
 
 check-sh6all: check-sh6
 check-sh6: check-pre
-	@( trap '' INT QUIT && cd tests && ../osh run.osh sh6 )
+	@( trap '' INT QUIT && cd tests && ../osh run sh6 )
 	@$(MAKE) check-post
 
 check-newlog: check-pre
-	@( trap '' INT QUIT && cd tests && ../osh run.osh -newlog osh sh6 )
+	@( trap '' INT QUIT && cd tests && ../osh run -newlog osh sh6 )
 	@$(MAKE) check-post
 
 check-post: $(OSH) clean-sh6
@@ -258,9 +258,19 @@ install-doc:
 	test -d $(DESTDOCDIR) || { umask 0022 && mkdir -p    $(DESTDOCDIR) ; }
 	$(INSTALL) -c    $(MANGRP) $(MANMODE) [ACDILNP]* R*E $(DESTDOCDIR)
 
-install-exp:
+#
+# Notice that doing a:
+#
+#	make [variable=value ...] EXPDIR=expdir install-exp
+#
+# is a simple way to install your example .etsh* and etsh* files
+# into expdir here in the source tree on the fly.
+#
+install-exp: config.h
+	cd examples && $(SHELL) ready_rc_files $(PREFIX) $(BINDIR) $(SYSCONFDIR)
 	test -d $(DESTEXPDIR) || { umask 0022 && mkdir -p $(DESTEXPDIR) ; }
-	$(INSTALL) -c    $(MANGRP) $(MANMODE) examples/.etsh* examples/* $(DESTEXPDIR)
+	$(INSTALL) -c    $(MANGRP) $(MANMODE) examples.install/.etsh* examples.install/etsh* $(DESTEXPDIR)
+	rm -rf examples.install
 
 #
 # Cleanup targets
