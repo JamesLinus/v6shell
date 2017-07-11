@@ -2,7 +2,9 @@
 config* ident
 mkconfig ident
 *.[1ch] ident
-examples/*osh* -ident
-libexec.osh/* ident
+examples/.etsh* -ident
+examples/etsh* -ident
+examples/ready_rc_files ident
+libexec.etsh/* ident
 tests/[ist]* -ident
-tests/run* -ident
+tests/run -ident
