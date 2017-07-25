@@ -267,9 +267,9 @@ install-doc:
 # into expdir here in the source tree on the fly.
 #
 install-exp: config.h
-	cd examples && $(SHELL) ready_rc_files $(PREFIX) $(BINDIR) $(SYSCONFDIR)
+	cd examples && $(SHELL) ready_rc_files $(OBN) $(PREFIX) $(BINDIR) $(SYSCONFDIR)
 	test -d $(DESTEXPDIR) || { umask 0022 && mkdir -p $(DESTEXPDIR) ; }
-	$(INSTALL) -c    $(MANGRP) $(MANMODE) examples.install/.etsh* examples.install/etsh* $(DESTEXPDIR)
+	$(INSTALL) -c    $(MANGRP) $(MANMODE) examples.install/.$(OBN)* examples.install/$(OBN)* $(DESTEXPDIR)
 	rm -rf examples.install
 
 #

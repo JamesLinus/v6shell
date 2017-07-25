@@ -81,7 +81,6 @@ defineSysAndDotFiles()
 		echo '#define	FILE_DOT_OSHRC		"'".${in_obn}rc"'"'
 		echo '#define	PATH_SYSTEM_LOGOUT	SYSCONFDIR/**/"'"/${in_obn}.logout"'"'
 		echo '#define	FILE_DOT_LOGOUT		"'".${in_obn}.logout"'"'
-		echo '#define	FILE_DOT_HISTORY	"'".${in_obn}.history"'"'
 	else
 		# omake was not found; assume there is no conflict.
 		etsh=false
@@ -91,8 +90,11 @@ defineSysAndDotFiles()
 		echo '#define	FILE_DOT_OSHRC		".oshrc"'
 		echo '#define	PATH_SYSTEM_LOGOUT	SYSCONFDIR/**/"/osh.logout"'
 		echo '#define	FILE_DOT_LOGOUT		".osh.logout"'
-		echo '#define	FILE_DOT_HISTORY	".osh.history"'
 	fi
+
+	# Exception: The name of the history file does not change.
+	echo '#define	FILE_DOT_HISTORY	".etsh.history"'
+	#
 
 	if $etsh ; then status=0 ; else status=1 ; fi
 	return $status
@@ -114,14 +116,14 @@ defineBinNameMacros()
 	test $? -eq 0 && etsh=true || etsh=false
 
 	# 1) obn / sbn - all characters to lower-case equivalent
-	obn="`echo $in_obn | awk '{ printf("%s\n", tolower($1)); }'`"
-	sbn="`echo $in_sbn | awk '{ printf("%s\n", tolower($1)); }'`"
+	obn="`echo $in_obn | awk '{ printf "%s\n", tolower($1); }'`"
+	sbn="`echo $in_sbn | awk '{ printf "%s\n", tolower($1); }'`"
 	# 2) obn1 / sbn1 - capitalize - 1st character to upper-case equivalent
-	obn1="`echo $obn | awk '{ ac = split($1, c, ""); for (i = 1; i <= ac; i++) { if (c[i] ~ /[0-9a-z]/ && i == 1) printf("%c", toupper(c[i])); else printf("%c", c[i]); }; printf("\n"); }'`"
-	sbn1="`echo $sbn | awk '{ ac = split($1, c, ""); for (i = 1; i <= ac; i++) { if (c[i] ~ /[0-9a-z]/ && i == 1) printf("%c", toupper(c[i])); else printf("%c", c[i]); }; printf("\n"); }'`"
+	obn1="`echo $obn | awk '{ ac = split($1, c, ""); for (i = 1; i <= ac; i++) { if (c[i] ~ /[0-9a-z]/ && i == 1) printf toupper(c[i]); else printf c[i]; }; printf("\n"); }'`"
+	sbn1="`echo $sbn | awk '{ ac = split($1, c, ""); for (i = 1; i <= ac; i++) { if (c[i] ~ /[0-9a-z]/ && i == 1) printf toupper(c[i]); else printf c[i]; }; printf("\n"); }'`"
 	# 3) obnc / sbnc - all characters to upper-case equivalent
-	obnc="`echo $obn | awk '{ printf("%s\n", toupper($1)); }'`"
-	sbnc="`echo $sbn | awk '{ printf("%s\n", toupper($1)); }'`"
+	obnc="`echo $obn | awk '{ printf "%s\n", toupper($1); }'`"
+	sbnc="`echo $sbn | awk '{ printf "%s\n", toupper($1); }'`"
 
 	if test $# -eq 2 -a X"$1" != X -a X"$2" != X ; then
 		echo "OBN=$obn OBN1=$obn1 OBNC=$obnc SBN=$sbn SBN1=$sbn1 SBNC=$sbnc" | tr ' ' '\n' >mkconfig.tmp
@@ -176,7 +178,7 @@ case "$UNAME_S" in
 	;;
 Linux)
 	# Check if building on Ubuntu 16.xx.
-	egrep '^(DISTRIB_ID=Ubuntu|DISTRIB_RELEASE=16.(04|10))$' /etc/lsb-release 2>/dev/null | wc -l | tr -d ' ' | grep '^2$' >/dev/null
+	egrep '^(DISTRIB_ID=Ubuntu|DISTRIB_RELEASE=(16.(04|10)|17.04))$' /etc/lsb-release 2>/dev/null | wc -l | tr -d ' ' | grep '^2$' >/dev/null
 	if test $? -eq 0 ; then
 		# Ubuntu 16.xx
 		( \
