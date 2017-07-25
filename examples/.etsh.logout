@@ -1,14 +1,14 @@
-: $h/.etsh.logout - " Modify to taste. "
+: $h/.@OBN@.logout - " Modify to taste. "
 :
 : "  The author of this file, J.A. Neitzel <jan (at) v6shell (dot) org>,  "
 : "  hereby grants it to the public domain.                               "
 :
-: "  From:  https://v6shell.org/rc_files  "
+: "  From:  https://etsh.io/rc_files  "
 :
 
 trap '' 2 3
 
-: fd2 -e echo "debug: Executing `"$h/.etsh.logout"' now..."
+: fd2 -e echo "debug: Executing `"$h/.@OBN@.logout"' now..."
 
 :
 : " Check for ETSHDIR ($d), and remove it before logout. "
@@ -28,8 +28,8 @@ if X$d = X -o ! -d $d'' goto Logout
 	if ! -s etsh-logout-$$ -o \
 		{ egrep '^$|^[Yy][A-Za-z]*$' etsh-logout-$$ >/dev/null } \
 			if { rm -f etsh-logout-$$ } exit
-	if ! { which etsh >/dev/null } \
+	if ! { which @OBN@ >/dev/null } \
 		if { rm -f etsh-logout-$$ } if { exit } sleep 5
 
 	rm -f etsh-logout-$$ ; unsetenv TTY ; chdir -
-	clear <- ; trap - 2 3 ; exec etsh -l <-
+	clear <- ; trap - 2 3 ; exec @OBN@ -l <-

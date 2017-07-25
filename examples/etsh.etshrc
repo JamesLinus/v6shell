@@ -1,15 +1,15 @@
-: /etc/etsh.etshrc - " Modify to taste. "
+: @SYSCONFDIR@/@OBN@.@OBN@rc - " Modify to taste. "
 :
 : "  The author of this file, J.A. Neitzel <jan (at) v6shell (dot) org>,  "
 : "  hereby grants it to the public domain.                               "
 :
-: "  From:  https://v6shell.org/rc_files  "
+: "  From:  https://etsh.io/rc_files  "
 :
 
 trap '' 1 2 3 13 14 15 ; : " Ignore HUP, INT, QUIT, PIPE, ALRM, and TERM. "
 trap '' 18 21 22 ;       : " Ignore job-control signals: TSTP, TTIN, TTOU "
 
-set F /etc/etsh.etshrc
+set F @SYSCONFDIR@/@OBN@.@OBN@rc
 
 : fd2 -e echo "debug: Executing `$F' now..."
 
@@ -27,8 +27,7 @@ if $? -eq 1 goto TermIsSet1
 
 : " ==== Begin PATH ==== "
 
-unset X
-set   X /usr/local ; : " This is the PREFIX where shell is installed. "
+set   X @PREFIX@ ; : " This is the PREFIX where shell is installed. "
 
 : " The following sets up the user's PATH, searching for and adding - "
 : "	$X/libexec/$v/etsh, /usr/local/v6bin, and $h/bin              "

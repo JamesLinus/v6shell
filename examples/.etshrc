@@ -1,12 +1,12 @@
-: $h/.etshrc - " Modify to taste. "
+: $h/.@OBN@rc - " Modify to taste. "
 :
 : "  The author of this file, J.A. Neitzel <jan (at) v6shell (dot) org>,  "
 : "  hereby grants it to the public domain.                               "
 :
-: "  From:  https://v6shell.org/rc_files  "
+: "  From:  https://etsh.io/rc_files  "
 :
 
-: fd2 -e echo "debug: Executing `"$h/.etshrc"' now..."
+: fd2 -e echo "debug: Executing `"$h/.@OBN@rc"' now..."
 
 :
 : " Make getopt(3) in the fd2 utility behave the same on  "
@@ -18,28 +18,40 @@ setenv	EDITOR		/usr/local/bin/vim
 setenv	VISUAL		/usr/local/bin/vim
 setenv	PAGER		'less -is'
 setenv	LESS		-M
-setenv	EXECSHELL	/usr/local/bin/etsh
+setenv	EXECSHELL	@BINDIR@/@OBN@
 setenv	LC_ALL		C
 
-: " env | grep '^TERM=' | fd2 -e cat "
 printenv TERM | grep '^vt220$' >/dev/null
 if $? -eq 0 goto Continue
+    printenv TERM | grep '^vt100$' >/dev/null
+    if $? = 0 goto Continue
 
-	printenv TERM | grep '^vt100$' >/dev/null
-	if $? = 0 goto Continue
+	: " Set LC_ALL and so forth according to LANG. "
+	unset L
+	printenv LANG | grep '^es_MX' >/dev/null
+	if $? -eq 0 goto L-Jump
+		set L en_US
+		goto L-Break
+	: L-Jump
+		set L es_MX
+		: fallthrough
+	: L-Break
+	: " ready; set LC_ALL and so forth below... "
 
 	:
 	: " The terminal I normally use is rxvt-unicode (urxvt),  "
 	: " but I also use others on occasion.  Normally, they're "
 	: " UTF-8 capable, but that's not always true.            "
 	:
-	setenv	LC_ALL		en_US.UTF-8
+	setenv	LC_ALL		$L.UTF-8
 	setenv	LESSCHARSET	utf-8
-	printf	"%b"		'\033]701;en_US.UTF-8\007' >/dev/tty
+	printf	"%b"		'\033]701;'$L'.UTF-8\007' >/dev/tty
+	unset L
 	: fallthrough
 
 : Continue - " Continue as normal. "
 
+	source	SetV
 	source	SetTandCTTY
 	setenv	TTY	$t
 	( stty altwerase imaxbel -oxtabs ; stty status '^T' ) <-
@@ -65,7 +77,7 @@ if $? -eq 0 goto Continue
 	alias	h	history
 	alias	hcount	"setenv LC_ALL C;awk '{print \$1;}'<$h/.etsh.history|sort|uniq -c|sort -k1 -rn|head -25;:"
 	alias	isset	'set'
-	alias	jobs	'fd2 -e echo "etsh: not a job-control shell";false'
+	alias	jobs	'fd2 -e echo "@OBN@: not a job-control shell";false'
 	alias	lf	'ls -F'
 	alias	li	'ls -i'
 	alias	ll	'ls -AlF'
@@ -85,17 +97,17 @@ if $? -eq 0 goto Continue
 	alias	pparm	'echo $0: $#: $*;:'
 	alias	psmem	'ps -Ovsz,rss -m'
 	alias	sensors	'sysctl hw.sensors;:'
-	alias	sh6i	'trap "" 1 2 3 13 14 15 18 21 22;sh6 -c xtitle;(trap - 1 2 3 13 14 15;sh6);xtitle;:'
+	alias	tshi	'trap "" 1 2 3 13 14 15 18 21 22;tsh -c xtitle;(trap - 1 2 3 13 14 15;tsh);xtitle;:'
 	alias	s	'echo $?;:'
 	alias	status	's'
 	alias	sysinfo	"echo -n '==== ';uname -n|tr -d \\n;echo ' ====';echo;uname -srm;echo;now;echo;uptime;:"
 	alias	topc	'top -C;:'
 	alias	unl	'uptime;now;loadavg;:'
-	alias	V	'etsh -V ;:'
-	alias	VV	'etsh -VV;:'
+	alias	V	'@OBN@ -V ;:'
+	alias	VV	'@OBN@ -VV;:'
 	( alias logout ) | wc -c | tr -d ' \t' | grep '^0$' >/dev/null
 	if $? != 0 goto Jump
-		alias	logout	'fd2 -e echo "Not an etsh login shell - Type an EOT (^D) instead";false'
+		alias	logout	'fd2 -e echo "Not an @OBN@ login shell - Type an EOT (^D) instead";false'
 		alias	rmod	'if X$d != X -a -d "$d" -a ! -h "$d" rm -rf "$d";:'
 		: fallthrough
 	: Jump

@@ -1,15 +1,17 @@
 Welcome to Etsh (V6Shell) RC Files!
 
-The Sixth Edition Thompson shell did not read/execute rc (init and
-logout) files.  The fact that etsh does so is simply one of its
-enhancements.  This makes etsh a much better login shell than it
-might be otherwise, as the ability to execute rc files can make
-things much easier for the user.  An rc file is simply a regular
-shell script, aka command file, that the shell treats specially.
+The Sixth Edition (V6) Thompson shell did not read/execute rc
+(init & logout) files.  The fact that etsh does so is simply one
+of its enhancements.  This makes etsh a much better login shell
+than it might be otherwise, as the ability to execute rc files
+can make things much easier for the user.  An rc file is simply a
+regular shell script, aka command file, that the shell handles in
+a special way.
 
 For full details about how etsh handles rc files, please refer to
 the "Startup and shutdown" subsection of etsh(1) manual page @
-https://v6shell.org/man/etsh.1.html#StartupAndShutdown .
+https://etsh.io/man/_etsh.1.html#Startup_and_shutdown_(+) or
+https://etsh.io/man/etsh.1.html#StartupAndShutdown .
 
 This collection of etsh(1) rc files may be studied as is, used as
 templates, modified, and/or installed for personal or general use.
@@ -17,15 +19,19 @@ templates, modified, and/or installed for personal or general use.
 -------
 INSTALL:
 
-1) The etsh* files are system-wide rc files, assuming SYSCONFDIR=/etc,
-   the default for shells/osh in OpenBSD Ports.
+1) The etsh* files are system-wide rc files for SYSCONFDIR, defaults
+   to $(PREFIX)/etc.
 
 2) The .etsh* files are user rc files for user HOME ($h) directories,
    and also for /etc/skel depending on sysadmin desires / needs.
 
-3) So, modify the etsh* and .etsh* files to taste.
+3) You can install them into the EXPDIR directory, defaults to
+   $(PREFIX)/share/examples/etsh, with the install-exp target.
+   See the ../INSTALL file for full details.
 
-4) Then, copy them to the destinations noted above
+4) Along the way, modify the etsh* and .etsh* files to taste.
+
+5) Then, copy them to SYSCONFDIR, HOME, and/or /etc/skel
    (changing user / group / mode as needed).
 
 ...
@@ -45,6 +51,6 @@ you to contact me via email.  Thanks & Enjoy!
 
 Jeffrey Allen Neitzel
 <jan (at) v6shell (dot) org>
-https://v6shell.org/rc_files					2017/06/18
+https://etsh.io/rc_files					2017/07/21
 
 @(#)$Id$

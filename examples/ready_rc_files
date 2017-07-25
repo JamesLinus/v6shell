@@ -1,0 +1,55 @@
+#!/bin/sh -
+#
+# @(#)$Id$
+#
+# The author of this file, J.A. Neitzel <jan (at) v6shell (dot) org>,
+# hereby grants it to the public domain.
+#
+
+#
+# Ready .etsh* and etsh* for installation.
+# ../Makefile runs this script via the install-exp target.
+#
+# usage: $(SHELL) ready_rc_files $(OBN) $(PREFIX) $(BINDIR) $(SYSCONFDIR)
+#
+# Exit w/ a status of 0 on success.
+# Exit w/ a status of 1 on error.
+# --
+# Jeffrey Allen Neitzel
+#
+
+if test ! \( $# -eq 4 \) -o \
+	! \( -n "$1" -a -n "$2" -a -n "$3" -a -n "$4" \) ; then
+   echo 'usage: $(SHELL) ready_rc_files $(OBN) $(PREFIX) $(BINDIR) $(SYSCONFDIR)' >&2
+   exit 1
+fi
+
+obn=$1
+prefix=$2
+bindir=$3
+sysconfdir=$4
+
+rm -rf ../examples.install
+mkdir  ../examples.install || exit 1
+
+for rc_file in .etsh* etsh* ; do
+    sed -e "s|@OBN@|$obn|g" \
+	-e "s|@PREFIX@|$prefix|" \
+	-e "s|@BINDIR@|$bindir|" \
+	-e "s|@SYSCONFDIR@|$sysconfdir|" < $rc_file \
+    > ../examples.install/$rc_file || { echo "$rc_file: error" >&2 ; exit 1 ; }
+done
+
+if test "$obn" != "etsh" ; then
+   cd ../examples.install
+   echo -n "Moving .etsh* and etsh* to .${obn}* and ${obn}* . . . " >&2
+   mv .etsh.login  .${obn}.login
+   mv .etsh.logout .${obn}.logout
+   mv .etshrc      .${obn}rc
+   mv etsh.etshrc   ${obn}.${obn}rc
+   mv etsh.login    ${obn}.login
+   mv etsh.logout   ${obn}.logout
+   echo "Done ." >&2
+fi
+
+exit 0
