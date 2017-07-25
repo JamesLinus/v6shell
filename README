@@ -37,7 +37,7 @@ following systems:
 	NetBSD		2.1, 3.1.1, 4.0, 4.0.1, 5.[01], 6.1, 7.0
 	OpenBSD		4.[1-7], 5.[0-9], 6.0, 6.1
 	OpenIndiana	(need to check if it works here or not)
-	GNU/Linux	CentOS 6.2, Debian 8.7 (jessie), Linpus,
+	GNU/Linux	CentOS 7.3, Debian 8.7 (jessie), Linpus,
 			Slackware 13.0, Ubuntu 14.04 LTS
 
 If your system is not reported above, simply try to build the etsh
@@ -56,6 +56,6 @@ you to contact me via email.  Thanks & Enjoy!
 
 Jeffrey Allen Neitzel
 <jan (at) v6shell (dot) org>
-https://v6shell.org/						2017/06/28
+https://etsh.io/						2017/07/25
 
 @(#)$Id$
