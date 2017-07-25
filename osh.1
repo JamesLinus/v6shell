@@ -956,7 +956,7 @@ in any rc file.
 .SS History (+)
 If the shell is invoked as an interactive shell,
 it tries to open the
-.I $h/.@OBN@.history
+.I $h/.etsh.history
 file to save the user's command-line history.
 Notice that the history file must already exist
 as a writable,
@@ -980,7 +980,7 @@ command found in the \fI@LIBEXECDIROSH@\fR directory.
 Execute `history \-h' to read its documentation.
 .PP
 Notice that the shell never creates or removes the
-.I $h/.@OBN@.history
+.I $h/.etsh.history
 file.
 It always leaves these actions to the user.
 For example:
@@ -1023,7 +1023,7 @@ and history entry for example:
 and then doing a:
 .PP
 .nf
-	% sed -n 6171p <$h/.@OBN@.history | @OBN@
+	% sed -n 6171p <$h/.etsh.history | @OBN@
 	OS == GNU/Linux || (Mac) OS X || (Free|Net|Open)BSD
 .fi
 .PP
@@ -1181,10 +1181,10 @@ See the
 manual page for full details.
 .TP
 \fBhistory\fR [\fB\-c\fR | \fB\-h\fR | \fB\-l\fR | \fB\-n\fR \fInumber1\fR[\fI,number2\fR] | \fB\-p\fR \fIpattern\fR | \fB\-r\fR] (+)
-Manages, prints, and searches the user's \fI$h/.@OBN@.history\fR file.
+Manages, prints, and searches the user's \fI$h/.etsh.history\fR file.
 If no options are specified,
 the history command prints all history entries from
-the user's @OBN@ history file to the standard output.
+the user's etsh history file to the standard output.
 Execute `history \-h' to read its documentation.
 .TP
 \fBif\fR [\fIexpression\fR [\fIcommand\fR [\fIarg ...\fR]]] (+)
@@ -1453,7 +1453,7 @@ system-wide rc init file for login shells
 .IR @SYSCONFDIR@/@OBN@.@OBN@rc \ (+)
 system-wide rc init file for \fIall\fR interactive shells
 .TP
-.IR $h/.@OBN@.history \ (+)
+.IR $h/.etsh.history \ (+)
 user history file for \fIall\fR interactive shells
 .TP
 .IR $h/.@OBN@.login \ (+)
@@ -1485,12 +1485,12 @@ stty(1),
 uname(1)
 .PP
 @OBN1@ home page:
-https://v6shell.org/
+https://etsh.io/
 .PP
 `The UNIX Time-Sharing System' (CACM, July, 1974):
 .PP
 .nf
-	https://v6shell.org/history/unix/
+	https://etsh.io/history/unix/
 .fi
 .PP
 gives the theory of operation of both the system and the shell.
@@ -1531,7 +1531,7 @@ in Seventh Edition (V7) UNIX.
 See either the LICENSE file which is distributed with
 .B @OBN@
 or
-https://v6shell.org/license/
+https://etsh.io/license/
 for full details.
 .SH COPYRIGHT
 .nf
