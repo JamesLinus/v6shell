@@ -177,12 +177,13 @@ case "$UNAME_S" in
 		>>$CONFIG_H
 	;;
 Linux)
-	# Check if building on Ubuntu 16.xx.
-	egrep '^(DISTRIB_ID=Ubuntu|DISTRIB_RELEASE=(16.(04|10)|17.04))$' /etc/lsb-release 2>/dev/null | wc -l | tr -d ' ' | grep '^2$' >/dev/null
+	# Check if building on Ubuntu 16.xx or 17.xx.
+	egrep '^(DISTRIB_ID=Ubuntu|DISTRIB_RELEASE=(16\.(04|10)|17\.04))$' /etc/lsb-release 2>/dev/null | wc -l | tr -d ' ' | grep '^2$' >/dev/null
 	if test $? -eq 0 ; then
 		# Ubuntu 16.xx
+		# Ubuntu 17.xx
 		( \
-			echo '#define	CONFIG_UBUNTU_16' ; \
+			echo '#define	CONFIG_BROKEN' ; \
 			echo \
 		) >>$CONFIG_H
 	fi

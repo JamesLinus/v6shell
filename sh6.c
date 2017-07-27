@@ -72,8 +72,8 @@
 #include "pexec.h"
 #include "sasignal.h"
 
-#if defined(CONFIG_UBUNTU_16)
-#   error "Ubuntu 16.(04|10)|17.04): Not supported: see https://blog.etsh.io/ubuntu-16/"
+#if defined(CONFIG_BROKEN)
+#   error "Ubuntu 16.(04|10)|17.04: Not supported: see https://blog.etsh.io/ubuntu-16/"
 #endif
 
 /*
