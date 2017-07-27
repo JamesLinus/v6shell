@@ -12,7 +12,7 @@ trap '' 18 21 22 ;       : " Ignore job-control signals: TSTP, TTIN, TTOU "
 : fd2 -e echo "debug: Executing `@SYSCONFDIR@/@OBN@.login' now..."
 
 unset X
-set   X @PREFIX@ ; : " This is the PREFIX where shell is installed. "
+set   X "@PREFIX@" ; : " This is the PREFIX where shell is installed. "
 
 :
 : " Set a default umask and PATH for all (root & !root) users. "
@@ -33,17 +33,21 @@ if X$u != Xroot goto NotRoot
 	: " There are other ways to selectively change root's PATH to allow "
 	: " etsh use in ($h/@OBN@.login, ~/.profile, etc), as needed.       "
 	:
-	: " Note to self: etsh is not a job-control shell; I can explore      "
-	: " setpgid(2) more fully and see what I can do, but IIRC this breaks "
-	: " compatibility.  If true, that is a showstopper for this project.  "
-	:
 	goto Continue
 
 : NotRoot
 	setenv	 PATH	$X/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/X11R6/bin
-	setenv	 PATH	$p:/usr/local/sbin:/usr/local/bin:/usr/games
+	if "$X" = "/usr/local" goto jump
+		setenv	 PATH	$p:/usr/local/sbin:/usr/local/bin:/usr/games
+		goto jump1
+	: jump
+		setenv	 PATH	$p:/usr/local/sbin:/usr/games
+		: fallthrough
+	: jump1
 	: setenv PATH	$p:. ; : " Current directory is not recommended. "
 	: fallthrough
+
+: " ==== PATH continues in @SYSCONFDIR@/@OBN@.@OBN@rc ==== "
 
 : Continue
 	setenv MAIL /var/mail/$u

@@ -27,7 +27,7 @@ if $? -eq 1 goto TermIsSet1
 
 : " ==== Begin PATH ==== "
 
-set   X @PREFIX@ ; : " This is the PREFIX where shell is installed. "
+set   X "@PREFIX@" ; : " This is the PREFIX where shell is installed. "
 
 : " The following sets up the user's PATH, searching for and adding - "
 : "	$X/libexec/$v/etsh, /usr/local/v6bin, and $h/bin              "
