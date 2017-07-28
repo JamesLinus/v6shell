@@ -247,6 +247,8 @@ static	struct vnode	*vnp;		/* shell variable node pointer      */
 static	char		*tty;		/* $t - terminal name               */
 /*@null@*/ /*@only@*/
 static	char		*user;		/* $u - effective user name         */
+/*@null@*/ /*@only@*/
+static	char		*group;		/* $g - effective group name        */
 
 /*
  * **** Function Prototypes ****
@@ -479,6 +481,8 @@ done:
 	tty = NULL;
 	xfree(user);
 	user = NULL;
+	xfree(group);
+	group = NULL;
 	(void)varfree(0);
 	(void)afree(NULL);
 	return status;
@@ -954,6 +958,9 @@ get_dolp(int c)
 	case 'e':
 		if ((v = getenv("EXECSHELL")) == NULL)
 			v = dolbuf;
+		break;
+	case 'g':
+		v = group;
 		break;
 	case 'h':
 		if ((v = getenv("HOME")) == NULL)
@@ -2764,6 +2771,7 @@ static void
 sh_init(const char *av0p)
 {
 	struct passwd *pwu;
+	struct group  *grg;
 	int fd;
 	const char *p;
 
@@ -2798,6 +2806,10 @@ sh_init(const char *av0p)
 	/* Try to get the effective user name for $u. */
 	pwu  = getpwuid(sheuid);
 	user = xstrdup((pwu != NULL) ? pwu->pw_name : "");
+
+	/* Try to get the effective group name for $g. */
+	grg   = getgrgid(getegid());
+	group = xstrdup((grg != NULL) ? grg->gr_name : "");
 
 	/*
 	 * Set the SIGCHLD signal to its default action.
