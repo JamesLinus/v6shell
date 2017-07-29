@@ -3,15 +3,65 @@ Thompson shell are marked w/ a `C:' in the details below.
 
 -------------------------------------------------------------------------------
 [etsh-current] (development):
-	* Work In Progress ( see https://v6shell.org/src/current/ )
+	* Work In Progress ( see https://etsh.io/src/current/ )
+
+-------------------------------------------------------------------------------
+[etsh-4.6.0] (latest):
+*:
+	* Changed all URLs {https://} from: v6shell.org to: etsh.io {/*} .
+
+defs.h, osh.1, osh.c, sh.h:
+	* Added $g as a new etsh / osh parameter / variable.
+	  Like $u is the effective user name of the current user,
+	  $g is the effective group name.
 
 if.1, util.c:
 	* Added two new primaries, -n to test for non-zero length string &
 	  -z to test for zero length string, like the same primaries found
 	  in test(1).
 
+tests/...:
+	* Moved (or renamed) tests/run.osh to tests/run, made some needed
+	  changes due to the new name, and regenerated the test logs.
+
+examples/...:
+	* ready_rc_files - new sh(1) script to preprocess the example rc files
+	  for the install-exp Makefile target.
+
+	* Made many changes revolving around the idea of simplification.
+
+README:
+	* CentOS 7.3 is supported.
+
+INSTALL:
+	* Made many necessary updates, nothing earth-shattering though.
+
+mkconfig:
+	* Renamed the CONFIG_UBUNTU_16 macro to CONFIG_BROKEN.  The reason
+	  is simple.  Not just Ubuntu 16.xx and 17.xx are broken.  Debian 9.x
+	  is too, which is extremely troubling to me.
+
+	  NOTE: I use the term broken, not to offend, but simply to state that
+		I, or sh6.c and goto.c more specifically, do not support them.
+
+	  Thus, I am left with the following open question(s):
+
+		Is the sh6 and goto problem caused by a problem in sh6.c
+		and goto.c, by systemd, by gcc-6.3.0, or by something else
+		that is unrelated?
+
+		Finally, does it make any sense at all that particular
+		GNU/Linux operating systems are now unable to run the
+		original UNIX shell and have it successfully perform
+		one of its most basic functions, executing goto in a
+		command file (aka script) in order to jump to a new
+		offset via lseek(2) and then allow sh6 to continue
+		on its merry way as it always has?
+
+	  I welcome all feedback on this topic.  Thank you.
+
 -------------------------------------------------------------------------------
-[etsh-4.5.1] (latest):
+[etsh-4.5.1]:
 osh.c:
 	* Changed OSHDIR to ETSHDIR.  ETSHDIR was documented in osh.1,
 	  but I forgot to change the code.  This resulted in a broken /
@@ -2105,6 +2155,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2017/07/10
+Jeffrey Allen Neitzel						2017/07/29
 
 @(#)$Id$
