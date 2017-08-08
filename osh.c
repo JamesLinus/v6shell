@@ -254,6 +254,7 @@ static	char		*group;		/* $g - effective group name        */
  * **** Function Prototypes ****
  */
 static	void		cmd_loop(bool);
+static	void		prompt_write(void);
 /*@noreturn@*/
 static	void		usage(void);
 static	void		cmd_verbose(void);
@@ -552,7 +553,7 @@ cmd_loop(bool halt)
 
 	for (error_source = gz = false; ; ) {
 		if (PROMPT)
-			fd_print(FD2, "%s", (sheuid != 0) ? "% " : "# ");
+			prompt_write();
 		if (rpx_line() == EOF) {
 			if (!gz)
 				status = SH_TRUE;
@@ -564,6 +565,37 @@ cmd_loop(bool halt)
 			break;
 		gz = true;
 	}
+}
+
+/*
+ * Write the appropriate command prompt to standard error (FD2).
+ * Use the default !root or root prompt if the user has not set
+ * the prompt with `set P "value"', where "value" is a "string".
+ *
+ * For example:
+ *	if X$u = Xroot goto Root
+ *		set P "$u>% "
+ *		goto Jump
+ *	: Root
+ *		set P "$u># "
+ *		: fallthrough
+ *	: Jump
+ *
+ * NOTE: Quoting string may or may not be needed.  That depends
+ *	 on what string contains and user wishes, of course.
+ *	 See the etsh(1) "Quoting" subsection for details.
+ */
+static void
+prompt_write(void)
+{
+	const char *p;
+	const char *prompt;
+
+	if ((p = varget('P')) == NULL || *p == EOS)
+		prompt = (sheuid != 0) ? "% " : "# ";
+	else
+		prompt = p;
+	fd_print(FD2, "%s", prompt);
 }
 
 /*
