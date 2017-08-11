@@ -1,0 +1,32 @@
+: etsh - " Force sh(1), csh(1), and other shells to exit w/ error! " <'' ;;;
+:
+: "  @(#)$Id$  "
+:
+: "  The author of this file, J.A. Neitzel <jan (at) v6shell (dot) org>,  "
+: "  hereby grants it to the public domain.                               "
+:
+
+:
+: "  Set $P to string, plus `>% ' or `># ' appended to the end, giving  "
+: "  in effect, `string>% ' or `string># '.  string may be unspecified  "
+: "  or empty.                                                          "
+:
+: "  usage: source [/path/to/]SetP [string]  "
+:
+
+if $# -eq 0 -o $# -eq 1 goto OK
+	if { exit } if { fd2 -e echo "usage: source $0 [string]" } false
+
+: OK
+	set S "$1"
+
+	if X$u = Xroot goto Root
+		set P "$S>% "
+		goto Jump
+	: Root
+		set P "$S># "
+		: fallthrough
+	: Jump
+
+	unset S
+: zero status
