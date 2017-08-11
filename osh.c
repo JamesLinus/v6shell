@@ -253,10 +253,10 @@ static	char		*group;		/* $g - effective group name        */
 /*
  * **** Function Prototypes ****
  */
-static	void		cmd_loop(bool);
-static	void		prompt_write(void);
 /*@noreturn@*/
 static	void		usage(void);
+static	void		cmd_loop(bool);
+static	void		prompt_write(void);
 static	void		cmd_verbose(void);
 static	int		rpx_line(void);
 /*@null@*/
@@ -512,31 +512,11 @@ usage(void)
 	tty = NULL;
 	xfree(user);
 	user = NULL;
+	xfree(group);
+	group = NULL;
 
 	n = getmyname();
 	err(SH_ERR, OSH_USAGE, n, n);
-}
-
-/*
- * Determine whether or not the string pointed to by cmd
- * is a special built-in command.  Return the key value.
- */
-enum sbikey
-cmd_lookup(const char *cmd)
-{
-	const struct sbicmd *lp, *mp, *rp;
-	int d;
-
-	for (lp = sbi, rp = &sbi[NSBICMD]; lp < rp; /* nothing */) {
-		mp = lp + (rp - lp) / 2;
-		if ((d = strcmp(cmd, mp->sbi_command)) == 0)
-			return mp->sbi_key;
-		if (d > 0)
-			lp = mp + 1;
-		else
-			rp = mp;
-	}
-	return SBI_UNKNOWN;
 }
 
 /*
@@ -568,11 +548,14 @@ cmd_loop(bool halt)
 }
 
 /*
- * Write the appropriate command prompt to standard error (FD2).
- * Use the default !root or root prompt if the user has not set
- * the prompt with `set P "value"', where "value" is a "string".
+ * Write the appropriate command prompt to standard error (FD2),
+ * where appropriate is the default !root "% " prompt, the
+ * default root "# " prompt, or the prompt set by the user
+ * with `set P value'.
  *
- * For example:
+ * For example, you could put the following in a command/rc file
+ * (see libexec.etsh/SetP):
+ *
  *	if X$u = Xroot goto Root
  *		set P "$u>% "
  *		goto Jump
@@ -581,9 +564,10 @@ cmd_loop(bool halt)
  *		: fallthrough
  *	: Jump
  *
- * NOTE: Quoting string may or may not be needed.  That depends
- *	 on what string contains and user wishes, of course.
- *	 See the etsh(1) "Quoting" subsection for details.
+ * ...
+ * NOTE: Quoting the value as above may or may not be needed.
+ *	 It depends what the value contains and what the user
+ *	 wants.  See the etsh(1) "Quoting" subsection for details.
  */
 static void
 prompt_write(void)
@@ -613,6 +597,28 @@ cmd_verbose(void)
 	for (vp = word; **vp != EOL; vp++)
 		fd_print(FD2, "%s%s", *vp, (**(vp + 1) != EOL) ? " " : "");
 	fd_print(FD2, FMT1S, "");
+}
+
+/*
+ * Determine whether or not the string pointed to by cmd
+ * is a special built-in command.  Return the key value.
+ */
+enum sbikey
+cmd_lookup(const char *cmd)
+{
+	const struct sbicmd *lp, *mp, *rp;
+	int d;
+
+	for (lp = sbi, rp = &sbi[NSBICMD]; lp < rp; /* nothing */) {
+		mp = lp + (rp - lp) / 2;
+		if ((d = strcmp(cmd, mp->sbi_command)) == 0)
+			return mp->sbi_key;
+		if (d > 0)
+			lp = mp + 1;
+		else
+			rp = mp;
+	}
+	return SBI_UNKNOWN;
 }
 
 /*

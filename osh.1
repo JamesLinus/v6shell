@@ -215,9 +215,14 @@ are specified and if both
 the standard input and standard error are
 connected to a terminal,
 the shell is interactive.
-An interactive shell prompts the user
-with a `%\ ' (or `#\ ' for the superuser)
+By default,
+an interactive shell prompts a regular user
+with a `%\ ' or with a `#\ ' for the superuser
 before reading each command line from the terminal.
+(+) Notice that the user can set a non-default prompt if desired
+(see
+.I "Variable\ substitution"
+below).
 .PP
 (+) When an interactive shell starts,
 it reads and executes commands
