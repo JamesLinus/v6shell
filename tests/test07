@@ -1,9 +1,9 @@
 : osh - " Force sh(1), csh(1), and other shells to exit w/ error! " <'' ;;;
 :
-: "  The author of this file, J.A. Neitzel <jan (at) v6shell (dot) org>,  "
-: "  hereby grants it to the public domain.                               "
+: "  The author of this file, J.A. Neitzel <jan (at) etsh (dot) io>,  "
+: "  hereby grants it to the public domain.                           "
 :
-: "  From:  https://v6shell.org/regression_tests  "
+: "  From:  https://etsh.io/regression_tests  "
 :
 
 :

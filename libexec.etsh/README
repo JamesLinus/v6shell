@@ -1,6 +1,8 @@
 See ../README (and below) for more info.
 This directory contains the following etsh(1) support scripts & files:
 
+	* SetP         - Set $P to (un)specified/empty string + `>% ' || `># '
+
 	* SetTandCTTY  - set $T and/or setenv CTTY as needed
 
 	* SetV         - set $V to the output from etsh -VV
@@ -12,7 +14,7 @@ This directory contains the following etsh(1) support scripts & files:
 	* history.help - history help (what would otherwise be a manual)
 
 Jeffrey Allen Neitzel
-<jan (at) v6shell (dot) org>
-https://v6shell.org/						2017/07/21
+<jan (at) etsh (dot) io>
+https://etsh.io/						2017/08/12
 
 @(#)$Id$

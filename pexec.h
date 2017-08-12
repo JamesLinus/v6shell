@@ -4,7 +4,7 @@
  */
 /*-
  * Copyright (c) 2005-2017
- *	Jeffrey Allen Neitzel <jan (at) v6shell (dot) org>.
+ *	Jeffrey Allen Neitzel <jan (at) etsh (dot) io>.
  *	All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
