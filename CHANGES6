@@ -7,7 +7,20 @@ command in porting them to run on modern UNIX systems.
 	* Work In Progress ( see https://etsh.io/src/current/ )
 
 -------------------------------------------------------------------------------
-[etsh-4.6.0] (latest):
+[etsh-4.7.0] (latest):
+*:
+	* Changed v6shell (dot) org references to etsh (dot) io,
+	  and v6shell.org references to etsh.io too, almost a
+	  s/v6shell.org/etsh.io/ in effect, but not quite.
+
+	* No code changes.
+
+sh6.1:
+	* Reworded the description of how an interactive shell prompts
+	  the user for the sake of clarity.
+
+-------------------------------------------------------------------------------
+[etsh-4.6.0]:
 if.1, if.c:
 	* Added two new primaries, -n to test for non-zero length string &
 	  -z to test for zero length string, like the same primaries found
@@ -548,6 +561,6 @@ glob.c:
     Date: May 14, 1975
     From: Sixth Edition UNIX /usr/source/s1/glob.c
 
-Jeffrey Allen Neitzel						2017/07/29
+Jeffrey Allen Neitzel						2017/08/16
 
 @(#)$Id$

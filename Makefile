@@ -5,7 +5,6 @@
 # Begin CONFIGURATION
 #
 # See the INSTALL file for build and install instructions.
-#
 
 #
 # Choose where and how to install the binaries and manual pages.
@@ -244,6 +243,7 @@ install-destlibexec:
 install-destlibexecosh: install-destlibexec
 	test -d $(DESTLIBEXECDIROSH) || { umask 0022 && mkdir -p $(DESTLIBEXECDIROSH) ; }
 	$(INSTALL) -c $(MANGRP) $(MANMODE) libexec.etsh/README $(DESTLIBEXECDIROSH)
+	$(INSTALL) -c $(MANGRP) $(MANMODE) libexec.etsh/SetP $(DESTLIBEXECDIROSH)
 	$(INSTALL) -c $(MANGRP) $(MANMODE) libexec.etsh/SetTandCTTY $(DESTLIBEXECDIROSH)
 	$(INSTALL) -c $(MANGRP) $(MANMODE) libexec.etsh/SetV $(DESTLIBEXECDIROSH)
 	$(INSTALL) -c $(BINGRP) $(BINMODE) libexec.etsh/etshdir $(DESTLIBEXECDIROSH)

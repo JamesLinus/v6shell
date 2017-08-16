@@ -6,7 +6,25 @@ Thompson shell are marked w/ a `C:' in the details below.
 	* Work In Progress ( see https://etsh.io/src/current/ )
 
 -------------------------------------------------------------------------------
-[etsh-4.6.0] (latest):
+[etsh-4.7.0] (latest):
+*:
+	* Changed v6shell (dot) org references to etsh (dot) io,
+	  and v6shell.org references to etsh.io too, almost a
+	  s/v6shell.org/etsh.io/ in effect, but not quite.
+
+osh.[1c]:
+	* New feature; user can set the shell command prompt,
+	  and the shell will prompt the user with it.  Doing
+	  a `set P value' will get you rolling.
+
+	* Reworded the description of how an interactive shell prompts
+	  the user for the sake of clarity.
+
+libexec.etsh/SetP:
+	* Added this new command file to help users set P on the fly.
+
+-------------------------------------------------------------------------------
+[etsh-4.6.0]:
 *:
 	* Changed all URLs {https://} from: v6shell.org to: etsh.io {/*} .
 
@@ -2155,6 +2173,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2017/07/29
+Jeffrey Allen Neitzel						2017/08/16
 
 @(#)$Id$
