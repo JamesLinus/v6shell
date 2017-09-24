@@ -106,6 +106,7 @@
 .br
 .B @OBN@
 [\fB\-v\fR]
+[\fB\-n\fR]
 [\fB\-\fR |
 \fB\-c\fR [\fIstring\fR] |
 \fB\-i\fR |
@@ -170,6 +171,15 @@ before prompting the user, reading, and
 executing command lines from the standard input.
 The shell prints a diagnostic and exits with a
 non-zero status if it is not connected to a terminal.
+.TP
+.B \-n
+(+)
+.IR noexec :
+The shell performs no command-line execution.
+It only checks the syntax of each command line,
+after performing parameter substitution
+and word splitting.
+The shell ignores this option for interactive and login shells.
 .TP
 .B \-t
 The shell reads a single command line

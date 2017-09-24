@@ -214,7 +214,8 @@ static	bool		error_source;	/* error flag for `source' command  */
 static	int		hwfd = -1;	/* history write file descriptor    */
 static	bool		is_first;	/* first line flag                  */
 static	bool		is_login;	/* login shell flag                 */
-static	bool		is_verbose;	/* verbose flag for `-v' & `verbose'*/
+static	bool		verbose_flag;	/* verbose flag for `-v' & `verbose'*/
+static	bool		noexec_flag;	/* noexec  flag for `-n'            */
 static	char		line[LINEMAX];	/* command-line buffer              */
 static	char		aline[LINEMAX];	/* alias-line buffer                */
 static	char		*linep;		/* [a]line pointer                  */
@@ -331,7 +332,7 @@ static	char		*xstrdup(const char *);
  *
  * SYNOPSIS
  *	osh [-V | -VV]
- *	osh [-v] [- | -c [string] | -i | -l | -t | file [arg1 ...]]
+ *	osh [-v] [-n] [- | -c [string] | -i | -l | -t | file [arg1 ...]]
  *
  * DESCRIPTION
  *	See the osh(1) manual page for full details.
@@ -359,8 +360,19 @@ main(int argc, char **argv)
 			usage();
 		goto done;
 	}
-	if (argc > 1 && *argv[1] == HYPHEN && argv[1][1] == 'v') {
-		is_verbose = true;
+	/* no getopt(3) for compatibility; -verbose & -noexec are valid */
+	if (argc > 1 &&
+	    *argv[1] == HYPHEN && (argv[1][1] == 'v' || argv[1][1] == 'n')) {
+		if (argv[1][1] == 'v') verbose_flag = true;
+		else if (argv[1][1] == 'n') noexec_flag = true;
+		av0p = argv[0], argv = &argv[1], argv[0] = av0p;
+		argc--;
+	}
+	/* ditto - code duplication, yes; but we cannot use getopt(3) */
+	if (argc > 1 &&
+	    *argv[1] == HYPHEN && (argv[1][1] == 'v' || argv[1][1] == 'n')) {
+		if (argv[1][1] == 'v') verbose_flag = true;
+		else if (argv[1][1] == 'n') noexec_flag = true;
 		av0p = argv[0], argv = &argv[1], argv[0] = av0p;
 		argc--;
 	}
@@ -377,12 +389,14 @@ main(int argc, char **argv)
 				dolc   -= 1;
 				argv2p  = argv[2];
 			} else if (argv[1][1] == 'i') {
+				noexec_flag = false;/* noexec_flag ignored */
 				rcflag = DO_SYSTEM_OSHRC;
 				shtype = ST_INTERACTIVE;
 				if (!sh_on_tty())
 					err(SH_ERR, FMT3S,
 					    getmyname(), argv[1], ERR_NOTTY);
 			} else if (argv[1][1] == 'l') {
+				noexec_flag = false;/* noexec_flag ignored */
 				is_login = true;
 				rcflag   = DO_SYSTEM_LOGIN;
 				shtype   = ST_INTERACTIVE;
@@ -405,6 +419,7 @@ main(int argc, char **argv)
 		}
 		fd_free();
 	} else {
+		noexec_flag = false;/* noexec_flag ignored */
 		dosigs = true;
 		fd_free();
 		if (sh_on_tty())
@@ -583,7 +598,7 @@ prompt_write(void)
 }
 
 /*
- * If is_verbose is true, print each argument/word
+ * If verbose_flag is true, print each argument/word
  * in the word pointer array to the standard error.
  * Otherwise, do nothing.
  */
@@ -592,7 +607,7 @@ cmd_verbose(void)
 {
 	char **vp;
 
-	if (!is_verbose)
+	if (!verbose_flag)
 		return;
 	for (vp = word; **vp != EOL; vp++)
 		fd_print(FD2, "%s%s", *vp, (**(vp + 1) != EOL) ? " " : "");
@@ -661,10 +676,15 @@ rpx_line(void)
 		tnp = NULL;
 		tnp = syntax(word, wordp);
 		(void)sigprocmask(SIG_SETMASK, &omask, NULL);
-		if (error_message != NULL)
-			error(-1, error_message);
-		else
-			execute(tnp, NULL, NULL);
+		if (noexec_flag) {
+			if (error_message != NULL)
+				error(-1, error_message);
+		} else {
+			if (error_message != NULL)
+				error(-1, error_message);
+			else
+				execute(tnp, NULL, NULL);
+		}
 		tfree(tnp);
 		tnp = NULL;
 		tnp = t;
@@ -2143,17 +2163,17 @@ execute1(struct tnode *t)
 
 	case SBI_VERBOSE:
 		/*
-		 * Set the global is_verbose flag to true or false,
+		 * Set the global verbose_flag to true or false,
 		 * or print its current value.
 		 *
 		 * usage: verbose [true | false]
 		 */
 		if (t->nav[1] != NULL && t->nav[2] == NULL) {
 			if (EQUAL(t->nav[1], "true")) {
-				is_verbose = true;
+				verbose_flag = true;
 				status = SH_TRUE;
 			} else if (EQUAL(t->nav[1], "false")) {
-				is_verbose = false;
+				verbose_flag = false;
 				status = SH_FALSE;
 			} else {
 				emsg = VERBOSE_USAGE;
@@ -2161,8 +2181,8 @@ execute1(struct tnode *t)
 			}
 			return;
 		} else if (t->nav[1] == NULL) {
-			fd_print(FD1, FMT1S, is_verbose ? "true" : "false");
-			status = is_verbose ? SH_TRUE : SH_FALSE;
+			fd_print(FD1, FMT1S, verbose_flag ? "true" : "false");
+			status = verbose_flag ? SH_TRUE : SH_FALSE;
 			return;
 		}
 		emsg = ERR_ARGCOUNT;
