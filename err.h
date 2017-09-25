@@ -91,7 +91,7 @@
 #define	ERR_BRACE	"} expected"
 #define	ERR_OPUNKNOWN	"unknown operator"
 #define	FD2_USAGE	"usage: %s [-e] [-f file] [--] command [arg ...]\n"
-#define	OSH_USAGE	"usage: %s [-V | -VV]\n       %s [-v] [-n] [- | -c [string] | -i | -l | -t | file [arg1 ...]]\n"
+#define	OSH_USAGE	"usage: %s [-V | -VV]\n       %s [-nv] [- | -c [string] | -i | -l | -t | file [arg1 ...]]\n"
 #define	VERBOSE_USAGE	"usage: verbose [true | false]"
 
 #define	FMT1S		"%s\n"

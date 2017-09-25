@@ -332,7 +332,7 @@ static	char		*xstrdup(const char *);
  *
  * SYNOPSIS
  *	osh [-V | -VV]
- *	osh [-v] [-n] [- | -c [string] | -i | -l | -t | file [arg1 ...]]
+ *	osh [-nv] [- | -c [string] | -i | -l | -t | file [arg1 ...]]
  *
  * DESCRIPTION
  *	See the osh(1) manual page for full details.
@@ -360,19 +360,66 @@ main(int argc, char **argv)
 			usage();
 		goto done;
 	}
-	/* no getopt(3) for compatibility; -verbose & -noexec are valid */
+	/*
+	 * Handle the -n and -v flags / options as needed.
+	 *
+	 * NOTE: We choose not to use getopt(3) for compatibility reasons.
+	 *	 -noexec & -verbose, in fact -[nv]*, are perfectly valid.
+	 */
 	if (argc > 1 &&
-	    *argv[1] == HYPHEN && (argv[1][1] == 'v' || argv[1][1] == 'n')) {
-		if (argv[1][1] == 'v') verbose_flag = true;
-		else if (argv[1][1] == 'n') noexec_flag = true;
+	    *argv[1] == HYPHEN && (argv[1][1] == 'n' || argv[1][1] == 'v')) {
+		       if (argv[1][1] == 'v' && argv[1][2] == 'n' && argv[1][3] == EOS) {
+			 verbose_flag =  true;
+			  noexec_flag =  true;
+		} else if (argv[1][1] == 'n' && argv[1][2] == 'v' && argv[1][3] == EOS) {
+			  noexec_flag =  true;
+			 verbose_flag =  true;
+		} else if (argv[1][1] == 'v')
+			 verbose_flag =  true;
+		  else if (argv[1][1] == 'n')
+			  noexec_flag =  true;
+
+		/* again, to catch the flipped args if need be */
+		       if (argv[1][1] == 'n' && argv[1][2] == 'v' && argv[1][3] == EOS) {
+			  noexec_flag =  true;
+			 verbose_flag =  true;
+		} else if (argv[1][1] == 'v' && argv[1][2] == 'n' && argv[1][3] == EOS) {
+			 verbose_flag =  true;
+			  noexec_flag =  true;
+		} else if (argv[1][1] == 'n')
+			  noexec_flag =  true;
+		  else if (argv[1][1] == 'v')
+			 verbose_flag =  true;
+
 		av0p = argv[0], argv = &argv[1], argv[0] = av0p;
 		argc--;
 	}
-	/* ditto - code duplication, yes; but we cannot use getopt(3) */
+	/* ditto */
 	if (argc > 1 &&
-	    *argv[1] == HYPHEN && (argv[1][1] == 'v' || argv[1][1] == 'n')) {
-		if (argv[1][1] == 'v') verbose_flag = true;
-		else if (argv[1][1] == 'n') noexec_flag = true;
+	    *argv[1] == HYPHEN && (argv[1][1] == 'n' || argv[1][1] == 'v')) {
+		       if (argv[1][1] == 'v' && argv[1][2] == 'n' && argv[1][3] == EOS) {
+			 verbose_flag =  true;
+			  noexec_flag =  true;
+		} else if (argv[1][1] == 'n' && argv[1][2] == 'v' && argv[1][3] == EOS) {
+			  noexec_flag =  true;
+			 verbose_flag =  true;
+		} else if (argv[1][1] == 'v')
+			 verbose_flag =  true;
+		  else if (argv[1][1] == 'n')
+			  noexec_flag =  true;
+
+		/* again, to catch the flipped args if need be */
+		       if (argv[1][1] == 'n' && argv[1][2] == 'v' && argv[1][3] == EOS) {
+			  noexec_flag =  true;
+			 verbose_flag =  true;
+		} else if (argv[1][1] == 'v' && argv[1][2] == 'n' && argv[1][3] == EOS) {
+			 verbose_flag =  true;
+			  noexec_flag =  true;
+		} else if (argv[1][1] == 'n')
+			  noexec_flag =  true;
+		  else if (argv[1][1] == 'v')
+			 verbose_flag =  true;
+
 		av0p = argv[0], argv = &argv[1], argv[0] = av0p;
 		argc--;
 	}
@@ -389,14 +436,14 @@ main(int argc, char **argv)
 				dolc   -= 1;
 				argv2p  = argv[2];
 			} else if (argv[1][1] == 'i') {
-				noexec_flag = false;/* noexec_flag ignored */
+				noexec_flag = false;
 				rcflag = DO_SYSTEM_OSHRC;
 				shtype = ST_INTERACTIVE;
 				if (!sh_on_tty())
 					err(SH_ERR, FMT3S,
 					    getmyname(), argv[1], ERR_NOTTY);
 			} else if (argv[1][1] == 'l') {
-				noexec_flag = false;/* noexec_flag ignored */
+				noexec_flag = false;
 				is_login = true;
 				rcflag   = DO_SYSTEM_LOGIN;
 				shtype   = ST_INTERACTIVE;
@@ -419,7 +466,7 @@ main(int argc, char **argv)
 		}
 		fd_free();
 	} else {
-		noexec_flag = false;/* noexec_flag ignored */
+		noexec_flag = false;
 		dosigs = true;
 		fd_free();
 		if (sh_on_tty())
@@ -435,10 +482,11 @@ main(int argc, char **argv)
 				sig_child |= S_SIGTERM;
 			if (rcflag == 0) {
 				if (*argv[0] == HYPHEN) {
+					noexec_flag = false;
 					is_login = true;
-					rcflag   = DO_SYSTEM_LOGIN;
+					rcflag = DO_SYSTEM_LOGIN;
 				} else
-					rcflag   = DO_SYSTEM_OSHRC;
+					rcflag = DO_SYSTEM_OSHRC;
 			}
 			if (is_login)
 				if (sasignal(SIGHUP, sighup) == SIG_IGN)
@@ -448,9 +496,15 @@ main(int argc, char **argv)
 		}
 	}
 
-	if (SHTYPE(ST_ONELINE))
+	if (SHTYPE(ST_ONELINE)) {
+/*
+		if (noexec_flag)
+			fd_print(FD2, "%s: -n: noexec;\n", getmyname());
+		if (verbose_flag)
+			fd_print(FD2, "%s: -v: verbose;\n", getmyname());
+ */
 		(void)rpx_line();
-	else {
+	} else {
 		/* Read and execute any rc init files if needed. */
 		while (SHTYPE(ST_RCFILE)) {
 			snamep = (char *)name;
@@ -470,6 +524,12 @@ main(int argc, char **argv)
 		}
 
 		/* Read and execute the shell's input. */
+/*
+		if (noexec_flag)
+			fd_print(FD2, "%s: -n: noexec;\n", getmyname());
+		if (verbose_flag)
+			fd_print(FD2, "%s: -v: verbose;\n", getmyname());
+ */
 		cmd_loop(!HALT);
 		if (logout_now != 0)
 			logout_now = 0;
