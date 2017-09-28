@@ -6,6 +6,9 @@ command in porting them to run on modern UNIX systems.
 [etsh-current] (development):
 	* Work In Progress ( see https://etsh.io/src/current/ )
 
+	* Added some comments to sh6.c to allow easier comparison
+	  with osh.c.
+
 -------------------------------------------------------------------------------
 [etsh-4.7.0] (latest):
 *:
@@ -561,6 +564,6 @@ glob.c:
     Date: May 14, 1975
     From: Sixth Edition UNIX /usr/source/s1/glob.c
 
-Jeffrey Allen Neitzel						2017/08/16
+Jeffrey Allen Neitzel						2017/09/27
 
 @(#)$Id$

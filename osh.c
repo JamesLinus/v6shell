@@ -344,12 +344,14 @@ main(int argc, char **argv)
 	int rcflag = 0;
 	bool dosigs = false;
 
+	/* Start the shell rolling if possible. */
 	sh_init(argv[0]);
 	if (argv[0] == NULL || *argv[0] == EOS)
 		err(SH_ERR, FMT2S, getmyname(), ERR_ALINVAL);
 	if (fd_type(FD0, FD_ISDIR))
 		goto done;
 
+	/* Handle the -V and -VV options (no getopt(3)). */
 	if (argc == 2 && *argv[1] == HYPHEN && argv[1][1] == 'V') {
 		status = SH_TRUE;
 		if (argv[1][2] == EOS)
@@ -360,69 +362,75 @@ main(int argc, char **argv)
 			usage();
 		goto done;
 	}
+
 	/*
-	 * Handle the -n and -v flags / options as needed.
+	 * Handle the -n and -v flags / options.
 	 *
 	 * NOTE: We choose not to use getopt(3) for compatibility reasons.
 	 *	 -noexec & -verbose, in fact -[nv]*, are perfectly valid.
 	 */
 	if (argc > 1 &&
 	    *argv[1] == HYPHEN && (argv[1][1] == 'n' || argv[1][1] == 'v')) {
-		       if (argv[1][1] == 'v' && argv[1][2] == 'n' && argv[1][3] == EOS) {
+		if (argv[1][1] == 'v' && argv[1][2] == 'n' &&
+		    argv[1][3] == EOS) {
 			 verbose_flag =  true;
 			  noexec_flag =  true;
-		} else if (argv[1][1] == 'n' && argv[1][2] == 'v' && argv[1][3] == EOS) {
+		} else if (argv[1][1] == 'n' && argv[1][2] == 'v' &&
+		  argv[1][3] == EOS) {
 			  noexec_flag =  true;
 			 verbose_flag =  true;
 		} else if (argv[1][1] == 'v')
 			 verbose_flag =  true;
 		  else if (argv[1][1] == 'n')
 			  noexec_flag =  true;
-
-		/* again, to catch the flipped args if need be */
-		       if (argv[1][1] == 'n' && argv[1][2] == 'v' && argv[1][3] == EOS) {
+		/* again, to catch the flipped args if needed */
+		if (argv[1][1] == 'n' && argv[1][2] == 'v' &&
+		    argv[1][3] == EOS) {
 			  noexec_flag =  true;
 			 verbose_flag =  true;
-		} else if (argv[1][1] == 'v' && argv[1][2] == 'n' && argv[1][3] == EOS) {
+		} else if (argv[1][1] == 'v' && argv[1][2] == 'n' &&
+		  argv[1][3] == EOS) {
 			 verbose_flag =  true;
 			  noexec_flag =  true;
 		} else if (argv[1][1] == 'n')
 			  noexec_flag =  true;
 		  else if (argv[1][1] == 'v')
 			 verbose_flag =  true;
-
 		av0p = argv[0], argv = &argv[1], argv[0] = av0p;
 		argc--;
 	}
-	/* ditto */
 	if (argc > 1 &&
 	    *argv[1] == HYPHEN && (argv[1][1] == 'n' || argv[1][1] == 'v')) {
-		       if (argv[1][1] == 'v' && argv[1][2] == 'n' && argv[1][3] == EOS) {
+		if (argv[1][1] == 'v' && argv[1][2] == 'n' &&
+		    argv[1][3] == EOS) {
 			 verbose_flag =  true;
 			  noexec_flag =  true;
-		} else if (argv[1][1] == 'n' && argv[1][2] == 'v' && argv[1][3] == EOS) {
+		} else if (argv[1][1] == 'n' && argv[1][2] == 'v' &&
+		  argv[1][3] == EOS) {
 			  noexec_flag =  true;
 			 verbose_flag =  true;
 		} else if (argv[1][1] == 'v')
 			 verbose_flag =  true;
 		  else if (argv[1][1] == 'n')
 			  noexec_flag =  true;
-
-		/* again, to catch the flipped args if need be */
-		       if (argv[1][1] == 'n' && argv[1][2] == 'v' && argv[1][3] == EOS) {
+		/* again, to catch the flipped args if needed */
+		if (argv[1][1] == 'n' && argv[1][2] == 'v' &&
+		    argv[1][3] == EOS) {
 			  noexec_flag =  true;
 			 verbose_flag =  true;
-		} else if (argv[1][1] == 'v' && argv[1][2] == 'n' && argv[1][3] == EOS) {
+		} else if (argv[1][1] == 'v' && argv[1][2] == 'n' &&
+		  argv[1][3] == EOS) {
 			 verbose_flag =  true;
 			  noexec_flag =  true;
 		} else if (argv[1][1] == 'n')
 			  noexec_flag =  true;
 		  else if (argv[1][1] == 'v')
 			 verbose_flag =  true;
-
 		av0p = argv[0], argv = &argv[1], argv[0] = av0p;
 		argc--;
 	}
+
+	/* Handle the standard Thompson shell options and so forth. */
 	if (argc > 1) {
 		name = argv[1];
 		dolv = &argv[1];
@@ -497,12 +505,8 @@ main(int argc, char **argv)
 	}
 
 	if (SHTYPE(ST_ONELINE)) {
-/*
-		if (noexec_flag)
-			fd_print(FD2, "%s: -n: noexec;\n", getmyname());
-		if (verbose_flag)
-			fd_print(FD2, "%s: -v: verbose;\n", getmyname());
- */
+		if (noexec_flag)  fd_print(FD2, "-n: noexec\n");
+		if (verbose_flag) fd_print(FD2, "-v: verbose\n");
 		(void)rpx_line();
 	} else {
 		/* Read and execute any rc init files if needed. */
@@ -522,18 +526,12 @@ main(int argc, char **argv)
 			}
 			rc_init(&rcflag);
 		}
-
 		/* Read and execute the shell's input. */
-/*
-		if (noexec_flag)
-			fd_print(FD2, "%s: -n: noexec;\n", getmyname());
-		if (verbose_flag)
-			fd_print(FD2, "%s: -v: verbose;\n", getmyname());
- */
+		if (noexec_flag)  fd_print(FD2, "-n: noexec\n");
+		if (verbose_flag) fd_print(FD2, "-v: verbose\n");
 		cmd_loop(!HALT);
 		if (logout_now != 0)
 			logout_now = 0;
-
 logout:
 		/* Read and execute any rc logout files if needed. */
 		rcflag = DO_SYSTEM_LOGOUT;
@@ -697,7 +695,7 @@ cmd_lookup(const char *cmd)
 }
 
 /*
- * Read, parse, and execute a command line.
+ * Read, parse, and execute (or noexec) a command line.
  */
 static int
 rpx_line(void)
@@ -737,6 +735,7 @@ rpx_line(void)
 		tnp = syntax(word, wordp);
 		(void)sigprocmask(SIG_SETMASK, &omask, NULL);
 		if (noexec_flag) {
+			/* or noexec, as the case may be */
 			if (error_message != NULL)
 				error(-1, error_message);
 		} else {

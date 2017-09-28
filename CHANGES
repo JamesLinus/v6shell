@@ -5,6 +5,9 @@ Thompson shell are marked w/ a `C:' in the details below.
 [etsh-current] (development):
 	* Work In Progress ( see https://etsh.io/src/current/ )
 
+	* Added a new -n (noexec) flag/option to allow syntax checking
+	  while not executing command lines.
+
 -------------------------------------------------------------------------------
 [etsh-4.7.0] (latest):
 *:
@@ -2173,6 +2176,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2017/08/16
+Jeffrey Allen Neitzel						2017/09/27
 
 @(#)$Id$

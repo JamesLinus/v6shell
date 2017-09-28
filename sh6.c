@@ -182,12 +182,14 @@ main(int argc, char **argv)
 {
 	bool dosigs = false;
 
+	/* Start the shell rolling if possible. */
 	sh_init(argv[0]);
 	if (argv[0] == NULL || *argv[0] == EOS)
 		err(SH_ERR, FMT1S, ERR_ALINVAL);
 	if (fd_isdir(FD0))
 		goto done;
 
+	/* Handle the standard Thompson shell options and so forth. */
 	if (argc > 1) {
 		name = argv[1];
 		dolv = &argv[1];
@@ -200,6 +202,7 @@ main(int argc, char **argv)
 				argv2p = argv[2];
 			} else if (argv[1][1] == 't')
 				one_line_flag = 2;
+			/* All other conceivable options are perfectly valid. */
 		} else {
 			(void)close(FD0);
 			if (open(argv[1], O_RDONLY) != FD0)
