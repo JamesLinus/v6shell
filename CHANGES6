@@ -6,11 +6,13 @@ command in porting them to run on modern UNIX systems.
 [etsh-current] (development):
 	* Work In Progress ( see https://etsh.io/src/current/ )
 
-	* Added some comments to sh6.c to allow easier comparison
-	  with osh.c.
+-------------------------------------------------------------------------------
+[etsh-4.8.0] (latest):
+sh6.c:
+	* Added 3 comments in main() to allow easier comparison with osh.c .
 
 -------------------------------------------------------------------------------
-[etsh-4.7.0] (latest):
+[etsh-4.7.0]:
 *:
 	* Changed v6shell (dot) org references to etsh (dot) io,
 	  and v6shell.org references to etsh.io too, almost a
@@ -564,6 +566,6 @@ glob.c:
     Date: May 14, 1975
     From: Sixth Edition UNIX /usr/source/s1/glob.c
 
-Jeffrey Allen Neitzel						2017/09/27
+Jeffrey Allen Neitzel						2017/09/29
 
 @(#)$Id$

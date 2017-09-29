@@ -5,11 +5,33 @@ Thompson shell are marked w/ a `C:' in the details below.
 [etsh-current] (development):
 	* Work In Progress ( see https://etsh.io/src/current/ )
 
+-------------------------------------------------------------------------------
+[etsh-4.8.0] (latest):
+osh.[1c], err.h:
 	* Added a new -n (noexec) flag/option to allow syntax checking
-	  while not executing command lines.
+	  while not executing command lines.  Notice that this only checks
+	  syntax with the shell's input and command-line parsing routines,
+	  not including glob, if, goto, and fd2 errors.
+	  For example, an if example follows:
+
+	  % etsh -vn -c 'if { test -r "$1" -a -w "$1" echo "rw: $1;"' /dev/null
+	  -n: noexec
+	  -v: verbose
+	  if { test -r "/dev/null" -a -w "/dev/null" echo "rw: /dev/null;"
+
+	  % etsh -v -c 'if { test -r "$1" -a -w "$1" echo "rw: $1;"' /dev/null
+	  -v: verbose
+	  if { test -r "/dev/null" -a -w "/dev/null" echo "rw: /dev/null;"
+	  if: {: } expected
+
+	  % etsh -c 'if { test -r "$1" -a -w "$1" echo "rw: $1;"' /dev/null
+	  if: {: } expected
+
+	  % etsh -c 'if { test -r "$1" -a -w "$1" } echo "rw: $1;"' /dev/null
+	  rw: /dev/null;
 
 -------------------------------------------------------------------------------
-[etsh-4.7.0] (latest):
+[etsh-4.7.0]:
 *:
 	* Changed v6shell (dot) org references to etsh (dot) io,
 	  and v6shell.org references to etsh.io too, almost a
@@ -2176,6 +2198,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2017/09/27
+Jeffrey Allen Neitzel						2017/09/29
 
 @(#)$Id$
