@@ -216,8 +216,8 @@ static	bool		is_first;	/* first line flag                  */
 static	bool		is_login;	/* login shell flag                 */
 static	bool		verbose_flag;	/* verbose flag for `-v' & `verbose'*/
 static	bool		noexec_flag;	/* noexec  flag for `-n'            */
-static	char		line[LINEMAX];	/* command-line buffer              */
-static	char		aline[LINEMAX];	/* alias-line buffer                */
+static	char		line[_LINEMAX];	/* command-line buffer              */
+static	char		aline[_LINEMAX];/* alias-line buffer                */
 static	char		*linep;		/* [a]line pointer                  */
 static	char		*elinep;	/* end of [a]line pointer           */
 static	volatile sig_atomic_t
@@ -231,8 +231,8 @@ static	enum sigflags	sig_child;	/* SIG(INT|QUIT|TERM) child flags   */
 static	enum sigflags	sig_state;	/* SIG(INT|QUIT|TERM) state flags   */
 static	int		status;		/* shell exit status                */
 static	int		tree_count;	/* talloc() call count (per line)   */
-static	char		*word[WORDMAX];	/* arg/word pointer array           */
-static	char		*aword[WORDMAX];/* alias arg/word pointer array     */
+static	char		*word[WORDMAX];	/* word pointer array               */
+static	char		*aword[WORDMAX];/* alias word pointer array         */
 /*@null@*/
 static	char		**wordp;	/* [a]word pointer                  */
 static	char		**ewordp;	/* end of [a]word pointer           */
@@ -705,9 +705,9 @@ rpx_line(void)
 	char *wp;
 
 	linep  = line;
-	elinep = &line[LINEMAX - 5];
+	elinep = &line[_LINEMAX - 5];
 	wordp  = word;
-	ewordp = &word[WORDMAX - 5];
+	ewordp = &word[WORDMAX - 6];
 	error_message = NULL;
 	nul_count = 0;
 	tree_count = 0;
@@ -719,13 +719,18 @@ rpx_line(void)
 	} while (*wp != EOL);
 	*wordp = NULL;
 
-	cmd_verbose();
-	hist_write(PROMPT && wordp - word > 1);
-
 	if (error_message != NULL) {
+#ifdef	DEBUG
+		fd_print(FD2,
+		    "%s: wordp: %p, ewordp: %p, (ewordp - wordp) == %d;\n",
+		    __func__, wordp, ewordp, (ewordp - wordp));
+#endif
 		error(-1, error_message);
 		return 1;
 	}
+
+	cmd_verbose();
+	hist_write(PROMPT && wordp - word > 1);
 
 	if (wordp - word > 1) {
 		(void)sigfillset(&nmask);
@@ -765,9 +770,9 @@ rp_alias(const char *string)
 
 	asp = string;
 	linep  = aline;
-	elinep = &aline[LINEMAX - 5];
+	elinep = &aline[_LINEMAX - 5];
 	wordp  = aword;
-	ewordp = &aword[WORDMAX - 5];
+	ewordp = &aword[WORDMAX - 6];
 	error_message = NULL;
 	nul_count = 0;
 	do {
@@ -930,20 +935,22 @@ xgetc(bool dolsub)
 		return c;
 	}
 
-	if (wordp >= ewordp) {
+	if (wordp + 1 >= ewordp) {
 #ifdef	DEBUG
-		fd_print(FD2, "xgetc: wordp: %p, ewordp: %p;\n", wordp, ewordp);
+		fd_print(FD2, "%s: wordp + 1: %p, ewordp: %p;\n",
+		    __func__, wordp + 1, ewordp);
 #endif
-		wordp -= 10;
+		wordp -= 12;
 		while ((c = xgetc(!DOLSUB)) != EOF && c != EOL)
 			;	/* nothing */
-		wordp += 10;
+		wordp += 12;
 		error_message = ERR_TMARGS;
 		goto geterr;
 	}
 	if (linep >= elinep) {
 #ifdef	DEBUG
-		fd_print(FD2, "xgetc: linep: %p, elinep: %p;\n", linep, elinep);
+		fd_print(FD2, "%s: linep: %p, elinep: %p;\n",
+		    __func__, linep, elinep);
 #endif
 		linep -= 10;
 		while ((c = xgetc(!DOLSUB)) != EOF && c != EOL)
@@ -2848,7 +2855,7 @@ sh_errexit(int es)
 {
 
 #ifdef	DEBUG
-	fd_print(FD2,"sh_errexit: getmypid() == %d, es == %d;\n",getmypid(),es);
+	fd_print(FD2,"%s: getmypid() == %d, es == %d;\n",__func__,getmypid(),es);
 #endif
 
 	switch (es) {

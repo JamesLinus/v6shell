@@ -115,7 +115,7 @@ static	const char	*error_message;	/* error msg for read/parse errors  */
 static	bool		glob_flag;	/* glob flag for `*', `?', `['      */
 static	bool		is_first;	/* first line flag                  */
 static	bool		is_noexec;	/* not executable file flag         */
-static	char		line[LINEMAX];	/* command-line buffer              */
+static	char		line[_LINEMAX];	/* command-line buffer              */
 static	char		*linep;		/* line pointer                     */
 static	int		nul_count;	/* `\0'-character count (per line)  */
 static	int		one_line_flag;	/* one-line flag for `-t' option    */
@@ -125,7 +125,7 @@ static	const char	*prompt;	/* interactive-shell prompt pointer */
 static	enum sigflags	sig_child;	/* SIG(INT|QUIT|TERM) child flags   */
 static	int		status;		/* shell exit status                */
 static	int		tree_count;	/* talloc() call count (per line)   */
-static	char		*word[WORDMAX];	/* argument/word pointer array      */
+static	char		*word[WORDMAX];	/* word pointer array               */
 /*@null@*/
 static	char		**wordp;	/* word pointer                     */
 
@@ -380,15 +380,15 @@ xgetc(bool dolsub)
 		return c;
 	}
 
-	if (wordp >= &word[WORDMAX - 5]) {
-		wordp -= 10;
+	if (wordp + 1 >= &word[WORDMAX - 6]) {
+		wordp -= 12;
 		while (xgetc(!DOLSUB) != EOL)
 			;	/* nothing */
-		wordp += 10;
+		wordp += 12;
 		error_message = ERR_TMARGS;
 		goto geterr;
 	}
-	if (linep >= &line[LINEMAX - 5]) {
+	if (linep >= &line[_LINEMAX - 5]) {
 		linep -= 10;
 		while (xgetc(!DOLSUB) != EOL)
 			;	/* nothing */
@@ -1141,7 +1141,7 @@ sh_errexit(int es)
 {
 
 #ifdef	DEBUG
-	fd_print(FD2,"sh_errexit: getmypid() == %d, es == %d;\n",getmypid(),es);
+	fd_print(FD2,"%s: getmypid() == %d, es == %d;\n",__func__,getmypid(),es);
 #endif
 
 	status = es;
@@ -1218,10 +1218,10 @@ sh_magic(void)
 					is_noexec = true;
 					break;
 				}
-				if (c == EOL)
+				if (c == EOL) { /* readc() doesn't return EOF */
 					is_first = false;
-				if (c == EOL || c == EOF)
 					return;
+				}
 			}
 			err(SH_ERR, FMT2S, name, ERR_EXEC);
 		} else

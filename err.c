@@ -121,7 +121,7 @@ get_lnum(void)
 	n = (lseek(FD0, o, SEEK_SET) == o && n > -1 && n < LONG_MAX) ? n : -1;
 
 #ifdef	DEBUG
-	fd_print(FD2, "get_lnum: n == %ld;\n", n);
+	fd_print(FD2, "%s: n == %ld;\n", __func__, n);
 #endif
 
 	return n;
@@ -219,7 +219,7 @@ ut_errexit(int es)
 {
 
 #ifdef	DEBUG
-	fd_print(FD2, "ut_errexit: es == %d: Call %s(%d);\n",
+	fd_print(FD2, "%s: es == %d: Call %s(%d);\n", __func__,
 	    es, (getpid() == getmypid()) ? "exit" : "_exit", es);
 #endif
 
