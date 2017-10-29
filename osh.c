@@ -367,7 +367,8 @@ main(int argc, char **argv)
 	 * Handle the -n and -v flags / options.
 	 *
 	 * NOTE: We choose not to use getopt(3) for compatibility reasons.
-	 *	 -noexec & -verbose, in fact -[nv]*, are perfectly valid.
+	 *	 -noexec & -verbose, in fact -[nv]*, are perfectly valid,
+	 *	 as well as -nv & -vn, as indicated by SYNOPSIS above.
 	 */
 	if (argc > 1 &&
 	    *argv[1] == HYPHEN && (argv[1][1] == 'n' || argv[1][1] == 'v')) {
@@ -474,11 +475,12 @@ main(int argc, char **argv)
 		}
 		fd_free();
 	} else {
-		noexec_flag = false;
 		dosigs = true;
 		fd_free();
-		if (sh_on_tty())
+		if (sh_on_tty()) {
 			shtype = ST_INTERACTIVE;
+			noexec_flag = false;
+		}
 	}
 	if (dosigs) {
 		if (sasignal(SIGINT, SIG_IGN) == SIG_DFL)
@@ -719,6 +721,9 @@ rpx_line(void)
 	} while (*wp != EOL);
 	*wordp = NULL;
 
+	cmd_verbose();
+	hist_write(PROMPT && wordp - word > 1);
+
 	if (error_message != NULL) {
 #ifdef	DEBUG
 		fd_print(FD2,
@@ -728,9 +733,6 @@ rpx_line(void)
 		error(-1, error_message);
 		return 1;
 	}
-
-	cmd_verbose();
-	hist_write(PROMPT && wordp - word > 1);
 
 	if (wordp - word > 1) {
 		(void)sigfillset(&nmask);
