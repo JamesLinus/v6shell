@@ -211,13 +211,15 @@ static	int		dupfd0;		/* duplicate of the standard input  */
 /*@null@*/ /*@observer@*/
 static	const char	*error_message;	/* error msg for read/parse errors  */
 static	bool		error_source;	/* error flag for `source' command  */
+static	bool		have_tmargs;	/* Too many args error flag         */
+static	bool		have_tmchars;	/* Too many characters error flag   */
 static	int		hwfd = -1;	/* history write file descriptor    */
 static	bool		is_first;	/* first line flag                  */
 static	bool		is_login;	/* login shell flag                 */
 static	bool		verbose_flag;	/* verbose flag for `-v' & `verbose'*/
 static	bool		noexec_flag;	/* noexec  flag for `-n'            */
-static	char		line[_LINEMAX];	/* command-line buffer              */
-static	char		aline[_LINEMAX];/* alias-line buffer                */
+static	char		line[_LINESIZ];	/* command-line buffer              */
+static	char		aline[_LINESIZ];/* alias-line buffer                */
 static	char		*linep;		/* [a]line pointer                  */
 static	char		*elinep;	/* end of [a]line pointer           */
 static	volatile sig_atomic_t
@@ -231,8 +233,8 @@ static	enum sigflags	sig_child;	/* SIG(INT|QUIT|TERM) child flags   */
 static	enum sigflags	sig_state;	/* SIG(INT|QUIT|TERM) state flags   */
 static	int		status;		/* shell exit status                */
 static	int		tree_count;	/* talloc() call count (per line)   */
-static	char		*word[WORDMAX];	/* word pointer array               */
-static	char		*aword[WORDMAX];/* alias word pointer array         */
+static	char		*word[_WORDSIZ];/* word pointer array               */
+static	char		*aword[_WORDSIZ];/* alias word pointer array        */
 /*@null@*/
 static	char		**wordp;	/* [a]word pointer                  */
 static	char		**ewordp;	/* end of [a]word pointer           */
@@ -669,6 +671,8 @@ cmd_verbose(void)
 
 	if (!verbose_flag)
 		return;
+	if (have_tmargs || have_tmchars)
+		return;
 	for (vp = word; **vp != EOL; vp++)
 		fd_print(FD2, "%s%s", *vp, (**(vp + 1) != EOL) ? " " : "");
 	fd_print(FD2, FMT1S, "");
@@ -707,10 +711,12 @@ rpx_line(void)
 	char *wp;
 
 	linep  = line;
-	elinep = &line[_LINEMAX - 5];
+	elinep = &line[LINEMAX];
 	wordp  = word;
-	ewordp = &word[WORDMAX - 6];
+	ewordp = &word[WORDMAX];
 	error_message = NULL;
+	have_tmargs = false;
+	have_tmchars = false;
 	nul_count = 0;
 	tree_count = 0;
 
@@ -727,8 +733,15 @@ rpx_line(void)
 	if (error_message != NULL) {
 #ifdef	DEBUG
 		fd_print(FD2,
-		    "%s: wordp: %p, ewordp: %p, (ewordp - wordp) == %d;\n",
-		    __func__, wordp, ewordp, (ewordp - wordp));
+		    "%s: (&word[_WORDMAX] - wordp) == %ld, (&word[_WORDMAX] - ewordp) == %ld, (ewordp - wordp) == %ld;\n",
+		    __func__, (&word[_WORDMAX] - wordp), (&word[_WORDMAX] - ewordp), (ewordp - wordp));
+		fd_print(FD2, "        : have_tmargs == %s;\n",
+		    have_tmargs ? "true" : "false");
+		fd_print(FD2,
+		    "        : (&line[_LINEMAX] - linep) == %ld, (&line[_LINEMAX] - elinep) == %ld, (elinep - linep) == %ld;\n",
+		    (&line[_LINEMAX] - linep), (&line[_LINEMAX] - elinep), (elinep - linep));
+		fd_print(FD2, "        : have_tmchars == %s;\n",
+		    have_tmchars ? "true" : "false");
 #endif
 		error(-1, error_message);
 		return 1;
@@ -772,9 +785,9 @@ rp_alias(const char *string)
 
 	asp = string;
 	linep  = aline;
-	elinep = &aline[_LINEMAX - 5];
+	elinep = &aline[LINEMAX];
 	wordp  = aword;
-	ewordp = &aword[WORDMAX - 6];
+	ewordp = &aword[WORDMAX];
 	error_message = NULL;
 	nul_count = 0;
 	do {
@@ -939,26 +952,28 @@ xgetc(bool dolsub)
 
 	if (wordp + 1 >= ewordp) {
 #ifdef	DEBUG
-		fd_print(FD2, "%s: wordp + 1: %p, ewordp: %p;\n",
-		    __func__, wordp + 1, ewordp);
+		fd_print(FD2, "%s: wordp: %p, ewordp: %p;\n",
+		    __func__, (void *)wordp, (void *)ewordp);
 #endif
 		wordp -= 12;
 		while ((c = xgetc(!DOLSUB)) != EOF && c != EOL)
 			;	/* nothing */
 		wordp += 12;
 		error_message = ERR_TMARGS;
+		have_tmargs = true;
 		goto geterr;
 	}
-	if (linep >= elinep) {
+	if (linep + 1 >= elinep) {
 #ifdef	DEBUG
 		fd_print(FD2, "%s: linep: %p, elinep: %p;\n",
-		    __func__, linep, elinep);
+		    __func__, (void *)linep, (void *)elinep);
 #endif
-		linep -= 10;
+		linep -= 12;
 		while ((c = xgetc(!DOLSUB)) != EOF && c != EOL)
 			;	/* nothing */
-		linep += 10;
+		linep += 12;
 		error_message = ERR_TMCHARS;
+		have_tmchars = true;
 		goto geterr;
 	}
 
@@ -1660,7 +1675,7 @@ syn3(char **p1, char **p2)
 				goto syn3err;
 #ifdef	DEBUG
 #ifdef	DEBUG_ALIAS
-			fd_print(FD2, "syn3: alcnt == %d;\n", alcnt);
+			fd_print(FD2, "%s: alcnt == %d;\n", __func__, alcnt);
 #endif
 #endif
 			if (alcnt > 2) {
@@ -1675,8 +1690,8 @@ syn3(char **p1, char **p2)
 #ifdef	DEBUG
 #ifdef	DEBUG_ALIAS
 			fd_print(FD2, "    : (%d + %d) == %d;\n",ac,n,(ac+n));
-			fd_print(FD2, "    :  av : %p;\n", av);
-			fd_print(FD2, "    : tav : %p;\n", tav);
+			fd_print(FD2, "    :  av : %p;\n", (void *)av);
+			fd_print(FD2, "    : tav : %p;\n", (void *)tav);
 #endif
 #endif
 			for (ac = 0; *av[ac] != EOL; ac++)
@@ -1689,9 +1704,10 @@ syn3(char **p1, char **p2)
 #ifdef	DEBUG_ALIAS
 			for (tavp = tav; *tavp != NULL; tavp++)
 				fd_print(FD2, "    : tavp: %p, %p, %s;\n",
-				    tavp, *tavp, (**tavp==EOL) ? "\\n" : *tavp);
-			fd_print(FD2, "    : tavp: %p, NULL;\n", tavp);
-			fd_print(FD2,"    : (tavp - tav) == %d;\n",(tavp-tav));
+				    (void *)tavp, (void *)*tavp,
+				    (**tavp==EOL) ? "\\n" : *tavp);
+			fd_print(FD2, "    : tavp: %p, NULL;\n", (void *)tavp);
+			fd_print(FD2,"    : (tavp - tav) == %ld;\n",(tavp-tav));
 #endif
 #endif
 			alcnt++;
@@ -3044,7 +3060,7 @@ rc_init(int *rcflag)
 				break;
 		} else
 			/* should never (but can) be true */
-			err(SH_ERR,FMT2S,getmyname(),"rc_init: Invalid file");
+			err(SH_ERR,FMT3S,getmyname(),__func__,"Invalid file");
 	}
 }
 
@@ -3091,7 +3107,7 @@ rc_logout(int *rcflag)
 				break;
 		} else
 			/* should never (but can) be true */
-			err(SH_ERR,FMT2S,getmyname(),"rc_logout: Invalid file");
+			err(SH_ERR,FMT3S,getmyname(),__func__,"Invalid file");
 	}
 }
 
@@ -3265,7 +3281,7 @@ fd_type(int fd, mode_t type)
 /*
  * Remove (trim) any unquoted quote characters from argument
  * pointed to by ap, make copy of, and return pointer to it.
- * This function never returns on error.
+ * Return original argument pointed to by ap on error.
  */
 char *
 atrim(UChar *ap)
@@ -3274,11 +3290,11 @@ atrim(UChar *ap)
 	long l;
 	const char *m;
 	UChar *a, *b;
-	UChar buf[LINEMAX], c;
+	UChar buf[_LINESIZ], c;
 	bool d;
 
 	*buf = UCHAR(EOS);
-	for (a = ap, b = buf; b < &buf[LINEMAX]; a++, b++) {
+	for (a = ap, b = buf; b < &buf[_LINESIZ]; a++, b++) {
 		switch (*a) {
 		case EOS:
 			*b = UCHAR(EOS);
@@ -3289,9 +3305,7 @@ atrim(UChar *ap)
 		case SQUOT:
 			c = *a++;
 			d = (c == DQUOT) ? true : false;
-			while (*a != c && b < &buf[LINEMAX]) {
-				if (*a == EOS)
-					goto aterr;
+			while (*a != c && b < &buf[_LINESIZ]) {
 				if (d && *a == BQUOT && *(a + 1) == DOLLAR)
 					a++;
 				*b++ = *a++;
@@ -3308,22 +3322,20 @@ atrim(UChar *ap)
 		*b = *a;
 	}
 
-aterr:
 	l = (is_noexec || no_lnum) ? -1 : get_lnum();
 	m = (const char *)ap;
 	if (name != NULL) {
 		if (l != -1)
-			err(ESTATUS,FMTAT1LS,getmyname(), name, l, ERR_TRIM, m);
+			err(-1,FMTAT1LS,getmyname(), name, l, ERR_TRIM, m);
 		else
-			err(ESTATUS, FMTAT1S, getmyname(), name, ERR_TRIM, m);
+			err(-1, FMTAT1S, getmyname(), name, ERR_TRIM, m);
 	} else {
 		if (l != -1)
-			err(ESTATUS, FMTATLS, getmyname(), l, ERR_TRIM, m);
+			err(-1, FMTATLS, getmyname(), l, ERR_TRIM, m);
 		else
-			err(ESTATUS, FMTATS, getmyname(), ERR_TRIM, m);
+			err(-1, FMTATS, getmyname(), ERR_TRIM, m);
 	}
-	/*NOTREACHED*/
-	return NULL;
+	return (char *)ap;
 }
 
 /*

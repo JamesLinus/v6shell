@@ -228,7 +228,8 @@ gcat(const char *src1, const char *src2)
 #ifdef	DEBUG
 #ifdef	DEBUG_GLOB
 	fd_print(FD2, "%s: siz == %zu, (%p < %p) == %s;\n", __func__,
-	    siz, b, &buf[PATHMAX], (b < &buf[PATHMAX]) ? "true" : "false");
+	    siz, (void *)b, (void *)&buf[PATHMAX],
+	    (b < &buf[PATHMAX]) ? "true" : "false");
 	fd_print(FD2, "    : strlen(buf) == %zu;\n", strlen(buf));
 #endif
 #endif

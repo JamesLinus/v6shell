@@ -52,6 +52,7 @@
 #define	ERR_GNOTFOUND	"Command not found."
 #define	ERR_ALINVAL	"Invalid argument list"
 #define	ERR_AVIINVAL	"Invalid argv index"
+#define	ERR_MYERREXIT	"Invalid myerrexit function pointer"
 #define	ERR_NODIR	"No directory"
 #define	ERR_NOHOMEDIR	"No home directory"
 #define	ERR_NOMATCH	"No match"

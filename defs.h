@@ -85,10 +85,13 @@
 
 #define	SOURCEMAX	64	/* Maximum # of nested source invocations   */
 
-#define	_LINEMAX	2072
-#define	LINEMAX		2067	/* 1000 in the original Sixth Edition shell */
-#define	TREEMAX		512	/*  100 ...                                 */
-#define	WORDMAX		1036	/*   50 ...                                 */
+#define	_LINESIZ	2072		/* LINSIZ was 1000 in orig V6 Shell */
+#define	_LINEMAX	(_LINESIZ - 1)
+#define	LINEMAX		(_LINEMAX - 6)	/* equal to 2065                    */
+#define	_WORDSIZ	1036		/* ARGSIZ was 50   ...              */
+#define	_WORDMAX	(_WORDSIZ - 1)
+#define	WORDMAX		(_WORDMAX - 6)	/* equal to 1029                    */
+#define	TREEMAX		512		/* TRESIZ was 100  ...              */
 
 #define	ASCII		0177
 #define	QUOTE		0200

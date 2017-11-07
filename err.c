@@ -32,7 +32,7 @@
 #include "defs.h"
 #include "err.h"
 
-#define	FMTMAX		SBUFMM(3)
+#define	FMTMAX		SBUFMM(4)
 #define	MSGMAX		(FMTMAX + LINEMAX)
 
 #define	MYNAME		"unknown"
@@ -61,7 +61,7 @@ err(int es, const char *msgfmt, ...)
 		va_end(va);
 	}
 	if (myerrexit == NULL) {
-		fd_print(FD2, FMT1S, "err: Invalid myerrexit function pointer");
+		fd_print(FD2, FMT2S, __func__, ERR_MYERREXIT);
 		abort();
 	}
 
