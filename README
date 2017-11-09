@@ -1,4 +1,4 @@
-Welcome to Etsh (V6Shell) - etsh-4.8.0 !
+Welcome to Etsh (V6Shell) - etsh-current !
 
 The etsh package provides two ports of the original /bin/sh from
 Sixth Edition (V6) UNIX (circa 1975).
@@ -34,7 +34,7 @@ following systems:
 	DragonFly BSD	2.0.1
 	FreeBSD		6.1, 7.0, 8.2, 10.2
 	(Mac) OS X	10.[4-9], 10.10, 10.11
-	NetBSD		2.1, 3.1.1, 4.0, 4.0.1, 5.[01], 6.1, 7.0
+	NetBSD		2.1, 3.1.1, 4.0, 4.0.1, 5.[01], 6.1, 7.[01]
 	OpenBSD		4.[1-7], 5.[0-9], 6.0, 6.1, 6.2
 	OpenIndiana	(need to check if it works here or not)
 	GNU/Linux	CentOS 7.3, Debian 8.7 (jessie), Linpus,
@@ -56,6 +56,6 @@ you to contact me via email.  Thanks & Enjoy!
 
 Jeffrey Allen Neitzel
 <jan (at) etsh (dot) io>
-https://etsh.io/						2017/09/29
+https://etsh.io/						2017/11/09
 
 @(#)$Id$
