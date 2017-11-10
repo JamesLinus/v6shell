@@ -15,7 +15,7 @@ BINDIR?=	$(PREFIX)/bin
 LIBEXECDIR?=	$(PREFIX)/libexec/$(OSH_VERSION)
 LIBEXECDIROSH?=	$(PREFIX)/libexec/$(OSH_VERSION)/etsh
 LIBEXECDIRSH6?=	$(PREFIX)/libexec/$(OSH_VERSION)/tsh
-DOCDIR?=	$(PREFIX)/share/doc/etsh
+DOCDIR?=	$(PREFIX)/share/doc/pkg-readmes
 EXPDIR?=	$(PREFIX)/share/examples/etsh
 MANDIR?=	$(PREFIX)/man/man1
 SYSCONFDIR?=	$(PREFIX)/etc
@@ -254,9 +254,12 @@ install-destlibexecsh6: install-destlibexec
 	test -d $(DESTLIBEXECDIRSH6) || { umask 0022 && mkdir -p $(DESTLIBEXECDIRSH6) ; }
 	$(INSTALL) -c $(MANGRP) $(MANMODE) README.libexec.tsh $(DESTLIBEXECDIRSH6)/README
 
+#
+# Install only the project README into DESTDOCDIR.
+#
 install-doc:
 	test -d $(DESTDOCDIR) || { umask 0022 && mkdir -p    $(DESTDOCDIR) ; }
-	$(INSTALL) -c    $(MANGRP) $(MANMODE) [ACDILNP]* R*E $(DESTDOCDIR)
+	$(INSTALL) -c    $(MANGRP) $(MANMODE) README $(DESTDOCDIR)/$(OSH_VERSION)
 
 #
 # Notice that doing a:
