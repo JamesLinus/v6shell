@@ -267,7 +267,8 @@ install-doc:
 #	make [variable=value ...] EXPDIR=expdir install-exp
 #
 # is a simple way to install your example .etsh* and etsh* files
-# into expdir here in the source tree on the fly.
+# into expdir here in the source tree on the fly (or anywhere else,
+# for that matter).
 #
 install-exp: config.h
 	cd examples && $(SHELL) ready_rc_files $(OBN) $(PREFIX) $(BINDIR) $(SYSCONFDIR)
