@@ -30,7 +30,7 @@ UNIX system.  It has been reported to build successfully on the
 following systems:
 
 	System		Releases / Distributions / Additional Info
-	----------------------------------------------------------
+	-----------------------------------------------------------
 	DragonFly BSD	2.0.1
 	FreeBSD		6.1, 7.0, 8.2, 10.2
 	(Mac) OS X	10.[4-9], 10.10, 10.11
