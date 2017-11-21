@@ -526,10 +526,12 @@ e3(void)
 	 */
 	if ((b = nxtarg(RETERR)) == NULL)
 		err(FC_ERR, FMT3S, getmyname(), a, ERR_OPERATOR);
-	if (equal(b,  "="))
-		return  equal(a, nxtarg(!RETERR));
 	if (equal(b, "!="))
 		return !equal(a, nxtarg(!RETERR));
+	if (equal(b, "=="))
+		return  equal(a, nxtarg(!RETERR));
+	if (equal(b,  "="))
+		return  equal(a, nxtarg(!RETERR));
 	if (equal(b, "<"))
 		return strcmp(a, nxtarg(!RETERR)) < 0;
 	if (equal(b, ">"))

@@ -1041,8 +1041,8 @@ and history entry for example:
 	Number	Command Line
 	------	------------
 	6171		uname -s | if { fd2 -ef/dev/null \\
-			egrep '(Darwin|Linux|[FNO][a-z]{2,3}BSD)' } \\
-			echo 'OS == GNU/Linux || (Mac) OS X || (Free|Net|Open)BSD'
+			egrep '([ONF][a-z]{2,3}BSD|Darwin|Linux)' } \\
+			echo '(Open|Net|Free)BSD || (Mac) OS X || OS == GNU/Linux'
 .fi
 .PP
 and then doing a:
@@ -1050,6 +1050,7 @@ and then doing a:
 .nf
 	% sed -n 6171p <$h/.etsh.history | @OBN@
 	OS == GNU/Linux || (Mac) OS X || (Free|Net|Open)BSD
+	(Open|Net|Free)BSD || (Mac) OS X || OS == GNU/Linux
 .fi
 .PP
 causes sed to output the 6171st command line from
