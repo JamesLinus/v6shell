@@ -6,7 +6,76 @@ Thompson shell are marked w/ a `C:' in the details below.
 	* Work In Progress ( see https://etsh.io/src/current/ )
 
 -------------------------------------------------------------------------------
-[etsh-4.8.0] (latest):
+[etsh-4.9.0] (latest):
+README:
+	* Updated supported systems to include NetBSD 7.1.
+
+Makefile:
+	* Clarify the comment for the install-exp target.
+
+	* Simplified what the install-doc target installs and where,
+	  only the project README into a default DOCDIR that uses
+	  the same name that OpenBSD ports/packages does.
+
+osh.c, err.c, defs.h:
+	* Increased size of line buffer & word pointer array.
+
+	  Previously, line only allowed a maximum of 2042 characters in each
+	  command line.  It now allows 2063 and gives a "Too many characters"
+	  error at 2064 and beyond.  For word, instead of allowing a maximum
+	  of 1018 arguments/words per command line and giving "Too many args"
+	  at 1019 and beyond, it now allows 1026 and errors at 1027 and beyond.
+
+osh.c:
+	* Fixed a problem that prevented -n & -v from working as expected
+	  when the shell was invoked "without args" [1] and reading command
+	  lines from the standard input via a pipe or file.  The correct
+	  post-fix behaviour is shown in the following examples:
+
+		% echo \' | etsh -nv
+		-n: noexec
+		-v: verbose
+		'
+		etsh: syntax error
+
+		% etsh -nv <file
+		-n: noexec
+		-v: verbose
+		'
+		etsh: 1: syntax error
+
+	  ...
+	  [1]: "without args" - this means without any shell flags, options,
+	       or command-line arguments except for -n and/or -v (or the
+	       combination thereof).
+
+osh.c, lib.c, sh.h, err.[ch], defs.h:
+	* Had what amounted to being a cleanup fest of sorts...
+
+	  Without going into too much detail, this provided a good opportunity
+	  to revisit, check, and fix a couple of problems (not problems) in the
+	  atrim() and gtrim() functions.  Many of the cleanups were because of
+	  reports by splint(1) only when the shell was in full DEBUG mode.
+	  This gave me a chance to change some splint annotations.
+
+if.[1c], util.c:
+	* For the if(1) - conditional command of osh/etsh,
+	  made == a synonym for =.
+
+	  1) The rationale is simple; 'if s1 == s2 echo equal' evaluates
+	     the expression for equality; 'if s1 = s2 echo equal' does
+	     too, but it looks like an assignment.
+
+	  2) In effect, this improves if(1) syntax compatibility between
+	     osh/etsh and csh/tcsh.
+
+	  3) Tweak some in "History (+)" subsection of osh.1 manual page.
+
+tests/...:
+	* Updated regression tests, and regenerate test logs.
+
+-------------------------------------------------------------------------------
+[etsh-4.8.0]:
 osh.[1c], err.h:
 	* Added a new -n (noexec) flag/option to allow syntax checking
 	  while not executing command lines.  Notice that this only checks
@@ -2198,6 +2267,6 @@ goto.c:
 	* All releases of osh prior to and including 020214 were authored
 	  and maintained by Gunnar Ritter.
 
-Jeffrey Allen Neitzel						2017/09/29
+Jeffrey Allen Neitzel						2017/11/22
 
 @(#)$Id$

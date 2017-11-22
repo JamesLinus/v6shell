@@ -7,7 +7,38 @@ command in porting them to run on modern UNIX systems.
 	* Work In Progress ( see https://etsh.io/src/current/ )
 
 -------------------------------------------------------------------------------
-[etsh-4.8.0] (latest):
+[etsh-4.9.0] (latest):
+sh6.c, defs.h:
+	* Increased size of line buffer & word pointer array.
+
+	  Previously, line only allowed a maximum of 2042 characters in each
+	  command line.  It now allows 2063 and gives a "Too many characters"
+	  error at 2064 and beyond.  For word, instead of allowing a maximum
+	  of 1018 arguments/words per command line and giving "Too many args"
+	  at 1019 and beyond, it now allows 1026 and errors at 1027 and beyond.
+
+glob.c, sh6.c, sh.h, err.h, defs.h:
+	* Had what amounted to being a cleanup fest of sorts...
+
+	  Without going into too much detail, this provided a good opportunity
+	  to revisit, check, and fix a couple of problems (not problems).  Many
+	  of the cleanups were because of reports by splint(1) only when the
+	  shell was in full DEBUG mode.  This gave me a chance to change
+	  some splint annotations.
+
+if.[1c]:
+	* For the if(1) - conditional command of sh6/tsh,
+	  made == a synonym for =.
+
+	  1) The rationale is simple; 'if s1 == s2 echo equal' evaluates
+	     the expression for equality; 'if s1 = s2 echo equal' does
+	     too, but it looks like an assignment.
+
+	  2) In effect, this improves if(1) syntax compatibility between
+	     sh6/tsh and csh/tcsh.
+
+-------------------------------------------------------------------------------
+[etsh-4.8.0]:
 sh6.c:
 	* Added 3 comments in main() to allow easier comparison with osh.c .
 
@@ -566,6 +597,6 @@ glob.c:
     Date: May 14, 1975
     From: Sixth Edition UNIX /usr/source/s1/glob.c
 
-Jeffrey Allen Neitzel						2017/09/29
+Jeffrey Allen Neitzel						2017/11/22
 
 @(#)$Id$
