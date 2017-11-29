@@ -1,4 +1,4 @@
-Welcome to Etsh (V6Shell) - etsh-4.9.0 !
+Welcome to Etsh (V6Shell) - etsh-current !
 
 The etsh package provides two ports of the original /bin/sh from
 Sixth Edition (V6) UNIX (circa 1975).
@@ -56,6 +56,6 @@ you to contact me via email.  Thanks & Enjoy!
 
 Jeffrey Allen Neitzel
 <jan (at) etsh (dot) io>
-https://etsh.io/						2017/11/22
+https://etsh.io/						2017/11/29
 
 @(#)$Id$

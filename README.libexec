@@ -1,4 +1,4 @@
-Part of the etsh-4.9.0 package.
+Part of the etsh-current package.
 It contains the following directories:
 
 	* etsh - etsh(1) support scripts & files
@@ -7,6 +7,6 @@ It contains the following directories:
 
 Jeffrey Allen Neitzel
 <jan (at) etsh (dot) io>
-https://etsh.io/						2017/11/22
+https://etsh.io/						2017/11/29
 
 @(#)$Id$
